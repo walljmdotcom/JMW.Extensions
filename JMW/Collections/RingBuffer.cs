@@ -53,7 +53,7 @@ public class RingBuffer<T> : IEnumerable<T>
 
         internalArray = new T[size];
         Array.Copy(array, internalArray, array.Length);
-        index = 0;
+        index = size == 0 ? 0 : array.Length % size;
         Count = array.Length;
     }
 
@@ -81,25 +81,36 @@ public class RingBuffer<T> : IEnumerable<T>
 
     public void Add(T item)
     {
+        // a zero-capacity buffer holds nothing
+        if (internalArray.Length == 0)
+            return;
+
         internalArray[index] = item;
 
         Count = Count >= internalArray.Length ? internalArray.Length : ++Count;
         index = index < internalArray.Length - 1 ? ++index : 0;
     }
 
+    /// <summary>
+    /// The most recently added item, or the oldest item when <see cref="ReverseIteration"/> is set.
+    /// </summary>
     public T Last()
     {
-        return ReverseIteration
-            ? internalArray[index] ?? throw new InvalidOperationException()
-            : index > 0
-                ? internalArray[index - 1] ?? throw new InvalidOperationException()
-                : internalArray[Count - 1] ?? throw new InvalidOperationException()
-                ;
+        if (Count == 0)
+            throw new InvalidOperationException("The buffer is empty.");
+
+        return ReverseIteration ? this[0] : this[Count - 1];
     }
 
+    /// <summary>
+    /// The oldest item in the buffer.
+    /// </summary>
     public T First()
     {
-        return internalArray[index] ?? throw new InvalidOperationException();
+        if (Count == 0)
+            throw new InvalidOperationException("The buffer is empty.");
+
+        return this[0];
     }
 
     public void Clear()
@@ -113,7 +124,14 @@ public class RingBuffer<T> : IEnumerable<T>
 
     public bool Contains(T item)
     {
-        return internalArray.Contains(item);
+        var comparer = EqualityComparer<T>.Default;
+        for (var i = 0; i < Count; i++)
+        {
+            if (comparer.Equals(internalArray[slot(i)], item))
+                return true;
+        }
+
+        return false;
     }
 
     public T[] ToArray()
@@ -134,23 +152,36 @@ public class RingBuffer<T> : IEnumerable<T>
         return new List<T>(this);
     }
 
+    /// <summary>
+    /// Maps a position counted from the oldest item to its slot in the internal array.
+    /// </summary>
+    private int slot(int position)
+    {
+        // the oldest item sits Count slots behind the next write position
+        var oldest = index - Count;
+        if (oldest < 0)
+            oldest += internalArray.Length;
+
+        var idx = oldest + position;
+        return idx < internalArray.Length ? idx : idx - internalArray.Length;
+    }
+
     public T this[int index]
     {
         get
         {
-            if (index >= Count)
-                throw new IndexOutOfRangeException("Index: " + index + " is not less than " + Count);
-            var idx = this.index + index < this.internalArray.Length ? this.index + index : this.index + index - this.internalArray.Length;
-            return internalArray[idx] ?? throw new InvalidOperationException();
+            if (index < 0 || index >= Count)
+                throw new IndexOutOfRangeException("Index: " + index + " is not between 0 and " + (Count - 1));
+
+            return internalArray[slot(index)] ?? throw new InvalidOperationException();
         }
 
         set
         {
-            if (index >= Count)
-                throw new IndexOutOfRangeException("Index: " + index + " is not less than " + Count);
+            if (index < 0 || index >= Count)
+                throw new IndexOutOfRangeException("Index: " + index + " is not between 0 and " + (Count - 1));
 
-            var idx = this.index + index < this.internalArray.Length ? this.index + index : this.index + index - this.internalArray.Length;
-            internalArray[idx] = value;
+            internalArray[slot(index)] = value;
         }
     }
 }
@@ -183,6 +214,7 @@ public class RingReverseEnumerator<T> : IEnumerator<T>
     public void Reset()
     {
         index = origin;
+        count = 0;
     }
 
     public void Dispose()
@@ -223,6 +255,7 @@ public class RingEnumerator<T> : IEnumerator<T>
     public void Reset()
     {
         index = origin;
+        count = 0;
     }
 
     T IEnumerator<T>.Current => internalArray[index] ?? throw new InvalidOperationException();
