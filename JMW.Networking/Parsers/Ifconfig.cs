@@ -4,7 +4,6 @@ using System.Diagnostics.CodeAnalysis;
 using System.IO;
 using System.Linq;
 using System.Text;
-using System.Text.Json;
 
 namespace JMW.Networking.Parsers;
 
@@ -53,13 +52,9 @@ public static class Ifconfig
     public static void OutputJson(TextReader output)
     {
         var blocks = GetBlocks(output);
-        var options = new JsonWriterOptions
-        {
-            Indented = true
-        };
 
-        using var stream = new MemoryStream();
-        using var writer = new Utf8JsonWriter(stream, options);
+        using var json = new StringWriter();
+        var writer = new JsonWriter(json);
 
         writer.WriteStartArray();
 
@@ -72,16 +67,13 @@ public static class Ifconfig
             WritePairsJson(writer, pairs);
 
             writer.WriteEndObject();
-            writer.Flush();
         }
 
         writer.WriteEndArray();
-        writer.Flush();
-        string json = Encoding.UTF8.GetString(stream.ToArray());
-        Console.WriteLine(json);
+        Console.WriteLine(json.ToString());
     }
 
-    private static void WritePairsJson(Utf8JsonWriter writer, IEnumerable<Pair> pairs)
+    private static void WritePairsJson(JsonWriter writer, IEnumerable<Pair> pairs)
     {
         Pair? last = null;
         bool arrayStarted = false;
@@ -139,7 +131,7 @@ public static class Ifconfig
 
     private record Pair(string Key, string Value, Pair[] Children, string ChildType = "object")
     {
-        public void WriteJson(Utf8JsonWriter writer, bool arrayStarted = false)
+        public void WriteJson(JsonWriter writer, bool arrayStarted = false)
         {
             var key = CleanKey(Key);
 
@@ -527,7 +519,7 @@ public static class Ifconfig
         {
             if (c == '=')
             {
-                if (sb[^1] == ':')
+                if (sb.Length > 0 && sb[sb.Length - 1] == ':')
                 {
                     sb.Remove(sb.Length - 1, 1);
                 }
@@ -556,7 +548,7 @@ public static class Ifconfig
                 continue;
             }
 
-            if (sb[^1] == ':')
+            if (sb[sb.Length - 1] == ':')
             {
                 sb.Remove(sb.Length - 1, 1);
             }

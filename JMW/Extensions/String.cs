@@ -611,7 +611,7 @@ public static class Extensions
         var words = v.Split(' ');
         var r = string.Empty;
         foreach (var w in words)
-            r += string.Concat(w.Substring(0, 1).ToUpper(), w.AsSpan(1));
+            r += string.Concat(w.Substring(0, 1).ToUpper(), w.Substring(1));
         return r;
     }
 

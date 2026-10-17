@@ -1,0 +1,8 @@
+<Project>
+
+  <ItemGroup Condition="'$(TargetFramework)' == 'netstandard2.0'">
+    <Compile Include="$(MSBuildThisFileDirectory)Polyfills/*.cs"
+      Link="Polyfills/%(Filename)%(Extension)" />
+  </ItemGroup>
+
+</Project>

@@ -9,7 +9,7 @@ using System.Text.RegularExpressions;
 
 namespace JMW.Template.Tags;
 
-public static partial class TagHelpers
+public static class TagHelpers
 {
     public static void PrefixTags(IEnumerable<Tag> tags, string sheet_name)
     {
@@ -181,7 +181,7 @@ public static partial class TagHelpers
         var result = new Engine();
         var variables = new List<string>();
 
-        var matches = VariableRegex().Matches(expression);
+        var matches = variableRegex.Matches(expression);
         foreach (var match in matches)
         {
             variables.Add(match.ToString());
@@ -209,6 +209,5 @@ public static partial class TagHelpers
         return result;
     }
 
-    [GeneratedRegex(@"(x|X)\d+")]
-    private static partial Regex VariableRegex();
+    private static readonly Regex variableRegex = new(@"(x|X)\d+", RegexOptions.Compiled | RegexOptions.CultureInvariant);
 }
