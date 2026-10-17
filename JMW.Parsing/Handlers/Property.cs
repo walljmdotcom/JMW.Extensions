@@ -54,7 +54,7 @@ public class Property : IProperty
         }
     }
 
-    public object Parse(StreamReader reader)
+    public object Parse(TextReader reader)
     {
         if (this.Extractors.Count > 0)
         {

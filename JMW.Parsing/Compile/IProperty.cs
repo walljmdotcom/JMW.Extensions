@@ -7,5 +7,5 @@ public interface IProperty
 {
     string Name { get; }
 
-    object Parse(StreamReader reader);
+    object Parse(TextReader reader);
 }

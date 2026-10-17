@@ -214,6 +214,50 @@ free  bird is   awesome
         Assert.That(output, Is.EqualTo("Wall;is;bird;"));
     }
 
+    // A paragraph inside a table parses each row on its own, and its results stay readable after the table moves on.
+    [Test]
+    public void ParseTableWithNestedParagraph()
+    {
+        var json = @"
+            table {
+                row: contains {s:["" ""]}
+                props:[
+                    para {
+                        start: contains {s:[""is""]}
+                        props:[
+                            prop {
+                                name:""P""
+                                parsers:[ after { s:[""is""] } ]
+                            }
+                        ]
+                    }
+                ]
+            }
+";
+        var paragraph = @"
+            para {
+                start: contains {s:[""is""]}
+                props:[
+                    prop {
+                        name:""P""
+                        parsers:[ after { s:[""is""] } ]
+                    }
+                ]
+            }
+";
+        string[] lines = ["this is one", "that is two"];
+        var rows = Compiler.Compile(json).Parse(string.Join("\n", lines) + "\n").ToList();
+
+        Assert.That(rows, Has.Count.EqualTo(lines.Length));
+        for (var i = 0; i < lines.Length; i++)
+        {
+            var nested = ((IEnumerable<object[]>)rows[i][0]).Select(p => p[0]).ToList();
+            var direct = Compiler.Compile(paragraph).Parse(lines[i]).Select(p => p[0]).ToList();
+            Assert.That(nested, Is.Not.Empty);
+            Assert.That(nested, Is.EqualTo(direct));
+        }
+    }
+
     [Test]
     public void ParseTableTest2()
     {

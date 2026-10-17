@@ -11,6 +11,12 @@ namespace JMW.Parsing.Handlers
 
         public abstract IEnumerable<object[]> Parse(StreamReader reader);
 
+        // Handlers rewind the underlying stream, so a nested handler given any other reader copies what is left.
+        protected static StreamReader AsStreamReader(TextReader reader)
+        {
+            return reader as StreamReader ?? new StreamReader(new MemoryStream(Encoding.UTF8.GetBytes(reader.ReadToEnd())));
+        }
+
         public IEnumerable<object[]> Parse(string text)
         {
             using var ms = new MemoryStream(Encoding.UTF8.GetBytes(text));

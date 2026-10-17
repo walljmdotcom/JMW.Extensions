@@ -140,17 +140,16 @@ public class Table : Base, IParser, IProperty
 
             foreach (var p in this.Props)
             {
-                using var ms = new MemoryStream(Encoding.UTF8.GetBytes(line));
-                using var sr = new StreamReader(ms);
+                using var sr = new StringReader(line);
                 record.Add(p.Parse(sr));
             }
             yield return record.ToArray();
         }
     }
 
-    object IProperty.Parse(StreamReader reader)
+    object IProperty.Parse(TextReader reader)
     {
-        return this.Parse(reader);
+        return this.Parse(AsStreamReader(reader));
     }
 
     #region Static Methods
