@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using NUnit.Framework;
 
 namespace JMW.Collections.Tests
@@ -91,10 +92,16 @@ namespace JMW.Collections.Tests
             idx.MaybeGetIndex(p => p.BarCollection).Do(ifSuccess: d => Assert.That(d.Count == 2), ifException: null);
             idx.Add(f1);
 
+            var removed = idx[0];
             idx.RemoveAt(0);
             idx.MaybeGetUniqueIndex(p => p.Bar).Do(ifSuccess: d => Assert.That(d.Count == 1), ifException: null);
             idx.MaybeGetIndex(p => p.BarCollection).Do(ifSuccess: d => Assert.That(d.Count == 2), ifException: null);
-            idx.Insert(0, f1);
+            idx.Insert(0, removed);
+            Assert.That(idx[0] == removed);
+
+            // f1 is still in the collection, so inserting it again violates the unique index
+            Assert.That(() => idx.Insert(0, f1), Throws.TypeOf<OperationCanceledException>());
+            Assert.That(idx.Count == 2);
 
             try
             {
@@ -311,6 +318,179 @@ namespace JMW.Collections.Tests
             Assert.That(idx, Is.Empty);
             Assert.That(idx.GetIndex(nameof(NullableFoo.Name)), Is.Empty);
             Assert.That(idx.GetIndex(nameof(NullableFoo.Tags)), Is.Empty);
+        }
+
+        // Foo declares its indexes in the order Bar (unique), BarCollection, Baz, BazCollection (unique), so a
+        // violation on BazCollection happens after the other three have been visited
+        private static IEnumerable<TestCaseData> ViolatingFoos()
+        {
+            yield return new TestCaseData("jason", new[] { 7 }).SetName("{m}(first unique index)");
+            yield return new TestCaseData("new", new[] { 1 }).SetName("{m}(last unique index)");
+            yield return new TestCaseData("new", new[] { 7, 8, 3 }).SetName("{m}(last element of last index)");
+            yield return new TestCaseData("new", new[] { 7, 7 }).SetName("{m}(duplicate within the item)");
+            yield return new TestCaseData("wall", new[] { 4 }).SetName("{m}(both unique indexes)");
+        }
+
+        private static Foo ViolatingFoo(string bar, int[] bazCollection)
+        {
+            return new Foo
+            {
+                Bar = bar,
+                BarCollection = ["leaked", "two"],
+                Baz = "leaked",
+                BazCollection = [.. bazCollection]
+            };
+        }
+
+        private static string Snapshot(IndexedCollection<Foo> idx)
+        {
+            static string bucket(IEnumerable<Foo> items) => string.Join("|", items.Select(f => f.Bar));
+
+            var parts = new List<string>();
+            foreach (var name in new[] { nameof(Foo.Bar), nameof(Foo.BazCollection) })
+            {
+                parts.AddRange(idx.GetUniqueIndex(name).OrderBy(kv => kv.Key, StringComparer.Ordinal)
+                    .Select(kv => name + ":" + kv.Key + "=" + kv.Value.Bar));
+            }
+
+            foreach (var name in new[] { nameof(Foo.BarCollection), nameof(Foo.Baz) })
+            {
+                parts.AddRange(idx.GetIndex(name).OrderBy(kv => kv.Key, StringComparer.Ordinal)
+                    .Select(kv => name + ":" + kv.Key + "=" + bucket(kv.Value)));
+            }
+
+            return string.Join(";", parts);
+        }
+
+        [TestCaseSource(nameof(ViolatingFoos))]
+        public void FailedTryAddLeavesEveryIndexUnchanged(string bar, int[] bazCollection)
+        {
+            var idx = TwoFoos();
+            var before = Snapshot(idx);
+            var violations = 0;
+            idx.IndexViolated += (o, e) => violations++;
+
+            Assert.That(idx.TryAdd(ViolatingFoo(bar, bazCollection)), Is.False);
+            Assert.That(Snapshot(idx), Is.EqualTo(before));
+            Assert.That(idx.Count, Is.EqualTo(2));
+            Assert.That(violations, Is.EqualTo(1));
+            Assert.That(idx.TryGetByIndex(p => p.Baz, "leaked", out _), Is.False);
+        }
+
+        [TestCaseSource(nameof(ViolatingFoos))]
+        public void FailedAddLeavesEveryIndexUnchanged(string bar, int[] bazCollection)
+        {
+            var idx = TwoFoos();
+            var before = Snapshot(idx);
+
+            Assert.That(() => idx.Add(ViolatingFoo(bar, bazCollection)), Throws.TypeOf<OperationCanceledException>());
+            Assert.That(Snapshot(idx), Is.EqualTo(before));
+            Assert.That(idx.Count, Is.EqualTo(2));
+        }
+
+        [TestCaseSource(nameof(ViolatingFoos))]
+        public void FailedInsertLeavesEveryIndexUnchanged(string bar, int[] bazCollection)
+        {
+            var idx = TwoFoos();
+            var before = Snapshot(idx);
+            var foo = ViolatingFoo(bar, bazCollection);
+
+            Assert.That(() => idx.Insert(1, foo), Throws.TypeOf<OperationCanceledException>());
+            Assert.That(Snapshot(idx), Is.EqualTo(before));
+            Assert.That(idx.Count, Is.EqualTo(2));
+            Assert.That(idx.Contains(foo), Is.False);
+        }
+
+        // replacing idx[0] releases its own keys, so these collide with idx[1] ("wall", [3, 4]) instead
+        private static IEnumerable<TestCaseData> ViolatingReplacements()
+        {
+            yield return new TestCaseData("wall", new[] { 7 }).SetName("{m}(first unique index)");
+            yield return new TestCaseData("new", new[] { 3 }).SetName("{m}(last unique index)");
+            yield return new TestCaseData("new", new[] { 7, 8, 4 }).SetName("{m}(last element of last index)");
+            yield return new TestCaseData("new", new[] { 7, 7 }).SetName("{m}(duplicate within the item)");
+            yield return new TestCaseData("wall", new[] { 4 }).SetName("{m}(both unique indexes)");
+        }
+
+        [TestCaseSource(nameof(ViolatingReplacements))]
+        public void FailedIndexerSetLeavesEveryIndexUnchanged(string bar, int[] bazCollection)
+        {
+            var idx = TwoFoos();
+            var original = idx[0];
+            var other = idx[1];
+            var before = Snapshot(idx);
+
+            Assert.That(() => idx[0] = ViolatingFoo(bar, bazCollection), Throws.TypeOf<OperationCanceledException>());
+            Assert.That(Snapshot(idx), Is.EqualTo(before));
+            Assert.That(idx[0], Is.SameAs(original));
+            Assert.That(idx[1], Is.SameAs(other));
+
+            // the original item still tracks its own property changes
+            original.Bar = "renamed";
+            Assert.That(idx.GetByUniqueIndex(p => p.Bar, "renamed"), Is.SameAs(original));
+        }
+
+        [Test]
+        public void KeysOfAFailedAddRemainFree()
+        {
+            var idx = TwoFoos();
+            Assert.That(idx.TryAdd(new Foo { Bar = "free", BazCollection = [9, 1] }), Is.False);
+
+            var next = new Foo { Bar = "free", BazCollection = [9] };
+            Assert.That(idx.TryAdd(next), Is.True);
+            Assert.That(idx.GetByUniqueIndex(p => p.Bar, "free"), Is.SameAs(next));
+            Assert.That(idx.GetUniqueIndex(p => p.BazCollection)["9"], Is.SameAs(next));
+        }
+
+        [TestCase(-1)]
+        [TestCase(3)]
+        public void InsertOutOfRangeLeavesEveryIndexUnchanged(int position)
+        {
+            var idx = TwoFoos();
+            var before = Snapshot(idx);
+
+            Assert.That(() => idx.Insert(position, new Foo { Bar = "new", BazCollection = [9] }),
+                Throws.TypeOf<ArgumentOutOfRangeException>());
+            Assert.That(Snapshot(idx), Is.EqualTo(before));
+        }
+
+        [TestCase(0)]
+        [TestCase(1)]
+        [TestCase(2)]
+        public void ValidInsertIndexesTheItem(int position)
+        {
+            var idx = TwoFoos();
+            var foo = new Foo { Bar = "new", BarCollection = ["x"], Baz = "z", BazCollection = [9] };
+
+            idx.Insert(position, foo);
+            Assert.That(idx[position], Is.SameAs(foo));
+            Assert.That(idx.GetByUniqueIndex(p => p.Bar, "new"), Is.SameAs(foo));
+            Assert.That(idx.GetByIndex(p => p.Baz, "z"), Is.EqualTo(new[] { foo }));
+
+            foo.Bar = "renamed";
+            Assert.That(idx.GetByUniqueIndex(p => p.Bar, "renamed"), Is.SameAs(foo));
+        }
+
+        [Test]
+        public void ValidIndexerSetReplacesIndexEntries()
+        {
+            var idx = TwoFoos();
+            var old = idx[0];
+
+            // reuses the replaced item's unique keys, which is allowed because they are released first
+            var foo = new Foo { Bar = "jason", BarCollection = ["x"], Baz = "z", BazCollection = [1, 9] };
+            idx[0] = foo;
+
+            Assert.That(idx[0], Is.SameAs(foo));
+            Assert.That(idx.GetByUniqueIndex(p => p.Bar, "jason"), Is.SameAs(foo));
+            Assert.That(idx.GetUniqueIndex(p => p.BazCollection).ContainsKey("2"), Is.False);
+            Assert.That(idx.TryGetByIndex(p => p.Baz, "me", out _), Is.False);
+
+            old.Bar = "changed";
+            Assert.That(idx.TryGetByUniqueIndex(p => p.Bar, "changed", out _), Is.False);
+
+            idx[0] = foo;
+            Assert.That(idx.GetByUniqueIndex(p => p.Bar, "jason"), Is.SameAs(foo));
+            Assert.That(idx.Count, Is.EqualTo(2));
         }
 
         [Test]

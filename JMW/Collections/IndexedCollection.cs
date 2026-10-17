@@ -32,6 +32,9 @@ namespace JMW.Collections
     /// <typeparam name="T">The type of object being stored in the collection.</typeparam>
     public class IndexedCollection<T> : INotifyCollectionChanged, IList<T> where T : IndexedClass
     {
+        private const string IndexViolationMessage =
+            "Operation was cancelled due to an index violation. The Index may have been violated.";
+
         private readonly Dictionary<string, Dictionary<string, List<T>>> _indexCollection = [];
         private readonly Dictionary<string, Dictionary<string, T>> _uniqueIndexCollection = [];
         private readonly ObservableCollection<T> _collection = [];
@@ -368,7 +371,7 @@ namespace JMW.Collections
         public void Add(T item)
         {
             if (!TryAdd(item))
-                throw new OperationCanceledException("Operation was cancelled due to an index violation. The Index may have been violated.");
+                throw new OperationCanceledException(IndexViolationMessage);
         }
 
         /// <summary>
@@ -536,39 +539,55 @@ namespace JMW.Collections
         }
 
         /// <summary>
-        /// Adds the value to all the relevant dictionaries (indexes)
+        /// Adds the value to all the relevant dictionaries (indexes).  Every unique key is checked before any index
+        /// is written, so a violation leaves every index unchanged.
         /// </summary>
         /// <param name="val">The value to add.</param>
         /// <returns>True if the operation succeeded.</returns>
         private bool AddToDictionaries(T val)
         {
+            if (!TryCollectUniqueKeys(val, null, out var uniqueKeys))
+                return false;
+
+            WriteToDictionaries(val, uniqueKeys);
+            return true;
+        }
+
+        /// <summary>
+        /// Gathers the unique index keys <paramref name="val"/> would occupy, raising <see cref="IndexViolated"/> and
+        /// returning false on the first key already held by another item.  Keys held by <paramref name="replacing"/>
+        /// count as free, since that item is about to leave the indexes.
+        /// </summary>
+        private bool TryCollectUniqueKeys(
+            T val,
+            T? replacing,
+            out List<(Dictionary<string, T> Index, string Key)> uniqueKeys
+        )
+        {
+            uniqueKeys = [];
             foreach (var prop in _indexedProps.Values)
             {
+                if (!prop.IsUnique) continue;
+
                 var p = prop.Info;
+                var index = _uniqueIndexCollection[p.Name];
 
-                if (prop.IsUnique)
+                if (prop.IsCollection || prop.IsDict)
                 {
-                    if (prop.IsCollection || prop.IsDict)
-                    {
-                        // setup events on the list.
-                        // its possible for a property to be specified as indexable, but be null.
-                        if (p.GetValue(val) is not IEnumerable objs) continue;
+                    // its possible for a property to be specified as indexable, but be null.
+                    if (p.GetValue(val) is not IEnumerable objs) continue;
 
-                        foreach (var o in objs)
-                        {
-                            // null values are never indexed
-                            if (o?.ToString() is not string key) continue;
-                            if (_uniqueIndexCollection[p.Name].AddIfNotPresent(key, val)) continue;
-
-                            IndexViolated?.Invoke(this, new IndexViolationEventArgs<T>(val, "Value violated index '" + p.Name + "' using key '" + key + "'"));
-                            return false;
-                        }
-                    }
-                    else
+                    // a key repeated within the item's own collection violates the index too
+                    var seen = new HashSet<string>();
+                    foreach (var o in objs)
                     {
                         // null values are never indexed
-                        if (p.GetValue(val, null)?.ToString() is not string key) continue;
-                        if (_uniqueIndexCollection[p.Name].AddIfNotPresent(key, val)) continue;
+                        if (o?.ToString() is not string key) continue;
+                        if (isFree(index, key, replacing) && seen.Add(key))
+                        {
+                            uniqueKeys.Add((index, key));
+                            continue;
+                        }
 
                         IndexViolated?.Invoke(this, new IndexViolationEventArgs<T>(val, "Value violated index '" + p.Name + "' using key '" + key + "'"));
                         return false;
@@ -576,28 +595,62 @@ namespace JMW.Collections
                 }
                 else
                 {
-                    if (prop.IsCollection || prop.IsDict)
+                    // null values are never indexed
+                    if (p.GetValue(val, null)?.ToString() is not string key) continue;
+                    if (isFree(index, key, replacing))
                     {
-                        // its possible for a property to be specified as indexed, but be null.
-                        if (p.GetValue(val) is not IEnumerable objs) continue;
+                        uniqueKeys.Add((index, key));
+                        continue;
+                    }
 
-                        foreach (var o in objs)
-                        {
-                            var key = prop.IsDict
-                                ? o?.GetType().GetProperty(nameof(KeyValuePair<string, T>.Value))?.GetValue(o)?.ToString()
-                                : o?.ToString();
-                            _indexCollection[p.Name].SafeAdd(key, val);
-                        }
-                    }
-                    else
-                    {
-                        var key = p.GetValue(val)?.ToString();
-                        _indexCollection[p.Name].SafeAdd(key, val);
-                    }
+                    IndexViolated?.Invoke(this, new IndexViolationEventArgs<T>(val, "Value violated index '" + p.Name + "' using key '" + key + "'"));
+                    return false;
                 }
             }
 
             return true;
+        }
+
+        private static bool isFree(Dictionary<string, T> index, string key, T? replacing)
+        {
+            return !index.TryGetValue(key, out var owner)
+                || (replacing is not null && ReferenceEquals(owner, replacing));
+        }
+
+        /// <summary>
+        /// Writes <paramref name="val"/> into every index, using unique keys already checked by
+        /// <see cref="TryCollectUniqueKeys"/>.
+        /// </summary>
+        private void WriteToDictionaries(T val, List<(Dictionary<string, T> Index, string Key)> uniqueKeys)
+        {
+            // assignment rather than Add: a key the replaced item still holds is overwritten instead of throwing
+            foreach (var (index, key) in uniqueKeys)
+                index[key] = val;
+
+            foreach (var prop in _indexedProps.Values)
+            {
+                if (prop.IsUnique) continue;
+
+                var p = prop.Info;
+                if (prop.IsCollection || prop.IsDict)
+                {
+                    // its possible for a property to be specified as indexed, but be null.
+                    if (p.GetValue(val) is not IEnumerable objs) continue;
+
+                    foreach (var o in objs)
+                    {
+                        var key = prop.IsDict
+                            ? o?.GetType().GetProperty(nameof(KeyValuePair<string, T>.Value))?.GetValue(o)?.ToString()
+                            : o?.ToString();
+                        _indexCollection[p.Name].SafeAdd(key, val);
+                    }
+                }
+                else
+                {
+                    var key = p.GetValue(val)?.ToString();
+                    _indexCollection[p.Name].SafeAdd(key, val);
+                }
+            }
         }
 
         /// <summary>
@@ -723,9 +776,20 @@ namespace JMW.Collections
         {
             ArgumentNullException.ThrowIfNull(item);
 
-            item.IndexedPropertyChanged -= OnIndexedPropertyChanged;
-            AddToDictionaries(item);
+            // checked before the indexes are written so a bad position cannot leave the item half indexed
+            if (index < 0 || index > _collection.Count)
+            {
+                throw new ArgumentOutOfRangeException(
+                    nameof(index),
+                    index,
+                    "Index must be within the bounds of the collection."
+                );
+            }
 
+            if (!AddToDictionaries(item))
+                throw new OperationCanceledException(IndexViolationMessage);
+
+            item.IndexedPropertyChanged -= OnIndexedPropertyChanged;
             _collection.Insert(index, item);
             item.IndexedPropertyChanged += OnIndexedPropertyChanged;
         }
@@ -745,12 +809,15 @@ namespace JMW.Collections
             {
                 var item = _collection[index];
 
+                // check before removing the old item so a violation leaves every index exactly as it was
+                if (!TryCollectUniqueKeys(value, item, out var uniqueKeys))
+                    throw new OperationCanceledException(IndexViolationMessage);
+
                 RemoveFromDictionaries(item);
+                WriteToDictionaries(value, uniqueKeys);
+
                 item.IndexedPropertyChanged -= OnIndexedPropertyChanged;
-
                 _collection[index] = value;
-
-                AddToDictionaries(value);
                 value.IndexedPropertyChanged += OnIndexedPropertyChanged;
             }
         }
