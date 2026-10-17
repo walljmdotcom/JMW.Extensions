@@ -516,6 +516,29 @@ namespace JMW.Templates.Tests
             }
         }
 
+        private const string JoinTables = "left_table=\"t\" right_table=\"u\" left_key=\"num\" right_key=\"num\"";
+
+        // A second join over the same tables and keys starts from every joined row, whatever the first one filtered.
+        [TestCase("where=\"x2 != 'b'\"", "ac|abc")]
+        [TestCase("orderby=\"left_name\" order=\"desc\"", "cba|abc")]
+        [TestCase("distinct=\"right_label\"", "ac|abc")]
+        [TestCase("left_where=\"x1 != '20'\"", "ac|abc")]
+        [TestCase("right_where=\"x1 != '20'\"", "ac|abc")]
+        [TestCase("", "abc|abc")]
+        public void TestJoinRepeated(string first_filter, string expected)
+        {
+            var sb = new StringBuilder();
+            using var wr = new StringWriter(sb);
+            var i = new Interpreter(wr);
+            i.AddHandler(new Table(new TableData("t", ["num,name", "10,a", "20,b", "30,c"]), i));
+            i.AddHandler(new Table(new TableData("u", ["num,label", "10,p", "20,p", "30,r"]), i));
+
+            i.Eval("<join " + JoinTables + " " + first_filter + "><left_name/></join>|<join " + JoinTables + "><left_name/></join>");
+
+            Assert.That(sb.ToString(), Is.EqualTo(expected));
+        }
+
+
         [Test]
         public void TestJoinError1()
         {

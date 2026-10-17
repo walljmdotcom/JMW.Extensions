@@ -6,8 +6,19 @@ namespace JMW.Templates.Tags
 {
     public class Join : TagHandlerBase
     {
-        private bool _hasBeenJoined = false;
-        private string _joinDetails = string.Empty;
+        private JoinKey _joinKey;
+
+        // The row lists compare by reference: a filtered table hands its body a new list.
+        private readonly record struct JoinKey(
+            string? LeftKeyExp,
+            string? LeftKey,
+            string? LeftWhere,
+            string? RightKeyExp,
+            string? RightKey,
+            string? RightWhere,
+            List<List<string>>? LeftData,
+            List<List<string>>? RightData
+        );
 
         private readonly TableData? _leftTableData;
         private readonly TableData? _rightTableData;
@@ -81,20 +92,20 @@ namespace JMW.Templates.Tags
 
             TagHelpers.PrefixTags(tag.Children, Name);
 
-            var join_details = (tag.Properties.TryGetValue(ATTR_LEFT_KEY_EXP, out var leftKeyExp) ? leftKeyExp : string.Empty) +
-                               (tag.Properties.TryGetValue(ATTR_LEFT_KEY, out var leftKey) ? leftKey : string.Empty) +
-                               (tag.Properties.TryGetValue(ATTR_LEFT_WHERE, out var leftWhere) ? leftWhere : string.Empty) +
-                               (tag.Properties.TryGetValue(ATTR_RIGHT_KEY, out var rightKey) ? rightKey : string.Empty) +
-                               (tag.Properties.TryGetValue(ATTR_RIGHT_KEY_EXP, out var rightKeyExp) ? rightKeyExp : string.Empty) +
-                               (tag.Properties.TryGetValue(ATTR_RIGHT_WHERE, out var rightWhere) ? rightWhere : string.Empty);
+            // The joined rows are reused until the join attributes or either table's row list change.
+            var join_key = new JoinKey(
+                tag.Properties.TryGetValue(ATTR_LEFT_KEY_EXP, out var leftKeyExp) ? leftKeyExp : null,
+                tag.Properties.TryGetValue(ATTR_LEFT_KEY, out var leftKey) ? leftKey : null,
+                tag.Properties.TryGetValue(ATTR_LEFT_WHERE, out var leftWhere) ? leftWhere : null,
+                tag.Properties.TryGetValue(ATTR_RIGHT_KEY_EXP, out var rightKeyExp) ? rightKeyExp : null,
+                tag.Properties.TryGetValue(ATTR_RIGHT_KEY, out var rightKey) ? rightKey : null,
+                tag.Properties.TryGetValue(ATTR_RIGHT_WHERE, out var rightWhere) ? rightWhere : null,
+                _leftTableData.Data,
+                _rightTableData.Data
+            );
 
-            if (!_hasBeenJoined || join_details != _joinDetails)
+            if (JoinedTableData is null || _joinKey != join_key)
             {
-                // if its the same join don't do this more than once.
-                _joinDetails = join_details;
-                _hasBeenJoined = true;
-
-                // do the join
                 var left = new Dictionary<string, List<string>>();
                 var ldata = _leftTableData.Data;
                 if (tag.Properties.TryGetValue(ATTR_LEFT_WHERE, out var attrLeftWhere))
@@ -151,28 +162,10 @@ namespace JMW.Templates.Tags
                 var i = 0;
                 var col_indexes = columns.ToDictionary(c => c, v => i++);
                 JoinedTableData = new TableData(Name, columns, col_indexes, joined);
+                _joinKey = join_key;
             }
 
-            if (JoinedTableData is null)
-            {
-                throw new InvalidOperationException();
-            }
-
-            // filter the distinct if present
-            Table.FilterDistinct(tag, JoinedTableData);
-
-            // filter data by where if present.
-            Table.FilterWhere(tag, JoinedTableData);
-
-            // filter data by where if present.
-            Table.FilterOrderBy(tag, JoinedTableData);
-
-            // Handles all rows in sheet.
-            for (CurrentRow = 0; CurrentRow < JoinedTableData.Data.Count; CurrentRow++)
-            {
-                // we access the row using the CurrentRow value, but it needs to be called for every row
-                interp.Eval(tag.Children);
-            }
+            Table.EvalFilteredRows(tag, JoinedTableData, interp, row => CurrentRow = row);
         }
 
         public string RetrieveColumnValue(string? column)

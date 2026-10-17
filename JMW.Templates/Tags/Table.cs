@@ -54,41 +54,49 @@ namespace JMW.Templates.Tags
             // prefix the names of the columns
             TagHelpers.PrefixTags(tag.Children, _name);
 
-            var old = TableData.Data;
+            EvalFilteredRows(tag, TableData, interp, row => CurrentRow = row);
+        }
 
-            // filter the distinct if present
-            FilterDistinct(tag, TableData);
-
-            // filter data by where if present.
-            FilterWhere(tag, TableData);
-
-            // filter data by where if present.
-            FilterOrderBy(tag, TableData);
-
-            // evaluate the children of the table tag.
-            for (CurrentRow = 0; CurrentRow < TableData.Data.Count; CurrentRow++)
+        /// <summary>
+        /// Applies the tag's distinct, where, and orderby to <paramref name="table_data"/>, runs the tag's body once per
+        /// remaining row, then puts the unfiltered rows back so the next tag over the same data starts from all of them.
+        /// </summary>
+        internal static void EvalFilteredRows(Tag tag, TableData table_data, Interpreter interp, Action<int> set_current_row)
+        {
+            var unfiltered = table_data.Data;
+            try
             {
-                // we access the row using the CurrentRow value, but it need to be called for every row
-                interp.Eval(tag.Children);
-            }
+                FilterDistinct(tag, table_data);
+                FilterWhere(tag, table_data);
+                FilterOrderBy(tag, table_data);
 
-            // just in case you modified TableData.Data in the distinct or where clause, put it back.
-            TableData.Data = old;
+                // column tags read the row through the current row number, so it is set before each pass.
+                for (var row = 0; row < table_data.Data.Count; row++)
+                {
+                    set_current_row(row);
+                    interp.Eval(tag.Children);
+                }
+            }
+            finally
+            {
+                table_data.Data = unfiltered;
+            }
         }
 
         public static void FilterOrderBy(Tag tag, TableData table_data)
         {
             if (tag.Properties.TryGetValue(ATTR_ORDERBY, out var attrOrderBy))
             {
+                var column = table_data.ColumnIndexes[attrOrderBy];
                 if (
-                       tag.Properties.TryGetValue(ATTR_ORDER, out var attrOrder) 
+                       tag.Properties.TryGetValue(ATTR_ORDER, out var attrOrder)
                     && attrOrder == ATTR_ORDER_VALUE_DESC
                 )
                 {
-                    table_data.Data = [.. table_data.Data.OrderByDescending(r => r[table_data.ColumnIndexes[attrOrderBy]])];
+                    table_data.Data = [.. table_data.Data.OrderByDescending(r => r[column])];
                 }
                 else
-                    table_data.Data = [.. table_data.Data.OrderBy(r => r[table_data.ColumnIndexes[attrOrderBy]])];
+                    table_data.Data = [.. table_data.Data.OrderBy(r => r[column])];
             }
         }
 
