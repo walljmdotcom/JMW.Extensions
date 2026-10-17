@@ -108,6 +108,19 @@ public class JunosParsingTest : TestBase
         Assert.Throws<ParseException>(() => ParseWithin(input, cancellationToken));
     }
 
+    // U+FFFF inserted at every position, in words, quoted strings, comments, block comments, and whitespace.
+    [TestCase("system { host-name \"foo bar\"; } # comment\n/* block */ x;")]
+    [TestCase("[ a b ]")]
+    [CancelAfter(10000)]
+    public void Parse_InvalidCharacterAnywhere_ThrowsEncodingError(string input, CancellationToken cancellationToken)
+    {
+        for (var i = 0; i <= input.Length; i++)
+        {
+            var ex = Assert.Throws<ParseException>(() => ParseWithin(input.Insert(i, ((char)0xFFFF).ToString()), cancellationToken));
+            Assert.That(ex?.ErrorText, Does.Contain("Invalid Character Encoding"), "at " + i);
+        }
+    }
+
     [Test]
     [CancelAfter(10000)]
     public void Parse_AfterFailure_SameParserStartsClean(CancellationToken cancellationToken)

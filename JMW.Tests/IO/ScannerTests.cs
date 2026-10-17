@@ -1,4 +1,5 @@
 using NUnit.Framework;
+using System;
 using System.IO;
 using System.Text;
 
@@ -7,9 +8,56 @@ namespace JMW.Tests;
 [TestFixture]
 public class ScannerTests
 {
+    private const string InvalidMessage = "bad encoding";
+
     private static Scanner Create(string text)
     {
-        return new Scanner(new StringReader(text));
+        return new Scanner(new StringReader(text), InvalidMessage);
+    }
+
+    private const char Invalid = (char)0xFFFF;
+
+    // U+FFFF, written as '~' in the cases, is rejected wherever it sits and by whichever member reaches it first.
+    [TestCase("~")]
+    [TestCase("~ab")]
+    [TestCase("ab~")]
+    [TestCase("a\n~\nb")]
+    public void EveryMemberRejectsInvalidCharacter(string text)
+    {
+        text = text.Replace('~', Invalid);
+        int at = text.IndexOf(Invalid, StringComparison.Ordinal);
+        var reads = new (string Name, Action<Scanner> Act)[]
+        {
+            ("TryRead", static s => s.TryRead(out _)),
+            ("TryPeek", static s => s.TryPeek(out _)),
+            ("AtEnd", static s => _ = s.AtEnd),
+            ("TryMatch", static s => s.TryMatch(Invalid.ToString())),
+            ("ReadWhile", static s => s.ReadWhile(static _ => true)),
+            ("ReadUntil", static s => s.ReadUntil('z', new StringBuilder())),
+        };
+
+        foreach ((string name, Action<Scanner> act) in reads)
+        {
+            Scanner scanner = Create(text);
+            ReadCount(scanner, at);
+            InvalidDataException? ex = Assert.Throws<InvalidDataException>(() => act(scanner), name);
+            Assert.That(ex?.Message, Is.EqualTo(InvalidMessage), name);
+        }
+
+        // Reaching it through a longer read rejects it too.
+        Assert.Throws<InvalidDataException>(() => Create(text).ReadWhile(static _ => true));
+        Assert.Throws<InvalidDataException>(() => Create(text).ReadUntil('z', new StringBuilder()));
+    }
+
+    [TestCase(0xFFFE)]
+    [TestCase(0xFFFD)]
+    [TestCase(0)]
+    public void OtherCharactersAreNotRejected(int code)
+    {
+        Scanner scanner = Create(((char)code).ToString());
+
+        Assert.That(scanner.TryRead(out char c), Is.True);
+        Assert.That(c, Is.EqualTo((char)code));
     }
 
     private static void ReadCount(Scanner scanner, int count)

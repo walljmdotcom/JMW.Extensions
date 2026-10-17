@@ -26,11 +26,10 @@ public class Tokenizer
     private readonly Scanner lineReader;
 
     private bool inWord = false;
-    private bool eof = false;
 
     public Tokenizer(TextReader reader)
     {
-        this.lineReader = new(reader);
+        this.lineReader = new(reader, INVALID_UNICODE_ERROR);
     }
 
     public Tokenizer(string template) : this(new StringReader(template))
@@ -41,11 +40,6 @@ public class Tokenizer
     {
         try
         {
-            if (this.eof)
-            {
-                return this.SetupErrorToken("EOF");
-            }
-
             this.Token.Line = this.Line;
             this.Token.Column = this.Column;
 
@@ -101,7 +95,6 @@ public class Tokenizer
 
             if (!this.lineReader.TryPeek(out char next))
             {
-                this.eof = true;
                 return this.SetupErrorToken("EOF");
             }
 
@@ -129,61 +122,33 @@ public class Tokenizer
         return this.Token.Type;
     }
 
-    private TokenType ConsumeUntil(char cc, TokenType type)
-    {
-        this.Token.Type = type;
-        var more = this.lineReader.TryRead(out char c);
-        var value = new List<char>();
-        while (more && c != cc && c != 0)
-        {
-            value.Add(c);
-            more = this.lineReader.TryRead(out c);
-            // This is the unicode invalid character. If we encounter this it means we parsed the
-            // template with an invalid encoding. Or the template was stored with an invalid
-            // encoding.
-            if (more && c == '\uffff')
-            {
-                return this.SetupErrorToken(INVALID_UNICODE_ERROR);
-            }
-        }
-        if (!more)
-        {
-            this.eof = true;
-        }
-        else if (c != cc)
-        {
-            this.lineReader.PushBack(c);
-        }
-
-        this.Token.Value = new string(value.ToArray());
-        return type;
-    }
-
     private TokenType ConsumeComment()
     {
         if (this.lineReader.AtEnd)
         {
-            this.eof = true;
             return this.SetupErrorToken("EOF");
         }
 
-        this.ConsumeUntil('\n', TokenType.Comment);
-        this.Token.Value = this.Token.Value.TrimEnd('\r', '\n');
+        // A comment runs to the end of the line, or to the end of the input on the last line.
+        var value = new StringBuilder();
+        this.lineReader.ReadUntil('\n', value);
+        this.Token.Type = TokenType.Comment;
+        this.Token.Value = value.ToString().TrimEnd('\r');
         return this.Token.Type;
     }
 
+    // Only called after a peek found the opening quote.
     private TokenType ConsumePropertyValue()
     {
-        if (!this.lineReader.TryRead(out char c))
+        this.lineReader.TryRead(out char quote);
+        var value = new StringBuilder();
+        if (!this.lineReader.ReadUntil(quote, value))
         {
-            this.eof = true;
-            return this.SetupErrorToken("EOF");
+            return this.SetupErrorToken("Unexpected end of input. Did you forget a closing " + quote + "?");
         }
-        if (c == '"' || c == '\'')
-        {
-            return this.ConsumeUntil(c, TokenType.Value);
-        }
-        this.lineReader.PushBack(c);
+
+        this.Token.Type = TokenType.Value;
+        this.Token.Value = value.ToString();
         return this.Token.Type;
     }
 
@@ -223,21 +188,6 @@ public class Tokenizer
     {
         var identifier = new StringBuilder();
         this.lineReader.ReadWhile(IsWordChar, identifier);
-        if (!this.lineReader.TryRead(out char c))
-        {
-            this.eof = true;
-        }
-        // This is the unicode invalid character. If we encounter this it means we parsed the
-        // template with an invalid encoding. Or the template was stored with an invalid
-        // encoding.
-        else if (c == '\uffff')
-        {
-            return this.SetupErrorToken(INVALID_UNICODE_ERROR);
-        }
-        else
-        {
-            this.lineReader.PushBack(c);
-        }
         this.inWord = true;
         this.Token.Type = TokenType.Word;
         this.Token.Value = identifier.ToString();
@@ -246,22 +196,7 @@ public class Tokenizer
 
     private TokenType ConsumeWhitespace()
     {
-        var skipped = this.lineReader.ReadWhile(IsSkippable); // ignore the ';', its optional.
-        if (!this.lineReader.TryRead(out char c))
-        {
-            this.eof = true;
-        }
-        // This is the unicode invalid character. If we encounter this it means we parsed the
-        // template with an invalid encoding. Or the template was stored with an invalid
-        // encoding.
-        else if (skipped > 0 && c == '\uffff')
-        {
-            return this.SetupErrorToken(INVALID_UNICODE_ERROR);
-        }
-        else
-        {
-            this.lineReader.PushBack(c);
-        }
+        this.lineReader.ReadWhile(IsSkippable); // ignore the ';', its optional.
         return this.Next();
     }
 
@@ -277,13 +212,7 @@ public class Tokenizer
 
     private bool MaybeReadWord()
     {
-        if (!this.lineReader.TryPeek(out char c))
-        {
-            this.eof = true;
-            return false;
-        }
-
-        return acceptableWordChars.Contains(c);
+        return this.lineReader.TryPeek(out char c) && acceptableWordChars.Contains(c);
     }
 
     private bool MaybeReadCommentStart()
@@ -323,12 +252,6 @@ public class Tokenizer
 
     private bool MaybeReadText(string text)
     {
-        if (this.lineReader.AtEnd)
-        {
-            this.eof = true;
-            return false;
-        }
-
         return this.lineReader.TryMatch(text);
     }
 }

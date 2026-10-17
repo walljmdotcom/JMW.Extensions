@@ -74,7 +74,7 @@ namespace JMW.Templates.Tests
             var tokenizer = new Tokenizer(reader);
             Assert.That(tokenizer.Next(), Is.EqualTo(TokenType.OPENTAG));
             Assert.That(tokenizer.Token.Value, Is.EqualTo("foo"));
-            Assert.That(tokenizer._eof, Is.False);
+            Assert.That(tokenizer._reader.AtEnd, Is.False);
 
             Assert.That(tokenizer.Next(), Is.EqualTo(TokenType.ERROR));
             Assert.That(tokenizer.Token.Value, Is.EqualTo("EOF"));
@@ -347,6 +347,59 @@ namespace JMW.Templates.Tests
             Assert.That(tokenizer.Next(), Is.EqualTo(TokenType.SINGLEClOSE));
             Assert.That(tokenizer.Token.Value, Is.EqualTo(""));
             Assert.That(tokenizer.Next(), Is.EqualTo(TokenType.ERROR));
+            Assert.That(tokenizer.Token.Value, Is.EqualTo("EOF"));
+        }
+
+        // U+FFFF inserted at every position, in text, tag names, param names and values, and comments.
+        [TestCase("text <a b='q v' c=\"w\" d=x>body</a>")]
+        [TestCase("<a/> # comment\nmore")]
+        [TestCase("x\\#y")]
+        public void InvalidCharacterAnywhereIsAnError(string template)
+        {
+            for (var i = 0; i <= template.Length; i++)
+            {
+                var tokenizer = new Tokenizer(template.Insert(i, ((char)0xFFFF).ToString()));
+                var tokens = 0;
+                while (tokenizer.Next() != TokenType.ERROR && tokens++ < 100)
+                {
+                }
+
+                Assert.That(tokenizer.Token.Value, Is.EqualTo(Tokenizer.INVALID_UNICODE_ERROR), "at " + i);
+            }
+        }
+
+        // Running out inside a tag is the same error with or without trailing whitespace.
+        [TestCase("<a")]
+        [TestCase("<a ")]
+        [TestCase("<a b")]
+        [TestCase("<a b ")]
+        [TestCase("<a b=c")]
+        [TestCase("<a b=c ")]
+        [TestCase("<a b=")]
+        [TestCase("</a ")]
+        public void EndInsideTagIsUnclosedTagError(string template)
+        {
+            var tokenizer = new Tokenizer(template);
+            var tokens = 0;
+            while (tokenizer.Next() != TokenType.ERROR && tokens++ < 100)
+            {
+            }
+
+            Assert.That(tokenizer.Token.Value, Is.EqualTo("Invalid tag. Did you forget to add a >?"));
+        }
+
+        [TestCase("<a>")]
+        [TestCase("<a> ")]
+        [TestCase("<a/>")]
+        [TestCase("<a b='c'>text")]
+        public void EndOutsideTagIsEof(string template)
+        {
+            var tokenizer = new Tokenizer(template);
+            var tokens = 0;
+            while (tokenizer.Next() != TokenType.ERROR && tokens++ < 100)
+            {
+            }
+
             Assert.That(tokenizer.Token.Value, Is.EqualTo("EOF"));
         }
 

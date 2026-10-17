@@ -27,10 +27,10 @@ namespace JMW.Templates
         private const char PARAM_ASSIGN = '=';
         private const char ESCAPE = '\\';
         private const string EOF = "EOF";
+        private const string UNCLOSED_TAG_ERROR = "Invalid tag. Did you forget to add a >?";
 
         internal bool _inTag = false;
         internal bool _inParam = false;
-        internal bool _eof = false;
 
         internal int Line
         {
@@ -49,7 +49,7 @@ namespace JMW.Templates
 
         public Tokenizer(TextReader reader)
         {
-            _reader = new Scanner(reader);
+            _reader = new Scanner(reader, INVALID_UNICODE_ERROR);
             Token = new Token();
         }
 
@@ -58,9 +58,10 @@ namespace JMW.Templates
             NEXT_START:
             try
             {
-                if (_eof)
+                if (_reader.AtEnd)
                 {
-                    return setupErrorToken(EOF);
+                    // A tag must end with a closing sigil, so running out inside one is an error.
+                    return setupErrorToken(_inTag ? UNCLOSED_TAG_ERROR : EOF);
                 }
 
                 Token.Line = Line;
@@ -145,13 +146,6 @@ namespace JMW.Templates
             var l = -1;
             while (more && c != BEGIN && !isComment(tb, c))
             {
-                // This is the unicode invalid character. If we encounter this it means we parsed the
-                // template with an invalid encoding. Or the template was stored with an invalid
-                // encoding.
-                if (c == '\uffff')
-                {
-                    return setupErrorToken(INVALID_UNICODE_ERROR);
-                }
                 consumed = true;
                 if (l == ESCAPE && c == COMMENT_START)
                 {
@@ -183,7 +177,7 @@ namespace JMW.Templates
             //  would always want to find a closing tag marker.
             if (!_reader.TryRead(out char c))
             {
-                return setupErrorToken("Invalid tag. Did you forget to add a " + CLOSE + "?", Line, Column);
+                return setupErrorToken(UNCLOSED_TAG_ERROR);
             }
 
             switch (c)
@@ -220,7 +214,7 @@ namespace JMW.Templates
         {
             if (_inTag)
             {
-                return setupErrorToken("Invalid tag. Did you forget to add a " + CLOSE + "?", Line, Column - 2);
+                return setupErrorToken(UNCLOSED_TAG_ERROR, Line, Column - 2);
             }
             _inTag = true;
             return consumeIdentifier(type);
@@ -238,7 +232,7 @@ namespace JMW.Templates
                 // this function only gets called when its reading a tag name, a parameter name, or a param value.
                 //  that being the case, if you hit the end of the file, then that's a syntax error, because you
                 //  would always want to find a closing tag marker.
-                return setupErrorToken("Invalid tag. Did you forget to add a " + CLOSE + "?", Line, Column);
+                return setupErrorToken(UNCLOSED_TAG_ERROR);
             }
 
             Token.Type = type;
@@ -250,25 +244,17 @@ namespace JMW.Templates
         internal void consumeWhitespace()
         {
             _reader.ReadWhile(char.IsWhiteSpace);
-            if (_reader.AtEnd)
-            {
-                _eof = true;
-            }
         }
 
         internal TokenType consumeComment()
         {
             if (_reader.AtEnd)
             {
-                _eof = true;
                 return setupErrorToken(EOF);
             }
             // A comment runs to the end of the line, or to the end of the template on the last line.
             var value = new StringBuilder();
-            if (!_reader.ReadUntil('\n', value))
-            {
-                _eof = true;
-            }
+            _reader.ReadUntil('\n', value);
 
             Token.Type = TokenType.COMMENT;
             Token.Value = value.ToString().TrimEnd('\r');
@@ -317,12 +303,6 @@ namespace JMW.Templates
 
         internal bool maybeReadText(string text)
         {
-            if (_reader.AtEnd)
-            {
-                _eof = true;
-                return false;
-            }
-
             return _reader.TryMatch(text);
         }
     }

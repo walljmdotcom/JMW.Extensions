@@ -9,22 +9,31 @@ namespace JMW;
 /// with line and column tracking from <see cref="LineTrackingReader"/>.
 /// </summary>
 /// <remarks>
-/// End of input is detected in <see cref="TryRead"/> and nowhere else. Every other member reports it through a
-/// <see langword="false"/> return, so callers never compare against the <c>-1</c> sentinel.
+/// End of input and U+FFFF are detected in <see cref="TryRead"/> and nowhere else. Every other member reports the
+/// end through a <see langword="false"/> return, so callers never compare against the <c>-1</c> sentinel.
 /// </remarks>
 internal sealed class Scanner : LineTrackingReader
 {
     private const int EndOfInput = -1;
 
-    public Scanner(TextReader reader)
+    // A decoder emits U+FFFF for bytes it could not map, so the input was read with the wrong encoding.
+    private const char InvalidCharacter = (char)0xFFFF;
+
+    private readonly string invalidCharacterMessage;
+
+    /// <param name="reader">The input.</param>
+    /// <param name="invalidCharacterMessage">The message thrown when the input contains U+FFFF.</param>
+    public Scanner(TextReader reader, string invalidCharacterMessage)
         : base(reader)
     {
+        this.invalidCharacterMessage = invalidCharacterMessage;
     }
 
     /// <summary>True when no characters remain.</summary>
     public bool AtEnd => !this.TryPeek(out _);
 
     /// <summary>Reads the next character. Returns false at the end of input.</summary>
+    /// <exception cref="InvalidDataException">The next character is U+FFFF.</exception>
     public bool TryRead(out char c)
     {
         int next = this.Read();
@@ -32,6 +41,11 @@ internal sealed class Scanner : LineTrackingReader
         {
             c = default;
             return false;
+        }
+
+        if (next == InvalidCharacter)
+        {
+            throw new InvalidDataException(this.invalidCharacterMessage);
         }
 
         c = (char)next;
