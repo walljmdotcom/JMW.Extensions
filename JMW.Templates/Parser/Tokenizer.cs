@@ -1,7 +1,5 @@
 using System;
-using System.Collections.Generic;
 using System.IO;
-using System.Linq;
 using System.Runtime.CompilerServices;
 using System.Text;
 
@@ -12,7 +10,7 @@ namespace JMW.Templates
 {
     public class Tokenizer
     {
-        internal LineTrackingReader _reader;
+        internal Scanner _reader;
         public Token Token
         {
             get;
@@ -51,7 +49,7 @@ namespace JMW.Templates
 
         public Tokenizer(TextReader reader)
         {
-            _reader = new LineTrackingReader(reader);
+            _reader = new Scanner(reader);
             Token = new Token();
         }
 
@@ -143,9 +141,9 @@ namespace JMW.Templates
             Token.Type = TokenType.TEXT;
             var consumed = false;
             var tb = new StringBuilder();
-            var c = _reader.Read();
+            var more = _reader.TryRead(out char c);
             var l = -1;
-            while (c != -1 && c != BEGIN && !isComment(tb, c))
+            while (more && c != BEGIN && !isComment(tb, c))
             {
                 // This is the unicode invalid character. If we encounter this it means we parsed the
                 // template with an invalid encoding. Or the template was stored with an invalid
@@ -158,16 +156,16 @@ namespace JMW.Templates
                 if (l == ESCAPE && c == COMMENT_START)
                 {
                     // you need to replace the escape with the actual char
-                    tb[tb.Length - 1] = (char)c;
+                    tb[tb.Length - 1] = c;
                 }
                 else
-                    tb.Append((char)c);
+                    tb.Append(c);
                 l = c;
-                c = _reader.Read();
+                more = _reader.TryRead(out c);
             }
-            if (c != -1) // NOTE(jeremy): -1 when cast to a char is an invalid unicode char. Don't push it back!
+            if (more)
             {
-                _reader.PushBack((char)c);
+                _reader.PushBack(c);
             }
             if (consumed)
             {
@@ -180,40 +178,35 @@ namespace JMW.Templates
 
         internal TokenType consumeParamValue()
         {
-            var c = _reader.Read();
+            // this function only gets called when its reading a tag name, a parameter name, or a param value.
+            //  that being the case, if you hit the end of the file, then that's a syntax error, because you
+            //  would always want to find a closing tag marker.
+            if (!_reader.TryRead(out char c))
+            {
+                return setupErrorToken("Invalid tag. Did you forget to add a " + CLOSE + "?", Line, Column);
+            }
+
             switch (c)
             {
-                // this function only gets called when its reading a tag name, a parameter name, or a param value.
-                //  that being the case, if you hit the end of the file, then that's a syntax error, because you
-                //  would always want to find a closing tag marker.
-                case -1:
-                    return setupErrorToken("Invalid tag. Did you forget to add a " + CLOSE + "?", Line, Column);
-
                 case '"':
                 case '\'':
                     return consumeUntil(c, TokenType.PARAMVALUE);
             }
 
-            _reader.PushBack((char)c);
+            _reader.PushBack(c);
             return consumeIdentifier(TokenType.PARAMVALUE);
         }
 
-        internal TokenType consumeUntil(int qry, TokenType type)
+        internal TokenType consumeUntil(char qry, TokenType type)
         {
             Token.Type = type;
-            var c = _reader.Read();
-            var value = new List<char>();
-            while (c != qry && c > -1)
+            var value = new StringBuilder();
+            if (!_reader.ReadUntil(qry, value))
             {
-                value.Add((char)c);
-                c = _reader.Read();
+                return setupErrorToken("Unexpected end of template.  Did you forget to add a " + qry + "?", Line, Column);
             }
-            if (c == -1)
-            {
-                return setupErrorToken("Unexpected end of template.  Did you forget to add a " + (char)qry + "?", Line, Column);
-            }
-            
-            Token.Value = new string(value.ToArray());
+
+            Token.Value = value.ToString();
             return type;
         }
 
@@ -235,14 +228,12 @@ namespace JMW.Templates
 
         internal TokenType consumeIdentifier(TokenType type)
         {
-            var identifier = new List<char>();
-            var c = _reader.Read();
-            while (c != -1 && c != FORWARD_SLASH && c != CLOSE && c != BEGIN && c != PARAM_ASSIGN && !char.IsWhiteSpace((char)c))
-            {
-                identifier.Add((char)c);
-                c = _reader.Read();
-            }
-            if (c == -1)
+            var identifier = new StringBuilder();
+            _reader.ReadWhile(
+                static c => c != FORWARD_SLASH && c != CLOSE && c != BEGIN && c != PARAM_ASSIGN && !char.IsWhiteSpace(c),
+                identifier
+            );
+            if (_reader.AtEnd)
             {
                 // this function only gets called when its reading a tag name, a parameter name, or a param value.
                 //  that being the case, if you hit the end of the file, then that's a syntax error, because you
@@ -250,46 +241,31 @@ namespace JMW.Templates
                 return setupErrorToken("Invalid tag. Did you forget to add a " + CLOSE + "?", Line, Column);
             }
 
-            _reader.PushBack((char)c);
             Token.Type = type;
-            Token.Value = new string(identifier.ToArray());
+            Token.Value = identifier.ToString();
             consumeWhitespace();
             return type;
         }
 
         internal void consumeWhitespace()
         {
-            var c = _reader.Read();
-            while (c != -1 && char.IsWhiteSpace((char)c))
-            {
-                c = _reader.Read();
-            }
-            if (c == -1)
+            _reader.ReadWhile(char.IsWhiteSpace);
+            if (_reader.AtEnd)
             {
                 _eof = true;
-            }
-            else
-            {
-                _reader.PushBack((char)c);
             }
         }
 
         internal TokenType consumeComment()
         {
-            var c = _reader.Read();
-            if (c == -1)
+            if (_reader.AtEnd)
             {
                 _eof = true;
                 return setupErrorToken(EOF);
             }
             // A comment runs to the end of the line, or to the end of the template on the last line.
             var value = new StringBuilder();
-            while (c != -1 && c != '\n')
-            {
-                value.Append((char)c);
-                c = _reader.Read();
-            }
-            if (c == -1)
+            if (!_reader.ReadUntil('\n', value))
             {
                 _eof = true;
             }
@@ -341,23 +317,13 @@ namespace JMW.Templates
 
         internal bool maybeReadText(string text)
         {
-            readText(text, out var buf, out var n);
-            var ok = (n == text.Length && new string(buf) == text);
-            if (!ok)
-            {
-                _reader.PushBack(buf.Take(n).ToArray());
-            }
-            return ok;
-        }
-
-        private void readText(string text, out char[] buf, out int n)
-        {
-            buf = new char[text.Length];
-            n = _reader.Read(buf);
-            if (n == 0)
+            if (_reader.AtEnd)
             {
                 _eof = true;
+                return false;
             }
+
+            return _reader.TryMatch(text);
         }
     }
 }
