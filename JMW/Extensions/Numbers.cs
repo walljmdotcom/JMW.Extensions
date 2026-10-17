@@ -40,22 +40,6 @@ public static class Extensions
     }
 
     /// <summary>
-    /// Indicates if the string is not null.
-    /// </summary>
-    public static bool IsNotNull(this object? o)
-    {
-        return o is not null;
-    }
-
-    /// <summary>
-    /// Indicates if the string is null
-    /// </summary>
-    public static bool IsNull(this object? o)
-    {
-        return o is null;
-    }
-
-    /// <summary>
     /// Converts a Decimal to an Int32
     /// </summary>
     public static int ToInt(this decimal d)
