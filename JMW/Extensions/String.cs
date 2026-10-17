@@ -40,16 +40,13 @@ public static class Extensions
         // return full string if no params were provided
         if (parms.Length == 0) return s;
 
-        // lowercase the string if we're working with case insensitive search
-        var str = case_insensitive ? s.ToLower() : s;
-
         var idx = -1;
 
         // look for earch parm, return first one found.
         foreach (var p in parms)
         {
             // get the index of our search parameter
-            var tidx = IndexOf(str, p, case_insensitive);
+            var tidx = IndexOf(s, p, case_insensitive);
             if (idx == -1)
                 idx = tidx;
             else if (idx > tidx && tidx > -1)
@@ -89,16 +86,13 @@ public static class Extensions
         // return full string if no params were provided
         if (parms.Length == 0) return s;
 
-        // lowercase the string if we're working with case insensitive search
-        var str = case_insensitive ? s.ToLower() : s;
-
         var idx = -1;
 
         // look for earch parm, return first one found.
         foreach (var p in parms)
         {
             // get the index of our search parameter
-            var tidx = IndexOf(str, p, case_insensitive, last: true);
+            var tidx = IndexOf(s, p, case_insensitive, last: true);
             if (idx == -1)
                 idx = tidx;
             else if (idx < tidx && tidx > -1)
@@ -139,9 +133,6 @@ public static class Extensions
         // return full string if no params were provided
         if (parms.Length == 0) return s;
 
-        // lowercase the string if we're working with case insensitive search
-        var str = case_insensitive ? s.ToLower() : s;
-
         var idx = -1;
         var l = 0;
 
@@ -149,7 +140,7 @@ public static class Extensions
         foreach (var p in parms)
         {
             // get the index of our search parameter
-            var tidx = IndexOf(str, p, case_insensitive);
+            var tidx = IndexOf(s, p, case_insensitive);
             if (idx == -1)
             {
                 idx = tidx;
@@ -195,9 +186,6 @@ public static class Extensions
         // return full string if no params were provided
         if (parms.Length == 0) return s;
 
-        // lowercase the string if we're working with case insensitive search
-        var str = case_insensitive ? s.ToLower() : s;
-
         var idx = -1;
         var l = 0;
 
@@ -205,7 +193,7 @@ public static class Extensions
         foreach (var p in parms)
         {
             // get the index of our search parameter
-            var tidx = IndexOf(str, p, case_insensitive, last: true);
+            var tidx = IndexOf(s, p, case_insensitive, last: true);
             if (idx == -1)
             {
                 idx = tidx;
@@ -251,9 +239,6 @@ public static class Extensions
         // return full string if no params were provided
         if (parms.Length == 0) return s;
 
-        // lowercase the string if we're working with case insensitive search
-        var str = case_insensitive ? s.ToLower() : s;
-
         var idx = -1;
         var l = 0;
 
@@ -261,7 +246,7 @@ public static class Extensions
         foreach (var p in parms)
         {
             // get the index of our search parameter
-            var tidx = IndexOf(str, p, case_insensitive);
+            var tidx = IndexOf(s, p, case_insensitive);
             if (idx == -1)
             {
                 idx = tidx;
@@ -307,9 +292,6 @@ public static class Extensions
         // return full string if no params were provided
         if (parms.Length == 0) return s;
 
-        // lowercase the string if we're working with case insensitive search
-        var str = case_insensitive ? s.ToLower() : s;
-
         var idx = -1;
         var l = 0;
 
@@ -317,7 +299,7 @@ public static class Extensions
         foreach (var p in parms)
         {
             // get the index of our search parameter
-            var tidx = IndexOf(str, p, case_insensitive, last: true);
+            var tidx = IndexOf(s, p, case_insensitive, last: true);
             if (idx == -1)
             {
                 idx = tidx;
@@ -409,16 +391,13 @@ public static class Extensions
         // return full string if no params were provided
         if (parms.Length == 0) return s;
 
-        // lowercase the string if we're working with case insensitive search
-        var str = case_insensitive ? s.ToLower() : s;
-
         var idx = -1;
 
         // look for earch parm, return first one found.
         foreach (var p in parms)
         {
             // get the index of our search parameter
-            var tidx = IndexOf(str, p, case_insensitive, last: true);
+            var tidx = IndexOf(s, p, case_insensitive, last: true);
             if (idx == -1)
                 idx = tidx;
             else if (idx < tidx && tidx > -1)
@@ -458,16 +437,13 @@ public static class Extensions
         // return full string if no params were provided
         if (parms.Length == 0) return s;
 
-        // lowercase the string if we're working with case insensitive search
-        var str = case_insensitive ? s.ToLower() : s;
-
         var idx = -1;
 
         // look for earch parm, return first one found.
         foreach (var p in parms)
         {
             // get the index of our search parameter
-            var tidx = IndexOf(str, p, case_insensitive);
+            var tidx = IndexOf(s, p, case_insensitive);
             if (idx == -1)
                 idx = tidx;
             else if (idx > tidx && tidx > -1)
@@ -495,13 +471,8 @@ public static class Extensions
     /// <param name="last">Search for last instance</param>
     public static int IndexOf(this string str, string search_string, bool case_insensitive, bool last = false)
     {
-        // get the index of our search parameter
-        int idx;
-        if (case_insensitive)
-            idx = last ? str.LastIndexOf(search_string.ToLower(), StringComparison.Ordinal) : str.IndexOf(search_string.ToLower(), StringComparison.Ordinal);
-        else
-            idx = last ? str.LastIndexOf(search_string, StringComparison.Ordinal) : str.IndexOf(search_string, StringComparison.Ordinal);
-        return idx;
+        var comparison = case_insensitive ? StringComparison.OrdinalIgnoreCase : StringComparison.Ordinal;
+        return last ? str.LastIndexOf(search_string, comparison) : str.IndexOf(search_string, comparison);
     }
 
     /// <summary>
@@ -513,25 +484,15 @@ public static class Extensions
     /// <param name="qty">Search for specific instance</param>
     public static int IndexOf(this string str, string search_string, bool case_insensitive, int qty)
     {
-        // get the index of our search parameter
+        var comparison = case_insensitive ? StringComparison.OrdinalIgnoreCase : StringComparison.Ordinal;
         var idx = -1;
-        if (case_insensitive)
+        for (var c = 0; c < qty; c++)
         {
-            var c = 0;
-            while (c != qty)
-            {
-                idx = str.IndexOf(search_string.ToLower(), idx < 0 ? 0 : idx + search_string.Length, StringComparison.Ordinal);
-                c++;
-            }
-        }
-        else
-        {
-            var c = 0;
-            while (c != qty)
-            {
-                idx = str.IndexOf(search_string, idx < 0 ? 0 : idx + search_string.Length, StringComparison.Ordinal);
-                c++;
-            }
+            idx = str.IndexOf(search_string, idx < 0 ? 0 : idx + search_string.Length, comparison);
+
+            // fewer than qty instances exist
+            if (idx < 0)
+                break;
         }
         return idx;
     }

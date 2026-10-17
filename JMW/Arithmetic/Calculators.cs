@@ -11,6 +11,7 @@
 //
 
 using System;
+using System.Globalization;
 
 namespace Lambda.Generic
 {
@@ -139,7 +140,7 @@ namespace Lambda.Generic
 
             public readonly int ConvertFrom(string t)
             {
-                return T.Parse(t);
+                return T.Parse(t, NumberStyles.Integer, CultureInfo.InvariantCulture);
             }
         }
     }
@@ -267,7 +268,7 @@ namespace Lambda.Generic
 
             public readonly long ConvertFrom(string t)
             {
-                return T.Parse(t);
+                return T.Parse(t, NumberStyles.Integer, CultureInfo.InvariantCulture);
             }
         }
     }

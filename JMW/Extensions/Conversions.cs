@@ -136,7 +136,7 @@ public static class Extensions
         {
             return new Maybe<bool>(v);
         }
-        var s1 = s.ToLower().Trim();
+        var s1 = s.ToLowerInvariant().Trim();
         if (s1 == "yes" || s1 == "1" || s1 == "on" || s1 == "t" || s1 == "y") return new Maybe<bool>(true);
         return s1 == "no" || s1 == "0" || s1 == "off" || s1 == "f" || s1 == "n"
             ? new Maybe<bool>(false)

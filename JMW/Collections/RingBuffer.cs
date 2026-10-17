@@ -124,7 +124,7 @@ public class RingBuffer<T> : IEnumerable<T>
 
     public bool Contains(T item)
     {
-        var comparer = EqualityComparer<T>.Default;
+        var comparer = EqualityComparer<T?>.Default;
         for (var i = 0; i < Count; i++)
         {
             if (comparer.Equals(internalArray[slot(i)], item))

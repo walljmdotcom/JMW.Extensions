@@ -1,5 +1,6 @@
 ﻿using NUnit.Framework;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 
 namespace JMW.Extensions.Enumerable.Tests
@@ -60,7 +61,7 @@ namespace JMW.Extensions.Enumerable.Tests
         {
             var lst1 = new List<int> { 1, 1, 1, 2, 3, 3, 4, 4, 4, 4, 5, 5, 5, 6, 6, 7, 8, 9, 9, 10 };
 
-            var lst = lst1.CreateHistogram(i => i.ToString());
+            var lst = lst1.CreateHistogram(i => i.ToString(CultureInfo.InvariantCulture));
 
             Assert.That(10, Is.EqualTo(lst.Count));
             Assert.That(3, Is.EqualTo(lst["1"].Count));

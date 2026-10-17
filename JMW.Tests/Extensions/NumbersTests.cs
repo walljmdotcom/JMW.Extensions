@@ -2,6 +2,7 @@
 using NUnit.Framework;
 using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 
 namespace JMW.Extensions.Numbers.Tests
@@ -148,6 +149,26 @@ namespace JMW.Extensions.Numbers.Tests
             Assert.That(input.ToInt64orDefault(42), Is.EqualTo(expected));
         }
 
+        [TestCase("1.5k", 1500L)]
+        [TestCase("8.2m", 8200000L)]
+        [TestCase("1,000k", 1000000L)]
+        [TestCase("12", 12L)]
+        [SetCulture("de-DE")]
+        public void ToInt64IgnoresCurrentCulture(string input, long expected)
+        {
+            Assert.That(input.ToInt64(), Is.EqualTo(expected));
+            Assert.That(input.ToInt64orDefault(), Is.EqualTo(expected));
+        }
+
+        [TestCase("1.5", 1.5)]
+        [TestCase("1,000.5", 1000.5)]
+        [TestCase("-2", -2.0)]
+        [SetCulture("de-DE")]
+        public void ToDoubleIgnoresCurrentCulture(string input, double expected)
+        {
+            Assert.That(input.ToDouble(), Is.EqualTo(expected));
+        }
+
         [TestCase("", typeof(FormatException))]
         [TestCase("k", typeof(FormatException))]
         [TestCase("x", typeof(FormatException))]
@@ -221,13 +242,13 @@ namespace JMW.Extensions.Numbers.Tests
             Assert.That(11234, Is.EqualTo("11234".ToInt()));
             Assert.That(1000, Is.EqualTo("1k".ToInt()));
             Assert.That(4321341, Is.EqualTo("4321341".ToInt()));
-            Assert.That(int.MaxValue, Is.EqualTo(int.MaxValue.ToString().ToInt()));
+            Assert.That(int.MaxValue, Is.EqualTo(int.MaxValue.ToString(CultureInfo.InvariantCulture).ToInt()));
             Assert.That(1431234121, Is.EqualTo("1431234121".ToInt()));
 
             Assert.That(1, Is.EqualTo("1".ToIntFast()));
             Assert.That(11234, Is.EqualTo("11234".ToIntFast()));
             Assert.That(4321341, Is.EqualTo("4321341".ToIntFast()));
-            Assert.That(int.MaxValue, Is.EqualTo(int.MaxValue.ToString().ToIntFast()));
+            Assert.That(int.MaxValue, Is.EqualTo(int.MaxValue.ToString(CultureInfo.InvariantCulture).ToIntFast()));
             Assert.That(1431234121, Is.EqualTo("1431234121".ToIntFast()));
 
             Assert.That(1, Is.EqualTo("1".ToIntFast()));
@@ -239,7 +260,7 @@ namespace JMW.Extensions.Numbers.Tests
             Assert.That(1, Is.EqualTo("1".ToIntOrDefaultFast()));
             Assert.That(11234, Is.EqualTo("11234".ToIntOrDefaultFast()));
             Assert.That(4321341, Is.EqualTo("4321341".ToIntOrDefaultFast()));
-            Assert.That(int.MaxValue, Is.EqualTo(int.MaxValue.ToString().ToIntOrDefaultFast()));
+            Assert.That(int.MaxValue, Is.EqualTo(int.MaxValue.ToString(CultureInfo.InvariantCulture).ToIntOrDefaultFast()));
             Assert.That(1431234121, Is.EqualTo("1431234121".ToIntOrDefaultFast()));
 
             Assert.That(1, Is.EqualTo("1".ToIntOrDefaultFast()));
@@ -268,10 +289,10 @@ namespace JMW.Extensions.Numbers.Tests
         public void ToIntOrNeg1Test()
         {
             Assert.That(-1, Is.EqualTo("basdf".ToIntOrDefaultFast(-1)));
-            Assert.That(int.MaxValue, Is.EqualTo(int.MaxValue.ToString().ToIntOrDefaultFast(-1)));
+            Assert.That(int.MaxValue, Is.EqualTo(int.MaxValue.ToString(CultureInfo.InvariantCulture).ToIntOrDefaultFast(-1)));
 
             Assert.That(-1, Is.EqualTo("basdf".ToIntOrNeg1()));
-            Assert.That(int.MaxValue, Is.EqualTo(int.MaxValue.ToString().ToIntOrNeg1()));
+            Assert.That(int.MaxValue, Is.EqualTo(int.MaxValue.ToString(CultureInfo.InvariantCulture).ToIntOrNeg1()));
             Assert.That(1000, Is.EqualTo("1k".ToIntOrNeg1()));
             Assert.That(-1, Is.EqualTo("143123412000001b".ToIntOrNeg1()));
         }
@@ -285,8 +306,8 @@ namespace JMW.Extensions.Numbers.Tests
             Assert.That("1123412341234".IsLong(), Is.True);
             Assert.That("1431234121".IsLong(), Is.True);
             Assert.That("14a".IsLong(), Is.False);
-            Assert.That(long.MaxValue.ToString().IsLong(), Is.True);
-            Assert.That(long.MinValue.ToString().IsLong(), Is.True);
+            Assert.That(long.MaxValue.ToString(CultureInfo.InvariantCulture).IsLong(), Is.True);
+            Assert.That(long.MinValue.ToString(CultureInfo.InvariantCulture).IsLong(), Is.True);
         }
 
         [Test]

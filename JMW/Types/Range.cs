@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Globalization;
 using Lambda.Generic.Arithmetic;
 
 namespace JMW.Types
@@ -184,7 +185,9 @@ namespace JMW.Types
         /// </summary>
         public string RangeToString()
         {
-            return Start == Stop ? Start.ToString() : Start + "-" + Stop;
+            return Start == Stop
+                ? Start.ToString(CultureInfo.InvariantCulture)
+                : Start.ToString(CultureInfo.InvariantCulture) + "-" + Stop.ToString(CultureInfo.InvariantCulture);
         }
 
         /// <summary>

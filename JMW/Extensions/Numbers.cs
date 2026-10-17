@@ -280,7 +280,7 @@ public static class Extensions
     /// </summary>
     public static long ToLong(this string i)
     {
-        return long.Parse(i);
+        return long.Parse(i, NumberStyles.Integer, CultureInfo.InvariantCulture);
     }
 
     /// <summary>
@@ -288,7 +288,7 @@ public static class Extensions
     /// </summary>
     public static double ToDouble(this string i)
     {
-        return double.Parse(i);
+        return double.Parse(i, NumberStyles.Float | NumberStyles.AllowThousands, CultureInfo.InvariantCulture);
     }
 
     /// <summary>
@@ -594,7 +594,7 @@ public static class Extensions
         }
         else if (sorted.Count == 1)
         {
-            r = sorted[0].ToString();
+            r = sorted[0].ToString(CultureInfo.InvariantCulture);
         }
 
         if (prev != current)
@@ -647,7 +647,7 @@ public static class Extensions
         }
         else if (sorted.Count == 1)
         {
-            r = sorted[0].ToString();
+            r = sorted[0].ToString(CultureInfo.InvariantCulture);
         }
 
         if (prev != current)

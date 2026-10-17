@@ -172,6 +172,51 @@ namespace JMW.Extensions.String.Tests
             Assert.That(19, Is.EqualTo(str.IndexOf("str", false, 2)));
         }
 
+        //          0         1         2         3
+        //          0123456789012345678901234567890123
+        [TestCase("This is a string a string a string", "STR", true, 3, 28)]
+        [TestCase("This is a string a string a string", "STR", true, 4, -1)]
+        [TestCase("This is a string a string a string", "str", false, 4, -1)]
+        [TestCase("This is a string a string a string", "STR", false, 1, -1)]
+        [TestCase("This is a string a string a string", "str", false, 0, -1)]
+        [TestCase("This is a string a string a string", "str", false, -1, -1)]
+        [TestCase("ab", "a", false, 3, -1)]
+        [TestCase("", "a", true, 1, -1)]
+        public void IndexOfQuantity(string str, string search, bool caseInsensitive, int qty, int expected)
+        {
+            Assert.That(str.IndexOf(search, caseInsensitive, qty), Is.EqualTo(expected));
+        }
+
+        [TestCase("İabcDEF", "def", "İabc")]
+        [TestCase("FILE.txt", "i", "F")]
+        [TestCase("file.TXT", "I", "f")]
+        [TestCase("abcDEF", "DEF", "abc")]
+        [TestCase("abcDEF", "xyz", "abcDEF")]
+        [SetCulture("tr-TR")]
+        public void ParseToIndexOfCaseInsensitiveUsesOriginalOffsetsTurkish(string s, string search, string expected)
+        {
+            Assert.That(s.ParseToIndexOf(true, search), Is.EqualTo(expected));
+        }
+
+        [TestCase("İabcDEF", "def", "İabc")]
+        [TestCase("FILE.txt", "i", "F")]
+        [TestCase("abcDEF", "DEF", "abc")]
+        [SetCulture("en-US")]
+        public void ParseToIndexOfCaseInsensitiveUsesOriginalOffsets(string s, string search, string expected)
+        {
+            Assert.That(s.ParseToIndexOf(true, search), Is.EqualTo(expected));
+        }
+
+        [TestCase("İabcDEFxdef", "DEF", true, 8)]
+        [TestCase("İabcDEFxdef", "DEF", false, 4)]
+        [TestCase("İabcDEFxdef", "def", false, 8)]
+        [TestCase("İabcDEFxdef", "zzz", true, -1)]
+        [SetCulture("tr-TR")]
+        public void LastIndexOfCaseInsensitive(string s, string search, bool caseInsensitive, int expected)
+        {
+            Assert.That(s.IndexOf(search, caseInsensitive, last: true), Is.EqualTo(expected));
+        }
+
 
         [Test]
         public void ToLinesTest()

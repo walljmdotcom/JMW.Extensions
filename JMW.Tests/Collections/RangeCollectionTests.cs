@@ -141,8 +141,8 @@ namespace JMW.Collections.Tests
             var rngs = new IntegerRangeCollection();
             rngs.AddRange([new IntegerRange(10, int.MaxValue), new IntegerRange(20, 30)]);
             Assert.That(rngs.Count, Is.EqualTo(1));
-            Assert.That(rngs.Ranges.Values[0].Start.ToString(), Is.EqualTo("10"));
-            Assert.That(rngs.Ranges.Values[0].Stop.ToString(), Is.EqualTo(int.MaxValue.ToString(CultureInfo.InvariantCulture)));
+            Assert.That(rngs.Ranges.Values[0].Start.ToString(CultureInfo.InvariantCulture), Is.EqualTo("10"));
+            Assert.That(rngs.Ranges.Values[0].Stop.ToString(CultureInfo.InvariantCulture), Is.EqualTo(int.MaxValue.ToString(CultureInfo.InvariantCulture)));
 
             rngs.AddRange([new IntegerRange(int.MaxValue, int.MaxValue)]);
             Assert.That(rngs.Count, Is.EqualTo(1));
