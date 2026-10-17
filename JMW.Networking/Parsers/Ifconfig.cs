@@ -106,6 +106,11 @@ public static class Ifconfig
 
             pair.WriteJson(writer);
         }
+
+        if (arrayStarted)
+        {
+            writer.WriteEndArray();
+        }
     }
 
     private static string CleanKey(string key)
@@ -451,7 +456,10 @@ public static class Ifconfig
             yield break;
         }
 
-        HandleSingleKeyword(queue, enumerator, definition[token].Kind, token);
+        foreach (var pair in HandleSingleKeyword(queue, enumerator, definition[token].Kind, key))
+        {
+            yield return pair;
+        }
     }
 
     private static IEnumerable<Pair> HandleSingleKeyword(
@@ -569,7 +577,15 @@ public static class Ifconfig
             sb.Clear();
         }
 
-        yield break;
+        // The last token of input that does not end in a newline.
+        if (sb.Length > 0)
+        {
+            if (sb[sb.Length - 1] == ':')
+            {
+                sb.Remove(sb.Length - 1, 1);
+            }
+            yield return sb.ToString();
+        }
     }
 
     private static IEnumerable<string> GetBlocks(TextReader output)
@@ -583,7 +599,10 @@ public static class Ifconfig
             if (!char.IsWhiteSpace((char)current) && last == '\n')
             {
                 // new block
-                yield return sb.ToString();
+                if (!IsBlank(sb))
+                {
+                    yield return sb.ToString();
+                }
                 sb.Clear();
                 sb.Append(current);
             }
@@ -594,6 +613,23 @@ public static class Ifconfig
 
             last = current;
         }
+
+        if (!IsBlank(sb))
+        {
+            yield return sb.ToString();
+        }
+    }
+
+    private static bool IsBlank(StringBuilder sb)
+    {
+        for (var i = 0; i < sb.Length; i++)
+        {
+            if (!char.IsWhiteSpace(sb[i]))
+            {
+                return false;
+            }
+        }
+        return true;
     }
 
     private static Dictionary<char, int> CountChars(StringBuilder sb, params char[] target)
