@@ -1348,6 +1348,34 @@ free      bird   is      awesome
         { }
     }
 
+    [TestCase(0, "Jason")]
+    [TestCase(1, "Wall")]
+    [TestCase(2, null)]
+    [TestCase(3, null)]
+    [TestCase(100, null)]
+    public void Extractor_Column_IndexBounds(int index, string? expected)
+    {
+        var ext = new Column(index)
+        {
+            Positions =
+            [
+                new ColumnPosition { Name = "Jason", Key = "Jason", Start = 2, Length = 5 },
+                new ColumnPosition { Name = "Wall", Key = "Wall", Start = 8, Length = 4 },
+            ]
+        };
+
+        if (expected is null)
+        {
+            Assert.That(
+                () => ext.Parse("  Jason Wall "),
+                Throws.TypeOf<ArgumentException>().With.Message.StartsWith($"Provided index ({index}) exceeded the number of columns (2)"));
+        }
+        else
+        {
+            Assert.That(ext.Parse("  Jason Wall "), Is.EqualTo(expected));
+        }
+    }
+
     [Test]
     public void ColumnPostionTest1()
     {
