@@ -5,6 +5,7 @@ using System.Data;
 using System.Linq;
 using System.Linq.Expressions;
 using System.Reflection;
+using System.Runtime.CompilerServices;
 
 namespace JMW.Types
 {
@@ -110,26 +111,46 @@ namespace JMW.Types
 
             #endregion Open handler generation and cache
 
+            // a closure object is referenced only by the delegate, so holding it weakly would let it be collected
+            // while the subscriber still expects the handler to fire
+            private readonly object? _strongTarget;
             private readonly WeakReference? _weakTarget;
             private readonly MethodInfo _method;
             private readonly OpenEventHandler _openHandler;
 
             public WeakDelegate(Delegate handler)
             {
-                _weakTarget = handler.Target is not null ? new WeakReference(handler.Target) : null;
+                var target = handler.Target;
+                if (target is not null)
+                {
+                    if (IsCompilerGenerated(target.GetType()))
+                        _strongTarget = target;
+                    else
+                        _weakTarget = new WeakReference(target);
+                }
+
                 _method = handler.Method;
                 _openHandler = _openHandlerCache.GetOrAdd(_method, CreateOpenHandler);
             }
 
+            private static bool IsCompilerGenerated(Type type)
+            {
+                for (Type? t = type; t is not null; t = t.DeclaringType)
+                {
+                    if (t.IsDefined(typeof(CompilerGeneratedAttribute), false))
+                        return true;
+                }
+
+                return false;
+            }
+
+            private object? CurrentTarget => _strongTarget ?? _weakTarget?.Target;
+
             public bool Invoke(object sender, TEventArgs e)
             {
-                object? target = null;
-                if (_weakTarget is not null)
-                {
-                    target = _weakTarget.Target;
-                    if (target is null)
-                        return false;
-                }
+                var target = CurrentTarget;
+                if (target is null && _weakTarget is not null)
+                    return false;
 
                 // a static handler has no target, and its open handler ignores the target argument
                 _openHandler(target, sender, e);
@@ -138,11 +159,14 @@ namespace JMW.Types
 
             public bool IsMatch(Delegate handler)
             {
-                if (_weakTarget is null && !_method.IsStatic) return false;
-                return _method.IsStatic
-                    ? handler.Method.Equals(_method)
-                    : ReferenceEquals(handler.Target, _weakTarget?.Target)
-                    && handler.Method.Equals(_method);
+                if (!handler.Method.Equals(_method))
+                    return false;
+
+                if (_method.IsStatic)
+                    return true;
+
+                var target = CurrentTarget;
+                return target is not null && ReferenceEquals(handler.Target, target);
             }
         }
     }
