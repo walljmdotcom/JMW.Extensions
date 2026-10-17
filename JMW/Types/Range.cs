@@ -84,28 +84,39 @@ namespace JMW.Types
         /// <example>1-3</example>
         /// <example>1,3</example>
         /// <example>1:3</example>
+        /// <example>-5--3</example>
+        /// <remarks>
+        /// A '-' at the start of the text, or straight after the '-' separator, is a sign, so "-5--3" is -5 to -3
+        /// and "1--3" is 1 to -3, which is rejected because Start is greater than Stop.
+        /// </remarks>
         /// <param name="rng"></param>
         public Range(string rng)
         {
-            if (rng.Contains('-'))
+            var text = rng.Trim();
+            if (text.Contains(','))
             {
-                Start = Signed<T, C>.Parse(rng.Split('-')[0]);
-                Stop = Signed<T, C>.Parse(rng.Split('-')[1]);
+                Start = Signed<T, C>.Parse(text.Split(',')[0]);
+                Stop = Signed<T, C>.Parse(text.Split(',')[1]);
             }
-            else if (rng.Contains(','))
+            else if (text.Contains(':'))
             {
-                Start = Signed<T, C>.Parse(rng.Split(',')[0]);
-                Stop = Signed<T, C>.Parse(rng.Split(',')[1]);
-            }
-            else if (rng.Contains(':'))
-            {
-                Start = Signed<T, C>.Parse(rng.Split(':')[0]);
-                Stop = Signed<T, C>.Parse(rng.Split(':')[1]);
+                Start = Signed<T, C>.Parse(text.Split(':')[0]);
+                Stop = Signed<T, C>.Parse(text.Split(':')[1]);
             }
             else
             {
-                Start = Signed<T, C>.Parse(rng.Split('-')[0]);
-                Stop = Start;
+                // skip index 0 so a leading sign is not taken for the separator
+                var separator = text.Length > 1 ? text.IndexOf('-', 1) : -1;
+                if (separator < 0)
+                {
+                    Start = Signed<T, C>.Parse(text);
+                    Stop = Start;
+                }
+                else
+                {
+                    Start = Signed<T, C>.Parse(text.Substring(0, separator));
+                    Stop = Signed<T, C>.Parse(text.Substring(separator + 1));
+                }
             }
 
             if (Start > Stop)

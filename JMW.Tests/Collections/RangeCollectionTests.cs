@@ -159,6 +159,126 @@ namespace JMW.Collections.Tests
             Assert.That(new IntegerRangeCollection(input).ToString(), Is.EqualTo(expected));
         }
 
+        private static IEnumerable<TestCaseData> ParsedRanges()
+        {
+            yield return new TestCaseData("-5", -5L, -5L);
+            yield return new TestCaseData("-5--3", -5L, -3L);
+            yield return new TestCaseData("-10-5", -10L, 5L);
+            yield return new TestCaseData("-10--10", -10L, -10L);
+            yield return new TestCaseData("-1-0", -1L, 0L);
+            yield return new TestCaseData("0--0", 0L, 0L);
+            yield return new TestCaseData(" -5--3 ", -5L, -3L);
+            yield return new TestCaseData("-5,-3", -5L, -3L);
+            yield return new TestCaseData("-5,3", -5L, 3L);
+            yield return new TestCaseData("-5:-3", -5L, -3L);
+            yield return new TestCaseData("-5:3", -5L, 3L);
+            yield return new TestCaseData("1-3", 1L, 3L);
+            yield return new TestCaseData("1,3", 1L, 3L);
+            yield return new TestCaseData("1:3", 1L, 3L);
+            yield return new TestCaseData("5", 5L, 5L);
+            yield return new TestCaseData("0", 0L, 0L);
+            yield return new TestCaseData("-2147483648", (long)int.MinValue, (long)int.MinValue);
+            yield return new TestCaseData("-2147483648-2147483647", (long)int.MinValue, (long)int.MaxValue);
+            yield return new TestCaseData("-2147483648--2147483647", (long)int.MinValue, (long)int.MinValue + 1);
+            yield return new TestCaseData("2147483647", (long)int.MaxValue, (long)int.MaxValue);
+        }
+
+        [TestCaseSource(nameof(ParsedRanges))]
+        public void ParseSignedRanges(string input, long start, long stop)
+        {
+            var rng = new IntegerRange(input);
+            Assert.That((long)rng.Start, Is.EqualTo(start));
+            Assert.That((long)rng.Stop, Is.EqualTo(stop));
+
+            var longRng = new LongRange(input);
+            Assert.That((long)longRng.Start, Is.EqualTo(start));
+            Assert.That((long)longRng.Stop, Is.EqualTo(stop));
+        }
+
+        [TestCase("-9223372036854775808", long.MinValue, long.MinValue)]
+        [TestCase("-9223372036854775808-9223372036854775807", long.MinValue, long.MaxValue)]
+        [TestCase("-9223372036854775808--1", long.MinValue, -1L)]
+        public void ParseLongExtremes(string input, long start, long stop)
+        {
+            var rng = new LongRange(input);
+            Assert.That((long)rng.Start, Is.EqualTo(start));
+            Assert.That((long)rng.Stop, Is.EqualTo(stop));
+        }
+
+        // a '-' right after the separator is a sign, so "1--3" means start 1, stop -3, which is rejected like "3-1"
+        [TestCase("1--3")]
+        [TestCase("-3--5")]
+        [TestCase("3-1")]
+        [TestCase("3,-1")]
+        [TestCase("-1:-3")]
+        public void ParseRejectsStartAfterStop(string input)
+        {
+            Assert.That(() => new IntegerRange(input), Throws.ArgumentException);
+        }
+
+        [TestCase("--5")]
+        [TestCase("-")]
+        [TestCase("5-")]
+        [TestCase("-5-")]
+        [TestCase("1---3")]
+        [TestCase("1-3-5")]
+        [TestCase("1-3,5")]
+        [TestCase("")]
+        public void ParseRejectsMalformed(string input)
+        {
+            Assert.That(() => new IntegerRange(input), Throws.Exception);
+        }
+
+        [TestCase(-5, -5)]
+        [TestCase(-5, -3)]
+        [TestCase(-10, 5)]
+        [TestCase(-1, 0)]
+        [TestCase(0, 0)]
+        [TestCase(1, 3)]
+        [TestCase(int.MinValue, int.MinValue)]
+        [TestCase(int.MinValue, int.MaxValue)]
+        [TestCase(int.MinValue, -1)]
+        [TestCase(int.MaxValue, int.MaxValue)]
+        public void RangeToStringRoundTrips(int start, int stop)
+        {
+            var text = new IntegerRange(start, stop).RangeToString();
+            var parsed = new IntegerRange(text);
+
+            Assert.That((int)parsed.Start, Is.EqualTo(start));
+            Assert.That((int)parsed.Stop, Is.EqualTo(stop));
+            Assert.That(parsed.RangeToString(), Is.EqualTo(text));
+        }
+
+        [TestCase("-5", "-5")]
+        [TestCase("-5--3,0,2-4", "-5--3,0,2-4")]
+        [TestCase("-3--1,0", "-3-0")]
+        [TestCase("-10-5,-20--15", "-20--15,-10-5")]
+        [TestCase("-5:-3, -2", "-5--2")]
+        [TestCase("-2147483648--2147483647,2147483647", "-2147483648--2147483647,2147483647")]
+        public void CollectionParsesSignedRanges(string input, string expected)
+        {
+            var rngs = new IntegerRangeCollection(input);
+            Assert.That(rngs.ToString(), Is.EqualTo(expected));
+            Assert.That(new IntegerRangeCollection(rngs.ToString()).ToString(), Is.EqualTo(expected));
+            Assert.That(new LongRangeCollection(input).ToString(), Is.EqualTo(expected));
+        }
+
+        [Test]
+        public void CollectionQueriesWithSignedRanges()
+        {
+            var rngs = new IntegerRangeCollection("-10--5,0-3");
+            Assert.That(rngs.IsInRange(-7), Is.True);
+            Assert.That(rngs.IsInRange("-7"), Is.True);
+            Assert.That(rngs.IsInRange(-4), Is.False);
+            Assert.That(rngs.Contains("-9--6"), Is.True);
+            Assert.That(rngs.Contains("-6-1"), Is.False);
+            Assert.That(rngs.IntersectsWith(new IntegerRange("-6-1")), Is.True);
+            Assert.That(IntegerRangeCollection.ExplodeRange("-2-1").ToDelimitedString(","), Is.EqualTo("-2,-1,0,1"));
+
+            rngs.AddRange(["-4", "-3--1"]);
+            Assert.That(rngs.ToString(), Is.EqualTo("-10-3"));
+        }
+
         [Test]
         public void RangeTest3()
         {
