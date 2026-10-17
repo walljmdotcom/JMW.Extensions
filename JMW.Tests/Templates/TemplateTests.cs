@@ -625,6 +625,24 @@ namespace JMW.Templates.Tests
             Assert.That(sb.ToString(), Does.Match("^aV[0-9.]+10,bV[0-9.]+20,$"));
         }
 
+        // The first row of each distinct combination is kept, in table order.
+        [TestCase("label", "ab")]
+        [TestCase("n", "ac")]
+        [TestCase("label,n", "abc")]
+        [TestCase(" n , label ", "abc")]
+        [TestCase("name", "abcd")]
+        public void TestDistinctColumns(string distinct, string expected)
+        {
+            var sb = new StringBuilder();
+            using var wr = new StringWriter(sb);
+            var i = new Interpreter(wr);
+            i.AddHandler(new Table(new TableData("t", ["name,label,n", "a,x,1", "b,y,1", "c,x,2", "d,x,1"]), i));
+
+            i.Eval("<tab name=\"t\" distinct=\"" + distinct + "\"><name/></tab>");
+
+            Assert.That(sb.ToString(), Is.EqualTo(expected));
+        }
+
         // Column names in orderby and distinct match whatever their case, as column tags do.
         [TestCase("<tab name=\"t\" orderby=\"Name\" order=\"desc\"><name/></tab>", "cba")]
         [TestCase("<tab name=\"t\" orderby=\"name\"><Name/></tab>", "abc")]

@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text;
 
 namespace JMW.Templates.Tags
 {
@@ -116,15 +117,28 @@ namespace JMW.Templates.Tags
             if (tag.Properties.TryGetValue(ATTR_DISTINCT, out var attrDistinct))
             {
                 var cols = attrDistinct.Split(separator, StringSplitOptions.RemoveEmptyEntries);
+                var indexes = new int[cols.Length];
+                for (var i = 0; i < cols.Length; i++)
+                    indexes[i] = table_data.ColumnIndexes[cols[i].Trim().ToLowerInvariant()];
 
-                var dict = new Dictionary<string, List<string>>();
+                var seen = new HashSet<string>(StringComparer.Ordinal);
+                var rows = new List<List<string>>();
+                var key = new StringBuilder();
                 foreach (var row in table_data.Data)
                 {
-                    var key = cols.Select(f => row[table_data.ColumnIndexes[f.Trim().ToLowerInvariant()]]).ToDelimitedString("|");
-                    dict.AddIfNotPresent(key, row);
+                    key.Clear();
+                    for (var i = 0; i < indexes.Length; i++)
+                    {
+                        if (i > 0)
+                            key.Append('|');
+                        key.Append(row[indexes[i]]);
+                    }
+
+                    if (seen.Add(key.ToString()))
+                        rows.Add(row);
                 }
 
-                table_data.Data = [.. dict.Values];
+                table_data.Data = rows;
             }
         }
 
