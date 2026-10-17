@@ -156,4 +156,18 @@ public class IndexedCollectionBenchmarks
         foreach (var item in items)
             collection.Remove(item);
     }
+
+    [IterationSetup(Target = nameof(RemoveAllNewestFirst))]
+    public void SetupRemoveAllNewestFirst() => collection = Build();
+
+    [IterationCleanup(Target = nameof(RemoveAllNewestFirst))]
+    public void CleanupRemoveAllNewestFirst() => collection = Build();
+
+    // Removing from the end avoids shifting the list, so this isolates the index cost of Remove.
+    [Benchmark]
+    public void RemoveAllNewestFirst()
+    {
+        for (var i = items.Length - 1; i >= 0; i--)
+            collection.Remove(items[i]);
+    }
 }
