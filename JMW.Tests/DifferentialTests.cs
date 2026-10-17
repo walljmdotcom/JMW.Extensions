@@ -156,6 +156,49 @@ namespace JMW.Differentials.Tests
             Assert.That(null != p2, Is.True);
         }
 
+        private static IEnumerable<TestCaseData> ForeignObjects()
+        {
+            yield return new TestCaseData("Jason");
+            yield return new TestCaseData(1);
+            yield return new TestCaseData(new object());
+            yield return new TestCaseData(new Pair<int>(1, 2));
+            yield return new TestCaseData(new Pair<int, string>(1, "a"));
+            yield return new TestCaseData(new Pair<string, int>("Jason", 1));
+            yield return new TestCaseData(new Pair<string>("Jason", "Wall"));
+        }
+
+        [TestCaseSource(nameof(ForeignObjects))]
+        public void PairEqualsForeignTypeIsFalse(object other)
+        {
+            var same = new Pair<string>("Jason", "Wall1");
+            var mixed = new Pair<string, int>("Jason", 2);
+
+            Assert.That(same.Equals(other), Is.False);
+            Assert.That(mixed.Equals(other), Is.False);
+            Assert.That(same.Equals((object?)null), Is.False);
+            Assert.That(mixed.Equals((object?)null), Is.False);
+        }
+
+        [TestCase(1, 2, 1, 3)]
+        [TestCase(1, 2, 2, 2)]
+        [TestCase(0, 0, 0, 1)]
+        [TestCase(5, -5, 5, 5)]
+        [TestCase(int.MaxValue, 0, int.MaxValue, 1)]
+        public void PairStructuralHashUsesBothItems(int a1, int b1, int a2, int b2)
+        {
+            var comparer = EqualityComparer<object>.Default;
+
+            IStructuralEquatable same1 = new Pair<int>(a1, b1);
+            IStructuralEquatable same2 = new Pair<int>(a2, b2);
+            Assert.That(same1.GetHashCode(comparer), Is.Not.EqualTo(same2.GetHashCode(comparer)));
+            Assert.That(same1.GetHashCode(comparer), Is.EqualTo(((IStructuralEquatable)new Pair<int>(a1, b1)).GetHashCode(comparer)));
+
+            var mixed1 = new Pair<int, int>(a1, b1);
+            var mixed2 = new Pair<int, int>(a2, b2);
+            Assert.That(mixed1.GetHashCode(), Is.Not.EqualTo(mixed2.GetHashCode()));
+            Assert.That(mixed1.GetHashCode(), Is.EqualTo(new Pair<int, int>(a1, b1).GetHashCode()));
+        }
+
         private class MyDiff
         {
             public string Difference { get; set; } = string.Empty;

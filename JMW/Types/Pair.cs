@@ -54,7 +54,7 @@ public class Pair<T> : IStructuralEquatable, IStructuralComparable, IComparable,
     public override bool Equals(object? obj)
     {
         // use the comparer for the type.
-        return Equals((Pair<T>?)obj);
+        return Equals(obj as Pair<T>);
     }
 
     public bool Equals(Pair<T>? other)
@@ -103,7 +103,7 @@ public class Pair<T> : IStructuralEquatable, IStructuralComparable, IComparable,
 
     int IStructuralEquatable.GetHashCode(IEqualityComparer comparer)
     {
-        return CombineHashCodes(comparer.GetHashCode(A), comparer.GetHashCode(A));
+        return CombineHashCodes(comparer.GetHashCode(A), comparer.GetHashCode(B));
     }
 
     internal static int CombineHashCodes(int h1, int h2)
@@ -159,7 +159,7 @@ public class Pair<Ta, Tb> : IStructuralEquatable, IStructuralComparable, ICompar
 
     public override bool Equals(object? obj)
     {
-        return Equals((Pair<Ta, Tb>?)obj);
+        return Equals(obj as Pair<Ta, Tb>);
     }
 
     public bool Equals(Pair<Ta, Tb>? other)
@@ -200,7 +200,7 @@ public class Pair<Ta, Tb> : IStructuralEquatable, IStructuralComparable, ICompar
 
     int IStructuralEquatable.GetHashCode(IEqualityComparer comparer)
     {
-        return CombineHashCodes(comparer.GetHashCode(A), comparer.GetHashCode(A));
+        return CombineHashCodes(comparer.GetHashCode(A), comparer.GetHashCode(B));
     }
 
     public int GetHashCode(Pair<Ta, Tb> obj)
