@@ -1,6 +1,8 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Data;
 using System.Linq;
+using System.Text;
 
 namespace JMW.Templates
 {
@@ -15,12 +17,15 @@ namespace JMW.Templates
         {
             Name = name;
 
-            Columns = [.. _table[0].Split(',')];
-            _table = _table.GetRange(1, _table.Count - 1);
+            var header = _table[0];
+            if (header.Length > 0 && header[0] == ByteOrderMark)
+                header = header.Substring(1);
 
-            foreach (var line in _table)
+            Columns = ReadFields(header, 1);
+
+            for (var row = 1; row < _table.Count; row++)
             {
-                Data.Add([.. line.Split(',')]);
+                Data.Add(ReadFields(_table[row], row + 1));
             }
 
             var i = 0;
@@ -75,6 +80,55 @@ namespace JMW.Templates
             foreach (var column in Columns)
             {
                 ColumnIndexes.Add(column.ToLowerInvariant(), i);
+                i++;
+            }
+        }
+
+        private const char ByteOrderMark = (char)0xFEFF;
+
+        /// <summary>
+        /// Splits one CSV line into fields per RFC 4180. A field that opens with a quote may hold commas, and a doubled
+        /// quote inside it is one quote. Unquoted fields are kept as written, spaces included.
+        /// </summary>
+        /// <param name="line_number">The 1-based line, for the error message.</param>
+        private static List<string> ReadFields(string line, int line_number)
+        {
+            if (line.IndexOf('"') < 0)
+                return [.. line.Split(',')];
+
+            var fields = new List<string>();
+            var field = new StringBuilder();
+            var i = 0;
+            while (true)
+            {
+                if (i < line.Length && line[i] == '"')
+                {
+                    i++;
+                    while (true)
+                    {
+                        if (i >= line.Length)
+                            throw new FormatException("Line " + line_number + " has a quoted field with no closing quote.");
+
+                        var c = line[i++];
+                        if (c != '"')
+                            field.Append(c);
+                        else if (i < line.Length && line[i] == '"')
+                            field.Append(line[i++]);
+                        else
+                            break;
+                    }
+                }
+
+                // Text after a closing quote, or a quote that does not open the field, is kept as written.
+                while (i < line.Length && line[i] != ',')
+                    field.Append(line[i++]);
+
+                fields.Add(field.ToString());
+                field.Clear();
+
+                if (i >= line.Length)
+                    return fields;
+
                 i++;
             }
         }
