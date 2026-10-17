@@ -60,36 +60,27 @@ public class Property : IProperty
         {
             if (this.Split is not null)
             {
+                var split = this.Split;
+                var sb = new StringBuilder();
                 var c = 0;
                 while (c != -1)
                 {
-                    var l = this.Split.Length;
-                    var test = string.Empty;
-                    var line = string.Empty;
-                    var sb = new StringBuilder();
-                    while ((c = reader.Read()) != -1)
+                    sb.Clear();
+                    string line;
+                    while (true)
                     {
-                        test += (char)c;
-                        sb.Append((char)c);
-
-                        if (test.Length > l)
+                        if ((c = reader.Read()) == -1)
                         {
-                            test = test.Substring(test.Length - l);
-                        }
-
-                        if (test == this.Split)
-                        {
-                            line = sb.ToString(0, sb.Length - test.Length);
+                            line = sb.ToString();
                             break;
                         }
-                    }
 
-                    // if its the last line, you need to set it.
-                    if (c == -1)
-                    {
-                        line = test == this.Split
-                            ? sb.ToString(test.Length, sb.Length - test.Length)
-                            : sb.ToString();
+                        sb.Append((char)c);
+                        if (EndsWith(sb, split))
+                        {
+                            line = sb.ToString(0, sb.Length - split.Length);
+                            break;
+                        }
                     }
 
                     if (this.Line is not null && !this.Line.Test(line))
@@ -116,6 +107,25 @@ public class Property : IProperty
         }
 
         return string.Empty;
+    }
+
+    private static bool EndsWith(StringBuilder sb, string value)
+    {
+        if (sb.Length < value.Length)
+        {
+            return false;
+        }
+
+        var offset = sb.Length - value.Length;
+        for (var i = 0; i < value.Length; i++)
+        {
+            if (sb[offset + i] != value[i])
+            {
+                return false;
+            }
+        }
+
+        return true;
     }
 
     private string ExtractText(string line)
