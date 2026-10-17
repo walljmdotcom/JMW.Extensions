@@ -158,6 +158,58 @@ namespace JMW.Collections.Tests
         }
 
         [Test]
+        public void LookupResultsCannotBeUsedToModifyTheIndex()
+        {
+            var (c, _) = Build(6);
+
+            Assert.That(c.GetByIndex("Group", 0), Is.Not.InstanceOf<ICollection<Item>>());
+            Assert.That(c.TryGetByIndex("Group", 0, out var bucket) ? bucket : null, Is.Not.InstanceOf<ICollection<Item>>());
+            Assert.That(c.GetIndex("Group"), Is.Not.InstanceOf<IDictionary<string, IReadOnlyList<Item>>>());
+            Assert.That(
+                () => ((IDictionary<string, Item>)c.GetUniqueIndex("Key")).Remove("k0"),
+                Throws.TypeOf<NotSupportedException>()
+            );
+            Assert.That(c.GetUniqueIndex("Key"), Has.Count.EqualTo(6));
+        }
+
+        [Test]
+        public void LookupResultsAreViewsOfTheIndex()
+        {
+            var (c, items) = Build(6);
+            var group0 = c.GetByIndex("Group", 0);
+            var byGroup = c.GetIndex("Group");
+            var byKey = c.GetUniqueIndex("Key");
+
+            var added = new Item { Key = "new", Group = 0 };
+            c.Add(added);
+            c.Remove(items[0]);
+
+            Assert.That(group0, Is.EqualTo(new[] { items[3], added }));
+            Assert.That(byGroup["0"], Is.EqualTo(new[] { items[3], added }));
+            Assert.That(byKey.ContainsKey("new"), Is.True);
+            Assert.That(byKey.ContainsKey("k0"), Is.False);
+        }
+
+        [Test]
+        public void ChangingTheCollectionWhileEnumeratingAViewThrows()
+        {
+            var (c, _) = Build(6);
+
+            // the copy-free result means this needs .ToList(), as it would over a List<T>
+            Assert.That(() =>
+            {
+                foreach (var item in c.GetByIndex("Group", 0))
+                    item.Group = 1;
+            }, Throws.InvalidOperationException);
+
+            Assert.That(() =>
+            {
+                foreach (var item in c.GetByIndex("Group", 1).ToList())
+                    item.Group = 2;
+            }, Throws.Nothing);
+        }
+
+        [Test]
         public void IsReadOnlyIsFalse()
         {
             Assert.That(new IndexedCollection<Item>().IsReadOnly, Is.False);

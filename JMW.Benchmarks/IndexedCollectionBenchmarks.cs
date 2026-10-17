@@ -116,7 +116,7 @@ public class IndexedCollectionBenchmarks
     }
 
     [Benchmark]
-    public int GetByIndexCopy()
+    public int GetByIndex()
     {
         var found = 0;
         foreach (var site in sites)

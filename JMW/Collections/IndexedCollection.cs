@@ -28,6 +28,11 @@ namespace JMW.Collections
     /// A collection that allows you to index more than one property.  The indices are maintained, so when a value
     /// is modified, the indices are updated.
     /// </summary>
+    /// <remarks>
+    /// Every lookup has an overload that names the property with a lambda, such as <c>p =&gt; p.Id</c>. The compiler
+    /// builds an expression tree at each such call, which costs far more than the lookup itself, so in hot paths use
+    /// the overload that takes the name, for example <c>nameof(Device.Id)</c>.
+    /// </remarks>
     /// <typeparam name="T">The type of object being stored in the collection.</typeparam>
     public class IndexedCollection<T> : INotifyCollectionChanged, IList<T>, IIndexObserver where T : IndexedClass
     {
@@ -57,10 +62,13 @@ namespace JMW.Collections
         }
 
         // The same dictionaries, reachable by property name for the public lookups and by slot for the hot paths.
-        private readonly Dictionary<string, Dictionary<string, List<T>>> _indexCollection = new(StringComparer.Ordinal);
+        // Buckets are deques so an item is removed from either end in O(1); they are handed out as read-only views.
+        private readonly Dictionary<string, Dictionary<string, Deque<T>>> _indexCollection = new(StringComparer.Ordinal);
         private readonly Dictionary<string, Dictionary<string, T>> _uniqueIndexCollection = new(StringComparer.Ordinal);
         private readonly Dictionary<string, T>[] _uniqueIndexes;
-        private readonly Dictionary<string, List<T>>[] _nonUniqueIndexes;
+        private readonly Dictionary<string, Deque<T>>[] _nonUniqueIndexes;
+        private readonly Dictionary<string, IReadOnlyDictionary<string, T>> _uniqueIndexViews = new(StringComparer.Ordinal);
+        private readonly Dictionary<string, IReadOnlyDictionary<string, IReadOnlyList<T>>> _indexViews = new(StringComparer.Ordinal);
         // A deque rather than a List: removing from either end is O(1), where a List shifts every later item.
         private readonly Deque<T> _items = new();
         private readonly IndexObserverToken _token;
@@ -80,13 +88,15 @@ namespace JMW.Collections
             {
                 _uniqueIndexes[prop.Slot] = new Dictionary<string, T>(StringComparer.Ordinal);
                 _uniqueIndexCollection.Add(prop.Name, _uniqueIndexes[prop.Slot]);
+                _uniqueIndexViews.Add(prop.Name, new ReadOnlyDictionary<string, T>(_uniqueIndexes[prop.Slot]));
             }
 
-            _nonUniqueIndexes = new Dictionary<string, List<T>>[s_nonUniqueProps.Length];
+            _nonUniqueIndexes = new Dictionary<string, Deque<T>>[s_nonUniqueProps.Length];
             foreach (var prop in s_nonUniqueProps)
             {
-                _nonUniqueIndexes[prop.Slot] = new Dictionary<string, List<T>>(StringComparer.Ordinal);
+                _nonUniqueIndexes[prop.Slot] = new Dictionary<string, Deque<T>>(StringComparer.Ordinal);
                 _indexCollection.Add(prop.Name, _nonUniqueIndexes[prop.Slot]);
+                _indexViews.Add(prop.Name, new BucketIndexView(_nonUniqueIndexes[prop.Slot]));
             }
         }
 
@@ -104,19 +114,22 @@ namespace JMW.Collections
         /// </summary>
         /// <param name="name">A string that identifies a property that has been indexed.</param>
         /// <param name="key">The value in the index that the object is keyed to.</param>
-        /// <param name="value">The object identified by the <paramref name="key"/>.</param>
+        /// <param name="value">A read-only view of the items under <paramref name="key"/>, in the order they were added.
+        /// It is not a copy: enumerating it while the collection changes throws, and after a change the key should be
+        /// looked up again.</param>
         /// <returns>True if the operation succeeded.</returns>
-        public bool TryGetByIndex(string name, object key, [NotNullWhen(true)] out List<T>? value)
+        public bool TryGetByIndex(string name, object key, [NotNullWhen(true)] out IReadOnlyList<T>? value)
         {
-            if (!_indexCollection.TryGetValue(name, out var internalValue)
-                || KeyOf(key) is not string k
-                || !internalValue.TryGetValue(k, out value))
+            if (_indexCollection.TryGetValue(name, out var internalValue)
+                && KeyOf(key) is string k
+                && internalValue.TryGetValue(k, out var bucket))
             {
-                value = null;
-                return false;
+                value = bucket;
+                return true;
             }
 
-            return true;
+            value = null;
+            return false;
         }
 
         /// <summary>
@@ -126,7 +139,7 @@ namespace JMW.Collections
         /// <param name="key">The value in the index that the object is keyed to.</param>
         /// <param name="value">The object identified by the <paramref name="key"/>.</param>
         /// <returns>True if the operation succeeded.</returns>
-        public bool TryGetByIndex(Expression<Func<T, object>> property_lambda, object key, [NotNullWhen(true)] out List<T>? value)
+        public bool TryGetByIndex(Expression<Func<T, object>> property_lambda, object key, [NotNullWhen(true)] out IReadOnlyList<T>? value)
         {
             var name = PropertyExpressions.GetPropertyName(property_lambda);
 
@@ -138,15 +151,16 @@ namespace JMW.Collections
         /// </summary>
         /// <param name="name">A string that identifies a property that has been indexed.</param>
         /// <param name="key">The value in the index that the object is keyed to.</param>
-        /// <returns>A <see cref="Maybe{T}"/> that holds the object.</returns>
-        public Maybe<List<T>> MaybeGetByIndex(string name, object key)
+        /// <returns>A <see cref="Maybe{T}"/> that holds a read-only view of the items, as described for
+        /// <see cref="TryGetByIndex(string, object, out IReadOnlyList{T})"/>.</returns>
+        public Maybe<IReadOnlyList<T>> MaybeGetByIndex(string name, object key)
         {
             if (!_indexCollection.TryGetValue(name, out var value))
-                return new Maybe<List<T>>(new ArgumentException("Property does not have an index."));
+                return new Maybe<IReadOnlyList<T>>(new ArgumentException("Property does not have an index."));
 
             return KeyOf(key) is string k && value.TryGetValue(k, out var found)
-                ? new Maybe<List<T>>(found)
-                : new Maybe<List<T>>(new KeyNotFoundException("The key was not found in the index."));
+                ? new Maybe<IReadOnlyList<T>>((IReadOnlyList<T>)found)
+                : new Maybe<IReadOnlyList<T>>(new KeyNotFoundException("The key was not found in the index."));
         }
 
         /// <summary>
@@ -155,7 +169,7 @@ namespace JMW.Collections
         /// <param name="property_lambda">A property lambda that identifies a property that has been indexed.</param>
         /// <param name="key">The value in the index that the object is keyed to.</param>
         /// <returns>A <see cref="Maybe{T}"/> that holds the object.</returns>
-        public Maybe<List<T>> MaybeGetByIndex(Expression<Func<T, object>> property_lambda, object key)
+        public Maybe<IReadOnlyList<T>> MaybeGetByIndex(Expression<Func<T, object>> property_lambda, object key)
         {
             var name = PropertyExpressions.GetPropertyName(property_lambda);
 
@@ -167,12 +181,14 @@ namespace JMW.Collections
         /// </summary>
         /// <param name="name">A string that identifies a property that has been indexed.</param>
         /// <param name="key">The value in the index that the object is keyed to.</param>
-        /// <returns>A <see cref="List{T}"/> that holds the object.</returns>
-        public List<T> GetByIndex(string name, object key)
+        /// <returns>A read-only view of the items, as described for
+        /// <see cref="TryGetByIndex(string, object, out IReadOnlyList{T})"/>.</returns>
+        /// <exception cref="KeyNotFoundException">No item has <paramref name="key"/>.</exception>
+        public IReadOnlyList<T> GetByIndex(string name, object key)
         {
             return !_indexCollection.TryGetValue(name, out var value)
                 ? throw new ArgumentException("Property does not have an index.")
-                : new List<T>(value[KeyOf(key) ?? throw new ArgumentNullException(nameof(key))]);
+                : value[KeyOf(key) ?? throw new ArgumentNullException(nameof(key))];
         }
 
         /// <summary>
@@ -180,8 +196,8 @@ namespace JMW.Collections
         /// </summary>
         /// <param name="property_lambda">A property lambda that identifies a property that has been indexed.</param>
         /// <param name="key">The value in the index that the object is keyed to.</param>
-        /// <returns>A <see cref="List{T}"/> that holds the object.</returns>
-        public List<T> GetByIndex(Expression<Func<T, object>> property_lambda, object key)
+        /// <returns>A read-only view of the items.</returns>
+        public IReadOnlyList<T> GetByIndex(Expression<Func<T, object>> property_lambda, object key)
         {
             var name = PropertyExpressions.GetPropertyName(property_lambda);
 
@@ -278,79 +294,76 @@ namespace JMW.Collections
         }
 
         /// <summary>
-        /// This function returns a copy of the dictionary index for a given uniquely indexed property.
-        /// The values themselves are not
-        /// copied, but the Dictionary is, and can be modified without damaging the IndexedCollection.
+        /// A read-only view of the index for a uniquely indexed property: key to item. It is not a copy, so it
+        /// reflects later changes to the collection, and enumerating it while the collection changes throws.
         /// </summary>
         /// <param name="name">a string that indicates an indexed property name</param>
-        /// <returns>A <see cref="Maybe{T}"/> with a copy of the dictionary.</returns>
-        public Maybe<Dictionary<string, T>> MaybeGetUniqueIndex(string name)
+        /// <returns>A <see cref="Maybe{T}"/> with the view.</returns>
+        public Maybe<IReadOnlyDictionary<string, T>> MaybeGetUniqueIndex(string name)
         {
-            return _uniqueIndexCollection.TryGetValue(name, out Dictionary<string, T>? value)
-                ? new Maybe<Dictionary<string, T>>(value.ToDictionary(k => k.Key, v => v.Value))
-                : new Maybe<Dictionary<string, T>>(new ArgumentException("Property \"" + name + "\" does not exist."));
+            return _uniqueIndexViews.TryGetValue(name, out var view)
+                ? new Maybe<IReadOnlyDictionary<string, T>>(view)
+                : new Maybe<IReadOnlyDictionary<string, T>>(new ArgumentException("Property \"" + name + "\" does not exist."));
         }
 
         /// <summary>
-        /// This function returns a copy of the dictionary index for a given uniquely indexed property.
-        /// The values themselves are not
-        /// copied, but the Dictionary is, and can be modified without damaging the IndexedCollection.
+        /// A read-only view of the index for a uniquely indexed property, as described for
+        /// <see cref="MaybeGetUniqueIndex(string)"/>.
         /// </summary>
         /// <param name="property_lambda">an expression in the form of p=>p.PropertyName</param>
-        /// <returns>A <see cref="Maybe{T}"/> with a copy of the dictionary.</returns>
-        public Maybe<Dictionary<string, T>> MaybeGetUniqueIndex(Expression<Func<T, object>> property_lambda)
+        /// <returns>A <see cref="Maybe{T}"/> with the view.</returns>
+        public Maybe<IReadOnlyDictionary<string, T>> MaybeGetUniqueIndex(Expression<Func<T, object>> property_lambda)
         {
             var name = PropertyExpressions.GetPropertyName(property_lambda);
             return MaybeGetUniqueIndex(name);
         }
 
         /// <summary>
-        /// This function returns a copy of the dictionary index for a given uniquely indexed property.
-        /// The values themselves are not
-        /// copied, but the Dictionary is, and can be modified without damaging the IndexedCollection.
+        /// A read-only view of the index for a uniquely indexed property, as described for
+        /// <see cref="MaybeGetUniqueIndex(string)"/>.
         /// </summary>
         /// <param name="name">a string that indicates an indexed property name</param>
-        /// <returns>A <see cref="Dictionary{TKey, TValue}"/>  with a copy of the dictionary.</returns>
-        public Dictionary<string, T> GetUniqueIndex(string name)
+        /// <returns>The view.</returns>
+        public IReadOnlyDictionary<string, T> GetUniqueIndex(string name)
         {
-            return _uniqueIndexCollection.TryGetValue(name, out var value)
-                ? value.ToDictionary(k => k.Key, v => v.Value)
+            return _uniqueIndexViews.TryGetValue(name, out var view)
+                ? view
                 : throw new ArgumentException("Property \"" + name + "\" does not exist.");
         }
 
         /// <summary>
-        /// This function returns a copy of the dictionary index for a given uniquely indexed property.
-        /// The values themselves are not
-        /// copied, but the Dictionary is, and can be modified without damaging the IndexedCollection.
+        /// A read-only view of the index for a uniquely indexed property, as described for
+        /// <see cref="MaybeGetUniqueIndex(string)"/>.
         /// </summary>
         /// <param name="property_lambda">an expression in the form of p=>p.PropertyName</param>
-        /// <returns>A <see cref="Dictionary{TKey, TValue}"/> with a copy of the dictionary.</returns>
-        public Dictionary<string, T> GetUniqueIndex(Expression<Func<T, object>> property_lambda)
+        /// <returns>The view.</returns>
+        public IReadOnlyDictionary<string, T> GetUniqueIndex(Expression<Func<T, object>> property_lambda)
         {
             var name = PropertyExpressions.GetPropertyName(property_lambda);
             return GetUniqueIndex(name);
         }
 
         /// <summary>
-        /// This function returns a copy of the dictionary index for a given property.  The values themselves are not
-        /// copied, but the Dictionary is, and can be modified without damaging the IndexedCollection.
+        /// A read-only view of the index for a non-uniquely indexed property: key to the items under it, in the order
+        /// they were added. It is not a copy, so it reflects later changes to the collection, and enumerating it, or a
+        /// list in it, while the collection changes throws.
         /// </summary>
         /// <param name="name">a string that indicates an indexed property name</param>
-        /// <returns>A <see cref="Maybe{T}"/> with a copy of the dictionary.</returns>
-        public Maybe<Dictionary<string, List<T>>> MaybeGetIndex(string name)
+        /// <returns>A <see cref="Maybe{T}"/> with the view.</returns>
+        public Maybe<IReadOnlyDictionary<string, IReadOnlyList<T>>> MaybeGetIndex(string name)
         {
-            return _indexCollection.TryGetValue(name, out var value)
-                ? new Maybe<Dictionary<string, List<T>>>(value.ToDictionary(k => k.Key, v => v.Value.ToList()))
-                : new Maybe<Dictionary<string, List<T>>>(new ArgumentException("Property \"" + name + "\" does not exist."));
+            return _indexViews.TryGetValue(name, out var view)
+                ? new Maybe<IReadOnlyDictionary<string, IReadOnlyList<T>>>(view)
+                : new Maybe<IReadOnlyDictionary<string, IReadOnlyList<T>>>(new ArgumentException("Property \"" + name + "\" does not exist."));
         }
 
         /// <summary>
-        /// This function returns a copy of the dictionary index for a given property.  The values themselves are not
-        /// copied, but the Dictionary is, and can be modified without damaging the IndexedCollection.
+        /// A read-only view of the index for a non-uniquely indexed property, as described for
+        /// <see cref="MaybeGetIndex(string)"/>.
         /// </summary>
         /// <param name="propertyLambda">an expression in the form of p=>p.PropertyName</param>
-        /// <returns>A <see cref="Maybe{T}"/> with a copy of the dictionary.</returns>
-        public Maybe<Dictionary<string, List<T>>> MaybeGetIndex(Expression<Func<T, object>> propertyLambda)
+        /// <returns>A <see cref="Maybe{T}"/> with the view.</returns>
+        public Maybe<IReadOnlyDictionary<string, IReadOnlyList<T>>> MaybeGetIndex(Expression<Func<T, object>> propertyLambda)
         {
             var name = PropertyExpressions.GetPropertyName(propertyLambda);
 
@@ -358,25 +371,25 @@ namespace JMW.Collections
         }
 
         /// <summary>
-        /// This function returns a copy of the dictionary index for a given property.  The values themselves are not
-        /// copied, but the Dictionary is, and can be modified without damaging the IndexedCollection.
+        /// A read-only view of the index for a non-uniquely indexed property, as described for
+        /// <see cref="MaybeGetIndex(string)"/>.
         /// </summary>
         /// <param name="name">a string that indicates an indexed property name</param>
-        /// <returns>A <see cref="Dictionary{TKey, TValue}"/> with a copy of the dictionary.</returns>
-        public Dictionary<string, List<T>> GetIndex(string name)
+        /// <returns>The view.</returns>
+        public IReadOnlyDictionary<string, IReadOnlyList<T>> GetIndex(string name)
         {
-            return _indexCollection.TryGetValue(name, out var value)
-                ? value.ToDictionary(k => k.Key, v => v.Value.ToList())
+            return _indexViews.TryGetValue(name, out var view)
+                ? view
                 : throw new ArgumentException("Property \"" + name + "\" does not exist.");
         }
 
         /// <summary>
-        /// This function returns a copy of the dictionary index for a given property.  The values themselves are not
-        /// copied, but the Dictionary is, and can be modified without damaging the IndexedCollection.
+        /// A read-only view of the index for a non-uniquely indexed property, as described for
+        /// <see cref="MaybeGetIndex(string)"/>.
         /// </summary>
         /// <param name="propertyLambda">an expression in the form of p=>p.PropertyName</param>
-        /// <returns>A <see cref="Dictionary{TKey, TValue}"/> with a copy of the dictionary.</returns>
-        public Dictionary<string, List<T>> GetIndex(Expression<Func<T, object>> propertyLambda)
+        /// <returns>The view.</returns>
+        public IReadOnlyDictionary<string, IReadOnlyList<T>> GetIndex(Expression<Func<T, object>> propertyLambda)
         {
             var name = PropertyExpressions.GetPropertyName(propertyLambda);
 
@@ -503,20 +516,8 @@ namespace JMW.Collections
             OnCollectionChanged(NotifyCollectionChangedAction.Remove, item, index);
         }
 
+        // Items are matched by identity: the indexes track instances, whatever Equals says.
         private int FindByReference(T item) => _items.IndexOfReference(item);
-
-        // Items are matched by identity, which also avoids the virtual Equals that List.IndexOf calls. The scan works
-        // inward from both ends, so items removed in the order they were added, or in reverse, are found at once.
-        private static int IndexOfReference(List<T> list, T item)
-        {
-            for (int lo = 0, hi = list.Count - 1; lo <= hi; lo++, hi--)
-            {
-                if (ReferenceEquals(list[lo], item)) return lo;
-                if (ReferenceEquals(list[hi], item)) return hi;
-            }
-
-            return -1;
-        }
 
         private void OnCollectionChanged(NotifyCollectionChangedAction action, T item, int index)
         {
@@ -598,11 +599,11 @@ namespace JMW.Collections
         /// <summary>
         /// Removes <paramref name="item"/> from the bucket for <paramref name="key"/>, dropping the bucket once empty.
         /// </summary>
-        private static void removeFromBucket(Dictionary<string, List<T>> index, string key, T item)
+        private static void removeFromBucket(Dictionary<string, Deque<T>> index, string key, T item)
         {
             if (!index.TryGetValue(key, out var bucket)) return;
 
-            var at = IndexOfReference(bucket, item);
+            var at = bucket.IndexOfReference(item);
             if (at < 0) return;
 
             bucket.RemoveAt(at);
@@ -610,12 +611,15 @@ namespace JMW.Collections
                 index.Remove(key);
         }
 
-        private static void addToBucket(Dictionary<string, List<T>> index, string key, T item)
+        private static void addToBucket(Dictionary<string, Deque<T>> index, string key, T item)
         {
-            if (index.TryGetValue(key, out var bucket))
-                bucket.Add(item);
-            else
-                index.Add(key, [item]);
+            if (!index.TryGetValue(key, out var bucket))
+            {
+                bucket = new Deque<T>();
+                index.Add(key, bucket);
+            }
+
+            bucket.Add(item);
         }
 
         /// <summary>
@@ -931,6 +935,43 @@ namespace JMW.Collections
                 var get = (Func<T, TProperty>)Delegate.CreateDelegate(typeof(Func<T, TProperty>), getter);
                 return item => get(item);
             }
+        }
+
+        /// <summary>
+        /// A non-unique index seen as read-only: each bucket is exposed as a read-only list without copying.
+        /// </summary>
+        private sealed class BucketIndexView(Dictionary<string, Deque<T>> index) : IReadOnlyDictionary<string, IReadOnlyList<T>>
+        {
+            public IReadOnlyList<T> this[string key] => index[key];
+
+            public IEnumerable<string> Keys => index.Keys;
+
+            public IEnumerable<IReadOnlyList<T>> Values => index.Values;
+
+            public int Count => index.Count;
+
+            public bool ContainsKey(string key) => index.ContainsKey(key);
+
+            // netstandard2.0 declares the out value non-null, so a miss gets an empty list rather than null
+            public bool TryGetValue(string key, out IReadOnlyList<T> value)
+            {
+                if (index.TryGetValue(key, out var bucket))
+                {
+                    value = bucket;
+                    return true;
+                }
+
+                value = Array.Empty<T>();
+                return false;
+            }
+
+            public IEnumerator<KeyValuePair<string, IReadOnlyList<T>>> GetEnumerator()
+            {
+                foreach (var pair in index)
+                    yield return new KeyValuePair<string, IReadOnlyList<T>>(pair.Key, pair.Value);
+            }
+
+            IEnumerator IEnumerable.GetEnumerator() => GetEnumerator();
         }
 
         /// <summary>

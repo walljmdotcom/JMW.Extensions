@@ -8,7 +8,7 @@ namespace JMW.Collections;
 /// An indexed list in a circular buffer. Adding or removing at either end is O(1), and inserting or removing in the
 /// middle moves only the shorter side, where <see cref="List{T}"/> always moves everything after the position.
 /// </summary>
-internal sealed class Deque<T> : IEnumerable<T>
+internal sealed class Deque<T> : IReadOnlyList<T>
 {
     private T[] items = [];
     private int head;

@@ -53,8 +53,8 @@ namespace JMW.Collections.Tests
             indices.Do(ifSuccess: d => Assert.That(d.Count == 2), ifException: null);
             indices2.Do(ifSuccess: d => Assert.That(d.Count == 3), ifException: null);
 
-            // make sure the indices can be modified without modifying the original.
-            indices.Do(ifSuccess: d => d.Remove("jeremy"), ifException: null);
+            // make sure the index handed out cannot be used to modify the collection's own index.
+            indices.Do(ifSuccess: d => Assert.That(() => ((IDictionary<string, Foo>)d).Remove("jeremy"), Throws.TypeOf<NotSupportedException>()), ifException: null);
             idx.MaybeGetUniqueIndex(p => p.Bar).Do(ifSuccess: d => Assert.That(d.Count == 2), ifException: null);
 
             Assert.That(idx.First() == f1);
