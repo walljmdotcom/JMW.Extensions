@@ -61,7 +61,8 @@ namespace JMW.Collections
         private readonly Dictionary<string, Dictionary<string, T>> _uniqueIndexCollection = new(StringComparer.Ordinal);
         private readonly Dictionary<string, T>[] _uniqueIndexes;
         private readonly Dictionary<string, List<T>>[] _nonUniqueIndexes;
-        private readonly List<T> _items = [];
+        // A deque rather than a List: removing from either end is O(1), where a List shifts every later item.
+        private readonly Deque<T> _items = new();
         private readonly IndexObserverToken _token;
 
         // Reused across operations; the collection is not thread-safe, so one set per instance is enough.
@@ -477,7 +478,7 @@ namespace JMW.Collections
                 _items[kept++] = item;
             }
 
-            _items.RemoveRange(kept, _items.Count - kept);
+            _items.Truncate(kept);
             return true;
         }
 
@@ -502,7 +503,7 @@ namespace JMW.Collections
             OnCollectionChanged(NotifyCollectionChangedAction.Remove, item, index);
         }
 
-        private int FindByReference(T item) => IndexOfReference(_items, item);
+        private int FindByReference(T item) => _items.IndexOfReference(item);
 
         // Items are matched by identity, which also avoids the virtual Equals that List.IndexOf calls. The scan works
         // inward from both ends, so items removed in the order they were added, or in reverse, are found at once.
@@ -762,7 +763,7 @@ namespace JMW.Collections
 
         public bool Contains(T item)
         {
-            return _items.Contains(item);
+            return _items.IndexOf(item) >= 0;
         }
 
         public void CopyTo(T[] array, int arrayIndex)
