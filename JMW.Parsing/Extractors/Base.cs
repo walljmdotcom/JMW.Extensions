@@ -61,6 +61,42 @@ public abstract class Base
 
     public abstract string Parse(string s);
 
+    private List<string>? queryArraySource;
+    private string[] queryArray = [];
+
+    /// <summary>
+    /// <see cref="Search"/>'s query as an array, copied again only when the query list or its items have changed.
+    /// </summary>
+    protected string[] QueryArray()
+    {
+        var query = this.Search.Query;
+        if (!ReferenceEquals(query, this.queryArraySource) || !SameItems(query, this.queryArray))
+        {
+            this.queryArray = [.. query];
+            this.queryArraySource = query;
+        }
+
+        return this.queryArray;
+    }
+
+    private static bool SameItems(List<string> query, string[] array)
+    {
+        if (query.Count != array.Length)
+        {
+            return false;
+        }
+
+        for (var i = 0; i < array.Length; i++)
+        {
+            if (!ReferenceEquals(query[i], array[i]))
+            {
+                return false;
+            }
+        }
+
+        return true;
+    }
+
     public static Base ToExtractor(Tag t)
     {
         return t.Name switch

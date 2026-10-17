@@ -30,7 +30,7 @@ public class Split : Base
         }
         else
         {
-            string[] fields = value.Split([.. this.Search.Query], splitOptions);
+            string[] fields = value.Split(this.QueryArray(), splitOptions);
             field = fields.Length > this.Index ? fields[this.Index] : throw new IndexOutOfRangeException();
         }
 

@@ -13,7 +13,7 @@ namespace JMW.Parsing.Extractors
             var isCaseInsensitive = this.Search.Mods.Contains(Constants.CASE_INSENSITIVE); // case insensitive
             var shouldTripOutput = this.Search.Mods.Contains(Constants.TRIM); // trim the output
             var includeSearchItem = this.Search.Mods.Contains(Constants.WITH_VALUE);
-            var queryArray = this.Search.Query.ToArray();
+            var queryArray = this.QueryArray();
 
             var r = includeSearchItem switch
             {

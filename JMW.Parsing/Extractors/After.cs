@@ -13,15 +13,16 @@ public class After : Base
         var isCaseInsensitive = this.Search.Mods.Contains(Constants.CASE_INSENSITIVE); // case insensitive
         var shouldTrim = this.Search.Mods.Contains(Constants.TRIM); // trim the output
         var excludeSearchItem = this.Search.Mods.Contains(Constants.WITH_VALUE);
+        var queryArray = this.QueryArray();
 
         var value = excludeSearchItem switch
         {
             true when this.Quantifier > -1
-                => s.ParseAfterDesignatedIndexOf_PlusLength(this.Quantifier, isCaseInsensitive, [.. this.Search.Query]),
+                => s.ParseAfterDesignatedIndexOf_PlusLength(this.Quantifier, isCaseInsensitive, queryArray),
             true when this.Search.Mods.Contains(Constants.LAST)
-                => s.ParseAfterLastIndexOf_PlusLength(isCaseInsensitive, [.. this.Search.Query]),
-            true => s.ParseAfterIndexOf_PlusLength(isCaseInsensitive, [.. this.Search.Query]),
-            _ => s.ParseAfterIndexOf(isCaseInsensitive, [.. this.Search.Query]),
+                => s.ParseAfterLastIndexOf_PlusLength(isCaseInsensitive, queryArray),
+            true => s.ParseAfterIndexOf_PlusLength(isCaseInsensitive, queryArray),
+            _ => s.ParseAfterIndexOf(isCaseInsensitive, queryArray),
         };
 
         return shouldTrim ? value.Trim() : value;
