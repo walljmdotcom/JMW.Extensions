@@ -526,6 +526,22 @@ free      bird   is      awesome
         Assert.That(pos.Positions["Col 1"].GetColumnValue("this      is      the    row"), Is.EqualTo(" the   "));
     }
 
+    // repeated header names get a count, in column order, and a real column already using a generated name keeps it
+    [TestCase("Name  Name  Name  Other\na     b     c     d", new[] { "Name", "Name1", "Name2", "Other" }, "c")]
+    [TestCase("Col  Col  Col  Col\na    b    c    d", new[] { "Col", "Col1", "Col2", "Col3" }, "c")]
+    [TestCase("Id  Name  Name\n1   a     b", new[] { "Id", "Name", "Name1" }, "")]
+    [TestCase("A1  A  A\nx   y  z", new[] { "A1", "A", "A2" }, "")]
+    public void Table_DeriveColumnPositions_DuplicateNames(string table, string[] names, string thirdValue)
+    {
+        var lines = table.ToLines().ToList();
+        var pos = Table.DeriveColumnPositions(lines, true);
+
+        Assert.That(pos.Positions.Keys, Is.EqualTo(names));
+        Assert.That(pos.Positions.Values.Select(p => p.Name), Is.EqualTo(names));
+        if (thirdValue.Length > 0)
+            Assert.That(pos.Positions[names[2]].GetColumnValue(lines[1]).Trim(), Is.EqualTo(thirdValue));
+    }
+
     [Test]
     public void Include()
     {

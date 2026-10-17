@@ -311,21 +311,28 @@ public class Table : Base, IParser, IProperty
 
         #endregion Validate
 
-        // fix the column names.
-        foreach (var kvp in fieldPositions.ToList())
+        // name the columns from the original header, so duplicates there become Name, Name1, Name2.
+        var named = new Dictionary<string, ColumnPosition>();
+        foreach (var position in fieldPositions.Values)
         {
-            fieldPositions.Remove(kvp.Key);
-
-            kvp.Value.Name = kvp.Value.GetColumnValue(original_column_string).Trim();
-            var d = 1;
-            while (fieldPositions.ContainsKey(kvp.Value.Name))
-            {
-                kvp.Value.Name += d;
-            }
-            fieldPositions.Add(kvp.Value.Name, kvp.Value);
+            position.Name = UniqueName(named, position.GetColumnValue(original_column_string).Trim());
+            named.Add(position.Name, position);
         }
 
-        return new ColumnPositionCollection(fieldPositions);
+        return new ColumnPositionCollection(named);
+    }
+
+    private static string UniqueName(Dictionary<string, ColumnPosition> taken, string name)
+    {
+        if (!taken.ContainsKey(name))
+            return name;
+
+        for (var n = 1; ; n++)
+        {
+            var candidate = name + n.ToString(CultureInfo.InvariantCulture);
+            if (!taken.ContainsKey(candidate))
+                return candidate;
+        }
     }
 
     /// <summary>
@@ -353,35 +360,14 @@ public class Table : Base, IParser, IProperty
                     positions[i + 1].Name = positions[i].Name + positions[i + 1].Name; // merge this position with the next position.
                 }
 
-                field_positions.Add(positions[i + 1].Name, positions[i + 1]); // add the next position to the fields.
+                field_positions.Add(UniqueName(field_positions, positions[i + 1].Name), positions[i + 1]); // add the next position to the fields.
 
                 if (positions.Count > i + 1) i++;
                 else break;
             }
             else
             {
-                var id = p.Name;
-                var increment = 0;
-                while (field_positions.ContainsKey(id))
-                {
-                    // deal with the old, so the unit test doesn't break
-                    var len = id.Length;
-                    var old = field_positions[id];
-                    field_positions.Remove(id);
-                    id = p.Name.Substring(0, len - increment.ToString(CultureInfo.InvariantCulture).Length) + increment;
-                    while (field_positions.ContainsKey(id))
-                    {
-                        increment++;
-                        id = p.Name.Substring(0, len - increment.ToString(CultureInfo.InvariantCulture).Length) + increment;
-                    }
-                    field_positions.Add(id, old);
-
-                    increment++;
-                    len = p.Name.Length;
-                    id = p.Name.Substring(0, len - increment.ToString(CultureInfo.InvariantCulture).Length) + increment;
-                    increment++;
-                }
-                field_positions.Add(id, p);
+                field_positions.Add(UniqueName(field_positions, p.Name), p);
             }
         }
         return field_positions;
