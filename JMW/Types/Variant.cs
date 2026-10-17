@@ -157,43 +157,64 @@ public class Variant : IEquatable<Variant>
         if (val is null)
             return false;
 
-        if (IsString && val.IsString) return StringValue == val.StringValue;
-        if (IsList && val.IsList)
+        if (ReferenceEquals(this, val))
+            return true;
+
+        if (_stringValue is not null || val._stringValue is not null)
+            return string.Equals(_stringValue, val._stringValue, StringComparison.Ordinal);
+
+        if (_listValue is not null || val._listValue is not null)
         {
-            if (ListValue is not null
-                && val.ListValue is not null
-                && ListValue.Count == val.ListValue.Count
-            )
+            if (_listValue is null || val._listValue is null || _listValue.Count != val._listValue.Count)
+                return false;
+
+            for (var i = 0; i < _listValue.Count; i++)
             {
-                for (var i = 0; i < ListValue.Count; i++)
-                {
-                    if (!ListValue[i].Equals(val.ListValue[i])) return false;
-                }
+                if (!_listValue[i].Equals(val._listValue[i])) return false;
             }
-        }
-        if (IsDict && val.IsDict)
-        {
-            if (
-                   DictValue is not null
-                && val.DictValue is not null
-                && DictValue.Count == val.DictValue.Count
-            )
-            {
-                foreach (var kv in DictValue)
-                {
-                    if (!(val.DictValue.ContainsKey(kv.Key) &&
-                          kv.Value.Equals(val.DictValue[kv.Key]))) return false;
-                }
-            }
+
+            return true;
         }
 
-        // Theoretically impossible at the time of writing but if we do somehow end
-        // up with empty variants later we'll consider them equal.
+        if (_dictValue is not null || val._dictValue is not null)
+        {
+            if (_dictValue is null || val._dictValue is null || _dictValue.Count != val._dictValue.Count)
+                return false;
+
+            foreach (var kv in _dictValue)
+            {
+                if (!val._dictValue.TryGetValue(kv.Key, out var other) || !kv.Value.Equals(other)) return false;
+            }
+
+            return true;
+        }
+
+        // two empty variants are equal
         return true;
     }
 
     public override bool Equals(object? obj)
     {
         return Equals(obj as Variant);
+    }
+
+    /// <summary>
+    /// Lists and dictionaries hash by kind and count only, so variants that compare equal hash equal regardless of
+    /// element hashing. The hash changes if the variant's value is mutated.
+    /// </summary>
+    public override int GetHashCode()
+    {
+        int hash;
+        if (_stringValue is not null)
+            hash = StringComparer.Ordinal.GetHashCode(_stringValue);
+        else if (_listValue is not null)
+            hash = unchecked((int)0x9E3779B1 * (_listValue.Count + 1));
+        else if (_dictValue is not null)
+            hash = unchecked((int)0x85EBCA77 * (_dictValue.Count + 1));
+        else
+            hash = 0;
+
+        // kept positive and non-zero, which callers of the original reference-based hash could rely on
+        return (hash & int.MaxValue) | 1;
     }
 }

@@ -57,5 +57,69 @@ namespace JMW.Types.Tests
             var v = new Variant();
             Assert.That("", Is.EqualTo(v.ToString()));
         }
+
+        private static IEnumerable<TestCaseData> EqualityCases()
+        {
+            yield return new TestCaseData(new Variant("a"), new Variant("a"), true).SetName("strings equal");
+            yield return new TestCaseData(new Variant("a"), new Variant("b"), false).SetName("strings differ");
+            yield return new TestCaseData(new Variant("a"), new Variant("A"), false).SetName("strings differ by case");
+            yield return new TestCaseData(new Variant(""), new Variant(""), true).SetName("empty strings equal");
+            yield return new TestCaseData(new Variant(), new Variant(), true).SetName("empty variants equal");
+
+            yield return new TestCaseData(V("a", "b"), V("a", "b"), true).SetName("lists equal");
+            yield return new TestCaseData(V(), V(), true).SetName("empty lists equal");
+            yield return new TestCaseData(V("a"), V("a", "b"), false).SetName("shorter list differs");
+            yield return new TestCaseData(V("a", "b"), V("a"), false).SetName("longer list differs");
+            yield return new TestCaseData(V(), V("a"), false).SetName("empty list differs from single");
+            yield return new TestCaseData(V("a", "b"), V("b", "a"), false).SetName("list order matters");
+            yield return new TestCaseData(V("a", "b"), V("a", "c"), false).SetName("list element differs");
+
+            yield return new TestCaseData(D(("k", "v")), D(("k", "v")), true).SetName("dicts equal");
+            yield return new TestCaseData(D(("k", "v"), ("j", "w")), D(("j", "w"), ("k", "v")), true).SetName("dict key order ignored");
+            yield return new TestCaseData(D(), D(), true).SetName("empty dicts equal");
+            yield return new TestCaseData(D(("k", "v")), D(("k", "v"), ("j", "w")), false).SetName("smaller dict differs");
+            yield return new TestCaseData(D(("k", "v"), ("j", "w")), D(("k", "v")), false).SetName("larger dict differs");
+            yield return new TestCaseData(D(), D(("k", "v")), false).SetName("empty dict differs from single");
+            yield return new TestCaseData(D(("k", "v")), D(("x", "v")), false).SetName("dict key differs");
+            yield return new TestCaseData(D(("k", "v")), D(("k", "x")), false).SetName("dict value differs");
+
+            yield return new TestCaseData(new Variant("a"), V("a"), false).SetName("string differs from list");
+            yield return new TestCaseData(V(), D(), false).SetName("empty list differs from empty dict");
+            yield return new TestCaseData(new Variant(""), V(), false).SetName("empty string differs from empty list");
+            yield return new TestCaseData(new Variant(), V(), false).SetName("empty variant differs from empty list");
+            yield return new TestCaseData(new Variant(), new Variant(""), false).SetName("empty variant differs from empty string");
+        }
+
+        [TestCaseSource(nameof(EqualityCases))]
+        public void EqualsAndHashCode(Variant a, Variant b, bool expected)
+        {
+            Assert.That(a.Equals(b), Is.EqualTo(expected));
+            Assert.That(b.Equals(a), Is.EqualTo(expected));
+            Assert.That(a.Equals((object)b), Is.EqualTo(expected));
+            if (expected)
+            {
+                Assert.That(a.GetHashCode(), Is.EqualTo(b.GetHashCode()));
+            }
+        }
+
+        private static Variant V(params string[] items)
+        {
+            var lst = new List<Variant>();
+            foreach (var item in items)
+            {
+                lst.Add(item);
+            }
+            return lst;
+        }
+
+        private static Variant D(params (string Key, string Value)[] items)
+        {
+            var dict = new Dictionary<string, Variant>();
+            foreach (var (key, value) in items)
+            {
+                dict.Add(key, value);
+            }
+            return dict;
+        }
     }
 }
