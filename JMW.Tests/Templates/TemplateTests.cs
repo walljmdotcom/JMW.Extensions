@@ -576,6 +576,42 @@ namespace JMW.Templates.Tests
             Assert.That(sb.ToString(), Is.EqualTo(expected));
         }
 
+        // Table names match whatever their case, in the table data and in the template.
+        [TestCase("<tab name=\"T\"><name/></tab>", "abc")]
+        [TestCase("<tab name=\"t\"><name/></tab>", "abc")]
+        [TestCase("<t><name/></t>", "abc")]
+        [TestCase("<tab name=\"t\"><if column=\"name\" exp=\"x1 == 'b'\">B</if></tab>", "B")]
+        [TestCase("<join left_table=\"T\" right_table=\"u\" left_key=\"num\" right_key=\"num\"><left_name/></join>", "abc")]
+        [TestCase("<join left_table=\"t\" right_table=\"U\" left_key=\"num\" right_key=\"num\"><left_name/><right_label/></join>", "apbpcr")]
+        [TestCase("<join " + JoinTables + "><if column=\"left_name\" exp=\"x1 == 'b'\">B</if></join>", "B")]
+        [TestCase("<join " + JoinTables + "><transform columns=\"right_label\" exp=\"x1\"/></join>", "ppr")]
+        [TestCase("<lookup table=\"T\" key_col=\"num\"><row key=\"20\"><name/></row></lookup>", "b")]
+        [TestCase("<lookup table=\"t\" key_col=\"num\"><row key=\"20\"><if column=\"name\" exp=\"x1 == 'b'\">B</if></row></lookup>", "B")]
+        public void TestCapitalizedTableNames(string template, string expected)
+        {
+            var sb = new StringBuilder();
+            using var wr = new StringWriter(sb);
+            var i = new Interpreter(wr);
+            i.AddHandler(new Table(new TableData("T", ["num,name", "10,a", "20,b", "30,c"]), i));
+            i.AddHandler(new Table(new TableData("U", ["num,label", "10,p", "20,p", "30,r"]), i));
+
+            i.Eval(template);
+
+            Assert.That(sb.ToString(), Is.EqualTo(expected));
+        }
+
+        [Test]
+        public void TestTableNamesDifferingOnlyInCaseCollide()
+        {
+            var i = new Interpreter(new StringWriter());
+            i.AddHandler(new Table(new TableData("T", ["num", "10"]), i));
+
+            Assert.That(
+                () => i.AddHandler(new Table(new TableData("t", ["num", "20"]), i)),
+                Throws.InstanceOf<ArgumentException>()
+            );
+        }
+
         [Test]
         public void TestVersionNestedInTable()
         {

@@ -14,20 +14,20 @@ namespace JMW.Templates
         private readonly Dictionary<string, ITagHandler> _tags = [];
         private readonly HashSet<string> _columnTags = [];
 
+        // Tag names are lowercased when parsed, so the names they are checked against are lowercased here.
         public void AddColumnTag(string column)
         {
-            if (!_columnTags.Contains(column))
-                _columnTags.Add(column);
+            _columnTags.Add(column.ToLowerInvariant());
         }
 
         public void AddTag(string tag_name, ITagHandler tag)
         {
-            _tags.Add(tag_name, tag);
+            _tags.Add(tag_name.ToLowerInvariant(), tag);
         }
 
         public void AddTag(ITagHandler tag)
         {
-            _tags.Add(tag.TagName, tag);
+            AddTag(tag.TagName, tag);
         }
 
         public Parser()

@@ -71,14 +71,14 @@ namespace JMW.Templates.Tags
             _leftTableData = leftTableData;
             _rightTableData = rightTableData;
 
-            Name = _leftTableData.Name + "_" + _rightTableData.Name;
+            Name = (_leftTableData.Name + "_" + _rightTableData.Name).ToLowerInvariant();
             _columnTags = TagHelpers.ColumnTagNames(
                 leftTableData.Columns.Select(c => JoinColumn.LEFT_PREFIX + c)
                     .Concat(rightTableData.Columns.Select(c => JoinColumn.RIGHT_PREFIX + c))
             );
 
             // Column lists inside the join body are prefixed with the join name, as in "t_u:left_name".
-            interp.Retrievers.Add(Name.ToLowerInvariant(), RetrieveColumnValue);
+            interp.Retrievers.Add(Name, RetrieveColumnValue);
 
             // A joined row is the left row followed by the right row, so the column positions are known now.
             for (var i = 0; i < leftTableData.Columns.Count; i++)

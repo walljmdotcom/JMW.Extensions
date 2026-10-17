@@ -236,11 +236,16 @@ namespace JMW.Templates
             else if (handler.TagName == Lookup.TAG)
                 name = ((Lookup)handler).Name ?? throw new ArgumentException("A lookup handler needs a name.", nameof(handler));
 
+            var holds_data = is_table || handler.TagName == Join.TAG || handler.TagName == Lookup.TAG;
+
+            // The parser lowercases tag names, and table, join, and lookup attributes are lowercased to match.
+            name = name.ToLowerInvariant();
+
             // tables, joins, and lookups hold data, so a second one with the same name is an error rather than
             // something to skip: skipping would silently drop its rows.
             if (Handlers.ContainsKey(name))
             {
-                if (name != handler.TagName)
+                if (holds_data)
                     throw new ArgumentException("A table, join, or lookup named '" + name + "' is already defined.", nameof(handler));
 
                 return;
