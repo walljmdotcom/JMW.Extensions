@@ -30,6 +30,18 @@ namespace JMW.Template
         public TextWriter OutputStream { get; set; }
         public Parser Parser { get; }
 
+        /// <summary>
+        /// The directory that <c>&lt;include path&gt;</c> and <c>&lt;output filename&gt;</c> paths must resolve inside.
+        /// Relative paths are taken from here. Null means the current directory at the time the tag runs.
+        /// </summary>
+        public string? FileRoot { get; set; }
+
+        /// <summary>
+        /// When false, include and output paths may point anywhere, including outside <see cref="FileRoot"/>.
+        /// Leave this true when templates come from anyone you would not let read and write your files.
+        /// </summary>
+        public bool RestrictFilePaths { get; set; } = true;
+
         #endregion Properties
 
         public Interpreter(TextWriter output_stream) : this(new Parser(), output_stream, new List<ITagHandler>())
@@ -77,7 +89,7 @@ namespace JMW.Template
                 .ToDictionary(k => k.Properties[Include.ATTR_DEFINE], v => v);
 
             // includes should be handled first.
-            Include.ReplaceIncludes(tags, includes);
+            Include.ReplaceIncludes(tags, includes, this);
 
             // now populated the variables declared in the template using the <var name="varname" value="varvalue" /> syntax.
             _varHandler.PopulateVariables(tags, this);
@@ -205,21 +217,27 @@ namespace JMW.Template
             else if (handler.TagName == Lookup.TAG)
                 name = ((Lookup)handler).Name ?? throw new ArgumentException("A lookup handler needs a name.", nameof(handler));
 
-            // add the handler
-            if (!Handlers.ContainsKey(handler.TagName))
+            // tables, joins, and lookups hold data, so a second one with the same name is an error rather than
+            // something to skip: skipping would silently drop its rows.
+            if (Handlers.ContainsKey(name))
             {
-                Handlers.Add(name, handler);
+                if (name != handler.TagName)
+                    throw new ArgumentException("A table, join, or lookup named '" + name + "' is already defined.", nameof(handler));
 
-                // add the column tags to the parser
-                if (is_table && handler is Table { TableData: { } tableData } h)
-                {
-                    // add the table_name tag.
-                    Parser.AddTag(tableData.Name, h);
+                return;
+            }
 
-                    // add the column_names.
-                    foreach (var c in tableData.Columns)
-                        Parser.AddColumnTag(c);
-                }
+            Handlers.Add(name, handler);
+
+            // add the column tags to the parser
+            if (is_table && handler is Table { TableData: { } tableData } table)
+            {
+                // add the table_name tag.
+                Parser.AddTag(tableData.Name, table);
+
+                // add the column_names.
+                foreach (var c in tableData.Columns)
+                    Parser.AddColumnTag(c);
             }
         }
 
@@ -229,5 +247,33 @@ namespace JMW.Template
         }
 
         #endregion Public Functions
+
+        /// <summary>
+        /// Resolves a path named in a template against <see cref="FileRoot"/>, and rejects it when
+        /// <see cref="RestrictFilePaths"/> is set and the path leaves the root.
+        /// </summary>
+        internal string ResolveTemplatePath(string path, string tagName)
+        {
+            var root = Path.GetFullPath(FileRoot ?? Directory.GetCurrentDirectory());
+            var full = Path.GetFullPath(Path.Combine(root, path));
+
+            if (!RestrictFilePaths)
+                return full;
+
+            var rootWithSeparator = root.EndsWith(Path.DirectorySeparatorChar.ToString(), StringComparison.Ordinal)
+                ? root
+                : root + Path.DirectorySeparatorChar;
+
+            // Ordinal, because case-insensitive matching would let /root/Dir accept /root/dir on a case-sensitive file
+            // system. On a case-insensitive one the cost is rejecting a path spelled with different casing.
+            if (!full.StartsWith(rootWithSeparator, StringComparison.Ordinal))
+            {
+                throw new UnauthorizedAccessException(
+                    "The <" + tagName + "> tag path '" + path + "' is outside the template directory '" + root + "'."
+                );
+            }
+
+            return full;
+        }
     }
 }

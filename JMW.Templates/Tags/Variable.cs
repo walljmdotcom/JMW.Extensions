@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
-using System.Text.RegularExpressions;
+using System.Text;
 using JMW.Extensions.String;
 
 namespace JMW.Template.Tags
@@ -102,29 +102,70 @@ namespace JMW.Template.Tags
             _variables.Add(name.ToLowerInvariant(), value);
         }
 
+        private const string REFERENCE_START = "[" + TAG + ":";
+        private const int MAX_SUBSTITUTION_PASSES = 10;
+        private const int MAX_SUBSTITUTED_LENGTH = 1_000_000;
+
+        /// <summary>
+        /// Replaces <c>[var:name]</c> references in the tag's attribute values. A variable whose value holds another
+        /// reference is expanded too, up to a fixed depth, so a variable that refers to itself fails instead of looping.
+        /// </summary>
         public void ReplaceVariables(Tag token)
         {
             var keys = token.Properties.Keys.ToList();
             foreach (var key in keys)
             {
-                var property_value = token.Properties[key].ToLowerInvariant();
-                while (property_value.Contains("[" + TAG + ":") && property_value.Contains(']'))
+                var value = token.Properties[key];
+                var pass = 0;
+                while (TryReplaceReferences(value, out var replaced))
                 {
-                    var full_variable = property_value.ParseAfterIndexOf("[" + TAG + ":").ParseToIndexOf("]") + "]";
-
-                    var variable = full_variable.ParseAfterIndexOf_PlusLength("[" + TAG + ":").ParseToIndexOf("]");
-
-                    if (_variables.ContainsKey(variable))
+                    if (++pass > MAX_SUBSTITUTION_PASSES || replaced.Length > MAX_SUBSTITUTED_LENGTH)
                     {
-                        token.Properties[key] = Regex.Replace(token.Properties[key], Regex.Escape(full_variable), _variables[variable], RegexOptions.IgnoreCase | RegexOptions.CultureInvariant);
+                        throw new Exception(
+                            "Variable references in the '" + key + "' attribute did not finish expanding. Check for a variable whose value refers to itself."
+                        );
                     }
-                    else
-                    {
-                        throw new Exception("Reference to variable which has not been declared: " + variable + ".");
-                    }
-                    property_value = token.Properties[key].ToLowerInvariant();
+
+                    value = replaced;
                 }
+
+                token.Properties[key] = value;
             }
+        }
+
+        // One left-to-right pass. Substituted values are copied literally and not rescanned until the next pass.
+        private bool TryReplaceReferences(string text, out string replaced)
+        {
+            replaced = text;
+            var start = text.IndexOf(REFERENCE_START, StringComparison.OrdinalIgnoreCase);
+            if (start < 0)
+                return false;
+
+            var sb = new StringBuilder(text.Length);
+            var copiedTo = 0;
+            var found = false;
+            while (start >= 0)
+            {
+                var end = text.IndexOf(']', start + REFERENCE_START.Length);
+                if (end < 0)
+                    break;
+
+                var name = text.Substring(start + REFERENCE_START.Length, end - start - REFERENCE_START.Length).ToLowerInvariant();
+                if (!_variables.TryGetValue(name, out var variableValue))
+                    throw new Exception("Reference to variable which has not been declared: " + name + ".");
+
+                sb.Append(text, copiedTo, start - copiedTo).Append(variableValue);
+                copiedTo = end + 1;
+                found = true;
+                start = text.IndexOf(REFERENCE_START, copiedTo, StringComparison.OrdinalIgnoreCase);
+            }
+
+            if (!found)
+                return false;
+
+            sb.Append(text, copiedTo, text.Length - copiedTo);
+            replaced = sb.ToString();
+            return true;
         }
 
         public void PopulateVariables(IEnumerable<Tag> tags, Interpreter interp)

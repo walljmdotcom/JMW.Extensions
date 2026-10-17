@@ -33,37 +33,48 @@ namespace JMW.Template.Tags
             // create new stream and handle properties.
             var mode = tag.Properties.ContainsKey(ATTR_MODE) ? tag.Properties[ATTR_MODE] : VALUE_MODE_APPEND;
 
+            StreamWriter writer;
             switch (mode)
             {
                 case VALUE_MODE_NEW:
                     {
                         var file = tag.Properties[ATTR_FILENAME];
+                        var directory = Path.GetDirectoryName(file) ?? string.Empty;
                         var ext = Path.GetExtension(file);
                         var file_name = Path.GetFileNameWithoutExtension(file);
 
                         if (!_iteration.ContainsKey(file))
                             _iteration.Add(file, 0);
 
-                        var new_file_name = file_name + _iteration[file] + ext;
+                        var new_file_name = Path.Combine(directory, file_name + _iteration[file] + ext);
+                        var path = interp.ResolveTemplatePath(new_file_name, TAG);
 
-                        interp.OutputStream = new StreamWriter(new FileStream(new_file_name, FileMode.OpenOrCreate, FileAccess.ReadWrite));
+                        // Create, not OpenOrCreate: a shorter output must not leave the old file's tail behind.
+                        writer = new StreamWriter(new FileStream(path, FileMode.Create, FileAccess.Write));
 
                         _iteration[file]++;
                         break;
                     }
                 case VALUE_MODE_APPEND:
                     {
-                        interp.OutputStream = new StreamWriter(new FileStream(tag.Properties[ATTR_FILENAME], FileMode.Append, FileAccess.Write));
+                        var path = interp.ResolveTemplatePath(tag.Properties[ATTR_FILENAME], TAG);
+                        writer = new StreamWriter(new FileStream(path, FileMode.Append, FileAccess.Write));
                         break;
                     }
                 default:
                     throw new Exception("Unknown attribute file for '" + ATTR_MODE + "'.  Allowed values are: '" + VALUE_MODE_NEW + "' and '" + VALUE_MODE_APPEND + "'");
             }
 
-            interp.HandleChildren(tag);
-
-            interp.OutputStream.Close();
-            interp.OutputStream = stream;
+            interp.OutputStream = writer;
+            try
+            {
+                interp.HandleChildren(tag);
+            }
+            finally
+            {
+                writer.Dispose();
+                interp.OutputStream = stream;
+            }
         }
 
         public static bool IsOutput(Tag tag)
