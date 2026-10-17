@@ -81,53 +81,16 @@ public static class Differential
         Func<T, TKey> key_selector,
         Func<T, T, ObjectDifferential<T, M>?> object_differ)
     {
-        // some objects to hold things.
         var diff = new CollectionDifferential<T, M>();
-        var comparer = Comparer<TKey>.Default;
-
-        var sorted_a = lst_a.OrderBy(key_selector).ToList();
-        var sorted_b = lst_b.OrderBy(key_selector).ToList();
-
-        var i = 0;
-        var t = sorted_a.Count < sorted_b.Count ? sorted_a.Count : sorted_b.Count;
-
-        // in this loop, we remove from the arrays, the
-        //  values that aren't shared between them.
-        while (i < t)
-        {
-            if (comparer.Compare(key_selector(sorted_a[i]), key_selector(sorted_b[i])) == 0)
-            {
-                diff.Shared.Add(new Pair<T>(sorted_a[i], sorted_b[i]));
-                i++;
-            }
-            else if (comparer.Compare(key_selector(sorted_a[i]), key_selector(sorted_b[i])) < 0)
-            {
-                diff.OnlyInListA.Add(sorted_a[i]);
-                sorted_a.RemoveAt(i);
-            }
-            else if (comparer.Compare(key_selector(sorted_a[i]), key_selector(sorted_b[i])) > 0)
-            {
-                diff.OnlyInListB.Add(sorted_b[i]);
-                sorted_b.RemoveAt(i);
-            }
-
-            t = sorted_a.Count < sorted_b.Count ? sorted_a.Count : sorted_b.Count;
-
-            // we have to make sure to remove any extra values
-            // at the end of an array when we reach the end of
-            // the other.
-            if (t == i && t < sorted_a.Count)
-            {
-                diff.OnlyInListA.AddRange(sorted_a.GetRange(i, sorted_a.Count - i));
-                sorted_a.RemoveAt(i);
-            }
-
-            if (t == i && t < sorted_b.Count)
-            {
-                diff.OnlyInListB.AddRange(sorted_b.GetRange(i, sorted_b.Count - i));
-                sorted_b.RemoveAt(i);
-            }
-        }
+        mergeByKey(
+            lst_a,
+            lst_b,
+            key_selector,
+            key_selector,
+            diff.OnlyInListA,
+            diff.OnlyInListB,
+            (a, b) => diff.Shared.Add(new Pair<T>(a, b))
+        );
 
         // loop an figure the differences between each object that exists in both.
         foreach (var item in diff.Shared)
@@ -199,53 +162,16 @@ public static class Differential
         Func<Ta, TKey> key_selector_a,
         Func<Tb, TKey> key_selector_b)
     {
-        // some objects to hold things.
         var diff = new CollectionDifferentialSimple<Ta, Tb>();
-        var comparer = Comparer<TKey>.Default;
-
-        var sorted_a = lst_a.OrderBy(key_selector_a).ToList();
-        var sorted_b = lst_b.OrderBy(key_selector_b).ToList();
-
-        var i = 0;
-        var t = sorted_a.Count < sorted_b.Count ? sorted_a.Count : sorted_b.Count;
-
-        // in this loop, we remove from the arrays, the
-        //  values that aren't shared between them.
-        while (i < t)
-        {
-            if (comparer.Compare(key_selector_a(sorted_a[i]), key_selector_b(sorted_b[i])) == 0)
-            {
-                diff.Shared.Add(new Pair<Ta, Tb>(sorted_a[i], sorted_b[i]));
-                i++;
-            }
-            else if (comparer.Compare(key_selector_a(sorted_a[i]), key_selector_b(sorted_b[i])) < 0)
-            {
-                diff.OnlyInListA.Add(sorted_a[i]);
-                sorted_a.RemoveAt(i);
-            }
-            else if (comparer.Compare(key_selector_a(sorted_a[i]), key_selector_b(sorted_b[i])) > 0)
-            {
-                diff.OnlyInListB.Add(sorted_b[i]);
-                sorted_b.RemoveAt(i);
-            }
-
-            t = sorted_a.Count < sorted_b.Count ? sorted_a.Count : sorted_b.Count;
-
-            // we have to make sure to remove any extra values
-            // at the end of an array when we reach the end of
-            // the other.
-            if (t == i && t < sorted_a.Count)
-            {
-                diff.OnlyInListA.AddRange(sorted_a.GetRange(i, sorted_a.Count - i));
-                sorted_a.RemoveAt(i);
-            }
-
-            if (t == i && t < sorted_b.Count)
-            {
-                diff.OnlyInListB.AddRange(sorted_b.GetRange(i, sorted_b.Count - i));
-                sorted_b.RemoveAt(i);
-            }
-        }
+        mergeByKey(
+            lst_a,
+            lst_b,
+            key_selector_a,
+            key_selector_b,
+            diff.OnlyInListA,
+            diff.OnlyInListB,
+            (a, b) => diff.Shared.Add(new Pair<Ta, Tb>(a, b))
+        );
 
         return diff;
     }
@@ -263,55 +189,64 @@ public static class Differential
         IEnumerable<T> lst_b,
         Func<T, TKey> key_selector)
     {
-        // some objects to hold things.
         var diff = new CollectionDifferentialSimple<T>();
+        mergeByKey(
+            lst_a,
+            lst_b,
+            key_selector,
+            key_selector,
+            diff.OnlyInListA,
+            diff.OnlyInListB,
+            (a, _) => diff.Shared.Add(a)
+        );
+
+        return diff;
+    }
+
+    /// <summary>
+    /// Sorts both lists by key and walks them together, reporting each item as only in A, only in B, or shared.
+    /// Duplicate keys pair off one to one; any surplus is reported as only in its own list.
+    /// </summary>
+    private static void mergeByKey<Ta, Tb, TKey>(
+        IEnumerable<Ta> lst_a,
+        IEnumerable<Tb> lst_b,
+        Func<Ta, TKey> key_selector_a,
+        Func<Tb, TKey> key_selector_b,
+        List<Ta> onlyInA,
+        List<Tb> onlyInB,
+        Action<Ta, Tb> shared)
+    {
         var comparer = Comparer<TKey>.Default;
 
-        var sorted_a = lst_a.OrderBy(key_selector).ToList();
-        var sorted_b = lst_b.OrderBy(key_selector).ToList();
+        var sorted_a = lst_a.OrderBy(key_selector_a, comparer).ToList();
+        var sorted_b = lst_b.OrderBy(key_selector_b, comparer).ToList();
 
         var i = 0;
-        var t = sorted_a.Count < sorted_b.Count ? sorted_a.Count : sorted_b.Count;
-
-        // in this loop, we remove from the arrays, the
-        //  values that aren't shared between them.
-        while (i < t)
+        var j = 0;
+        while (i < sorted_a.Count && j < sorted_b.Count)
         {
-            if (comparer.Compare(key_selector(sorted_a[i]), key_selector(sorted_b[i])) == 0)
+            var order = comparer.Compare(key_selector_a(sorted_a[i]), key_selector_b(sorted_b[j]));
+            if (order == 0)
             {
-                diff.Shared.Add(sorted_a[i]);
+                shared(sorted_a[i], sorted_b[j]);
                 i++;
+                j++;
             }
-            else if (comparer.Compare(key_selector(sorted_a[i]), key_selector(sorted_b[i])) < 0)
+            else if (order < 0)
             {
-                diff.OnlyInListA.Add(sorted_a[i]);
-                sorted_a.RemoveAt(i);
+                onlyInA.Add(sorted_a[i++]);
             }
-            else if (comparer.Compare(key_selector(sorted_a[i]), key_selector(sorted_b[i])) > 0)
+            else
             {
-                diff.OnlyInListB.Add(sorted_b[i]);
-                sorted_b.RemoveAt(i);
-            }
-
-            t = sorted_a.Count < sorted_b.Count ? sorted_a.Count : sorted_b.Count;
-
-            // we have to make sure to remove any extra values
-            // at the end of an array when we reach the end of
-            // the other.
-            if (t == i && t < sorted_a.Count)
-            {
-                diff.OnlyInListA.AddRange(sorted_a.GetRange(i, sorted_a.Count - i));
-                sorted_a.RemoveAt(i);
-            }
-
-            if (t == i && t < sorted_b.Count)
-            {
-                diff.OnlyInListB.AddRange(sorted_b.GetRange(i, sorted_b.Count - i));
-                sorted_b.RemoveAt(i);
+                onlyInB.Add(sorted_b[j++]);
             }
         }
 
-        return diff;
+        for (; i < sorted_a.Count; i++)
+            onlyInA.Add(sorted_a[i]);
+
+        for (; j < sorted_b.Count; j++)
+            onlyInB.Add(sorted_b[j]);
     }
 }
 

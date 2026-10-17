@@ -214,6 +214,54 @@ namespace JMW.Differentials.Tests
         }
     }
 
+    [TestFixture]
+    public class DifferKeyMergeTests
+    {
+        // a, b, expected only in a, expected only in b, expected shared
+        [TestCase(new string[0], new string[0], new string[0], new string[0], new string[0])]
+        [TestCase(new string[0], new[] { "1", "2" }, new string[0], new[] { "1", "2" }, new string[0])]
+        [TestCase(new[] { "1", "2" }, new string[0], new[] { "1", "2" }, new string[0], new string[0])]
+        [TestCase(new[] { "1" }, new string[0], new[] { "1" }, new string[0], new string[0])]
+        [TestCase(new string[0], new[] { "1" }, new string[0], new[] { "1" }, new string[0])]
+        [TestCase(new[] { "1" }, new[] { "1" }, new string[0], new string[0], new[] { "1" })]
+        [TestCase(new[] { "1" }, new[] { "2" }, new[] { "1" }, new[] { "2" }, new string[0])]
+        [TestCase(new[] { "2" }, new[] { "1" }, new[] { "2" }, new[] { "1" }, new string[0])]
+        [TestCase(new[] { "1", "2", "3", "4" }, new[] { "2", "4", "5", "6" }, new[] { "1", "3" }, new[] { "5", "6" }, new[] { "2", "4" })]
+        [TestCase(new[] { "4", "3", "2", "1" }, new[] { "6", "5", "4", "2" }, new[] { "1", "3" }, new[] { "5", "6" }, new[] { "2", "4" })]
+        [TestCase(new[] { "5", "6" }, new[] { "1", "2" }, new[] { "5", "6" }, new[] { "1", "2" }, new string[0])]
+        [TestCase(new[] { "1", "1" }, new[] { "1" }, new[] { "1" }, new string[0], new[] { "1" })]
+        [TestCase(new[] { "1" }, new[] { "1", "1" }, new string[0], new[] { "1" }, new[] { "1" })]
+        public void AllItemsReported(string[] a, string[] b, string[] onlyA, string[] onlyB, string[] shared)
+        {
+            var lst_a = a.Select(k => new T1 { Foo = k }).ToList();
+            var lst_b = b.Select(k => new T1 { Foo = k }).ToList();
+            var lst_b2 = b.Select(k => new T2 { Foo = k }).ToList();
+
+            var simple = Differential.RunCollectionDifferential(lst_a, lst_b, p => p.Foo);
+            Assert.That(simple.OnlyInListA.Select(o => o.Foo), Is.EqualTo(onlyA));
+            Assert.That(simple.OnlyInListB.Select(o => o.Foo), Is.EqualTo(onlyB));
+            Assert.That(simple.Shared.Select(o => o.Foo), Is.EqualTo(shared));
+
+            var twoTypes = Differential.RunCollectionDifferential(lst_a, lst_b2, p => p.Foo, p => p.Foo);
+            Assert.That(twoTypes.OnlyInListA.Select(o => o.Foo), Is.EqualTo(onlyA));
+            Assert.That(twoTypes.OnlyInListB.Select(o => o.Foo), Is.EqualTo(onlyB));
+            Assert.That(twoTypes.Shared.Select(o => o.A.Foo), Is.EqualTo(shared));
+            Assert.That(twoTypes.Shared.Select(o => o.B.Foo), Is.EqualTo(shared));
+
+            var withDiffer = Differential.RunCollectionDifferential<T1, string, string>(
+                lst_a,
+                lst_b,
+                p => p.Foo,
+                (x, y) => new ObjectDifferential<T1, string>(x, y, [x.Foo])
+            );
+            Assert.That(withDiffer.OnlyInListA.Select(o => o.Foo), Is.EqualTo(onlyA));
+            Assert.That(withDiffer.OnlyInListB.Select(o => o.Foo), Is.EqualTo(onlyB));
+            Assert.That(withDiffer.Shared.Select(o => o.A.Foo), Is.EqualTo(shared));
+            Assert.That(withDiffer.Modified.Select(o => o.Differences[0]), Is.EqualTo(shared));
+            Assert.That(withDiffer.HasDifferences, Is.EqualTo(onlyA.Length > 0 || onlyB.Length > 0 || shared.Length > 0));
+        }
+    }
+
     internal class StringComparer : IComparer<string>
     {
         #region Implementation of IComparer<in string>
