@@ -8,4 +8,11 @@
     <Description>Useful Extensions for string manipulation, list manipulation, conversions, as well as Types like the algebraic Maybe{T} and an IndexedCollection for when you need to look up values by more than one property.</Description>
   </PropertyGroup>
 
+  <ItemGroup>
+    <InternalsVisibleTo Include="JMW.Networking" />
+    <InternalsVisibleTo Include="JMW.Parsing" />
+    <InternalsVisibleTo Include="JMW.Templates" />
+    <InternalsVisibleTo Include="JMW.Tests" />
+  </ItemGroup>
+
 </Project>

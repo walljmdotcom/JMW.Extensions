@@ -6,6 +6,7 @@
     <AssemblyName>JMW.Networking</AssemblyName>
     <PackageId>JMW.Networking</PackageId>
     <Description>Parsers for Junos configuration, netstat, and ifconfig output, and a firewall rules engine.</Description>
+    <UsePolyfillsFromJmw>true</UsePolyfillsFromJmw>
   </PropertyGroup>
 
   <ItemGroup>

@@ -6,6 +6,7 @@
     <AssemblyName>JMW.Parsing</AssemblyName>
     <PackageId>JMW.Parsing</PackageId>
     <Description>A small instruction language for extracting properties, paragraphs, and tables from semi-structured text.</Description>
+    <UsePolyfillsFromJmw>true</UsePolyfillsFromJmw>
   </PropertyGroup>
 
   <ItemGroup>

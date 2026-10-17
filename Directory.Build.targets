@@ -1,6 +1,10 @@
 <Project>
 
-  <ItemGroup Condition="'$(TargetFramework)' == 'netstandard2.0'">
+  <!--
+    Friend assemblies of JMW (UsePolyfillsFromJmw=true) read JMW's internal polyfills through InternalsVisibleTo.
+    Compiling a second copy into them would make every polyfill type and extension member ambiguous.
+  -->
+  <ItemGroup Condition="'$(TargetFramework)' == 'netstandard2.0' and '$(UsePolyfillsFromJmw)' != 'true'">
     <Compile Include="$(MSBuildThisFileDirectory)Polyfills/*.cs"
       Link="Polyfills/%(Filename)%(Extension)" />
   </ItemGroup>
