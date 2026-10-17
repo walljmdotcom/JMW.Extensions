@@ -32,7 +32,19 @@ namespace JMW.Types
         {
             lock (_handlers)
             {
-                _handlers.RemoveAll(h => !h.Invoke(sender, e));
+                // compact in place, dropping handlers whose target was collected, without allocating a predicate
+                var kept = 0;
+                for (var i = 0; i < _handlers.Count; i++)
+                {
+                    var handler = _handlers[i];
+                    if (!handler.Invoke(sender, e))
+                        continue;
+
+                    _handlers[kept++] = handler;
+                }
+
+                if (kept < _handlers.Count)
+                    _handlers.RemoveRange(kept, _handlers.Count - kept);
             }
         }
 

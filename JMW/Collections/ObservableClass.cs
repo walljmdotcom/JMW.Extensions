@@ -15,6 +15,7 @@ using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Runtime.CompilerServices;
+using System.Threading;
 
 namespace JMW.Collections
 {
@@ -30,12 +31,12 @@ namespace JMW.Collections
         /// <summary>
         /// The number of registered handlers for the event.
         /// </summary>
-        public int PropertyChangingEventCount => _PropertyChanging.HandlerCount;
+        public int PropertyChangingEventCount => _PropertyChanging?.HandlerCount ?? 0;
 
         /// <summary>
         /// The number of registered handlers for the event.
         /// </summary>
-        public int PropertyChangedEventCount => _PropertyChanged.HandlerCount;
+        public int PropertyChangedEventCount => _PropertyChanged?.HandlerCount ?? 0;
 
         #endregion Properties
 
@@ -57,7 +58,7 @@ namespace JMW.Collections
         /// </summary>
         public void ClearPropertyChanged()
         {
-            _PropertyChanged.Clear();
+            _PropertyChanged?.Clear();
         }
 
         /// <summary>
@@ -65,14 +66,16 @@ namespace JMW.Collections
         /// </summary>
         public void ClearPropertyChanging()
         {
-            _PropertyChanging.Clear();
+            _PropertyChanging?.Clear();
         }
 
         #endregion Public Methods
 
         #region Events
 
-        private readonly WeakEventSource<PropertyChangingEventArgs> _PropertyChanging = new();
+        // Created on first subscribe: most instances are never observed, and three empty sources per object
+        // cost more memory than the object's own data.
+        private WeakEventSource<PropertyChangingEventArgs>? _PropertyChanging;
         /// <summary>
         /// The <see cref="INotifyPropertyChanging"/> event.  Gives you the property name before
         /// the value is changed.
@@ -83,11 +86,11 @@ namespace JMW.Collections
         /// </summary>
         public event PropertyChangingEventHandler? PropertyChanging
         {
-            add { if (value is not null) _PropertyChanging.Subscribe(value.CastDelegate<EventHandler<PropertyChangingEventArgs>>()); }
-            remove { if (value is not null) _PropertyChanging.Unsubscribe(value.CastDelegate<EventHandler<PropertyChangingEventArgs>>()); }
+            add { if (value is not null) EnsureCreated(ref _PropertyChanging).Subscribe(value.CastDelegate<EventHandler<PropertyChangingEventArgs>>()); }
+            remove { if (value is not null) _PropertyChanging?.Unsubscribe(value.CastDelegate<EventHandler<PropertyChangingEventArgs>>()); }
         }
 
-        private readonly WeakEventSource<PropertyChangedEventArgs> _PropertyChanged = new();
+        private WeakEventSource<PropertyChangedEventArgs>? _PropertyChanged;
         /// <summary>
         /// The <see cref="INotifyPropertyChanged"/> event.  Gives you the property name after
         /// the value has changed.
@@ -97,8 +100,8 @@ namespace JMW.Collections
         /// </summary>
         public event PropertyChangedEventHandler? PropertyChanged
         {
-            add { if (value is not null) _PropertyChanged.Subscribe(value.CastDelegate<EventHandler<PropertyChangedEventArgs>>()); }
-            remove { if (value is not null) _PropertyChanged.Unsubscribe(value.CastDelegate<EventHandler<PropertyChangedEventArgs>>()); }
+            add { if (value is not null) EnsureCreated(ref _PropertyChanged).Subscribe(value.CastDelegate<EventHandler<PropertyChangedEventArgs>>()); }
+            remove { if (value is not null) _PropertyChanged?.Unsubscribe(value.CastDelegate<EventHandler<PropertyChangedEventArgs>>()); }
         }
 
         #endregion Events
@@ -127,14 +130,29 @@ namespace JMW.Collections
 
         #region Private Methods
 
+        /// <summary>
+        /// Returns <paramref name="field"/>, creating it first if it is null. Safe when two threads subscribe at once.
+        /// </summary>
+        private protected static TSource EnsureCreated<TSource>(ref TSource? field) where TSource : class, new()
+        {
+            if (field is not null)
+                return field;
+
+            var created = new TSource();
+            return Interlocked.CompareExchange(ref field, created, null) ?? created;
+        }
+
+        // The args are only allocated when someone is listening.
         private void RaisePropertyChanged(string prop)
         {
-            _PropertyChanged.Raise(this, new PropertyChangedEventArgs(prop));
+            if (_PropertyChanged is { HandlerCount: > 0 } source)
+                source.Raise(this, new PropertyChangedEventArgs(prop));
         }
 
         private void RaisePropertyChanging(string prop)
         {
-            _PropertyChanging.Raise(this, new PropertyChangingEventArgs(prop));
+            if (_PropertyChanging is { HandlerCount: > 0 } source)
+                source.Raise(this, new PropertyChangingEventArgs(prop));
         }
 
         #endregion Private Methods

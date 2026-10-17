@@ -50,7 +50,7 @@ public abstract class IndexedClass : ObservableClass
     /// <summary>
     /// The number of registered handlers for the event.
     /// </summary>
-    public int IndexedPropertyChangedEventCount => _IndexedPropertyChanged.HandlerCount;
+    public int IndexedPropertyChangedEventCount => _IndexedPropertyChanged?.HandlerCount ?? 0;
 
     #endregion Properties
 
@@ -63,7 +63,7 @@ public abstract class IndexedClass : ObservableClass
     /// </summary>
     public override void ClearEvents()
     {
-        _IndexedPropertyChanged.Clear();
+        _IndexedPropertyChanged?.Clear();
         base.ClearEvents();
     }
 
@@ -72,14 +72,19 @@ public abstract class IndexedClass : ObservableClass
     /// </summary>
     public void ClearIndexedPropertyChanged()
     {
-        _IndexedPropertyChanged.Clear();
+        _IndexedPropertyChanged?.Clear();
     }
 
     #endregion Public Methods
 
     #region Events
 
-    private readonly WeakEventSource<IndexedPropertyChangedEventArgs> _IndexedPropertyChanged = new();
+    // Created on first subscribe; collections use the observer slots below instead.
+    private WeakEventSource<IndexedPropertyChangedEventArgs>? _IndexedPropertyChanged;
+
+    // The collections holding this item: null, one IndexObserverToken, or a List of them. One collection is the
+    // common case, so it costs a single reference.
+    private object? _observers;
     /// <summary>
     /// Fires when a property has changed.  This event will give you the before and after value of the
     /// property, as well as the property name.
@@ -90,11 +95,76 @@ public abstract class IndexedClass : ObservableClass
     /// </summary>
     public event IndexedPropertyChangedHandler IndexedPropertyChanged
     {
-        add { _IndexedPropertyChanged.Subscribe(value.CastDelegate<EventHandler<IndexedPropertyChangedEventArgs>>()); }
-        remove { _IndexedPropertyChanged.Unsubscribe(value.CastDelegate<EventHandler<IndexedPropertyChangedEventArgs>>()); }
+        add { EnsureCreated(ref _IndexedPropertyChanged).Subscribe(value.CastDelegate<EventHandler<IndexedPropertyChangedEventArgs>>()); }
+        remove { _IndexedPropertyChanged?.Unsubscribe(value.CastDelegate<EventHandler<IndexedPropertyChangedEventArgs>>()); }
     }
 
     #endregion Events
+
+    /// <summary>
+    /// Registers a collection to be told about indexed-property changes. Attaching the same token twice means two
+    /// notifications per change, the same as subscribing an event handler twice.
+    /// </summary>
+    internal void AttachObserver(IndexObserverToken token)
+    {
+        switch (_observers)
+        {
+            case null:
+                _observers = token;
+                break;
+            case IndexObserverToken single:
+                _observers = new List<IndexObserverToken>(2) { single, token };
+                break;
+            case List<IndexObserverToken> list:
+                list.Add(token);
+                break;
+        }
+    }
+
+    /// <summary>
+    /// Removes one registration of <paramref name="token"/>.
+    /// </summary>
+    internal void DetachObserver(IndexObserverToken token)
+    {
+        switch (_observers)
+        {
+            case IndexObserverToken single when ReferenceEquals(single, token):
+                _observers = null;
+                break;
+            case List<IndexObserverToken> list:
+                var at = list.LastIndexOf(token);
+                if (at >= 0) list.RemoveAt(at);
+                if (list.Count == 1) _observers = list[0];
+                else if (list.Count == 0) _observers = null;
+                break;
+        }
+    }
+
+    private void NotifyObservers(string propertyName, object? before, object? after)
+    {
+        switch (_observers)
+        {
+            case null:
+                return;
+            case IndexObserverToken single:
+                if (single.TryGetObserver(out var observer))
+                    observer.OnIndexedPropertyChanging(this, propertyName, before, after);
+                else
+                    _observers = null;
+                return;
+            case List<IndexObserverToken> list:
+                // a snapshot, so an observer that detaches while handling the change does not skip the next one
+                foreach (var token in list.ToArray())
+                {
+                    if (token.TryGetObserver(out var target))
+                        target.OnIndexedPropertyChanging(this, propertyName, before, after);
+                    else
+                        DetachObserver(token);
+                }
+
+                return;
+        }
+    }
 
     /// <summary>
     /// Sets a value and fires the appropriate events.
@@ -120,7 +190,10 @@ public abstract class IndexedClass : ObservableClass
 
     private void RaiseIndexedPropertyChanging(string prop_name, object? before, object? after)
     {
-        _IndexedPropertyChanged.Raise(this, new IndexedPropertyChangedEventArgs(prop_name, before, after));
+        NotifyObservers(prop_name, before, after);
+
+        if (_IndexedPropertyChanged is { HandlerCount: > 0 } source)
+            source.Raise(this, new IndexedPropertyChangedEventArgs(prop_name, before, after));
     }
 
     #endregion Private Methods

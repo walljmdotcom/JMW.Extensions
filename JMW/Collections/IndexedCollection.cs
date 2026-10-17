@@ -28,7 +28,7 @@ namespace JMW.Collections
     /// is modified, the indices are updated.
     /// </summary>
     /// <typeparam name="T">The type of object being stored in the collection.</typeparam>
-    public class IndexedCollection<T> : INotifyCollectionChanged, IList<T> where T : IndexedClass
+    public class IndexedCollection<T> : INotifyCollectionChanged, IList<T>, IIndexObserver where T : IndexedClass
     {
         private const string IndexViolationMessage =
             "Operation was cancelled due to an index violation. The Index may have been violated.";
@@ -37,9 +37,12 @@ namespace JMW.Collections
         private readonly Dictionary<string, Dictionary<string, T>> _uniqueIndexCollection = [];
         private readonly ObservableCollection<T> _collection = [];
         private readonly Dictionary<string, PropInfo> _indexedProps;
+        private readonly IndexObserverToken _token;
 
         public IndexedCollection()
         {
+            _token = new IndexObserverToken(this);
+
             _indexedProps = typeof(T).GetPropertiesByAttribute<Indexed>().ToDictionary(k => k.Name, v => new PropInfo(v));
 
             foreach (var prop in _indexedProps)
@@ -355,9 +358,9 @@ namespace JMW.Collections
             foreach (var idx in _uniqueIndexCollection) idx.Value.Clear();
             foreach (var item in _collection)
             {
-                item.IndexedPropertyChanged -= OnIndexedPropertyChanged;
+                item.DetachObserver(_token);
                 AddToDictionaries(item);
-                item.IndexedPropertyChanged += OnIndexedPropertyChanged;
+                item.AttachObserver(_token);
             }
         }
 
@@ -384,7 +387,7 @@ namespace JMW.Collections
                 return false;
 
             _collection.Add(obj);
-            obj.IndexedPropertyChanged += OnIndexedPropertyChanged;
+            obj.AttachObserver(_token);
             return true;
         }
 
@@ -399,7 +402,7 @@ namespace JMW.Collections
 
             var r = RemoveFromDictionaries(item);
             _collection.Remove(item);
-            item.IndexedPropertyChanged -= OnIndexedPropertyChanged;
+            item.DetachObserver(_token);
 
             return r;
         }
@@ -432,32 +435,29 @@ namespace JMW.Collections
         #region Private Methods
 
         /// <summary>
-        /// This event fires whenever an Indexed Property has been changed.
+        /// Called by an item before one of its properties changes, with the value before and after the change.
         /// </summary>
-        /// <param name="sender">The object being changed</param>
-        /// <param name="e">Arguments that give you the name of the property, the value of the property before and after the change.</param>
-        private void OnIndexedPropertyChanged(object sender, IndexedPropertyChangedEventArgs e)
+        void IIndexObserver.OnIndexedPropertyChanging(IndexedClass sender, string propertyName, object? before, object? after)
         {
-            if (!_indexedProps.TryGetValue(e.PropertyName, out var value)) return; // don't update the index if the property isn't indexed
-            var prop = value;
+            if (!_indexedProps.TryGetValue(propertyName, out var prop)) return; // don't update the index if the property isn't indexed
 
             if (prop.IsUnique)
             {
-                var unique_index = _uniqueIndexCollection[e.PropertyName];
+                var unique_index = _uniqueIndexCollection[propertyName];
 
                 if (prop.IsCollection)
                 {
-                    if (e.Before is IEnumerable before)
+                    if (before is IEnumerable beforeItems)
                     {
-                        foreach (var item in before)
+                        foreach (var item in beforeItems)
                         {
                             if (item?.ToString() is string key) unique_index.Remove(key);
                         }
                     }
 
-                    if (e.After is IEnumerable after)
+                    if (after is IEnumerable afterItems)
                     {
-                        foreach (var item in after)
+                        foreach (var item in afterItems)
                         {
                             if (item?.ToString() is string key) unique_index.Add(key, (T)sender);
                         }
@@ -465,32 +465,32 @@ namespace JMW.Collections
                 }
                 else
                 {
-                    if (e.Before?.ToString() is string beforeKey) unique_index.Remove(beforeKey);
-                    if (e.After?.ToString() is string afterKey) unique_index.Add(afterKey, (T)sender);
+                    if (before?.ToString() is string beforeKey) unique_index.Remove(beforeKey);
+                    if (after?.ToString() is string afterKey) unique_index.Add(afterKey, (T)sender);
                 }
             }
             else
             {
-                var index = _indexCollection[e.PropertyName];
+                var index = _indexCollection[propertyName];
 
                 if (prop.IsCollection)
                 {
-                    if (e.Before is IEnumerable before)
+                    if (before is IEnumerable beforeItems)
                     {
-                        foreach (var item in before)
+                        foreach (var item in beforeItems)
                             RemoveFromIndex(sender, item, index);
                     }
 
-                    if (e.After is IEnumerable after)
+                    if (after is IEnumerable afterItems)
                     {
-                        foreach (var item in after)
+                        foreach (var item in afterItems)
                             AddToIndex(sender, item, index);
                     }
                 }
                 else
                 {
-                    RemoveFromIndex(sender, e.Before, index);
-                    AddToIndex(sender, e.After, index);
+                    RemoveFromIndex(sender, before, index);
+                    AddToIndex(sender, after, index);
                 }
             }
         }
@@ -742,7 +742,7 @@ namespace JMW.Collections
 
         public void Clear()
         {
-            foreach (var obj in _collection) obj.IndexedPropertyChanged -= OnIndexedPropertyChanged;
+            foreach (var obj in _collection) obj.DetachObserver(_token);
 
             _collection.Clear();
 
@@ -787,9 +787,9 @@ namespace JMW.Collections
             if (!AddToDictionaries(item))
                 throw new OperationCanceledException(IndexViolationMessage);
 
-            item.IndexedPropertyChanged -= OnIndexedPropertyChanged;
+            item.DetachObserver(_token);
             _collection.Insert(index, item);
-            item.IndexedPropertyChanged += OnIndexedPropertyChanged;
+            item.AttachObserver(_token);
         }
 
         public int Count => _collection.Count;
@@ -814,9 +814,9 @@ namespace JMW.Collections
                 RemoveFromDictionaries(item);
                 WriteToDictionaries(value, uniqueKeys);
 
-                item.IndexedPropertyChanged -= OnIndexedPropertyChanged;
+                item.DetachObserver(_token);
                 _collection[index] = value;
-                value.IndexedPropertyChanged += OnIndexedPropertyChanged;
+                value.AttachObserver(_token);
             }
         }
 
