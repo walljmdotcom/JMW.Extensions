@@ -156,7 +156,6 @@ namespace JMW.Types
         /// <returns><see cref="bool"/></returns>
         public bool Contains(Range<T, C> rng)
         {
-            if (Start >= rng.Start && Stop <= rng.Stop) return true;
             return rng.Start >= Start && rng.Stop <= Stop;
         }
 

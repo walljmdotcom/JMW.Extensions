@@ -66,6 +66,43 @@ namespace JMW.Collections.Tests
             Assert.That(false, Is.EqualTo(rng.Contains(new IntegerRange(1, 5))));
         }
 
+        [TestCase(1, 10, 0, 20, false)]
+        [TestCase(1, 10, 1, 11, false)]
+        [TestCase(1, 10, 0, 10, false)]
+        [TestCase(1, 10, 11, 20, false)]
+        [TestCase(1, 10, -5, 0, false)]
+        [TestCase(5, 5, 4, 6, false)]
+        [TestCase(1, 10, 1, 10, true)]
+        [TestCase(1, 10, 2, 9, true)]
+        [TestCase(1, 10, 1, 1, true)]
+        [TestCase(1, 10, 10, 10, true)]
+        [TestCase(5, 5, 5, 5, true)]
+        [TestCase(int.MinValue, int.MaxValue, 0, 0, true)]
+        [TestCase(0, 0, int.MinValue, int.MaxValue, false)]
+        public void RangeContainsRange(int start, int stop, int otherStart, int otherStop, bool expected)
+        {
+            var rng = new IntegerRange(start, stop);
+            var other = new IntegerRange(otherStart, otherStop);
+
+            Assert.That(rng.Contains(other), Is.EqualTo(expected));
+            Assert.That(new LongRange(start, stop).Contains(new LongRange(otherStart, otherStop)), Is.EqualTo(expected));
+        }
+
+        [TestCase("1-10", "0-20", false)]
+        [TestCase("1-10,15-20", "1-20", false)]
+        [TestCase("1-10,15-20", "9-16", false)]
+        [TestCase("1-10,15-20", "2-3", true)]
+        [TestCase("1-10,15-20", "15-20", true)]
+        [TestCase("1-10,15-20", "16", true)]
+        [TestCase("1-10,15-20", "12", false)]
+        public void RangeCollectionContainsRange(string collection, string range, bool expected)
+        {
+            var rngs = new IntegerRangeCollection(collection);
+
+            Assert.That(rngs.Contains(range), Is.EqualTo(expected));
+            Assert.That(rngs.Contains(new IntegerRange(range)), Is.EqualTo(expected));
+        }
+
         [Test]
         public void RangeTest3()
         {
