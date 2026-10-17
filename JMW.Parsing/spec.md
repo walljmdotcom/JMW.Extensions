@@ -161,6 +161,10 @@ or {
 }
 
 # is the string s behind string a and ahead of string b
+#  each list uses its own i modifier for its own matching, including
+#  finding the last a and the last b that bound the search window.
+#  n on s negates the whole result, so a missing a or b also flips it.
+#  n on a or b has no meaning and is ignored.
 look {
     a:["val"]i # optional
     # i == ignore case

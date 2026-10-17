@@ -52,7 +52,7 @@ public class Look : IExpression
 
             if (aheadTag.Properties.TryGetValue(Search.MODS, out var modsTag))
             {
-                this.Search.Mods = modsTag.Value.ToString() ?? string.Empty;
+                this.Ahead.Mods = modsTag.Value.ToString() ?? string.Empty;
             }
         }
 
@@ -69,7 +69,7 @@ public class Look : IExpression
 
             if (behindTag.Properties.TryGetValue(Search.MODS, out var modsTag))
             {
-                this.Search.Mods = modsTag.Value.ToString() ?? string.Empty;
+                this.Behind.Mods = modsTag.Value.ToString() ?? string.Empty;
             }
         }
     }
@@ -84,44 +84,55 @@ public class Look : IExpression
         this.Behind.Mods = modsb;
     }
 
+    /// <summary>
+    ///   True when a search value sits after the last ahead value and before the last behind value.
+    ///   Each list matches with its own <c>i</c> modifier; <c>n</c> on the search list negates the whole result.
+    /// </summary>
     public bool Test(string inputValue)
     {
-        var text = inputValue;
+        var isMatch = this.IsBetween(inputValue);
+        return this.Search.Mods.Contains(Constants.NEGATE) ? !isMatch : isMatch;
+    }
 
-        var isCaseInsensitive = this.Search.Mods.Contains(Constants.CASE_INSENSITIVE);
+    private bool IsBetween(string text)
+    {
+        var searchIgnoresCase = IgnoresCase(this.Search);
+        var aheadIgnoresCase = IgnoresCase(this.Ahead);
+        var behindIgnoresCase = IgnoresCase(this.Behind);
 
-        // find case insensitively.
-        bool find(string sch, string qry)
-        {
-            return sch.Contains(qry, isCaseInsensitive ? StringComparison.OrdinalIgnoreCase : StringComparison.Ordinal);
-        }
-
-        if (!this.Search.Query.Any(sr => find(text, sr)))
-        {
-            return false;
-        }
-
-        if (this.Ahead.Query.Count > 0 && !this.Ahead.Query.Any(sr => find(text, sr)))
+        if (!ContainsAny(text, this.Search.Query, searchIgnoresCase))
         {
             return false;
         }
 
-        if (this.Behind.Query.Count > 0 && !this.Behind.Query.Any(sr => find(text, sr)))
+        if (this.Ahead.Query.Count > 0 && !ContainsAny(text, this.Ahead.Query, aheadIgnoresCase))
+        {
+            return false;
+        }
+
+        if (this.Behind.Query.Count > 0 && !ContainsAny(text, this.Behind.Query, behindIgnoresCase))
         {
             return false;
         }
 
         if (this.Behind.Query.Count > 0)
         {
-            text = text.ParseToLastIndexOf([.. this.Behind.Query]);
+            text = text.ParseToLastIndexOf(behindIgnoresCase, [.. this.Behind.Query]);
         }
 
         if (this.Ahead.Query.Count > 0)
         {
-            text = text.ParseAfterLastIndexOf_PlusLength([.. this.Ahead.Query]);
+            text = text.ParseAfterLastIndexOf_PlusLength(aheadIgnoresCase, [.. this.Ahead.Query]);
         }
 
-        var v = this.Search.Query.Any(sr => find(text, sr));
-        return this.Search.Mods.Contains(Constants.NEGATE) ? !v : v;
+        return ContainsAny(text, this.Search.Query, searchIgnoresCase);
+    }
+
+    private static bool IgnoresCase(Search search) => search.Mods.Contains(Constants.CASE_INSENSITIVE);
+
+    private static bool ContainsAny(string text, List<string> queries, bool ignoreCase)
+    {
+        var comparison = ignoreCase ? StringComparison.OrdinalIgnoreCase : StringComparison.Ordinal;
+        return queries.Any(q => text.Contains(q, comparison));
     }
 }

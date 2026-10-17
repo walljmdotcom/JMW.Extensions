@@ -822,7 +822,7 @@ free      bird   is      awesome
                                   }";
 
         exp = new Look(new Parser().Parse(exp_text).First());
-        Assert.That(exp.Test("bar foo baz"), Is.True);
+        Assert.That(exp.Test("bar foo baz"), Is.False);
         exp_text = @"look {
                                     a:[""bar""]i # optional
                                     s:[""Foo""]ni #required
@@ -838,7 +838,7 @@ free      bird   is      awesome
                                   }";
 
         exp = new Look(new Parser().Parse(exp_text).First());
-        Assert.That(exp.Test("foo Bar baz"), Is.True);
+        Assert.That(exp.Test("foo Bar baz"), Is.False);
 
         exp_text = @"look {
                                     a:[""bar""]i # optional
@@ -863,14 +863,14 @@ free      bird   is      awesome
                               }";
 
         exp = new Look(new Parser().Parse(exp_text).First());
-        Assert.That(exp.Test("foo jar baz"), Is.False);
+        Assert.That(exp.Test("foo jar baz"), Is.True);
 
         exp_text = @"look {  b:[""bar""]i # optional
                                  s:[""Foo""]ni #required
                               }";
 
         exp = new Look(new Parser().Parse(exp_text).First());
-        Assert.That(exp.Test("foo jar baz"), Is.False);
+        Assert.That(exp.Test("foo jar baz"), Is.True);
         try
         {
             exp_text = @"look {a:[""Foo""]ni }";
@@ -881,6 +881,148 @@ free      bird   is      awesome
         }
         catch (ArgumentException)
         {
+        }
+    }
+
+    private static readonly string[] lookMods = ["", "i", "n", "ni"];
+
+    private static string WithoutNegate(string mods) => mods.Replace(Constants.NEGATE, string.Empty, StringComparison.Ordinal);
+
+    private static string LookText(string? ahead, string modsa, string search, string mods, string? behind, string modsb)
+    {
+        var sb = new StringBuilder("look {\r\n");
+        if (ahead is not null)
+        {
+            sb.Append("a:[\"").Append(ahead).Append("\"]").Append(modsa).Append("\r\n");
+        }
+
+        sb.Append("s:[\"").Append(search).Append("\"]").Append(mods).Append("\r\n");
+        if (behind is not null)
+        {
+            sb.Append("b:[\"").Append(behind).Append("\"]").Append(modsb).Append("\r\n");
+        }
+
+        return sb.Append('}').ToString();
+    }
+
+    private static Look ParsedLook(string? ahead, string modsa, string search, string mods, string? behind, string modsb)
+    {
+        return new Look(new Parser().Parse(LookText(ahead, modsa, search, mods, behind, modsb)).First());
+    }
+
+    private static Look ConstructedLook(string? ahead, string modsa, string search, string mods, string? behind, string modsb)
+    {
+        return new Look(
+            [search],
+            mods,
+            ahead is null ? [] : [ahead],
+            ahead is null ? string.Empty : modsa,
+            behind is null ? [] : [behind],
+            behind is null ? string.Empty : modsb
+        );
+    }
+
+    // s mods: i ignores case for the search list, n negates.
+    [TestCase("start", "", "Foo", "", "end", "", "start foo end", false)]
+    [TestCase("start", "", "Foo", "i", "end", "", "start foo end", true)]
+    [TestCase("start", "", "Foo", "n", "end", "", "start foo end", true)]
+    [TestCase("start", "", "Foo", "ni", "end", "", "start foo end", false)]
+    [TestCase(null, "", "Foo", "", null, "", "foo", false)]
+    [TestCase(null, "", "Foo", "i", null, "", "foo", true)]
+    [TestCase(null, "", "Foo", "n", null, "", "foo", true)]
+    [TestCase(null, "", "Foo", "ni", null, "", "foo", false)]
+    [TestCase(null, "", "Woo", "n", null, "", "foo bar", true)]
+    // a mods: i ignores case for the ahead list only, n is ignored.
+    [TestCase("Start", "", "foo", "", "end", "", "start foo end", false)]
+    [TestCase("Start", "i", "foo", "", "end", "", "start foo end", true)]
+    [TestCase("Start", "n", "foo", "", "end", "", "start foo end", false)]
+    [TestCase("Start", "ni", "foo", "", "end", "", "start foo end", true)]
+    [TestCase("Start", "i", "Foo", "", "end", "", "start foo end", false)]
+    // a narrowing uses the last ahead match under the ahead list's case rule.
+    [TestCase("start", "", "foo", "", null, "", "start foo START", true)]
+    [TestCase("start", "i", "foo", "", null, "", "start foo START", false)]
+    [TestCase("start", "n", "foo", "", null, "", "start foo START", true)]
+    [TestCase("start", "ni", "foo", "", null, "", "start foo START", false)]
+    // b mods: i ignores case for the behind list only, n is ignored.
+    [TestCase("start", "", "foo", "", "End", "", "start foo end", false)]
+    [TestCase("start", "", "foo", "", "End", "i", "start foo end", true)]
+    [TestCase("start", "", "foo", "", "End", "n", "start foo end", false)]
+    [TestCase("start", "", "foo", "", "End", "ni", "start foo end", true)]
+    [TestCase("start", "", "Foo", "", "End", "i", "start foo end", false)]
+    // b narrowing uses the last behind match under the behind list's case rule.
+    [TestCase(null, "", "foo", "", "end", "", "end foo END", false)]
+    [TestCase(null, "", "foo", "", "end", "i", "end foo END", true)]
+    [TestCase(null, "", "foo", "", "end", "n", "end foo END", false)]
+    [TestCase(null, "", "foo", "", "end", "ni", "end foo END", true)]
+    // every list ignoring case.
+    [TestCase("start", "i", "foo", "i", "end", "i", "START FOO END", true)]
+    [TestCase("start", "i", "foo", "ni", "end", "i", "START FOO END", false)]
+    // search outside the window.
+    [TestCase("start", "", "foo", "", "end", "", "foo start end", false)]
+    [TestCase("start", "", "foo", "n", "end", "", "foo start end", true)]
+    [TestCase("start", "", "foo", "", "end", "", "start end foo", false)]
+    // n negates the whole result, including a missing ahead or behind value.
+    [TestCase("start", "", "foo", "n", null, "", "foo end", true)]
+    [TestCase(null, "", "foo", "n", "end", "", "start foo", true)]
+    public void ExpressionTest_Look_Mods(
+        string? ahead,
+        string modsa,
+        string search,
+        string mods,
+        string? behind,
+        string modsb,
+        string input,
+        bool expected
+    )
+    {
+        using (Assert.EnterMultipleScope())
+        {
+            Assert.That(ParsedLook(ahead, modsa, search, mods, behind, modsb).Test(input), Is.EqualTo(expected), "parsed");
+            Assert.That(
+                ConstructedLook(ahead, modsa, search, mods, behind, modsb).Test(input),
+                Is.EqualTo(expected),
+                "constructed"
+            );
+        }
+    }
+
+    [TestCase("start foo end")]
+    [TestCase("START FOO END")]
+    [TestCase("Start Foo End")]
+    [TestCase("start foo START end END")]
+    [TestCase("foo start end")]
+    [TestCase("start end foo")]
+    [TestCase("nothing here")]
+    [TestCase("")]
+    public void ExpressionTest_Look_AllModCombinations(string input)
+    {
+        using (Assert.EnterMultipleScope())
+        {
+            foreach (var modsa in lookMods)
+            {
+                foreach (var mods in lookMods)
+                {
+                    foreach (var modsb in lookMods)
+                    {
+                        var label = $"a:{modsa} s:{mods} b:{modsb}";
+                        var parsed = ParsedLook("Start", modsa, "foo", mods, "END", modsb).Test(input);
+                        var constructed = ConstructedLook("Start", modsa, "foo", mods, "END", modsb).Test(input);
+                        Assert.That(constructed, Is.EqualTo(parsed), label + " constructed vs parsed");
+
+                        var aheadWithoutNegate = ParsedLook("Start", WithoutNegate(modsa), "foo", mods, "END", modsb).Test(input);
+                        Assert.That(parsed, Is.EqualTo(aheadWithoutNegate), label + " n on a is ignored");
+
+                        var behindWithoutNegate = ParsedLook("Start", modsa, "foo", mods, "END", WithoutNegate(modsb)).Test(input);
+                        Assert.That(parsed, Is.EqualTo(behindWithoutNegate), label + " n on b is ignored");
+
+                        var searchWithoutNegate = ParsedLook("Start", modsa, "foo", WithoutNegate(mods), "END", modsb).Test(input);
+                        var expected = mods.Contains(Constants.NEGATE, StringComparison.Ordinal)
+                            ? !searchWithoutNegate
+                            : searchWithoutNegate;
+                        Assert.That(parsed, Is.EqualTo(expected), label + " n on s negates");
+                    }
+                }
+            }
         }
     }
 
