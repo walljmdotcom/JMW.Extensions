@@ -47,7 +47,7 @@ public class Look : IExpression
                 {
                     continue;
                 }
-                this.Search.Query.Add(val.Value.ToString() ?? string.Empty);
+                this.Ahead.Query.Add(val.Value.ToString() ?? string.Empty);
             }
 
             if (aheadTag.Properties.TryGetValue(Search.MODS, out var modsTag))
@@ -64,7 +64,7 @@ public class Look : IExpression
                 {
                     continue;
                 }
-                this.Search.Query.Add(val.Value.ToString() ?? string.Empty);
+                this.Behind.Query.Add(val.Value.ToString() ?? string.Empty);
             }
 
             if (behindTag.Properties.TryGetValue(Search.MODS, out var modsTag))

@@ -18,7 +18,7 @@ public static class Extensions
     /// </summary>
     /// <param name="obj">Object to evaluate</param>
     /// <returns>True or False</returns>
-    public static bool IsNull(this object obj)
+    public static bool IsNull(this object? obj)
     {
         return obj is null;
     }
@@ -28,7 +28,7 @@ public static class Extensions
     /// </summary>
     /// <param name="obj">Object to evaluate</param>
     /// <returns>True or False</returns>
-    public static bool IsNotNull(this object obj)
+    public static bool IsNotNull(this object? obj)
     {
         return obj is not null;
     }

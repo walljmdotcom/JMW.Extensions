@@ -439,16 +439,12 @@ namespace JMW.Collections
                 {
                     var before = ((IEnumerable)e.Before).GetEnumerator();
                     var after = ((IEnumerable)e.After).GetEnumerator();
-                    var beforeCurrent = before.Current.ToString() ?? string.Empty;
-                    var afterCurrent = after.Current.ToString() ?? string.Empty;
 
                     while (before.MoveNext())
-                        // ReSharper disable once PossibleNullReferenceException
-                        unique_index.Remove(beforeCurrent);
+                        unique_index.Remove(before.Current?.ToString() ?? string.Empty);
 
                     while (after.MoveNext())
-                        // ReSharper disable once PossibleNullReferenceException
-                        unique_index.Add(afterCurrent, (T)sender);
+                        unique_index.Add(after.Current?.ToString() ?? string.Empty, (T)sender);
                 }
                 else
                 {

@@ -73,7 +73,7 @@ namespace JMW.Template.Tags
 
         public override void Handler(Tag tag, Interpreter interp)
         {
-            if (Name is null || _leftTableData is null || _rightTableData is null || JoinedTableData is null)
+            if (Name is null || _leftTableData is null || _rightTableData is null)
             {
                 throw new InvalidOperationException();
             }
@@ -150,6 +150,11 @@ namespace JMW.Template.Tags
                 var i = 0;
                 var col_indexes = columns.ToDictionary(c => c, v => i++);
                 JoinedTableData = new TableData(Name, columns, col_indexes, joined);
+            }
+
+            if (JoinedTableData is null)
+            {
+                throw new InvalidOperationException();
             }
 
             // filter the distinct if present

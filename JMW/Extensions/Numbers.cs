@@ -41,7 +41,7 @@ public static class Extensions
     /// <summary>
     /// Indicates if the string is not null.
     /// </summary>
-    public static bool IsNotNull(this object o)
+    public static bool IsNotNull(this object? o)
     {
         return o is not null;
     }
@@ -49,7 +49,7 @@ public static class Extensions
     /// <summary>
     /// Indicates if the string is null
     /// </summary>
-    public static bool IsNull(this object o)
+    public static bool IsNull(this object? o)
     {
         return o is null;
     }

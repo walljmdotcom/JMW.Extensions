@@ -56,11 +56,6 @@ public class Property : IProperty
 
     public object Parse(StreamReader reader)
     {
-        if (Line is null)
-        {
-            throw new InvalidOperationException();
-        }
-
         if (this.Extractors.Count > 0)
         {
             if (this.Split is not null)
@@ -97,7 +92,7 @@ public class Property : IProperty
                             : sb.ToString();
                     }
 
-                    if (!this.Line.Test(line))
+                    if (this.Line is not null && !this.Line.Test(line))
                     {
                         continue;
                     }
