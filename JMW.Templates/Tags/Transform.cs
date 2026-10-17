@@ -21,16 +21,15 @@ namespace JMW.Templates.Tags
         public const string ATTR_EXP = "exp";
         public const string ATTR_COLUMN = "columns";
 
-        private Dictionary<string, ValueRetriever> _retrievers = [];
-        private static readonly string[] separator = [","];
+        private readonly ColumnList _columnList;
 
-        public Transform()
+        public Transform() : this([])
         {
         }
 
         public Transform(Dictionary<string, ValueRetriever> retrievers)
         {
-            _retrievers = retrievers;
+            _columnList = new ColumnList(retrievers);
         }
 
         public override void Handler(Tag token, Interpreter interp)
@@ -39,23 +38,9 @@ namespace JMW.Templates.Tags
             {
                 if (token.Properties.ContainsKey(ATTR_EXP))
                 {
-                    var values = new List<string>();
-                    var columns = new List<string>();
-
-                    if (token.Properties.ContainsKey(ATTR_COLUMN))
-                    {
-                        columns = [.. token.Properties[ATTR_COLUMN].Split(separator, StringSplitOptions.None)];
-                    }
-
-                    foreach (var column in columns)
-                    {
-                        if (!string.IsNullOrWhiteSpace(column))
-                        {
-                            var retriever = column.ParseToLastIndexOf(":").Trim();
-                            var col = column.ParseAfterLastIndexOf_PlusLength(":").Trim();
-                            values.Add(_retrievers[retriever.ToLowerInvariant()](col.ToLowerInvariant()));
-                        }
-                    }
+                    var values = token.Properties.TryGetValue(ATTR_COLUMN, out var columnList)
+                        ? _columnList.ReadValues(columnList)
+                        : [];
 
                     var val = TagHelpers.EvaluateExpression(token.Properties[ATTR_EXP], values);
                     interp.OutputStream.Write(val);
