@@ -84,7 +84,8 @@ namespace JMW.Template
                     return consumeTagName(TokenType.OPENTAG);
                 }
 
-                if (maybeReadClose()) // We just eat close sigils
+                // Close sigils end the current tag. Outside a tag a '>' is ordinary text.
+                if (_inTag && maybeReadClose())
                 {
                     _inTag = false;
                     // yes yes it's a goto. This is a state machine deal with it.
@@ -282,10 +283,20 @@ namespace JMW.Template
                 _eof = true;
                 return setupErrorToken(EOF);
             }
-            _reader.PushBack([(char)c]);
+            // A comment runs to the end of the line, or to the end of the template on the last line.
+            var value = new StringBuilder();
+            while (c != -1 && c != '\n')
+            {
+                value.Append((char)c);
+                c = _reader.Read();
+            }
+            if (c == -1)
+            {
+                _eof = true;
+            }
 
-            consumeUntil('\n', TokenType.COMMENT);
-            Token.Value = Token.Value.TrimEnd('\r', '\n');
+            Token.Type = TokenType.COMMENT;
+            Token.Value = value.ToString().TrimEnd('\r');
             return Token.Type;
         }
 

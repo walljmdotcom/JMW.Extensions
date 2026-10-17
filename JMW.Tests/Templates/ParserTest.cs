@@ -184,5 +184,80 @@ more text at the end.
             //Assert
             Assert.That(testDelegate, Throws.TypeOf<ParseException>(), "Malformed conditional tag. Help: <If column=\"\" value=\"\" type=\"\">");
         }
+
+        [TestCase("# comment", "")]
+        [TestCase("# comment\n", "")]
+        [TestCase("# comment\r\n", "")]
+        [TestCase("#", "")]
+        [TestCase("a\n# comment", "a\n")]
+        [TestCase("a\r\n# comment", "a")]
+        [TestCase("a\n# comment\n", "a\n")]
+        [TestCase("<b>x</b># comment", "")]
+        [TestCase("a \\# not a comment", "a # not a comment")]
+        [TestCase("", "")]
+        [TestCase("   ", "   ")]
+        public void TestParsingTrailingComment(string block, string expectedText)
+        {
+            var tags = new Parser().Parse(block);
+
+            var text = string.Concat(tags.FindAll(t => t.TagType == TagTypes.Text).ConvertAll(t => t.TokenText));
+            Assert.That(text, Is.EqualTo(expectedText));
+        }
+
+        [TestCase(">", ">")]
+        [TestCase(">>", ">>")]
+        [TestCase("> quoted", "> quoted")]
+        [TestCase("a>b", "a>b")]
+        [TestCase("<b/>> after", "> after")]
+        [TestCase("<b>x</b>>", ">")]
+        public void TestParsingTextWithCloseSigil(string block, string expectedText)
+        {
+            var tags = new Parser().Parse(block);
+
+            var text = string.Concat(tags.FindAll(t => t.TagType == TagTypes.Text).ConvertAll(t => t.TokenText));
+            Assert.That(text, Is.EqualTo(expectedText));
+        }
+
+        [Test]
+        public void TestParsingCloseSigilInsideTagChildren()
+        {
+            var tags = new Parser().Parse("<b>>x</b>");
+
+            Assert.That(tags, Has.Count.EqualTo(1));
+            Assert.That(tags[0].Children, Has.Count.EqualTo(1));
+            Assert.That(tags[0].Children[0].TokenText, Is.EqualTo(">x"));
+        }
+
+        [TestCase("</b>")]
+        [TestCase("a</b>")]
+        [TestCase("/>")]
+        [TestCase("# comment\n/>")]
+        [TestCase("<b></b>/>")]
+        [TestCase("<b></b></b>")]
+        [TestCase("<b/>/>")]
+        [TestCase("<b/></b>")]
+        [TestCase("</b x=1>")]
+        [TestCase("<b></b x=1>")]
+        [TestCase("<b>")]
+        [TestCase("<b></c>")]
+        public void TestParsingUnbalancedTagsThrowsParseException(string block)
+        {
+            Assert.That(() => new Parser().Parse(block), Throws.TypeOf<ParseException>());
+        }
+
+        [TestCase("<b>")]
+        [TestCase("<b><c>")]
+        [TestCase("<b></c>")]
+        [TestCase("</b>")]
+        public void TestParsingAfterFailureStartsClean(string failing)
+        {
+            var parser = new Parser();
+            Assert.That(() => parser.Parse(failing), Throws.TypeOf<ParseException>());
+
+            var tags = parser.Parse("<c>x</c>");
+
+            Assert.That(tags, Has.Count.EqualTo(1));
+            Assert.That(tags[0].Name, Is.EqualTo("c"));
+        }
     }
 }

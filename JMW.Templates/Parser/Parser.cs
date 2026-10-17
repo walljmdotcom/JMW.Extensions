@@ -14,7 +14,6 @@ namespace JMW.Template
     /// </summary>
     public class Parser
     {
-        private readonly Stack<Tag> _stack = new();
         private readonly Dictionary<string, ITagHandler> _tags = [];
         private readonly HashSet<string> _columnTags = [];
 
@@ -63,6 +62,7 @@ namespace JMW.Template
         public List<Tag> Parse(TextReader reader)
         {
             var tokenizer = new Tokenizer(reader);
+            var stack = new Stack<Tag>();
             var ast = new List<Tag>();
             var currParam = string.Empty;
             while (tokenizer.Next() != TokenType.ERROR)
@@ -75,16 +75,25 @@ namespace JMW.Template
                         tag.TagType = TagTypes.Tag;
                         tag.Name = token.Value.ToLower().Trim();
 
-                        if (_stack.Count > 0)
+                        if (stack.Count > 0)
                         {
-                            _stack.Peek().Children.Add(tag);
+                            stack.Peek().Children.Add(tag);
                         }
-                        _stack.Push(tag);
+                        stack.Push(tag);
                         break;
 
                     case TokenType.SINGLEClOSE:
                     case TokenType.ENDTAG:
-                        var curr = _stack.Pop();
+                        if (stack.Count == 0)
+                        {
+                            throw new ParseException(
+                                token.Type == TokenType.ENDTAG
+                                    ? "End tag </" + token.Value + "> has no matching open tag."
+                                    : "/> has no matching open tag.",
+                                token
+                            );
+                        }
+                        var curr = stack.Pop();
 
                         if (curr.Name != token.Value.ToLower().Trim() && token.Type != TokenType.SINGLEClOSE)
                         {
@@ -114,24 +123,32 @@ namespace JMW.Template
                             TagHelpers.CheckAllowedAttributes(curr, ColumnBase.ALLOWED, token);
                         }
 
-                        if (_stack.Count == 0)
+                        if (stack.Count == 0)
                         {
                             ast.Add(curr);
                         }
                         break;
 
                     case TokenType.PARAMNAME:
+                        if (stack.Count == 0)
+                        {
+                            throw new ParseException("Parameter '" + token.Value + "' is outside any open tag.", token);
+                        }
                         if (currParam.IsNotEmpty())
                         {
-                            _stack.Peek().Properties[currParam] = string.Empty;
+                            stack.Peek().Properties[currParam] = string.Empty;
                         }
                         currParam = token.Value.ToLower();
                         break;
 
                     case TokenType.PARAMVALUE:
+                        if (stack.Count == 0)
+                        {
+                            throw new ParseException("Parameter value '" + token.Value + "' is outside any open tag.", token);
+                        }
                         if (currParam.IsNotEmpty())
                         {
-                            _stack.Peek().Properties[currParam] = token.Value;
+                            stack.Peek().Properties[currParam] = token.Value;
                         }
                         // reset currParam since we found a value for it.
                         currParam = string.Empty;
@@ -140,9 +157,9 @@ namespace JMW.Template
                     case TokenType.TEXT:
                         tag.TagType = TagTypes.Text;
                         tag.TokenText = token.Value;
-                        if (_stack.Count > 0)
+                        if (stack.Count > 0)
                         {
-                            _stack.Peek().Children.Add(tag);
+                            stack.Peek().Children.Add(tag);
                         }
                         else
                         {
@@ -156,9 +173,9 @@ namespace JMW.Template
             {
                 throw new ParseException(tokenizer.Token);
             }
-            return _stack.Count != 0
+            return stack.Count != 0
                 ? throw new ParseException("Template ended prematurely. Did you forget a </" +
-                    _stack.Peek().Name + ">?", tokenizer.Token)
+                    stack.Peek().Name + ">?", tokenizer.Token)
                 : ast;
         }
 
