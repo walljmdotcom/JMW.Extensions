@@ -9,8 +9,6 @@ namespace JMW.Networking.Parsers.JunosConfig;
 /// </summary>
 public class Parser
 {
-    private readonly Stack<Tag> stack = new();
-
     public Parser()
     {
     }
@@ -28,6 +26,7 @@ public class Parser
     public List<Tag> Parse(TextReader reader)
     {
         var tokenizer = new Tokenizer(reader);
+        var stack = new Stack<Tag>();
         var ast = new List<Tag>();
         Tag? last = null;
         while (tokenizer.Next() != TokenType.Error)
@@ -37,7 +36,7 @@ public class Parser
             switch (token.Type)
             {
                 case TokenType.ObjectStart:
-                    var o_names = CollapseWords();
+                    var o_names = CollapseWords(stack);
                     if (o_names.Count > 0)
                     {
                         tag.Name = o_names.First().Value.Trim();
@@ -62,6 +61,10 @@ public class Parser
 
                 case TokenType.ArrayStop:
                     {
+                        if (stack.Count == 0)
+                        {
+                            throw new ParseException("Unexpected ] with no open [.", token);
+                        }
                         var curr = stack.Pop();
                         if (stack.Count == 0)
                         {
@@ -75,6 +78,10 @@ public class Parser
                     }
                 case TokenType.ObjectStop:
                     {
+                        if (stack.Count == 0)
+                        {
+                            throw new ParseException("Unexpected } with no open {.", token);
+                        }
                         var curr = stack.Pop();
                         last = curr;
                         if (stack.Count > 0 && stack.Peek().TagType == TagTypes.Array)
@@ -115,7 +122,7 @@ public class Parser
                         }
                         else if (stack.Count > 0)
                         {
-                            var words = CollapseWords();
+                            var words = CollapseWords(stack);
                             tag.TagType = TagTypes.Property;
 
                             if (words.Count > 2)
@@ -167,7 +174,7 @@ public class Parser
             : ast;
     }
 
-    private List<Tag> CollapseWords()
+    private static List<Tag> CollapseWords(Stack<Tag> stack)
     {
         var words = new List<Tag>();
         while (stack.Count > 0 && stack.Peek().TagType == TagTypes.Word)

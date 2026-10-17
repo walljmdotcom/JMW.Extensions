@@ -24,6 +24,8 @@ internal class Tokenizer
     internal Token Token { get; } = new();
 
     internal static readonly string INVALID_UNICODE_ERROR = "Invalid Character Encoding for parsing instruction input";
+    internal static readonly string UNTERMINATED_COMMENT_ERROR = "Unexpected end of input. Did you forget to close a /* comment with */?";
+    internal static readonly string UNTERMINATED_STRING_ERROR = "Unexpected end of input. Did you forget a closing \"?";
 
     private bool inWord = false;
     private bool eof = false;
@@ -45,7 +47,8 @@ internal class Tokenizer
     {
         try
         {
-            if (eof)
+            // A word that ran into the end of input is still pending and has to be emitted first.
+            if (eof && !inWord)
             {
                 return SetupErrorToken("EOF");
             }
@@ -98,7 +101,21 @@ internal class Tokenizer
             {
                 return ConsumeLineStop();
             }
-            return MaybeReadWord() ? ConsumeWord() : ConsumeWhitespace();
+            if (MaybeReadWord())
+            {
+                return ConsumeWord();
+            }
+
+            var next = Peek();
+            if (next == -1)
+            {
+                eof = true;
+                return SetupErrorToken("EOF");
+            }
+
+            return char.IsWhiteSpace((char)next)
+                ? ConsumeWhitespace()
+                : SetupErrorToken("Unexpected character '" + (char)next + "'");
         }
         catch (Exception ex)
         {
@@ -125,7 +142,7 @@ internal class Tokenizer
         Token.Type = type;
         var c = reader.Read();
         var value = new List<char>();
-        while (c != cc && c != 0)
+        while (c != cc && c != 0 && c != -1)
         {
             value.Add((char)c);
             c = reader.Read();
@@ -188,11 +205,19 @@ internal class Tokenizer
         var text = new RingBuffer<char>(2);
 
         var c = reader.Read();
+        if (c == -1)
+        {
+            return SetupErrorToken(UNTERMINATED_COMMENT_ERROR);
+        }
         text.Add((char)c);
 
-        while (!(text[0] == '*' && text[1] == '/')) // ignore the ';', its optional.
+        while (!(text.Count == 2 && text[0] == '*' && text[1] == '/'))
         {
             c = reader.Read();
+            if (c == -1)
+            {
+                return SetupErrorToken(UNTERMINATED_COMMENT_ERROR);
+            }
             // This is the unicode invalid character. If we encounter this it means we parsed the
             // template with an invalid encoding. Or the template was stored with an invalid
             // encoding.
@@ -201,11 +226,6 @@ internal class Tokenizer
                 return SetupErrorToken(INVALID_UNICODE_ERROR);
             }
             text.Add((char)c);
-        }
-
-        if (c == -1)
-        {
-            eof = true;
         }
 
         return Next();
@@ -236,7 +256,7 @@ internal class Tokenizer
             return ConsumeQuotedString();
         }
 
-        while (!char.IsWhiteSpace((char)c) && !unacceptableWordChars.Contains((char)c))
+        while (c != -1 && !char.IsWhiteSpace((char)c) && !unacceptableWordChars.Contains((char)c))
         {
             identifier.Add((char)c);
             c = reader.Read();
@@ -275,11 +295,12 @@ internal class Tokenizer
             return Next();
         }
 
-        text.Append((char)c);
-
-        while (c != 34) // ignore the ';', its optional.
+        while (c != 34)
         {
-            c = reader.Read();
+            if (c == -1)
+            {
+                return SetupErrorToken(UNTERMINATED_STRING_ERROR);
+            }
             // This is the unicode invalid character. If we encounter this it means we parsed the
             // template with an invalid encoding. Or the template was stored with an invalid
             // encoding.
@@ -288,13 +309,10 @@ internal class Tokenizer
                 return SetupErrorToken(INVALID_UNICODE_ERROR);
             }
             text.Append((char)c);
+            c = reader.Read();
         }
 
-        if (c == -1)
-        {
-            eof = true;
-        }
-        Token.Value = text.ToString().Trim('"');
+        Token.Value = text.ToString();
         Token.Type = TokenType.Word;
         return Next();
     }
@@ -327,10 +345,24 @@ internal class Tokenizer
     private bool MaybeReadWord()
     {
         ReadText(" ", out var buf, out var n);
+        if (n == 0)
+        {
+            return false;
+        }
         reader.PushBack(buf.Take(n).ToArray());
 
         var c = buf.First();
         return !unacceptableWordChars.Contains(c);
+    }
+
+    private int Peek()
+    {
+        var c = reader.Read();
+        if (c != -1)
+        {
+            reader.PushBack((char)c);
+        }
+        return c;
     }
 
     private bool MaybeReadCommentStart()
