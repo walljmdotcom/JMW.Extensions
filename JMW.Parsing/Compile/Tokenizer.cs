@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
-using System.Linq;
+using System.Text;
 
 namespace JMW.Parsing.Compile;
 
@@ -23,7 +23,7 @@ public class Tokenizer
 
     private static readonly HashSet<char> acceptableWordChars = new("abcdefghijklmnopqrstuvwxyz_-".ToCharArray());
 
-    private readonly LineTrackingReader lineReader;
+    private readonly Scanner lineReader;
 
     private bool inWord = false;
     private bool eof = false;
@@ -99,8 +99,7 @@ public class Tokenizer
                 return this.ConsumeWord();
             }
 
-            var next = this.Peek();
-            if (next == -1)
+            if (!this.lineReader.TryPeek(out char next))
             {
                 this.eof = true;
                 return this.SetupErrorToken("EOF");
@@ -108,7 +107,7 @@ public class Tokenizer
 
             return IsSkippable(next)
                 ? this.ConsumeWhitespace()
-                : this.SetupErrorToken("Unexpected character '" + (char)next + "'");
+                : this.SetupErrorToken("Unexpected character '" + next + "'");
         }
         catch (Exception ex)
         {
@@ -130,30 +129,30 @@ public class Tokenizer
         return this.Token.Type;
     }
 
-    private TokenType ConsumeUntil(int cc, TokenType type)
+    private TokenType ConsumeUntil(char cc, TokenType type)
     {
         this.Token.Type = type;
-        var c = this.lineReader.Read();
+        var more = this.lineReader.TryRead(out char c);
         var value = new List<char>();
-        while (c != cc && c != 0 && c != -1)
+        while (more && c != cc && c != 0)
         {
-            value.Add((char)c);
-            c = this.lineReader.Read();
+            value.Add(c);
+            more = this.lineReader.TryRead(out c);
             // This is the unicode invalid character. If we encounter this it means we parsed the
             // template with an invalid encoding. Or the template was stored with an invalid
             // encoding.
-            if (c == '\uffff')
+            if (more && c == '\uffff')
             {
                 return this.SetupErrorToken(INVALID_UNICODE_ERROR);
             }
         }
-        if (c == -1)
+        if (!more)
         {
             this.eof = true;
         }
         else if (c != cc)
         {
-            this.lineReader.PushBack((char)c);
+            this.lineReader.PushBack(c);
         }
 
         this.Token.Value = new string(value.ToArray());
@@ -162,13 +161,11 @@ public class Tokenizer
 
     private TokenType ConsumeComment()
     {
-        var c = this.lineReader.Read();
-        if (c == -1)
+        if (this.lineReader.AtEnd)
         {
             this.eof = true;
             return this.SetupErrorToken("EOF");
         }
-        this.lineReader.PushBack([(char)c]);
 
         this.ConsumeUntil('\n', TokenType.Comment);
         this.Token.Value = this.Token.Value.TrimEnd('\r', '\n');
@@ -177,8 +174,7 @@ public class Tokenizer
 
     private TokenType ConsumePropertyValue()
     {
-        var c = this.lineReader.Read();
-        if (c == -1)
+        if (!this.lineReader.TryRead(out char c))
         {
             this.eof = true;
             return this.SetupErrorToken("EOF");
@@ -187,7 +183,7 @@ public class Tokenizer
         {
             return this.ConsumeUntil(c, TokenType.Value);
         }
-        this.lineReader.PushBack((char)c);
+        this.lineReader.PushBack(c);
         return this.Token.Type;
     }
 
@@ -225,80 +221,68 @@ public class Tokenizer
 
     private TokenType ConsumeWord()
     {
-        var identifier = new List<char>();
-        var c = this.lineReader.Read();
-        while (!char.IsWhiteSpace((char)c) && acceptableWordChars.Contains((char)c))
-        {
-            identifier.Add((char)c);
-            c = this.lineReader.Read();
-            // This is the unicode invalid character. If we encounter this it means we parsed the
-            // template with an invalid encoding. Or the template was stored with an invalid
-            // encoding.
-            if (c == '\uffff')
-            {
-                return this.SetupErrorToken(INVALID_UNICODE_ERROR);
-            }
-        }
-        if (c == -1)
+        var identifier = new StringBuilder();
+        this.lineReader.ReadWhile(IsWordChar, identifier);
+        if (!this.lineReader.TryRead(out char c))
         {
             this.eof = true;
         }
+        // This is the unicode invalid character. If we encounter this it means we parsed the
+        // template with an invalid encoding. Or the template was stored with an invalid
+        // encoding.
+        else if (c == '\uffff')
+        {
+            return this.SetupErrorToken(INVALID_UNICODE_ERROR);
+        }
         else
         {
-            this.lineReader.PushBack((char)c);
+            this.lineReader.PushBack(c);
         }
         this.inWord = true;
         this.Token.Type = TokenType.Word;
-        this.Token.Value = new string(identifier.ToArray());
+        this.Token.Value = identifier.ToString();
         return this.ConsumeWhitespace();
     }
 
     private TokenType ConsumeWhitespace()
     {
-        var c = this.lineReader.Read();
-        while (IsSkippable(c)) // ignore the ';', its optional.
-        {
-            c = this.lineReader.Read();
-            // This is the unicode invalid character. If we encounter this it means we parsed the
-            // template with an invalid encoding. Or the template was stored with an invalid
-            // encoding.
-            if (c == '\uffff')
-            {
-                return this.SetupErrorToken(INVALID_UNICODE_ERROR);
-            }
-        }
-        if (c == -1)
+        var skipped = this.lineReader.ReadWhile(IsSkippable); // ignore the ';', its optional.
+        if (!this.lineReader.TryRead(out char c))
         {
             this.eof = true;
         }
+        // This is the unicode invalid character. If we encounter this it means we parsed the
+        // template with an invalid encoding. Or the template was stored with an invalid
+        // encoding.
+        else if (skipped > 0 && c == '\uffff')
+        {
+            return this.SetupErrorToken(INVALID_UNICODE_ERROR);
+        }
         else
         {
-            this.lineReader.PushBack((char)c);
+            this.lineReader.PushBack(c);
         }
         return this.Next();
     }
 
-    private static bool IsSkippable(int c)
+    private static bool IsSkippable(char c)
     {
-        return c != -1 && (char.IsWhiteSpace((char)c) || c == ';' || c == ',');
+        return char.IsWhiteSpace(c) || c == ';' || c == ',';
     }
 
-    private int Peek()
+    private static bool IsWordChar(char c)
     {
-        var c = this.lineReader.Read();
-        if (c != -1)
-        {
-            this.lineReader.PushBack((char)c);
-        }
-        return c;
+        return !char.IsWhiteSpace(c) && acceptableWordChars.Contains(c);
     }
 
     private bool MaybeReadWord()
     {
-        this.ReadText(" ", out var buf, out var n);
-        this.lineReader.PushBack(buf.Take(n).ToArray());
+        if (!this.lineReader.TryPeek(out char c))
+        {
+            this.eof = true;
+            return false;
+        }
 
-        var c = buf.First();
         return acceptableWordChars.Contains(c);
     }
 
@@ -334,29 +318,17 @@ public class Tokenizer
 
     private bool MaybeReadBeginPropertyValue()
     {
-        var c = this.Peek();
-        return c == '"' || c == '\'';
+        return this.lineReader.TryPeek(out char c) && (c == '"' || c == '\'');
     }
 
     private bool MaybeReadText(string text)
     {
-        this.ReadText(text, out var buf, out var n);
-        var ok = (n == text.Length && new string(buf) == text);
-        if (!ok)
-        {
-            this.lineReader.PushBack(buf.Take(n).ToArray());
-        }
-        return ok;
-    }
-
-    private void ReadText(string text, out char[] buf, out int n)
-    {
-        buf = new char[text.Length];
-        n = this.lineReader.Read(buf);
-
-        if (n == 0)
+        if (this.lineReader.AtEnd)
         {
             this.eof = true;
+            return false;
         }
+
+        return this.lineReader.TryMatch(text);
     }
 }
