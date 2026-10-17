@@ -50,8 +50,8 @@ namespace JMW.Templates.Tests
         [Test]
         public void ReplaceOctetTest()
         {
-            Assert.That("1.1.1.255", Is.EqualTo(TagHelpers.ReplaceOctet("1.1.1.1", "4", 2600)));
-            Assert.That("1.1.1.0", Is.EqualTo(TagHelpers.ReplaceOctet("1.1.1.1", "4", -1)));
+            Assert.That(TagHelpers.ReplaceOctet("1.1.1.1", "4", 2600), Is.EqualTo("1.1.1.255"));
+            Assert.That(TagHelpers.ReplaceOctet("1.1.1.1", "4", -1), Is.EqualTo("1.1.1.0"));
         }
 
         [Test]

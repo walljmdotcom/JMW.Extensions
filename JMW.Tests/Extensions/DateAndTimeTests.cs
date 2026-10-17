@@ -9,7 +9,7 @@ namespace JMW.Extensions.Tests
         [Test]
         public void GetElapsedTimeTest()
         {
-            Assert.That("01:01:01", Is.EqualTo(new DateTime(2018, 01, 01, 01, 01, 01).GetElapsedTime(new DateTime(2018, 1, 1))));
+            Assert.That(new DateTime(2018, 01, 01, 01, 01, 01).GetElapsedTime(new DateTime(2018, 1, 1)), Is.EqualTo("01:01:01"));
         }
     }
 }

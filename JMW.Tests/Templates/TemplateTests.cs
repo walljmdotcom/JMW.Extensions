@@ -38,7 +38,7 @@ namespace JMW.Templates.Tests
 ");
 
             var output = sb.ToString();
-            Assert.That("blah\r\n1.1.1.1\r\nwooooo\r\nwo\r\nfloo\r\nblue\r\nwooooo\r\nwo\r\n", Is.EqualTo(output));
+            Assert.That(output, Is.EqualTo("blah\r\n1.1.1.1\r\nwooooo\r\nwo\r\nfloo\r\nblue\r\nwooooo\r\nwo\r\n"));
         }
 
         [Test]
@@ -70,7 +70,7 @@ namespace JMW.Templates.Tests
 ");
 
             var output = sb.ToString();
-            Assert.That("blah\r\n1.1.1.1\r\nwooooo\r\nwo\r\nfloo\r\nblue\r\nwooooo\r\nwo\r\n", Is.EqualTo(output));
+            Assert.That(output, Is.EqualTo("blah\r\n1.1.1.1\r\nwooooo\r\nwo\r\nfloo\r\nblue\r\nwooooo\r\nwo\r\n"));
         }
 
         [Test]
@@ -191,44 +191,44 @@ namespace JMW.Templates.Tests
             i.AddHandler(tbl);
 
             var output = RunTableIf(sb, i, "equals", "flaw");
-            Assert.That("flaw\r\n", Is.EqualTo(output));
+            Assert.That(output, Is.EqualTo("flaw\r\n"));
             output = RunTableIf(sb, i, "eq", "flaw");
-            Assert.That("flaw\r\n", Is.EqualTo(output));
+            Assert.That(output, Is.EqualTo("flaw\r\n"));
 
             output = RunTableIf(sb, i, "notequals", "blue");
-            Assert.That("flaw\r\n", Is.EqualTo(output));
+            Assert.That(output, Is.EqualTo("flaw\r\n"));
             output = RunTableIf(sb, i, "neq", "blue");
-            Assert.That("flaw\r\n", Is.EqualTo(output));
+            Assert.That(output, Is.EqualTo("flaw\r\n"));
 
             output = RunTableIf(sb, i, "strt", "fl");
-            Assert.That("flaw\r\n", Is.EqualTo(output));
+            Assert.That(output, Is.EqualTo("flaw\r\n"));
             output = RunTableIf(sb, i, "startswith", "fl");
-            Assert.That("flaw\r\n", Is.EqualTo(output));
+            Assert.That(output, Is.EqualTo("flaw\r\n"));
 
             output = RunTableIf(sb, i, "nstrt", "bl");
-            Assert.That("flaw\r\n", Is.EqualTo(output));
+            Assert.That(output, Is.EqualTo("flaw\r\n"));
             output = RunTableIf(sb, i, "notstartswith", "bl");
-            Assert.That("flaw\r\n", Is.EqualTo(output));
+            Assert.That(output, Is.EqualTo("flaw\r\n"));
 
             output = output = RunTableIf(sb, i, "ends", "aw");
-            Assert.That("flaw\r\n", Is.EqualTo(output));
+            Assert.That(output, Is.EqualTo("flaw\r\n"));
             output = output = RunTableIf(sb, i, "endswith", "aw");
-            Assert.That("flaw\r\n", Is.EqualTo(output));
+            Assert.That(output, Is.EqualTo("flaw\r\n"));
 
             output = output = RunTableIf(sb, i, "nends", "ue");
-            Assert.That("flaw\r\n", Is.EqualTo(output));
+            Assert.That(output, Is.EqualTo("flaw\r\n"));
             output = output = RunTableIf(sb, i, "notendswith", "ue");
-            Assert.That("flaw\r\n", Is.EqualTo(output));
+            Assert.That(output, Is.EqualTo("flaw\r\n"));
 
             output = output = RunTableIf(sb, i, "contains", "la");
-            Assert.That("flaw\r\n", Is.EqualTo(output));
+            Assert.That(output, Is.EqualTo("flaw\r\n"));
             output = output = RunTableIf(sb, i, "cnt", "la");
-            Assert.That("flaw\r\n", Is.EqualTo(output));
+            Assert.That(output, Is.EqualTo("flaw\r\n"));
 
             output = output = RunTableIf(sb, i, "notcontains", "lu");
-            Assert.That("flaw\r\n", Is.EqualTo(output));
+            Assert.That(output, Is.EqualTo("flaw\r\n"));
             output = output = RunTableIf(sb, i, "ncnt", "lu");
-            Assert.That("flaw\r\n", Is.EqualTo(output));
+            Assert.That(output, Is.EqualTo("flaw\r\n"));
         }
 
         private static string RunTableIf(StringBuilder sb, Interpreter i, string type, string value)
@@ -267,7 +267,7 @@ namespace JMW.Templates.Tests
 ");
 
             var output = sb.ToString();
-            Assert.That("floo\r\nfloo\r\n|||\r\nblah\r\nfloo\r\nblah\r\nfloo\r\n", Is.EqualTo(output));
+            Assert.That(output, Is.EqualTo("floo\r\nfloo\r\n|||\r\nblah\r\nfloo\r\nblah\r\nfloo\r\n"));
         }
 
         [Test]
@@ -289,7 +289,7 @@ namespace JMW.Templates.Tests
 ");
 
             var output = sb.ToString();
-            Assert.That("blah\r\nfloo\r\n", Is.EqualTo(output));
+            Assert.That(output, Is.EqualTo("blah\r\nfloo\r\n"));
         }
 
         [Test]
@@ -311,7 +311,7 @@ namespace JMW.Templates.Tests
 ");
 
             var output = sb.ToString();
-            Assert.That("ablah\r\nbfloo\r\ncblah\r\ndfloo\r\n", Is.EqualTo(output));
+            Assert.That(output, Is.EqualTo("ablah\r\nbfloo\r\ncblah\r\ndfloo\r\n"));
         }
 
         [Test]
@@ -333,7 +333,7 @@ namespace JMW.Templates.Tests
 ");
 
             var output = sb.ToString();
-            Assert.That("dfloo\r\ncblah\r\nbfloo\r\nablah\r\n", Is.EqualTo(output));
+            Assert.That(output, Is.EqualTo("dfloo\r\ncblah\r\nbfloo\r\nablah\r\n"));
         }
 
         [Test]
@@ -359,7 +359,7 @@ namespace JMW.Templates.Tests
 ");
 
             var output = sb.ToString();
-            Assert.That("f\r\nf\r\n|||\r\n1.1.2.1\r\n1.2.4.4\r\n10.130.1.12\r\n192.168.13.56\r\n", Is.EqualTo(output));
+            Assert.That(output, Is.EqualTo("f\r\nf\r\n|||\r\n1.1.2.1\r\n1.2.4.4\r\n10.130.1.12\r\n192.168.13.56\r\n"));
         }
 
         [Test]
@@ -385,7 +385,7 @@ namespace JMW.Templates.Tests
 ");
 
             var output = sb.ToString();
-            Assert.That("f\r\nf\r\n|||\r\n1.1.2.1\r\n1.2.4.4\r\n10.130.1.12\r\n192.168.13.56\r\n", Is.EqualTo(output));
+            Assert.That(output, Is.EqualTo("f\r\nf\r\n|||\r\n1.1.2.1\r\n1.2.4.4\r\n10.130.1.12\r\n192.168.13.56\r\n"));
         }
 
         [Test]
@@ -417,7 +417,7 @@ namespace JMW.Templates.Tests
 ");
 
                 var output = sb.ToString();
-                Assert.That("greenflaw\r\nblueblue\r\nredflaw\r\nblackblue\r\n|||\r\ngreenyellow\r\nbluepurple\r\nredpink\r\nblackbrown\r\n", Is.EqualTo(output));
+                Assert.That(output, Is.EqualTo("greenflaw\r\nblueblue\r\nredflaw\r\nblackblue\r\n|||\r\ngreenyellow\r\nbluepurple\r\nredpink\r\nblackbrown\r\n"));
             }
 
             sb = new StringBuilder();
@@ -446,7 +446,7 @@ namespace JMW.Templates.Tests
 ");
 
                 var output = sb.ToString();
-                Assert.That("greenflaw\r\nblueblue\r\nredflaw\r\nblackblue\r\n|||\r\ngreenyellow\r\nbluepurple\r\nredpink\r\nblackbrown\r\n", Is.EqualTo(output));
+                Assert.That(output, Is.EqualTo("greenflaw\r\nblueblue\r\nredflaw\r\nblackblue\r\n|||\r\ngreenyellow\r\nbluepurple\r\nredpink\r\nblackbrown\r\n"));
             }
 
             sb = new StringBuilder();
@@ -471,7 +471,7 @@ namespace JMW.Templates.Tests
 ");
 
                 var output = sb.ToString();
-                Assert.That("green1.1.2.1\r\nblue1.1.2.1\r\nred1.1.2.1\r\nblack1.1.2.1\r\n", Is.EqualTo(output));
+                Assert.That(output, Is.EqualTo("green1.1.2.1\r\nblue1.1.2.1\r\nred1.1.2.1\r\nblack1.1.2.1\r\n"));
             }
         }
 
@@ -583,7 +583,7 @@ namespace JMW.Templates.Tests
 </table>
 ");
             var output = File.ReadAllText("foo.txt");
-            Assert.That("blah\r\nfloo\r\nblah\r\nfloo\r\n", Is.EqualTo(output));
+            Assert.That(output, Is.EqualTo("blah\r\nfloo\r\nblah\r\nfloo\r\n"));
             "foo.txt".IfExists(File.Delete);
         }
 
@@ -656,19 +656,19 @@ namespace JMW.Templates.Tests
 </table>
 ");
             var output = File.ReadAllText("foo0.txt");
-            Assert.That("blah\r\n", Is.EqualTo(output));
+            Assert.That(output, Is.EqualTo("blah\r\n"));
             "foo0.txt".IfExists(File.Delete);
 
             output = File.ReadAllText("foo1.txt");
-            Assert.That("floo\r\n", Is.EqualTo(output));
+            Assert.That(output, Is.EqualTo("floo\r\n"));
             "foo1.txt".IfExists(File.Delete);
 
             output = File.ReadAllText("foo2.txt");
-            Assert.That("blah\r\n", Is.EqualTo(output));
+            Assert.That(output, Is.EqualTo("blah\r\n"));
             "foo2.txt".IfExists(File.Delete);
 
             output = File.ReadAllText("foo3.txt");
-            Assert.That("floo\r\n", Is.EqualTo(output));
+            Assert.That(output, Is.EqualTo("floo\r\n"));
             "foo3.txt".IfExists(File.Delete);
         }
 
@@ -693,7 +693,7 @@ namespace JMW.Templates.Tests
 </table>
 ");
             var output = sb.ToString();
-            Assert.That("blah | flaw\r\nfloo | blue\r\nblah | flaw\r\nfloo | blue\r\n", Is.EqualTo(output));
+            Assert.That(output, Is.EqualTo("blah | flaw\r\nfloo | blue\r\nblah | flaw\r\nfloo | blue\r\n"));
         }
 
         [Test]
@@ -757,7 +757,7 @@ namespace JMW.Templates.Tests
 </table>
 ");
             var output = sb.ToString();
-            Assert.That("blah | flaw\r\nfloo | blue\r\nblah | flaw\r\nfloo | blue\r\n", Is.EqualTo(output));
+            Assert.That(output, Is.EqualTo("blah | flaw\r\nfloo | blue\r\nblah | flaw\r\nfloo | blue\r\n"));
         }
 
         [Test]
@@ -806,7 +806,7 @@ namespace JMW.Templates.Tests
 ");
 
             var output = sb.ToString();
-            Assert.That("blueblue\r\nblackblue\r\n", Is.EqualTo(output));
+            Assert.That(output, Is.EqualTo("blueblue\r\nblackblue\r\n"));
         }
 
         [Test]
@@ -831,7 +831,7 @@ namespace JMW.Templates.Tests
 ");
 
             var output = sb.ToString();
-            Assert.That("blueblue1.1.2.1\r\nblackblue1.1.2.1\r\n", Is.EqualTo(output));
+            Assert.That(output, Is.EqualTo("blueblue1.1.2.1\r\nblackblue1.1.2.1\r\n"));
         }
 
         [Test]
@@ -1014,7 +1014,7 @@ datetime: <timestamp format=""M-d-yy hh:mm:ss"" exp=""x1.substr(0,x1.indexOf(' '
                 i.Eval(@"<jason/>");
 
                 var output = sb.ToString();
-                Assert.That(string.Empty, Is.EqualTo(output));
+                Assert.That(output, Is.EqualTo(string.Empty));
             }
 
             sb = new StringBuilder();
@@ -1028,7 +1028,7 @@ datetime: <timestamp format=""M-d-yy hh:mm:ss"" exp=""x1.substr(0,x1.indexOf(' '
                 i.Eval(@"<jason/>");
 
                 var output = sb.ToString();
-                Assert.That("jason", Is.EqualTo(output));
+                Assert.That(output, Is.EqualTo("jason"));
             }
         }
 
@@ -1042,7 +1042,7 @@ datetime: <timestamp format=""M-d-yy hh:mm:ss"" exp=""x1.substr(0,x1.indexOf(' '
             i.Eval(@"<test>jason</test>");
 
             var output = sb.ToString();
-            Assert.That("JASON", Is.EqualTo(output));
+            Assert.That(output, Is.EqualTo("JASON"));
         }
 
         [Test]
@@ -1074,7 +1074,7 @@ datetime: <timestamp format=""M-d-yy hh:mm:ss"" exp=""x1.substr(0,x1.indexOf(' '
                 i.AddVariable("IP", "1.1.1.1");
 
                 i.Eval(@"<var:ip exp='x1+10' oct='4' />");
-                Assert.That("1.1.1.11", Is.EqualTo(sb1.ToString()));
+                Assert.That(sb1.ToString(), Is.EqualTo("1.1.1.11"));
             }
 
             sb1 = new StringBuilder();
@@ -1084,7 +1084,7 @@ datetime: <timestamp format=""M-d-yy hh:mm:ss"" exp=""x1.substr(0,x1.indexOf(' '
                 i.AddVariable("IP", "1.1.1.1");
 
                 i.Eval(@"<var:ip store='true' value='2.2.2.2'/>");
-                Assert.That("2.2.2.2", Is.EqualTo(sb1.ToString()));
+                Assert.That(sb1.ToString(), Is.EqualTo("2.2.2.2"));
             }
         }
 
@@ -1117,7 +1117,7 @@ datetime: <timestamp format=""M-d-yy hh:mm:ss"" exp=""x1.substr(0,x1.indexOf(' '
 </table>
 ");
             var output = sb.ToString();
-            Assert.That("blah|flaw\r\nfloo|blue\r\nblah|flaw\r\nfloo|blue\r\n", Is.EqualTo(output));
+            Assert.That(output, Is.EqualTo("blah|flaw\r\nfloo|blue\r\nblah|flaw\r\nfloo|blue\r\n"));
         }
 
         [Test]
@@ -1138,7 +1138,7 @@ datetime: <timestamp format=""M-d-yy hh:mm:ss"" exp=""x1.substr(0,x1.indexOf(' '
 </table>
 ");
             var output = sb.ToString();
-            Assert.That("blah|flaw\r\nfloo|blue\r\nblah|flaw\r\nfloo|blue\r\n", Is.EqualTo(output));
+            Assert.That(output, Is.EqualTo("blah|flaw\r\nfloo|blue\r\nblah|flaw\r\nfloo|blue\r\n"));
         }
 
         [Test]
@@ -1159,7 +1159,7 @@ datetime: <timestamp format=""M-d-yy hh:mm:ss"" exp=""x1.substr(0,x1.indexOf(' '
 </table>
 ");
             var output = sb.ToString();
-            Assert.That("blah|flaw\r\nfloo|blue\r\nblah|flaw\r\nfloo|blue\r\n", Is.EqualTo(output));
+            Assert.That(output, Is.EqualTo("blah|flaw\r\nfloo|blue\r\nblah|flaw\r\nfloo|blue\r\n"));
         }
     }
 

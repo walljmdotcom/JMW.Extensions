@@ -44,9 +44,9 @@ start
                 }
             }
 
-            Assert.That(6, Is.EqualTo(lines.Count));
-            Assert.That("start", Is.EqualTo(lines[0]));
-            Assert.That(" this is 5 more foo", Is.EqualTo(lines[5]));
+            Assert.That(lines.Count, Is.EqualTo(6));
+            Assert.That(lines[0], Is.EqualTo("start"));
+            Assert.That(lines[5], Is.EqualTo(" this is 5 more foo"));
         }
 
         [Test]
@@ -82,9 +82,9 @@ start
                 }
             }
 
-            Assert.That(8, Is.EqualTo(lines.Count));
-            Assert.That("foo", Is.EqualTo(lines[0]));
-            Assert.That("bar", Is.EqualTo(lines[7]));
+            Assert.That(lines.Count, Is.EqualTo(8));
+            Assert.That(lines[0], Is.EqualTo("foo"));
+            Assert.That(lines[7], Is.EqualTo("bar"));
         }
 
 
@@ -119,9 +119,9 @@ start
                 }
             }
 
-            Assert.That(14, Is.EqualTo(lines.Count));
-            Assert.That("", Is.EqualTo(lines[0]));
-            Assert.That(" this is 6 more foo", Is.EqualTo(lines[13]));
+            Assert.That(lines.Count, Is.EqualTo(14));
+            Assert.That(lines[0], Is.EqualTo(""));
+            Assert.That(lines[13], Is.EqualTo(" this is 6 more foo"));
         }
     }
 }

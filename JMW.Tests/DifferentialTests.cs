@@ -28,12 +28,12 @@ namespace JMW.Differentials.Tests
                     return a != b ? new ObjectDifferential<string, MyDiff>(a, b, [new MyDiff { Difference = a + " " + b }]) : null;
                 });
 
-            Assert.That(1, Is.EqualTo(diff.OnlyInListA.Count));
-            Assert.That(1, Is.EqualTo(diff.OnlyInListB.Count));
-            Assert.That(1, Is.EqualTo(diff.Modified.Count));
-            Assert.That("b B", Is.EqualTo(diff.Modified.First().Differences.First().Difference));
-            Assert.That("b", Is.EqualTo(diff.Modified.First().ObjectA));
-            Assert.That("B", Is.EqualTo(diff.Modified.First().ObjectB));
+            Assert.That(diff.OnlyInListA.Count, Is.EqualTo(1));
+            Assert.That(diff.OnlyInListB.Count, Is.EqualTo(1));
+            Assert.That(diff.Modified.Count, Is.EqualTo(1));
+            Assert.That(diff.Modified.First().Differences.First().Difference, Is.EqualTo("b B"));
+            Assert.That(diff.Modified.First().ObjectA, Is.EqualTo("b"));
+            Assert.That(diff.Modified.First().ObjectB, Is.EqualTo("B"));
         }
 
         [Test]
@@ -63,18 +63,18 @@ namespace JMW.Differentials.Tests
             Assert.That(p1 == p2, Is.True);
             Assert.That(p1 == p2, Is.True);
 
-            Assert.That(0, Is.EqualTo(p1.CompareTo(p2)));
+            Assert.That(p1.CompareTo(p2), Is.EqualTo(0));
 
             o1 = "1Jason";
             p1 = new Pair<string>(o1, o2);
-            Assert.That(-1, Is.EqualTo(p1.CompareTo(p2)));
+            Assert.That(p1.CompareTo(p2), Is.EqualTo(-1));
             o1 = "Jason1";
             p1 = new Pair<string>(o1, o2);
-            Assert.That(1, Is.EqualTo(p1.CompareTo(p2)));
-            Assert.That(1, Is.EqualTo(p1.CompareTo(null)));
+            Assert.That(p1.CompareTo(p2), Is.EqualTo(1));
+            Assert.That(p1.CompareTo(null), Is.EqualTo(1));
 
-            Assert.That(1, Is.EqualTo(((IComparable)p1).CompareTo(p2)));
-            Assert.That(1, Is.EqualTo(((IComparable)p1).CompareTo(null)));
+            Assert.That(((IComparable)p1).CompareTo(p2), Is.EqualTo(1));
+            Assert.That(((IComparable)p1).CompareTo(null), Is.EqualTo(1));
 
             o1 = "Jason";
             o2 = "Wall";
@@ -123,20 +123,20 @@ namespace JMW.Differentials.Tests
             Assert.That(p1 == p2, Is.True);
             Assert.That(p1 == p2, Is.True);
 
-            Assert.That(0, Is.EqualTo(p1.CompareTo(p2)));
+            Assert.That(p1.CompareTo(p2), Is.EqualTo(0));
 
             o1 = "1Jason";
             p1 = new Pair<string, int>(o1, o2);
-            Assert.That(-1, Is.EqualTo(p1.CompareTo(p2)));
+            Assert.That(p1.CompareTo(p2), Is.EqualTo(-1));
             o1 = "Jason1";
             p1 = new Pair<string, int>(o1, o2);
-            Assert.That(1, Is.EqualTo(p1.CompareTo(p2)));
-            Assert.That(1, Is.EqualTo(p1.CompareTo(null)));
+            Assert.That(p1.CompareTo(p2), Is.EqualTo(1));
+            Assert.That(p1.CompareTo(null), Is.EqualTo(1));
 
-            Assert.That(1, Is.EqualTo(((IComparable)p1).CompareTo(p2)));
-            Assert.That(1, Is.EqualTo(((IComparable)p1).CompareTo(null)));
-            Assert.That(0, Is.EqualTo(new PairComparer<string, int>().Compare(null, null)));
-            Assert.That(1, Is.EqualTo(new PairComparer<string, int>().Compare(null, p2)));
+            Assert.That(((IComparable)p1).CompareTo(p2), Is.EqualTo(1));
+            Assert.That(((IComparable)p1).CompareTo(null), Is.EqualTo(1));
+            Assert.That(new PairComparer<string, int>().Compare(null, null), Is.EqualTo(0));
+            Assert.That(new PairComparer<string, int>().Compare(null, p2), Is.EqualTo(1));
 
             o1 = "Jason";
             o2 = 1;
@@ -227,9 +227,9 @@ namespace JMW.Differentials.Tests
             };
 
             var diff = Differential.RunCollectionDifferential(lst_a, lst_b, p => p.Foo);
-            Assert.That(2, Is.EqualTo(diff.OnlyInListA.Count));
-            Assert.That(2, Is.EqualTo(diff.OnlyInListB.Count));
-            Assert.That(2, Is.EqualTo(diff.Shared.Count));
+            Assert.That(diff.OnlyInListA.Count, Is.EqualTo(2));
+            Assert.That(diff.OnlyInListB.Count, Is.EqualTo(2));
+            Assert.That(diff.Shared.Count, Is.EqualTo(2));
         }
 
         [Test]
@@ -251,9 +251,9 @@ namespace JMW.Differentials.Tests
             };
 
             var diff = Differential.RunCollectionDifferential(lst_a, lst_b, p => p.Foo, p => p.Foo);
-            Assert.That(2, Is.EqualTo(diff.OnlyInListA.Count));
-            Assert.That(2, Is.EqualTo(diff.OnlyInListB.Count));
-            Assert.That(2, Is.EqualTo(diff.Shared.Count));
+            Assert.That(diff.OnlyInListA.Count, Is.EqualTo(2));
+            Assert.That(diff.OnlyInListB.Count, Is.EqualTo(2));
+            Assert.That(diff.Shared.Count, Is.EqualTo(2));
         }
     }
 

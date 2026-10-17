@@ -13,12 +13,12 @@ namespace JMW.Extensions.Tests
             var path = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "..","..","..","Extensions","lines.txt");
             using var r = new StreamReader(path);
             var last = r.Tail(5);
-            Assert.That(5, Is.EqualTo(last.Length));
-            Assert.That("foo bar 6", Is.EqualTo(last[0]));
-            Assert.That("foo bar 7", Is.EqualTo(last[1]));
-            Assert.That("foo bar 8", Is.EqualTo(last[2]));
-            Assert.That("foo bar 9", Is.EqualTo(last[3]));
-            Assert.That("foo bar 10", Is.EqualTo(last[4]));
+            Assert.That(last.Length, Is.EqualTo(5));
+            Assert.That(last[0], Is.EqualTo("foo bar 6"));
+            Assert.That(last[1], Is.EqualTo("foo bar 7"));
+            Assert.That(last[2], Is.EqualTo("foo bar 8"));
+            Assert.That(last[3], Is.EqualTo("foo bar 9"));
+            Assert.That(last[4], Is.EqualTo("foo bar 10"));
         }
 
         [TestCase("", 0, new string[0])]
@@ -48,12 +48,12 @@ namespace JMW.Extensions.Tests
             var path = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "..","..","..","Extensions","lines_long.txt");
             using var r = new StreamReader(path);
             var last = r.Tail(5);
-            Assert.That(5, Is.EqualTo(last.Length));
-            Assert.That("foo bar 6", Is.EqualTo(last[0]));
-            Assert.That("foo bar 7", Is.EqualTo(last[1]));
-            Assert.That("foo bar 8", Is.EqualTo(last[2]));
-            Assert.That("foo bar 9", Is.EqualTo(last[3]));
-            Assert.That("foo bar 10", Is.EqualTo(last[4]));
+            Assert.That(last.Length, Is.EqualTo(5));
+            Assert.That(last[0], Is.EqualTo("foo bar 6"));
+            Assert.That(last[1], Is.EqualTo("foo bar 7"));
+            Assert.That(last[2], Is.EqualTo("foo bar 8"));
+            Assert.That(last[3], Is.EqualTo("foo bar 9"));
+            Assert.That(last[4], Is.EqualTo("foo bar 10"));
         }
     }
 }

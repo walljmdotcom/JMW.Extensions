@@ -16,17 +16,17 @@ namespace JMW.Collections.Tests
             for (var i = 0; i < 15; i++)
                 buff.Add(i);
 
-            Assert.That(10, Is.EqualTo(buff.Count));
-            Assert.That(14, Is.EqualTo(buff.Last()));
+            Assert.That(buff.Count, Is.EqualTo(10));
+            Assert.That(buff.Last(), Is.EqualTo(14));
 
             var c = 5;
             foreach (var i in buff)
-                Assert.That(c++, Is.EqualTo(i));
+                Assert.That(i, Is.EqualTo(c++));
 
-            Assert.That(15, Is.EqualTo(c));
+            Assert.That(c, Is.EqualTo(15));
             Assert.That(buff.Contains(11), Is.True);
             buff.Clear();
-            Assert.That(0, Is.EqualTo(buff.Count));
+            Assert.That(buff.Count, Is.EqualTo(0));
             Assert.That(buff.IsReadOnly, Is.False);
         }
 
@@ -39,20 +39,20 @@ namespace JMW.Collections.Tests
 
             var c = 14;
             foreach (var i in buff)
-                Assert.That(c--, Is.EqualTo(i));
+                Assert.That(i, Is.EqualTo(c--));
 
-            Assert.That(4, Is.EqualTo(c));
-            Assert.That(10, Is.EqualTo(buff.Count));
+            Assert.That(c, Is.EqualTo(4));
+            Assert.That(buff.Count, Is.EqualTo(10));
         }
 
         [Test]
         public void RingBufferTest2()
         {
             var buff = new RingBuffer<int>([3, 4, 5, 6, 7, 8, 9, 10, 11, 12]);
-            Assert.That(10, Is.EqualTo(buff.Count));
+            Assert.That(buff.Count, Is.EqualTo(10));
             Assert.That(buff.Contains(11), Is.True);
             buff.Clear();
-            Assert.That(0, Is.EqualTo(buff.Count));
+            Assert.That(buff.Count, Is.EqualTo(0));
         }
 
         [Test]
@@ -62,50 +62,50 @@ namespace JMW.Collections.Tests
 
             var c = 12;
             foreach (var i in buff)
-                Assert.That(c--, Is.EqualTo(i));
-            Assert.That(2, Is.EqualTo(c));
-            Assert.That(10, Is.EqualTo(buff.Count));
+                Assert.That(i, Is.EqualTo(c--));
+            Assert.That(c, Is.EqualTo(2));
+            Assert.That(buff.Count, Is.EqualTo(10));
         }
 
         [Test]
         public void RingBufferTest4()
         {
             var buff = new RingBuffer<int>([3, 4, 5]);
-            Assert.That(5, Is.EqualTo(buff.Last()));
+            Assert.That(buff.Last(), Is.EqualTo(5));
             buff = new RingBuffer<int>([3, 4, 5], true);
-            Assert.That(3, Is.EqualTo(buff.Last()));
+            Assert.That(buff.Last(), Is.EqualTo(3));
 
             buff = new RingBuffer<int>(10, [3, 4, 5]);
-            Assert.That(5, Is.EqualTo(buff.Last()));
-            Assert.That(3, Is.EqualTo(buff.Count));
+            Assert.That(buff.Last(), Is.EqualTo(5));
+            Assert.That(buff.Count, Is.EqualTo(3));
 
             buff = new RingBuffer<int>(10, [3, 4, 5], true);
-            Assert.That(3, Is.EqualTo(buff.Last()));
+            Assert.That(buff.Last(), Is.EqualTo(3));
         }
 
         [Test]
         public void RingBufferTest5()
         {
             var buff = new RingBuffer<int>([3, 4, 5]);
-            Assert.That(5, Is.EqualTo(buff[2]));
-            Assert.That(4, Is.EqualTo(buff[1]));
-            Assert.That(3, Is.EqualTo(buff[0]));
-            Assert.That(3, Is.EqualTo(buff.First()));
-            Assert.That(5, Is.EqualTo(buff.Last()));
+            Assert.That(buff[2], Is.EqualTo(5));
+            Assert.That(buff[1], Is.EqualTo(4));
+            Assert.That(buff[0], Is.EqualTo(3));
+            Assert.That(buff.First(), Is.EqualTo(3));
+            Assert.That(buff.Last(), Is.EqualTo(5));
 
             buff.Add(6);
-            Assert.That(6, Is.EqualTo(buff[2]));
-            Assert.That(5, Is.EqualTo(buff[1]));
-            Assert.That(4, Is.EqualTo(buff[0]));
-            Assert.That(4, Is.EqualTo(buff.First()));
-            Assert.That(6, Is.EqualTo(buff.Last()));
+            Assert.That(buff[2], Is.EqualTo(6));
+            Assert.That(buff[1], Is.EqualTo(5));
+            Assert.That(buff[0], Is.EqualTo(4));
+            Assert.That(buff.First(), Is.EqualTo(4));
+            Assert.That(buff.Last(), Is.EqualTo(6));
 
             buff.Add(7);
-            Assert.That(7, Is.EqualTo(buff[2]));
-            Assert.That(6, Is.EqualTo(buff[1]));
-            Assert.That(5, Is.EqualTo(buff[0]));
-            Assert.That(5, Is.EqualTo(buff.First()));
-            Assert.That(7, Is.EqualTo(buff.Last()));
+            Assert.That(buff[2], Is.EqualTo(7));
+            Assert.That(buff[1], Is.EqualTo(6));
+            Assert.That(buff[0], Is.EqualTo(5));
+            Assert.That(buff.First(), Is.EqualTo(5));
+            Assert.That(buff.Last(), Is.EqualTo(7));
         }
 
         [TestCase(1, 1)]

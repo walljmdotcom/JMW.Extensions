@@ -29,8 +29,8 @@ namespace JMW.Extensions.Tests
             Assert.That(str == str.ParseToIndexOf("Str"));
             Assert.That(string.Empty == string.Empty.ParseToIndexOf("Str"));
             Assert.That("that" == "that".ParseToIndexOf());
-            Assert.That("that this is a test",Is.EqualTo( "that this is a testfoo blah foo blah foo ".ParseToIndexOf("blah", "foo")));
-            Assert.That("that this is a test", Is.EqualTo("that this is a testfoo blah foo blah foo ".ParseToIndexOf("foo", "blah")));
+            Assert.That("that this is a testfoo blah foo blah foo ".ParseToIndexOf("blah", "foo"), Is.EqualTo("that this is a test"));
+            Assert.That("that this is a testfoo blah foo blah foo ".ParseToIndexOf("foo", "blah"), Is.EqualTo("that this is a test"));
         }
 
         [Test]
@@ -43,8 +43,8 @@ namespace JMW.Extensions.Tests
             Assert.That(str == str.ParseToLastIndexOf("Str"));
             Assert.That(string.Empty == string.Empty.ParseToLastIndexOf("Str"));
             Assert.That("that" == "that".ParseToLastIndexOf());
-            Assert.That("that this is a test foo ", Is.EqualTo("that this is a test foo blah jason".ParseToLastIndexOf("blah", "foo")));
-            Assert.That("that this is a test foo ", Is.EqualTo("that this is a test foo blah jason".ParseToLastIndexOf("foo", "blah")));
+            Assert.That("that this is a test foo blah jason".ParseToLastIndexOf("blah", "foo"), Is.EqualTo("that this is a test foo "));
+            Assert.That("that this is a test foo blah jason".ParseToLastIndexOf("foo", "blah"), Is.EqualTo("that this is a test foo "));
         }
 
         [Test]
@@ -57,8 +57,8 @@ namespace JMW.Extensions.Tests
             Assert.That(str == str.ParseToIndexOf_PlusLength("Str"));
             Assert.That(string.Empty == string.Empty.ParseToIndexOf_PlusLength("Str"));
             Assert.That("that" == "that".ParseToIndexOf_PlusLength());
-            Assert.That("that this is a test foo", Is.EqualTo("that this is a test foo blah jason".ParseToIndexOf_PlusLength("blah", "foo")));
-            Assert.That("that this is a test foo", Is.EqualTo("that this is a test foo blah jason".ParseToIndexOf_PlusLength("foo", "blah")));
+            Assert.That("that this is a test foo blah jason".ParseToIndexOf_PlusLength("blah", "foo"), Is.EqualTo("that this is a test foo"));
+            Assert.That("that this is a test foo blah jason".ParseToIndexOf_PlusLength("foo", "blah"), Is.EqualTo("that this is a test foo"));
         }
 
         [Test]
@@ -71,8 +71,8 @@ namespace JMW.Extensions.Tests
             Assert.That(str == str.ParseToDesignatedIndexOf_PlusLength(1, false, "Str"));
             Assert.That(string.Empty == string.Empty.ParseToDesignatedIndexOf_PlusLength(1, false, "Str"));
             Assert.That("that" == "that".ParseToDesignatedIndexOf_PlusLength(1, false));
-            Assert.That("that this is a test foo", Is.EqualTo("that this is a test foo blah jason".ParseToDesignatedIndexOf_PlusLength(1, false, "blah", "foo")));
-            Assert.That("that this is a test foo", Is.EqualTo("that this is a test foo blah jason".ParseToDesignatedIndexOf_PlusLength(1, false, "foo", "blah")));
+            Assert.That("that this is a test foo blah jason".ParseToDesignatedIndexOf_PlusLength(1, false, "blah", "foo"), Is.EqualTo("that this is a test foo"));
+            Assert.That("that this is a test foo blah jason".ParseToDesignatedIndexOf_PlusLength(1, false, "foo", "blah"), Is.EqualTo("that this is a test foo"));
         }
 
         [Test]
@@ -85,8 +85,8 @@ namespace JMW.Extensions.Tests
             Assert.That(str == str.ParseToLastIndexOf_PlusLength("Str"));
             Assert.That(string.Empty == string.Empty.ParseToLastIndexOf_PlusLength("Str"));
             Assert.That("that" == "that".ParseToLastIndexOf_PlusLength());
-            Assert.That("that this is a test foo blah", Is.EqualTo("that this is a test foo blah jason".ParseToLastIndexOf_PlusLength("blah", "foo")));
-            Assert.That("that this is a test foo blah", Is.EqualTo("that this is a test foo blah jason".ParseToLastIndexOf_PlusLength("foo", "blah")));
+            Assert.That("that this is a test foo blah jason".ParseToLastIndexOf_PlusLength("blah", "foo"), Is.EqualTo("that this is a test foo blah"));
+            Assert.That("that this is a test foo blah jason".ParseToLastIndexOf_PlusLength("foo", "blah"), Is.EqualTo("that this is a test foo blah"));
         }
 
         [Test]
@@ -99,8 +99,8 @@ namespace JMW.Extensions.Tests
             Assert.That(str == str.ParseAfterIndexOf("Str"));
             Assert.That(string.Empty == string.Empty.ParseAfterIndexOf("Str"));
             Assert.That("that" == "that".ParseAfterIndexOf());
-            Assert.That("blah foo that this is a test", Is.EqualTo("jason blah foo that this is a test".ParseAfterIndexOf("blah", "foo")));
-            Assert.That("blah foo that this is a test", Is.EqualTo("jason blah foo that this is a test".ParseAfterIndexOf("foo", "blah")));
+            Assert.That("jason blah foo that this is a test".ParseAfterIndexOf("blah", "foo"), Is.EqualTo("blah foo that this is a test"));
+            Assert.That("jason blah foo that this is a test".ParseAfterIndexOf("foo", "blah"), Is.EqualTo("blah foo that this is a test"));
         }
 
         [Test]
@@ -113,8 +113,8 @@ namespace JMW.Extensions.Tests
             Assert.That(str == str.ParseAfterLastIndexOf("Str"));
             Assert.That(string.Empty == string.Empty.ParseAfterLastIndexOf("Str"));
             Assert.That("that" == "that".ParseAfterLastIndexOf());
-            Assert.That("foo that this is a test", Is.EqualTo("jason blah foo that this is a test".ParseAfterLastIndexOf("foo", "blah")));
-            Assert.That("foo that this is a test", Is.EqualTo("jason blah foo that this is a test".ParseAfterLastIndexOf("blah", "foo")));
+            Assert.That("jason blah foo that this is a test".ParseAfterLastIndexOf("foo", "blah"), Is.EqualTo("foo that this is a test"));
+            Assert.That("jason blah foo that this is a test".ParseAfterLastIndexOf("blah", "foo"), Is.EqualTo("foo that this is a test"));
         }
 
         [Test]
@@ -127,8 +127,8 @@ namespace JMW.Extensions.Tests
             Assert.That(str == str.ParseAfterIndexOf_PlusLength("Str"));
             Assert.That(string.Empty == string.Empty.ParseAfterIndexOf_PlusLength("Str"));
             Assert.That("that" == "that".ParseAfterIndexOf_PlusLength());
-            Assert.That(" blah that this is a test", Is.EqualTo("jason foo blah that this is a test".ParseAfterIndexOf_PlusLength("blah", "foo")));
-            Assert.That(" blah that this is a test", Is.EqualTo("jason foo blah that this is a test".ParseAfterIndexOf_PlusLength("foo", "blah")));
+            Assert.That("jason foo blah that this is a test".ParseAfterIndexOf_PlusLength("blah", "foo"), Is.EqualTo(" blah that this is a test"));
+            Assert.That("jason foo blah that this is a test".ParseAfterIndexOf_PlusLength("foo", "blah"), Is.EqualTo(" blah that this is a test"));
         }
 
         [Test]
@@ -141,8 +141,8 @@ namespace JMW.Extensions.Tests
             Assert.That(str == str.ParseAfterLastIndexOf_PlusLength("Str"));
             Assert.That(string.Empty == string.Empty.ParseAfterLastIndexOf_PlusLength("Str"));
             Assert.That("that" == "that".ParseAfterLastIndexOf_PlusLength());
-            Assert.That(" that this is a test", Is.EqualTo("jason foo blah that this is a test".ParseAfterLastIndexOf_PlusLength("blah", "foo")));
-            Assert.That(" that this is a test", Is.EqualTo("jason foo blah that this is a test".ParseAfterLastIndexOf_PlusLength("foo", "blah")));
+            Assert.That("jason foo blah that this is a test".ParseAfterLastIndexOf_PlusLength("blah", "foo"), Is.EqualTo(" that this is a test"));
+            Assert.That("jason foo blah that this is a test".ParseAfterLastIndexOf_PlusLength("foo", "blah"), Is.EqualTo(" that this is a test"));
         }
 
         [Test]
@@ -155,8 +155,8 @@ namespace JMW.Extensions.Tests
             Assert.That(str == str.ParseAfterDesignatedIndexOf_PlusLength(1, false, "Str"));
             Assert.That(string.Empty == string.Empty.ParseAfterDesignatedIndexOf_PlusLength(1, false, "Str"));
             Assert.That("that" == "that".ParseAfterDesignatedIndexOf_PlusLength(1, false));
-            Assert.That(" blah jason", Is.EqualTo("that this is a test foo blah jason".ParseAfterDesignatedIndexOf_PlusLength(1, false, "blah", "foo")));
-            Assert.That(" jason", Is.EqualTo("that this is a test foo blah jason".ParseAfterDesignatedIndexOf_PlusLength(2, false, "foo", "blah")));
+            Assert.That("that this is a test foo blah jason".ParseAfterDesignatedIndexOf_PlusLength(1, false, "blah", "foo"), Is.EqualTo(" blah jason"));
+            Assert.That("that this is a test foo blah jason".ParseAfterDesignatedIndexOf_PlusLength(2, false, "foo", "blah"), Is.EqualTo(" jason"));
         }
 
 
@@ -165,11 +165,11 @@ namespace JMW.Extensions.Tests
         {
             //        01234567890123456798012345647980123
             var str = "This is a string a string a string";
-            Assert.That(10, Is.EqualTo(str.IndexOf("STR", true, 1)));
-            Assert.That(10, Is.EqualTo(str.IndexOf("str", false, 1)));
+            Assert.That(str.IndexOf("STR", true, 1), Is.EqualTo(10));
+            Assert.That(str.IndexOf("str", false, 1), Is.EqualTo(10));
 
-            Assert.That(19, Is.EqualTo(str.IndexOf("STR", true, 2)));
-            Assert.That(19, Is.EqualTo(str.IndexOf("str", false, 2)));
+            Assert.That(str.IndexOf("STR", true, 2), Is.EqualTo(19));
+            Assert.That(str.IndexOf("str", false, 2), Is.EqualTo(19));
         }
 
         //          0         1         2         3
@@ -222,23 +222,23 @@ namespace JMW.Extensions.Tests
         public void ToLinesTest()
         {
             var str = "This is another\r\nThis is a string\r\n a string";
-            Assert.That(3, Is.EqualTo(str.ToLines().Count()));
+            Assert.That(str.ToLines().Count(), Is.EqualTo(3));
         }
 
         [Test]
         public void ContainsFastTest()
         {
             var str = "This is another\r\nThis is a string\r\n a string";
-            Assert.That(true, Is.EqualTo(str.ContainsFast('t')));
-            Assert.That(false, Is.EqualTo(str.ContainsFast('q')));
+            Assert.That(str.ContainsFast('t'), Is.EqualTo(true));
+            Assert.That(str.ContainsFast('q'), Is.EqualTo(false));
         }
 
         [Test]
         public void ToPascalCaseTest()
         {
             var str = "This is another";
-            Assert.That("ThisIsAnother", Is.EqualTo(str.ToPascalCase()));
-            Assert.That("This_IsAnother", Is.EqualTo("This _ is another".ToPascalCase()));
+            Assert.That(str.ToPascalCase(), Is.EqualTo("ThisIsAnother"));
+            Assert.That("This _ is another".ToPascalCase(), Is.EqualTo("This_IsAnother"));
         }
 
         [TestCase("", "")]

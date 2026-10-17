@@ -40,31 +40,31 @@ namespace JMW.Collections.Tests
         public void RangeTest2()
         {
             var rng = new IntegerRange(2, 6);
-            Assert.That(false, Is.EqualTo(rng.Contains(1)));
-            Assert.That(true, Is.EqualTo(rng.Contains(2)));
-            Assert.That(true, Is.EqualTo(rng.Contains(3)));
-            Assert.That(true, Is.EqualTo(rng.Contains(4)));
-            Assert.That(true, Is.EqualTo(rng.Contains(5)));
-            Assert.That(true, Is.EqualTo(rng.Contains(6)));
-            Assert.That(false, Is.EqualTo(rng.Contains(7)));
+            Assert.That(rng.Contains(1), Is.EqualTo(false));
+            Assert.That(rng.Contains(2), Is.EqualTo(true));
+            Assert.That(rng.Contains(3), Is.EqualTo(true));
+            Assert.That(rng.Contains(4), Is.EqualTo(true));
+            Assert.That(rng.Contains(5), Is.EqualTo(true));
+            Assert.That(rng.Contains(6), Is.EqualTo(true));
+            Assert.That(rng.Contains(7), Is.EqualTo(false));
 
-            Assert.That(true, Is.EqualTo(rng.Contains("5")));
+            Assert.That(rng.Contains("5"), Is.EqualTo(true));
 
-            Assert.That("2-6", Is.EqualTo(rng.ToString()));
-            Assert.That("2,3,4,5,6", Is.EqualTo(rng.GetNumbers().ToDelimitedString(',')));
+            Assert.That(rng.ToString(), Is.EqualTo("2-6"));
+            Assert.That(rng.GetNumbers().ToDelimitedString(','), Is.EqualTo("2,3,4,5,6"));
 
             rng = new IntegerRange
             {
                 Start = 2,
                 Stop = 6
             };
-            Assert.That(true, Is.EqualTo(rng.IntersectsWith("1,5")));
-            Assert.That(true, Is.EqualTo(rng.IntersectsWith("3:5")));
-            Assert.That(true, Is.EqualTo(rng.IntersectsWith("3-8")));
-            Assert.That(true, Is.EqualTo(rng.Contains(new IntegerRange(3, 5))));
-            Assert.That(true, Is.EqualTo(rng.Contains(new IntegerRange(2, 6))));
-            Assert.That(false, Is.EqualTo(rng.Contains(new IntegerRange(3, 8))));
-            Assert.That(false, Is.EqualTo(rng.Contains(new IntegerRange(1, 5))));
+            Assert.That(rng.IntersectsWith("1,5"), Is.EqualTo(true));
+            Assert.That(rng.IntersectsWith("3:5"), Is.EqualTo(true));
+            Assert.That(rng.IntersectsWith("3-8"), Is.EqualTo(true));
+            Assert.That(rng.Contains(new IntegerRange(3, 5)), Is.EqualTo(true));
+            Assert.That(rng.Contains(new IntegerRange(2, 6)), Is.EqualTo(true));
+            Assert.That(rng.Contains(new IntegerRange(3, 8)), Is.EqualTo(false));
+            Assert.That(rng.Contains(new IntegerRange(1, 5)), Is.EqualTo(false));
         }
 
         [TestCase(1, 10, 0, 20, false)]
@@ -283,37 +283,37 @@ namespace JMW.Collections.Tests
         public void RangeTest3()
         {
             var rng = new LongRange(2, 6);
-            Assert.That(false, Is.EqualTo(rng.Contains(1)));
-            Assert.That(true, Is.EqualTo(rng.Contains(2)));
-            Assert.That(true, Is.EqualTo(rng.Contains(3)));
-            Assert.That(true, Is.EqualTo(rng.Contains(4)));
-            Assert.That(true, Is.EqualTo(rng.Contains(5)));
-            Assert.That(true, Is.EqualTo(rng.Contains(6)));
-            Assert.That(false, Is.EqualTo(rng.Contains(7)));
-            Assert.That(true, Is.EqualTo(rng.Contains("5")));
-            Assert.That("2-6", Is.EqualTo(rng.ToString()));
-            Assert.That("2,3,4,5,6", Is.EqualTo(rng.GetNumbers().ToDelimitedString(',')));
+            Assert.That(rng.Contains(1), Is.EqualTo(false));
+            Assert.That(rng.Contains(2), Is.EqualTo(true));
+            Assert.That(rng.Contains(3), Is.EqualTo(true));
+            Assert.That(rng.Contains(4), Is.EqualTo(true));
+            Assert.That(rng.Contains(5), Is.EqualTo(true));
+            Assert.That(rng.Contains(6), Is.EqualTo(true));
+            Assert.That(rng.Contains(7), Is.EqualTo(false));
+            Assert.That(rng.Contains("5"), Is.EqualTo(true));
+            Assert.That(rng.ToString(), Is.EqualTo("2-6"));
+            Assert.That(rng.GetNumbers().ToDelimitedString(','), Is.EqualTo("2,3,4,5,6"));
 
             rng = new LongRange
             {
                 Start = 2,
                 Stop = 6
             };
-            Assert.That(true, Is.EqualTo(rng.IntersectsWith("1,5")));
-            Assert.That(true, Is.EqualTo(rng.IntersectsWith("3:5")));
-            Assert.That(true, Is.EqualTo(rng.IntersectsWith("3-8")));
+            Assert.That(rng.IntersectsWith("1,5"), Is.EqualTo(true));
+            Assert.That(rng.IntersectsWith("3:5"), Is.EqualTo(true));
+            Assert.That(rng.IntersectsWith("3-8"), Is.EqualTo(true));
 
             var rng1 = new LongRange(rng)
             {
                 Stop = 11,
                 Start = 6
             };
-            Assert.That(false, Is.EqualTo(rng1.IntersectsWith("1,5")));
-            Assert.That(true, Is.EqualTo(rng1.IntersectsWith("6:8")));
-            Assert.That(true, Is.EqualTo(rng1.IntersectsWith("3-15")));
-            Assert.That(false, Is.EqualTo(rng1.IntersectsWith("12-15")));
-            Assert.That(false, Is.EqualTo(rng.IntersectsWith("0-1")));
-            Assert.That(false, Is.EqualTo(rng.IntersectsWith("7-8")));
+            Assert.That(rng1.IntersectsWith("1,5"), Is.EqualTo(false));
+            Assert.That(rng1.IntersectsWith("6:8"), Is.EqualTo(true));
+            Assert.That(rng1.IntersectsWith("3-15"), Is.EqualTo(true));
+            Assert.That(rng1.IntersectsWith("12-15"), Is.EqualTo(false));
+            Assert.That(rng.IntersectsWith("0-1"), Is.EqualTo(false));
+            Assert.That(rng.IntersectsWith("7-8"), Is.EqualTo(false));
 
             try
             {
@@ -321,7 +321,7 @@ namespace JMW.Collections.Tests
             }
             catch (ArgumentException ex)
             {
-                Assert.That("Stop cannot be less than Start (Parameter 'rng')", Is.EqualTo(ex.Message));
+                Assert.That(ex.Message, Is.EqualTo("Stop cannot be less than Start (Parameter 'rng')"));
             }
         }
 
@@ -364,7 +364,7 @@ namespace JMW.Collections.Tests
             // assert
             Assert.That(foo.ToString(), Is.EqualTo("1-15,19"));
             foo.Clear();
-            Assert.That(0, Is.EqualTo(foo.Count));
+            Assert.That(foo.Count, Is.EqualTo(0));
 
             var foo1 = new LongRangeCollection("1-4,10,8, 12-15,19");
             foo1.AddRange(new List<LongRange> { new("3-9"), new("12-20") });
@@ -393,15 +393,15 @@ namespace JMW.Collections.Tests
 
             Assert.That(foo1.Contains("11"), Is.False);
             Assert.That(foo1.Contains("21"), Is.False);
-            Assert.That("1,2,3,4,5,6,7,8,9,10,12,13,14,15,16,17,18,19,20", Is.EqualTo(foo1.GetNumbers().ToDelimitedString(",")));
-            Assert.That("1,2,3,4,5,6,7,8,9,10,12,13,14,15,16,17,18,19,20", Is.EqualTo(IntegerRangeCollection.ExplodeRange("1-10,12-20").ToDelimitedString(",")));
-            Assert.That(true, Is.EqualTo(foo1.IntersectsWith(new LongRange(0, 8))));
-            Assert.That(true, Is.EqualTo(foo1.IntersectsWith(new LongRange(0, 30))));
-            Assert.That(true, Is.EqualTo(foo1.IntersectsWith(new LongRange(17, 30))));
-            Assert.That(true, Is.EqualTo(foo1.IntersectsWith(new LongRange(0, 5))));
-            Assert.That(true, Is.EqualTo(foo1.IntersectsWith(new LongRange(5, 15))));
-            Assert.That(false, Is.EqualTo(foo1.IntersectsWith(new LongRange(21, 22))));
-            Assert.That(false, Is.EqualTo(foo1.IntersectsWith(new LongRange(-3, 0))));
+            Assert.That(foo1.GetNumbers().ToDelimitedString(","), Is.EqualTo("1,2,3,4,5,6,7,8,9,10,12,13,14,15,16,17,18,19,20"));
+            Assert.That(IntegerRangeCollection.ExplodeRange("1-10,12-20").ToDelimitedString(","), Is.EqualTo("1,2,3,4,5,6,7,8,9,10,12,13,14,15,16,17,18,19,20"));
+            Assert.That(foo1.IntersectsWith(new LongRange(0, 8)), Is.EqualTo(true));
+            Assert.That(foo1.IntersectsWith(new LongRange(0, 30)), Is.EqualTo(true));
+            Assert.That(foo1.IntersectsWith(new LongRange(17, 30)), Is.EqualTo(true));
+            Assert.That(foo1.IntersectsWith(new LongRange(0, 5)), Is.EqualTo(true));
+            Assert.That(foo1.IntersectsWith(new LongRange(5, 15)), Is.EqualTo(true));
+            Assert.That(foo1.IntersectsWith(new LongRange(21, 22)), Is.EqualTo(false));
+            Assert.That(foo1.IntersectsWith(new LongRange(-3, 0)), Is.EqualTo(false));
 
             foo = new IntegerRangeCollection("1-4,10,8, 12-15,19");
             foo.AddRange(new List<string> { "3-6", "11", "35" });

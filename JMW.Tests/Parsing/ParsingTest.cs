@@ -120,10 +120,10 @@ start
             output += o["jason"] + "|" + o["wall"] + ";";
         }
 
-        Assert.That("is is 0 a |start\n this;is is 1 foo|\n this;is is 2 foo|\n this;is is 3 foo|\n this;is is 4 foo|\n this;is is 5 foo|\n this;", Is.EqualTo(output));
+        Assert.That(output, Is.EqualTo("is is 0 a |start\n this;is is 1 foo|\n this;is is 2 foo|\n this;is is 3 foo|\n this;is is 4 foo|\n this;is is 5 foo|\n this;"));
         var items = ((Paragraph)i).Parse((StreamReader?)null).ToList();
 
-        Assert.That(0, Is.EqualTo(items.Count));
+        Assert.That(items.Count, Is.EqualTo(0));
 
         output = string.Empty;
 
@@ -135,7 +135,7 @@ start
                 output += o[2] + "|" + o[1] + ";";
             }
         }
-        Assert.That("is is 0 a |start\n this;is is 1 foo|\n this;is is 2 foo|\n this;is is 3 foo|\n this;is is 4 foo|\n this;is is 5 foo|\n this;", Is.EqualTo(output));
+        Assert.That(output, Is.EqualTo("is is 0 a |start\n this;is is 1 foo|\n this;is is 2 foo|\n this;is is 3 foo|\n this;is is 4 foo|\n this;is is 5 foo|\n this;"));
     }
 
     [Test]
@@ -211,7 +211,7 @@ free  bird is   awesome
             output += o[0] + ";";
         }
 
-        Assert.That("Wall;is;bird;", Is.EqualTo(output));
+        Assert.That(output, Is.EqualTo("Wall;is;bird;"));
     }
 
     [Test]
@@ -243,7 +243,7 @@ free  bird is   awesome
             output += o["C1"] + ";";
         }
 
-        Assert.That("Wall;is;bird;", Is.EqualTo(output));
+        Assert.That(output, Is.EqualTo("Wall;is;bird;"));
     }
 
     [Test]
@@ -277,7 +277,7 @@ free  bird  is   awesome
             output += o["C1"] + ";";
         }
 
-        Assert.That(" is   ;bird  ;", Is.EqualTo(output));
+        Assert.That(output, Is.EqualTo(" is   ;bird  ;"));
     }
 
     [Test]
@@ -322,10 +322,10 @@ this  is   a    row
                 output += o[0] + ";";
             }
         }
-        Assert.That("Wall;is;bird;", Is.EqualTo(output));
+        Assert.That(output, Is.EqualTo("Wall;is;bird;"));
         var items = ((Table)i).Parse((StreamReader?)null).ToList();
 
-        Assert.That(0, Is.EqualTo(items.Count));
+        Assert.That(items.Count, Is.EqualTo(0));
     }
 
     [Test]
@@ -396,15 +396,15 @@ this  is   a    row
 free  bird is   awesome
 ".ToLines().ToList();
         var pos = Table.DeriveColumnPositions(text);
-        Assert.That(0, Is.EqualTo(pos.Positions["Jason"].Start));
-        Assert.That(6, Is.EqualTo(pos.Positions["Wall"].Start));
-        Assert.That(11, Is.EqualTo(pos.Positions["Col1"].Start));
-        Assert.That(16, Is.EqualTo(pos.Positions["Col2"].Start));
-        Assert.That(6, Is.EqualTo(pos.Positions["Jason"].Length));
-        Assert.That(5, Is.EqualTo(pos.Positions["Wall"].Length));
-        Assert.That(5, Is.EqualTo(pos.Positions["Col1"].Length));
-        Assert.That(-1, Is.EqualTo(pos.Positions["Col2"].Length));
-        Assert.That(4, Is.EqualTo(pos.Positions.Count));
+        Assert.That(pos.Positions["Jason"].Start, Is.EqualTo(0));
+        Assert.That(pos.Positions["Wall"].Start, Is.EqualTo(6));
+        Assert.That(pos.Positions["Col1"].Start, Is.EqualTo(11));
+        Assert.That(pos.Positions["Col2"].Start, Is.EqualTo(16));
+        Assert.That(pos.Positions["Jason"].Length, Is.EqualTo(6));
+        Assert.That(pos.Positions["Wall"].Length, Is.EqualTo(5));
+        Assert.That(pos.Positions["Col1"].Length, Is.EqualTo(5));
+        Assert.That(pos.Positions["Col2"].Length, Is.EqualTo(-1));
+        Assert.That(pos.Positions.Count, Is.EqualTo(4));
     }
 
     [Test]
@@ -416,15 +416,15 @@ this  is   a    row
 free  bird is   awesome
 ".ToLines().ToList();
         var pos = Table.DeriveColumnPositions(text, true);
-        Assert.That(0, Is.EqualTo(pos.Positions["Jason"].Start));
-        Assert.That(6, Is.EqualTo(pos.Positions["Wall"].Start));
-        Assert.That(11, Is.EqualTo(pos.Positions["Col1"].Start));
-        Assert.That(16, Is.EqualTo(pos.Positions["Col2"].Start));
-        Assert.That(6, Is.EqualTo(pos.Positions["Jason"].Length));
-        Assert.That(5, Is.EqualTo(pos.Positions["Wall"].Length));
-        Assert.That(5, Is.EqualTo(pos.Positions["Col1"].Length));
-        Assert.That(-1, Is.EqualTo(pos.Positions["Col2"].Length));
-        Assert.That(4, Is.EqualTo(pos.Positions.Count));
+        Assert.That(pos.Positions["Jason"].Start, Is.EqualTo(0));
+        Assert.That(pos.Positions["Wall"].Start, Is.EqualTo(6));
+        Assert.That(pos.Positions["Col1"].Start, Is.EqualTo(11));
+        Assert.That(pos.Positions["Col2"].Start, Is.EqualTo(16));
+        Assert.That(pos.Positions["Jason"].Length, Is.EqualTo(6));
+        Assert.That(pos.Positions["Wall"].Length, Is.EqualTo(5));
+        Assert.That(pos.Positions["Col1"].Length, Is.EqualTo(5));
+        Assert.That(pos.Positions["Col2"].Length, Is.EqualTo(-1));
+        Assert.That(pos.Positions.Count, Is.EqualTo(4));
     }
 
     [Test]
@@ -436,15 +436,15 @@ this  is      the  row
 free  bird  is    awesome
 ".ToLines().ToList();
         var pos = Table.DeriveColumnPositions(text, true);
-        Assert.That(0, Is.EqualTo(pos.Positions["Jason"].Start));
-        Assert.That(6, Is.EqualTo(pos.Positions["Wall"].Start));
-        Assert.That(11, Is.EqualTo(pos.Positions["Col1"].Start));
-        Assert.That(18, Is.EqualTo(pos.Positions["Col2"].Start));
-        Assert.That(6, Is.EqualTo(pos.Positions["Jason"].Length));
-        Assert.That(5, Is.EqualTo(pos.Positions["Wall"].Length));
-        Assert.That(7, Is.EqualTo(pos.Positions["Col1"].Length));
-        Assert.That(-1, Is.EqualTo(pos.Positions["Col2"].Length));
-        Assert.That(4, Is.EqualTo(pos.Positions.Count));
+        Assert.That(pos.Positions["Jason"].Start, Is.EqualTo(0));
+        Assert.That(pos.Positions["Wall"].Start, Is.EqualTo(6));
+        Assert.That(pos.Positions["Col1"].Start, Is.EqualTo(11));
+        Assert.That(pos.Positions["Col2"].Start, Is.EqualTo(18));
+        Assert.That(pos.Positions["Jason"].Length, Is.EqualTo(6));
+        Assert.That(pos.Positions["Wall"].Length, Is.EqualTo(5));
+        Assert.That(pos.Positions["Col1"].Length, Is.EqualTo(7));
+        Assert.That(pos.Positions["Col2"].Length, Is.EqualTo(-1));
+        Assert.That(pos.Positions.Count, Is.EqualTo(4));
         Assert.That(pos.Positions["Jason"].GetColumnValue("this  is      the  row"), Is.EqualTo("this  "));
         Assert.That(pos.Positions["Wall"].GetColumnValue("this  is      the  row"), Is.EqualTo("is   "));
         Assert.That(pos.Positions["Col1"].GetColumnValue("this  is      the  row"), Is.EqualTo("   the "));
@@ -466,20 +466,20 @@ this      is      the    row
 free      bird   is      awesome
 ".ToLines().ToList();
         var pos = Table.DeriveColumnPositions(text, true);
-        Assert.That(0, Is.EqualTo(pos.Positions["The Jason"].Start));
-        Assert.That(10, Is.EqualTo(pos.Positions["The Jason"].Length));
+        Assert.That(pos.Positions["The Jason"].Start, Is.EqualTo(0));
+        Assert.That(pos.Positions["The Jason"].Length, Is.EqualTo(10));
 
-        Assert.That(10, Is.EqualTo(pos.Positions["Wall 1"].Start));
-        Assert.That(7, Is.EqualTo(pos.Positions["Wall 1"].Length));
+        Assert.That(pos.Positions["Wall 1"].Start, Is.EqualTo(10));
+        Assert.That(pos.Positions["Wall 1"].Length, Is.EqualTo(7));
 
-        Assert.That(17, Is.EqualTo(pos.Positions["Col 1"].Start));
-        Assert.That(7, Is.EqualTo(pos.Positions["Col 1"].Length));
+        Assert.That(pos.Positions["Col 1"].Start, Is.EqualTo(17));
+        Assert.That(pos.Positions["Col 1"].Length, Is.EqualTo(7));
 
-        Assert.That(24, Is.EqualTo(pos.Positions["Col 11"].Start));
-        Assert.That(-1, Is.EqualTo(pos.Positions["Col 11"].Length));
+        Assert.That(pos.Positions["Col 11"].Start, Is.EqualTo(24));
+        Assert.That(pos.Positions["Col 11"].Length, Is.EqualTo(-1));
 
-        Assert.That(4, Is.EqualTo(pos.Positions.Count));
-        Assert.That(" the   ", Is.EqualTo(pos.Positions["Col 1"].GetColumnValue("this      is      the    row")));
+        Assert.That(pos.Positions.Count, Is.EqualTo(4));
+        Assert.That(pos.Positions["Col 1"].GetColumnValue("this      is      the    row"), Is.EqualTo(" the   "));
     }
 
     [Test]
@@ -528,8 +528,8 @@ free      bird   is      awesome
                     include_start: 'true'
                 }";
         var inc = new Include(new Parser().Parse(exp_text).First());
-        Assert.That(true, Is.EqualTo(inc.IncludeStart));
-        Assert.That(true, Is.EqualTo(inc.IncludeStop));
+        Assert.That(inc.IncludeStart, Is.EqualTo(true));
+        Assert.That(inc.IncludeStop, Is.EqualTo(true));
     }
 
     [Test]
@@ -1134,50 +1134,50 @@ free      bird   is      awesome
     public void Extractor_After()
     {
         var ext = new After(["foo"], "i", -1);
-        Assert.That("foo blah ", Is.EqualTo(ext.Parse("blah foo blah ")));
+        Assert.That(ext.Parse("blah foo blah "), Is.EqualTo("foo blah "));
 
         ext = new After(["foo"], "iw", -1);
-        Assert.That(" blah ", Is.EqualTo(ext.Parse("blah Foo blah ")));
+        Assert.That(ext.Parse("blah Foo blah "), Is.EqualTo(" blah "));
         ext = new After(["foo"], "iwt", -1);
-        Assert.That("blah", Is.EqualTo(ext.Parse("blah Foo blah ")));
+        Assert.That(ext.Parse("blah Foo blah "), Is.EqualTo("blah"));
         ext = new After(["foo"], "iwtl", -1);
-        Assert.That("what", Is.EqualTo(ext.Parse("blah Foo blah foo what ")));
+        Assert.That(ext.Parse("blah Foo blah foo what "), Is.EqualTo("what"));
 
         ext = new After(["foo"], "iwtl", 2);
-        Assert.That("what foo ho", Is.EqualTo(ext.Parse("blah Foo blah foo what foo ho ")));
+        Assert.That(ext.Parse("blah Foo blah foo what foo ho "), Is.EqualTo("what foo ho"));
     }
 
     [Test]
     public void Extractor_To()
     {
         var ext = new To(["foo"], "i", -1);
-        Assert.That("blah ", Is.EqualTo(ext.Parse("blah foo blah ")));
+        Assert.That(ext.Parse("blah foo blah "), Is.EqualTo("blah "));
 
         ext = new To(["foo"], "iw", -1);
-        Assert.That("blah Foo", Is.EqualTo(ext.Parse("blah Foo blah ")));
+        Assert.That(ext.Parse("blah Foo blah "), Is.EqualTo("blah Foo"));
         ext = new To(["foo"], "iwt", -1);
-        Assert.That("blah Foo", Is.EqualTo(ext.Parse("blah Foo blah ")));
+        Assert.That(ext.Parse("blah Foo blah "), Is.EqualTo("blah Foo"));
         ext = new To(["foo"], "iwtl", -1);
-        Assert.That("blah Foo blah foo", Is.EqualTo(ext.Parse("blah Foo blah foo what ")));
+        Assert.That(ext.Parse("blah Foo blah foo what "), Is.EqualTo("blah Foo blah foo"));
 
         ext = new To(["foo"], "iwtl", 2);
-        Assert.That("blah Foo blah foo", Is.EqualTo(ext.Parse("blah Foo blah foo what foo ho ")));
+        Assert.That(ext.Parse("blah Foo blah foo what foo ho "), Is.EqualTo("blah Foo blah foo"));
     }
 
     [Test]
     public void Extractor_Split()
     {
         var ext = new Split(["foo"], "i", 0);
-        Assert.That("blah ", Is.EqualTo(ext.Parse("blah foo blue ")));
+        Assert.That(ext.Parse("blah foo blue "), Is.EqualTo("blah "));
         ext = new Split(["foo"], "it", 1);
-        Assert.That("blue", Is.EqualTo(ext.Parse("blah Foo blue ")));
+        Assert.That(ext.Parse("blah Foo blue "), Is.EqualTo("blue"));
         ext = new Split(["foo"], "ir", 1);
-        Assert.That(" blue ", Is.EqualTo(ext.Parse("blah foofoo blue ")));
+        Assert.That(ext.Parse("blah foofoo blue "), Is.EqualTo(" blue "));
 
         try
         {
             ext = new Split(["foo"], "", -1);
-            Assert.That(" blue ", Is.EqualTo(ext.Parse("blah foofoo blue ")));
+            Assert.That(ext.Parse("blah foofoo blue "), Is.EqualTo(" blue "));
             Assert.Fail();
         }
         catch (ArgumentException)
@@ -1231,7 +1231,7 @@ free      bird   is      awesome
             Start = 8,
             Length = 4
         });
-        Assert.That("Wall", Is.EqualTo(ext.Parse("  Jason Wall ")));
+        Assert.That(ext.Parse("  Jason Wall "), Is.EqualTo("Wall"));
 
         var exp_text = @" col {
                                         i:""1"" #optional
@@ -1255,7 +1255,7 @@ free      bird   is      awesome
             Start = 8,
             Length = 4
         });
-        Assert.That("Wall", Is.EqualTo(ext.Parse("  Jason Wall ")));
+        Assert.That(ext.Parse("  Jason Wall "), Is.EqualTo("Wall"));
 
         try
         {
@@ -1297,21 +1297,21 @@ free      bird   is      awesome
             Start = 5,
             Length = 5
         };
-        Assert.That("Jason: 5-9", Is.EqualTo(ext.ToString()));
+        Assert.That(ext.ToString(), Is.EqualTo("Jason: 5-9"));
         ext.Start = 5;
         ext.Length = -1;
-        Assert.That("Jason: 5", Is.EqualTo(ext.ToString()));
+        Assert.That(ext.ToString(), Is.EqualTo("Jason: 5"));
         ext.Start = 5;
         ext.Length = 0;
-        Assert.That("Jason: 5-5", Is.EqualTo(ext.ToString()));
+        Assert.That(ext.ToString(), Is.EqualTo("Jason: 5-5"));
 
-        Assert.That("", Is.EqualTo(ext.GetColumnValue("test")));
+        Assert.That(ext.GetColumnValue("test"), Is.EqualTo(""));
         ext.Start = 5;
         ext.Length = 2;
-        Assert.That("56", Is.EqualTo(ext.GetColumnValue("0123456789")));
+        Assert.That(ext.GetColumnValue("0123456789"), Is.EqualTo("56"));
         ext.Start = 5;
         ext.Length = 20;
-        Assert.That("56789", Is.EqualTo(ext.GetColumnValue("0123456789")));
+        Assert.That(ext.GetColumnValue("0123456789"), Is.EqualTo("56789"));
     }
 
     // Parsing runs on a worker task so a tokenizer that loops forever fails the test instead of hanging the run.

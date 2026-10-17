@@ -9,164 +9,164 @@ namespace JMW.Extensions.Tests
         [Test]
         public void ToInt32Test()
         {
-            "12".MaybeToInt32().Do(v => Assert.That(12, Is.EqualTo(v)), null);
+            "12".MaybeToInt32().Do(v => Assert.That(v, Is.EqualTo(12)), null);
             "blah".MaybeToInt32().Do(null,
                 v =>
                 {
-                    Assert.That(typeof(ArgumentException), Is.EqualTo(v.GetType()));
+                    Assert.That(v.GetType(), Is.EqualTo(typeof(ArgumentException)));
                 });
 
             var v1 = "12".MaybeToInt32().Do(val => val, null);
             var v2 = "blah".MaybeToInt32().Do(null, val => -1);
 
-            Assert.That(12, Is.EqualTo(v1));
-            Assert.That(-1, Is.EqualTo(v2));
+            Assert.That(v1, Is.EqualTo(12));
+            Assert.That(v2, Is.EqualTo(-1));
         }
 
         [Test]
         public void ToInt16Test()
         {
-            "12".MaybeToInt16().Do(v => Assert.That(12, Is.EqualTo(v)), null);
+            "12".MaybeToInt16().Do(v => Assert.That(v, Is.EqualTo(12)), null);
             "blah".MaybeToInt16().Do(null,
                 v =>
                 {
-                    Assert.That(typeof(ArgumentException), Is.EqualTo(v.GetType()));
+                    Assert.That(v.GetType(), Is.EqualTo(typeof(ArgumentException)));
                 });
 
             var v1 = "12".MaybeToInt16().Do(val => val, null);
             var v2 = "blah".MaybeToInt16().Do(null, val => -1);
 
-            Assert.That(12, Is.EqualTo(v1));
-            Assert.That(-1, Is.EqualTo(v2));
+            Assert.That(v1, Is.EqualTo(12));
+            Assert.That(v2, Is.EqualTo(-1));
         }
 
         [Test]
         public void ToInt64Test()
         {
-            "12".MaybeToInt64().Do(v => Assert.That(12, Is.EqualTo(v)), null);
+            "12".MaybeToInt64().Do(v => Assert.That(v, Is.EqualTo(12)), null);
             "blah".MaybeToInt64().Do(null,
                 v =>
                 {
-                    Assert.That(typeof(ArgumentException), Is.EqualTo(v.GetType()));
+                    Assert.That(v.GetType(), Is.EqualTo(typeof(ArgumentException)));
                 });
 
             var v1 = "12".MaybeToInt64().Do(val => val, null);
             var v2 = "blah".MaybeToInt64().Do(null, val => -1);
 
-            Assert.That(12, Is.EqualTo(v1));
-            Assert.That(-1, Is.EqualTo(v2));
+            Assert.That(v1, Is.EqualTo(12));
+            Assert.That(v2, Is.EqualTo(-1));
         }
 
         [Test]
         public void ToUInt32Test()
         {
-            "12".MaybeToUInt32().Do(v => Assert.That(12, Is.EqualTo(v)), null);
+            "12".MaybeToUInt32().Do(v => Assert.That(v, Is.EqualTo(12)), null);
             "blah".MaybeToUInt32().Do(null,
                 v =>
                 {
-                    Assert.That(typeof(ArgumentException), Is.EqualTo(v.GetType()));
+                    Assert.That(v.GetType(), Is.EqualTo(typeof(ArgumentException)));
                 });
 
             var v1 = "12".MaybeToUInt32().Do(val => val, null);
             var v2 = "blah".MaybeToUInt32().Do(null, val => 0);
 
-            Assert.That(12, Is.EqualTo(v1));
-            Assert.That(0, Is.EqualTo(v2));
+            Assert.That(v1, Is.EqualTo(12));
+            Assert.That(v2, Is.EqualTo(0));
         }
 
         [Test]
         public void ToUInt16Test()
         {
-            "12".MaybeToUInt16().Do(v => Assert.That(12, Is.EqualTo(v)), null);
+            "12".MaybeToUInt16().Do(v => Assert.That(v, Is.EqualTo(12)), null);
             "blah".MaybeToUInt16().Do(null,
                 v =>
                 {
-                    Assert.That(typeof(ArgumentException), Is.EqualTo(v.GetType()));
+                    Assert.That(v.GetType(), Is.EqualTo(typeof(ArgumentException)));
                 });
 
             var v1 = "12".MaybeToUInt16().Do(val => val, null);
             var v2 = "blah".MaybeToUInt16().Do(null, val => 0);
 
-            Assert.That(12, Is.EqualTo(v1));
-            Assert.That(0, Is.EqualTo(v2));
+            Assert.That(v1, Is.EqualTo(12));
+            Assert.That(v2, Is.EqualTo(0));
         }
 
         [Test]
         public void ToUInt64Test()
         {
-            "12".MaybeToUInt64().Do(v => Assert.That(12, Is.EqualTo(v)), null);
+            "12".MaybeToUInt64().Do(v => Assert.That(v, Is.EqualTo(12)), null);
             "blah".MaybeToUInt64().Do(null,
                 v =>
                 {
-                    Assert.That(typeof(ArgumentException), Is.EqualTo(v.GetType()));
+                    Assert.That(v.GetType(), Is.EqualTo(typeof(ArgumentException)));
                 });
 
             var v1 = "12".MaybeToUInt64().Do(val => val, null);
             var v2 = "blah".MaybeToUInt64().Do(null, val => 0);
 
-            Assert.That(12, Is.EqualTo(v1));
-            Assert.That(0, Is.EqualTo(v2));
+            Assert.That(v1, Is.EqualTo(12));
+            Assert.That(v2, Is.EqualTo(0));
         }
 
         [Test]
         public void ToDecimalTest()
         {
-            "12".MaybeToDecimal().Do(v => Assert.That(12, Is.EqualTo(v)), null);
+            "12".MaybeToDecimal().Do(v => Assert.That(v, Is.EqualTo(12)), null);
             "blah".MaybeToDecimal().Do(null,
                 v =>
                 {
-                    Assert.That(typeof(ArgumentException), Is.EqualTo(v.GetType()));
+                    Assert.That(v.GetType(), Is.EqualTo(typeof(ArgumentException)));
                 });
 
             var v1 = "12".MaybeToDecimal().Do(val => val, null);
             var v2 = "blah".MaybeToDecimal().Do(null, val => -1);
 
-            Assert.That(12, Is.EqualTo(v1));
-            Assert.That(-1, Is.EqualTo(v2));
+            Assert.That(v1, Is.EqualTo(12));
+            Assert.That(v2, Is.EqualTo(-1));
         }
 
         [Test]
         public void ToFloatTest()
         {
-            "12".MaybeToFloat().Do(v => Assert.That(12, Is.EqualTo(v)), null);
+            "12".MaybeToFloat().Do(v => Assert.That(v, Is.EqualTo(12)), null);
             "blah".MaybeToFloat().Do(null,
                 v =>
                 {
-                    Assert.That(typeof(ArgumentException), Is.EqualTo(v.GetType()));
+                    Assert.That(v.GetType(), Is.EqualTo(typeof(ArgumentException)));
                 });
 
             var v1 = "12".MaybeToFloat().Do(val => val, null);
             var v2 = "blah".MaybeToFloat().Do(null, val => -1);
 
-            Assert.That(12, Is.EqualTo(v1));
-            Assert.That(-1, Is.EqualTo(v2));
+            Assert.That(v1, Is.EqualTo(12));
+            Assert.That(v2, Is.EqualTo(-1));
         }
 
         [Test]
         public void ToDoubleTest()
         {
-            "12".MaybeToDouble().Do(v => Assert.That(12, Is.EqualTo(v)), null);
+            "12".MaybeToDouble().Do(v => Assert.That(v, Is.EqualTo(12)), null);
             "blah".MaybeToDouble().Do(null,
                 v =>
                 {
-                    Assert.That(typeof(ArgumentException), Is.EqualTo(v.GetType()));
+                    Assert.That(v.GetType(), Is.EqualTo(typeof(ArgumentException)));
                 });
 
             var v1 = "12".MaybeToDouble().Do(val => val, null);
             var v2 = "blah".MaybeToDouble().Do(null, val => -1);
 
-            Assert.That(12, Is.EqualTo(v1));
-            Assert.That(-1, Is.EqualTo(v2));
+            Assert.That(v1, Is.EqualTo(12));
+            Assert.That(v2, Is.EqualTo(-1));
         }
 
         [Test]
         public void ToBooleanTest()
         {
-            "1".MaybeToBoolean().Do(v => Assert.That(true, Is.EqualTo(v)), null);
+            "1".MaybeToBoolean().Do(v => Assert.That(v, Is.EqualTo(true)), null);
             "blah".MaybeToBoolean().Do(null,
                 v =>
                 {
-                    Assert.That(typeof(ArgumentException), Is.EqualTo(v.GetType()));
+                    Assert.That(v.GetType(), Is.EqualTo(typeof(ArgumentException)));
                 });
 
             var v1 = "1".MaybeToBoolean().Do(val => val, null);
@@ -196,32 +196,32 @@ namespace JMW.Extensions.Tests
             var v24 = "f".MaybeToBoolean().Do(val => val, null);
             var v25 = "F".MaybeToBoolean().Do(val => val, null);
 
-            Assert.That(true, Is.EqualTo(v1));
-            Assert.That(true, Is.EqualTo(v2));
-            Assert.That(true, Is.EqualTo(v3));
-            Assert.That(true, Is.EqualTo(v4));
-            Assert.That(true, Is.EqualTo(v5));
-            Assert.That(true, Is.EqualTo(v6));
-            Assert.That(true, Is.EqualTo(v7));
-            Assert.That(true, Is.EqualTo(v8));
-            Assert.That(true, Is.EqualTo(v9));
-            Assert.That(true, Is.EqualTo(v10));
-            Assert.That(true, Is.EqualTo(v11));
-            Assert.That(true, Is.EqualTo(v12));
+            Assert.That(v1, Is.EqualTo(true));
+            Assert.That(v2, Is.EqualTo(true));
+            Assert.That(v3, Is.EqualTo(true));
+            Assert.That(v4, Is.EqualTo(true));
+            Assert.That(v5, Is.EqualTo(true));
+            Assert.That(v6, Is.EqualTo(true));
+            Assert.That(v7, Is.EqualTo(true));
+            Assert.That(v8, Is.EqualTo(true));
+            Assert.That(v9, Is.EqualTo(true));
+            Assert.That(v10, Is.EqualTo(true));
+            Assert.That(v11, Is.EqualTo(true));
+            Assert.That(v12, Is.EqualTo(true));
 
-            Assert.That(false, Is.EqualTo(v13));
-            Assert.That(false, Is.EqualTo(v14));
-            Assert.That(false, Is.EqualTo(v15));
-            Assert.That(false, Is.EqualTo(v16));
-            Assert.That(false, Is.EqualTo(v17));
-            Assert.That(false, Is.EqualTo(v18));
-            Assert.That(false, Is.EqualTo(v19));
-            Assert.That(false, Is.EqualTo(v20));
-            Assert.That(false, Is.EqualTo(v21));
-            Assert.That(false, Is.EqualTo(v22));
-            Assert.That(false, Is.EqualTo(v23));
-            Assert.That(false, Is.EqualTo(v24));
-            Assert.That(false, Is.EqualTo(v25));
+            Assert.That(v13, Is.EqualTo(false));
+            Assert.That(v14, Is.EqualTo(false));
+            Assert.That(v15, Is.EqualTo(false));
+            Assert.That(v16, Is.EqualTo(false));
+            Assert.That(v17, Is.EqualTo(false));
+            Assert.That(v18, Is.EqualTo(false));
+            Assert.That(v19, Is.EqualTo(false));
+            Assert.That(v20, Is.EqualTo(false));
+            Assert.That(v21, Is.EqualTo(false));
+            Assert.That(v22, Is.EqualTo(false));
+            Assert.That(v23, Is.EqualTo(false));
+            Assert.That(v24, Is.EqualTo(false));
+            Assert.That(v25, Is.EqualTo(false));
         }
     }
 }

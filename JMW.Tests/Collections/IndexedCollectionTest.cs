@@ -170,8 +170,8 @@ namespace JMW.Collections.Tests
                     .With.Message.EqualTo("Operation was cancelled due to an index violation. The Index may have been violated.")
             );
 
-            Assert.That(1,Is.EqualTo(cnt));
-            Assert.That("Value violated index 'Bar' using key 'wall'", Is.EqualTo(msg));
+            Assert.That(cnt, Is.EqualTo(1));
+            Assert.That(msg, Is.EqualTo("Value violated index 'Bar' using key 'wall'"));
         }
 
         private static IndexedCollection<Foo> TwoFoos()
