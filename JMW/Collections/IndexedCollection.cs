@@ -61,7 +61,7 @@ namespace JMW.Collections
         private readonly Dictionary<string, Dictionary<string, T>> _uniqueIndexCollection = new(StringComparer.Ordinal);
         private readonly Dictionary<string, T>[] _uniqueIndexes;
         private readonly Dictionary<string, List<T>>[] _nonUniqueIndexes;
-        private readonly ObservableCollection<T> _collection = [];
+        private readonly List<T> _items = [];
         private readonly IndexObserverToken _token;
 
         // Reused across operations; the collection is not thread-safe, so one set per instance is enough.
@@ -92,11 +92,7 @@ namespace JMW.Collections
         /// <summary>
         /// This event gets fired whenever the collection is modified.
         /// </summary>
-        public event NotifyCollectionChangedEventHandler? CollectionChanged
-        {
-            add { _collection.CollectionChanged += value; }
-            remove { _collection.CollectionChanged -= value; }
-        }
+        public event NotifyCollectionChangedEventHandler? CollectionChanged;
 
         public event EventHandler<IndexViolationEventArgs<T>>? IndexViolated;
 
@@ -393,7 +389,7 @@ namespace JMW.Collections
         {
             foreach (var idx in _indexCollection) idx.Value.Clear();
             foreach (var idx in _uniqueIndexCollection) idx.Value.Clear();
-            foreach (var item in _collection)
+            foreach (var item in _items)
             {
                 item.DetachObserver(_token);
                 AddToDictionaries(item);
@@ -423,13 +419,14 @@ namespace JMW.Collections
             if (!AddToDictionaries(obj))
                 return false;
 
-            _collection.Add(obj);
+            _items.Add(obj);
             obj.AttachObserver(_token);
+            OnCollectionChanged(NotifyCollectionChangedAction.Add, obj, _items.Count - 1);
             return true;
         }
 
         /// <summary>
-        /// Removes an item from the collection.
+        /// Removes an item from the collection.  Items are matched by reference, since the indexes track instances.
         /// </summary>
         /// <param name="item">Item to remove</param>
         /// <returns>Returns true if the item was successfully removed.</returns>
@@ -437,11 +434,13 @@ namespace JMW.Collections
         {
             ArgumentNullException.ThrowIfNull(item);
 
-            var r = RemoveFromDictionaries(item);
-            _collection.Remove(item);
-            item.DetachObserver(_token);
+            // an item that is not in the collection must not touch the indexes: its keys may belong to a member
+            var at = FindByReference(item);
+            if (at < 0)
+                return false;
 
-            return r;
+            RemoveAtCore(at);
+            return true;
         }
 
         /// <summary>
@@ -451,9 +450,34 @@ namespace JMW.Collections
         /// <returns>True if the operation succeeds.</returns>
         public bool Remove(Func<T, bool> predicate)
         {
-            var items = _collection.Where(predicate).ToList();
-            foreach (var o in items)
-                Remove(o);
+            if (CollectionChanged is not null)
+            {
+                // listeners get one Remove event per item, with its index at the time
+                for (var i = _items.Count - 1; i >= 0; i--)
+                {
+                    if (predicate(_items[i]))
+                        RemoveAtCore(i);
+                }
+
+                return true;
+            }
+
+            // nobody is listening, so compact in one pass instead of shifting the list once per removal
+            var kept = 0;
+            for (var i = 0; i < _items.Count; i++)
+            {
+                var item = _items[i];
+                if (predicate(item))
+                {
+                    RemoveFromDictionaries(item);
+                    item.DetachObserver(_token);
+                    continue;
+                }
+
+                _items[kept++] = item;
+            }
+
+            _items.RemoveRange(kept, _items.Count - kept);
             return true;
         }
 
@@ -463,8 +487,40 @@ namespace JMW.Collections
         /// <param name="index">The index to remove the item from.</param>
         public void RemoveAt(int index)
         {
-            var item = _collection[index];
-            Remove(item);
+            if (index < 0 || index >= _items.Count)
+                throw new ArgumentOutOfRangeException(nameof(index), index, "Index must be within the bounds of the collection.");
+
+            RemoveAtCore(index);
+        }
+
+        private void RemoveAtCore(int index)
+        {
+            var item = _items[index];
+            RemoveFromDictionaries(item);
+            _items.RemoveAt(index);
+            item.DetachObserver(_token);
+            OnCollectionChanged(NotifyCollectionChangedAction.Remove, item, index);
+        }
+
+        private int FindByReference(T item) => IndexOfReference(_items, item);
+
+        // Items are matched by identity, which also avoids the virtual Equals that List.IndexOf calls. The scan works
+        // inward from both ends, so items removed in the order they were added, or in reverse, are found at once.
+        private static int IndexOfReference(List<T> list, T item)
+        {
+            for (int lo = 0, hi = list.Count - 1; lo <= hi; lo++, hi--)
+            {
+                if (ReferenceEquals(list[lo], item)) return lo;
+                if (ReferenceEquals(list[hi], item)) return hi;
+            }
+
+            return -1;
+        }
+
+        private void OnCollectionChanged(NotifyCollectionChangedAction action, T item, int index)
+        {
+            // the args are only allocated when someone is listening
+            CollectionChanged?.Invoke(this, new NotifyCollectionChangedEventArgs(action, item, index));
         }
 
         #endregion Public Methods
@@ -545,10 +601,8 @@ namespace JMW.Collections
         {
             if (!index.TryGetValue(key, out var bucket)) return;
 
-            // items are matched by identity, so a reference scan avoids the virtual Equals that List.Remove calls
-            int at = 0;
-            while (at < bucket.Count && !ReferenceEquals(bucket[at], item)) at++;
-            if (at == bucket.Count) return;
+            var at = IndexOfReference(bucket, item);
+            if (at < 0) return;
 
             bucket.RemoveAt(at);
             if (bucket.Count == 0)
@@ -686,37 +740,39 @@ namespace JMW.Collections
 
         public IEnumerator<T> GetEnumerator()
         {
-            return _collection.GetEnumerator();
+            return _items.GetEnumerator();
         }
 
         IEnumerator IEnumerable.GetEnumerator()
         {
-            return _collection.GetEnumerator();
+            return _items.GetEnumerator();
         }
 
         public void Clear()
         {
-            foreach (var obj in _collection) obj.DetachObserver(_token);
+            foreach (var obj in _items) obj.DetachObserver(_token);
 
-            _collection.Clear();
+            _items.Clear();
 
             foreach (var index in _uniqueIndexes) index.Clear();
             foreach (var index in _nonUniqueIndexes) index.Clear();
+
+            CollectionChanged?.Invoke(this, new NotifyCollectionChangedEventArgs(NotifyCollectionChangedAction.Reset));
         }
 
         public bool Contains(T item)
         {
-            return _collection.Contains(item);
+            return _items.Contains(item);
         }
 
         public void CopyTo(T[] array, int arrayIndex)
         {
-            _collection.CopyTo(array, arrayIndex);
+            _items.CopyTo(array, arrayIndex);
         }
 
         public int IndexOf(T item)
         {
-            return _collection.IndexOf(item);
+            return _items.IndexOf(item);
         }
 
         public void Insert(int index, T item)
@@ -724,7 +780,7 @@ namespace JMW.Collections
             ArgumentNullException.ThrowIfNull(item);
 
             // checked before the indexes are written so a bad position cannot leave the item half indexed
-            if (index < 0 || index > _collection.Count)
+            if (index < 0 || index > _items.Count)
             {
                 throw new ArgumentOutOfRangeException(
                     nameof(index),
@@ -737,24 +793,25 @@ namespace JMW.Collections
                 throw new OperationCanceledException(IndexViolationMessage);
 
             item.DetachObserver(_token);
-            _collection.Insert(index, item);
+            _items.Insert(index, item);
             item.AttachObserver(_token);
+            OnCollectionChanged(NotifyCollectionChangedAction.Add, item, index);
         }
 
-        public int Count => _collection.Count;
+        public int Count => _items.Count;
 
-        public bool IsReadOnly => ((ICollection<T>)_collection).IsReadOnly;
+        public bool IsReadOnly => false;
 
         public T this[int index]
         {
             get
             {
-                return _collection[index];
+                return _items[index];
             }
 
             set
             {
-                var item = _collection[index];
+                var item = _items[index];
 
                 // check before removing the old item so a violation leaves every index exactly as it was
                 // RemoveFromDictionaries only uses _keys, so the unique keys collected here survive it
@@ -765,8 +822,9 @@ namespace JMW.Collections
                 WriteToDictionaries(value);
 
                 item.DetachObserver(_token);
-                _collection[index] = value;
+                _items[index] = value;
                 value.AttachObserver(_token);
+                CollectionChanged?.Invoke(this, new NotifyCollectionChangedEventArgs(NotifyCollectionChangedAction.Replace, value, item, index));
             }
         }
 
@@ -776,17 +834,17 @@ namespace JMW.Collections
 
         public T First()
         {
-            return _collection.First();
+            return _items.First();
         }
 
         public T First(Func<T, bool> predicate)
         {
-            return _collection.First(predicate);
+            return _items.First(predicate);
         }
 
         public void Each(Action<T> action)
         {
-            foreach (var item in _collection)
+            foreach (var item in _items)
                 action(item);
         }
 
