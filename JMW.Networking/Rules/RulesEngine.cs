@@ -106,21 +106,18 @@ public class RulesEngine
         return Allowed(rules, source, dest, port);
     }
 
-    private static bool Allowed(IEnumerable<FirewallRule> rules, Location source, Location dest, IntegerRange port)
+    // The last matching rule decides, so the scan starts from the bottom and stops at the first match.
+    private static bool Allowed(List<FirewallRule> rules, Location source, Location dest, IntegerRange port)
     {
-        var r = false;
-        foreach (var rule in rules)
+        for (var i = rules.Count - 1; i >= 0; i--)
         {
-            if (rule.Source.IsMatch(source)
-                &&
-                rule.Dest.IsMatch(dest)
-                &&
-                rule.Port.IntersectsWith(port))
+            var rule = rules[i];
+            if (rule.Source.IsMatch(source) && rule.Dest.IsMatch(dest) && rule.Port.IntersectsWith(port))
             {
-                r = rule.Policy != Policy.Deny;
+                return rule.Policy != Policy.Deny;
             }
         }
 
-        return r;
+        return false;
     }
 }

@@ -9,6 +9,35 @@ namespace JMW.Extensions.Tests
     [TestFixture]
     public class NetworkingRulesTests
     {
+        // Rules: permit everything, deny 10.0.0.1, permit 10.0.0.1 to port 22. The last matching rule decides.
+        [TestCase("10.0.0.2", 80, true)]
+        [TestCase("10.0.0.1", 80, false)]
+        [TestCase("10.0.0.1", 22, true)]
+        [TestCase("10.0.0.2", 22, true)]
+        public void TestAllowedLastMatchWins(string source, int port, bool expected)
+        {
+            var engine = new RulesEngine(
+                [
+                    new FirewallRule { Source = new Location(), Dest = new Location(), Port = new IntegerRange(0, 65535), Policy = Policy.Permit },
+                    new FirewallRule { Source = new Location(IPAddress.Parse("10.0.0.1")), Dest = new Location(), Port = new IntegerRange(0, 65535) },
+                    new FirewallRule { Source = new Location(IPAddress.Parse("10.0.0.1")), Dest = new Location(), Port = new IntegerRange(22, 22), Policy = Policy.Permit },
+                ]
+            );
+
+            Assert.That(engine.Allowed(new Location(IPAddress.Parse(source)), new Location(), new IntegerRange(port, port)), Is.EqualTo(expected));
+        }
+
+        [Test]
+        public void TestAllowedWithNoMatchDenies()
+        {
+            var engine = new RulesEngine(
+                [new FirewallRule { Source = new Location(IPAddress.Parse("10.0.0.1")), Dest = new Location(), Port = new IntegerRange(22, 22), Policy = Policy.Permit }]
+            );
+
+            Assert.That(engine.Allowed(new Location(IPAddress.Parse("10.0.0.2")), new Location(), new IntegerRange(22, 22)), Is.False);
+            Assert.That(new RulesEngine([]).Allowed(new Location(), new Location(), new IntegerRange(22, 22)), Is.False);
+        }
+
         [Test]
         public void TestAllowed1()
         {
