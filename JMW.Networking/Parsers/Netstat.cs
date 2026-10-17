@@ -18,7 +18,12 @@ public static class NetStat
         foreach (var table in tables)
         {
             var lines = table.Split('\n');
-            var positions = Table.DeriveColumnPositions(lines.Skip(1).ToArray());
+            var body = lines.Skip(1).ToArray();
+            if (body.All(string.IsNullOrWhiteSpace))
+            {
+                continue;
+            }
+            var positions = Table.DeriveColumnPositions(body);
 
             foreach (var o in lines.Skip(2))
             {
@@ -30,15 +35,21 @@ public static class NetStat
                 var row = new Dictionary<string, string>();
                 foreach (var position in positions.Positions)
                 {
-                    var val = position.Value.Length == -1
-                        ? o.Substring(position.Value.Start)
-                        : o.Substring(position.Value.Start, position.Value.Length);
-
-                    row.Add(position.Key, val.Trim());
+                    row.Add(position.Key, Slice(o, position.Value.Start, position.Value.Length).Trim());
                 }
                 yield return row;
             }
         }
+    }
+
+    // Rows are often shorter than the header, so a column can start or end past the end of the row.
+    // A length of -1 means the column runs to the end of the row.
+    private static string Slice(string row, int start, int length)
+    {
+        start = Math.Min(Math.Max(start, 0), row.Length);
+        return length < 0 || start + length > row.Length
+            ? row.Substring(start)
+            : row.Substring(start, length);
     }
 
     private static readonly StringComparison ignoreCase = StringComparison.OrdinalIgnoreCase;
