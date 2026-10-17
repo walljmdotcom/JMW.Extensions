@@ -64,11 +64,12 @@ namespace JMW.Templates.Tags
             interp.Retrievers.Add(Name + JoinColumn.LEFT_PREFIX + leftTableData.Name.ToLowerInvariant(), RetrieveColumnValue);
             interp.Retrievers.Add(Name + JoinColumn.RIGHT_PREFIX + rightTableData.Name.ToLowerInvariant(), RetrieveColumnValue);
 
-            foreach (var column in leftTableData.Columns)
-                interp.AddHandler(MakeColumnHandler(JoinColumn.LEFT_PREFIX + column));
+            // A joined row is the left row followed by the right row, so the column positions are known now.
+            for (var i = 0; i < leftTableData.Columns.Count; i++)
+                interp.AddHandler(MakeColumnHandler(JoinColumn.LEFT_PREFIX + leftTableData.Columns[i], i));
 
-            foreach (var column in rightTableData.Columns)
-                interp.AddHandler(MakeColumnHandler(JoinColumn.RIGHT_PREFIX + column));
+            for (var i = 0; i < rightTableData.Columns.Count; i++)
+                interp.AddHandler(MakeColumnHandler(JoinColumn.RIGHT_PREFIX + rightTableData.Columns[i], leftTableData.Columns.Count + i));
         }
 
         public override void Handler(Tag tag, Interpreter interp)
@@ -183,9 +184,14 @@ namespace JMW.Templates.Tags
             return JoinedTableData?.Data[CurrentRow][JoinedTableData.ColumnIndexes[column.ToLowerInvariant()]] ?? string.Empty;
         }
 
-        private JoinColumn MakeColumnHandler(string column_name)
+        internal string RetrieveColumnValue(int column_index)
         {
-            return new JoinColumn(Name + ":" + column_name.ToLowerInvariant().Trim(), this);
+            return JoinedTableData?.Data[CurrentRow][column_index] ?? string.Empty;
+        }
+
+        private JoinColumn MakeColumnHandler(string column_name, int column_index)
+        {
+            return new JoinColumn(Name + ":" + column_name.ToLowerInvariant().Trim(), this, column_index);
         }
     }
 }

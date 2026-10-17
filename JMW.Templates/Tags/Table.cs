@@ -41,7 +41,7 @@ namespace JMW.Templates.Tags
             interp.Retrievers.Add(table_data.Name.ToLowerInvariant(), RetrieveColumnValue);
 
             foreach (var column in table_data.Columns)
-                interp.AddHandler(MakeColumnHandler(column));
+                interp.AddHandler(MakeColumnHandler(table_data, column));
         }
 
         public override void Handler(Tag tag, Interpreter interp)
@@ -122,9 +122,17 @@ namespace JMW.Templates.Tags
             return TableData?.Data[CurrentRow][TableData.ColumnIndexes[column.ToLowerInvariant()]] ?? string.Empty;
         }
 
-        private TableColumn MakeColumnHandler(string column_name)
+        internal string RetrieveColumnValue(int column_index)
         {
-            return new TableColumn(_name + ":" + column_name.ToLowerInvariant().Trim(), this);
+            return TableData?.Data[CurrentRow][column_index] ?? string.Empty;
+        }
+
+        private TableColumn MakeColumnHandler(TableData table_data, string column_name)
+        {
+            var name = column_name.ToLowerInvariant().Trim();
+            return table_data.ColumnIndexes.TryGetValue(name, out var index)
+                ? new TableColumn(_name + ":" + name, this, index)
+                : new TableColumn(_name + ":" + name, this);
         }
 
         public static bool IsTable(Tag tag)

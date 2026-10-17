@@ -35,7 +35,7 @@ namespace JMW.Templates.Tags
             interp.Retrievers.Add(Name, RetrieveColumnValue);
 
             foreach (var column in table_data.Columns)
-                interp.AddHandler(MakeColumnHandler(column));
+                interp.AddHandler(MakeColumnHandler(table_data, column));
 
             interp.AddHandler(new LookupRow(Name + ":" + LookupRow.TAG, this));
         }
@@ -90,9 +90,22 @@ namespace JMW.Templates.Tags
             return LookupTable[Key][CurrentRow][TableData.ColumnIndexes[column.ToLowerInvariant()]];
         }
 
-        private LookupColumn MakeColumnHandler(string column_name)
+        internal string RetrieveColumnValue(int column_index)
         {
-            return new LookupColumn(Name + ":" + column_name.ToLowerInvariant().Trim(), this);
+            if (Key is null)
+            {
+                throw new InvalidOperationException();
+            }
+
+            return LookupTable[Key][CurrentRow][column_index];
+        }
+
+        private LookupColumn MakeColumnHandler(TableData table_data, string column_name)
+        {
+            var name = column_name.ToLowerInvariant().Trim();
+            return table_data.ColumnIndexes.TryGetValue(name, out var index)
+                ? new LookupColumn(Name + ":" + name, this, index)
+                : new LookupColumn(Name + ":" + name, this);
         }
     }
 }

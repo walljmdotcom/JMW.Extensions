@@ -5,6 +5,7 @@ namespace JMW.Templates.Tags;
 public class LookupColumn : ColumnBase
 {
     private readonly Lookup parent;
+    private readonly int columnIndex = -1;
     public override string TagName { get; }
 
     public LookupColumn(string name, Lookup data)
@@ -13,10 +14,16 @@ public class LookupColumn : ColumnBase
         parent = data;
     }
 
+    internal LookupColumn(string name, Lookup data, int column_index) : this(name, data)
+    {
+        columnIndex = column_index;
+    }
+
     public override void Handler(Tag token, Interpreter interp)
     {
-        var column_name = TagName.ParseAfterLastIndexOf_PlusLength(":");
-        var data = parent.RetrieveColumnValue(column_name);
+        var data = columnIndex >= 0
+            ? parent.RetrieveColumnValue(columnIndex)
+            : parent.RetrieveColumnValue(TagName.ParseAfterLastIndexOf_PlusLength(":"));
 
         HandleColumn(token, interp, data);
     }

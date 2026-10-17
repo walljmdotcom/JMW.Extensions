@@ -5,6 +5,7 @@ namespace JMW.Templates.Tags;
 public class JoinColumn : ColumnBase
 {
     private readonly Join parent;
+    private readonly int columnIndex = -1;
     public override string TagName { get; }
     public const string LEFT_PREFIX = "left_";
     public const string RIGHT_PREFIX = "right_";
@@ -15,10 +16,16 @@ public class JoinColumn : ColumnBase
         parent = data;
     }
 
+    internal JoinColumn(string name, Join data, int column_index) : this(name, data)
+    {
+        columnIndex = column_index;
+    }
+
     public override void Handler(Tag token, Interpreter interp)
     {
-        var column_name = TagName.ParseAfterLastIndexOf_PlusLength(":");
-        var data = parent.RetrieveColumnValue(column_name);
+        var data = columnIndex >= 0
+            ? parent.RetrieveColumnValue(columnIndex)
+            : parent.RetrieveColumnValue(TagName.ParseAfterLastIndexOf_PlusLength(":"));
 
         HandleColumn(token, interp, data);
     }

@@ -65,6 +65,21 @@ namespace JMW.Templates.Tests
             Assert.That(counter.Properties["value"], Is.EqualTo("[var:n]"));
         }
 
+        // Join columns are found by position, so the case of the source column names does not matter.
+        [Test]
+        public void JoinColumnsWithMixedCaseNames()
+        {
+            var sb = new StringBuilder();
+            using var wr = new StringWriter(sb);
+            var i = new Interpreter(wr);
+            i.AddHandler(new Table(new TableData("t", ["Num,Name", "10,a", "20,b"]), i));
+            i.AddHandler(new Table(new TableData("u", ["Num,Label", "10,p", "20,q"]), i));
+
+            i.Eval("<join left_table=\"t\" right_table=\"u\" left_key=\"num\" right_key=\"num\"><left_Name/><right_label/>,</join>");
+
+            Assert.That(sb.ToString(), Is.EqualTo("ap,bq,"));
+        }
+
         // Declaring the same variable twice is still an error, wherever the declarations sit.
         [TestCase("<var name=\"v\" value=\"x\"/><var name=\"v\" value=\"y\"/>")]
         [TestCase("<var name=\"v\" value=\"x\"/><tab name=\"t\"><var name=\"v\" value=\"y\"/></tab>")]
