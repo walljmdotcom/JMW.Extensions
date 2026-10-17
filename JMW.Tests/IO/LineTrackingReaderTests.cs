@@ -49,5 +49,44 @@ namespace JMW.Tests
             Assert.That(reader.Line, Is.EqualTo(expected.Line));
             Assert.That(reader.Column, Is.EqualTo(expected.Column));
         }
+
+        // reads all of `text`, pushes it back in chunks of `chunk` from the end, then reads it again one char at a time
+        [TestCase("abcdefgh", 1)]
+        [TestCase("abcdefgh", 3)]
+        [TestCase("abcdefgh", 8)]
+        [TestCase("ab\ncd\n\nef", 1)]
+        [TestCase("ab\ncd\n\nef", 2)]
+        [TestCase("\n\n\n", 2)]
+        public void LayeredPushBacksReadInOriginalOrder(string text, int chunk)
+        {
+            var reader = new LineTrackingReader(new StringReader(text));
+            var lines = new int[text.Length + 1];
+            var columns = new int[text.Length + 1];
+            for (var i = 0; i < text.Length; i++)
+            {
+                lines[i] = reader.Line;
+                columns[i] = reader.Column;
+                reader.Read();
+            }
+            lines[text.Length] = reader.Line;
+            columns[text.Length] = reader.Column;
+
+            for (var end = text.Length; end > 0; end -= chunk)
+            {
+                var start = end - chunk < 0 ? 0 : end - chunk;
+                reader.PushBack(text.Substring(start, end - start).ToCharArray());
+                Assert.That(reader.Line, Is.EqualTo(lines[start]));
+                Assert.That(reader.Column, Is.EqualTo(columns[start]));
+            }
+
+            var result = new StringBuilder();
+            int c;
+            while ((c = reader.Read()) != -1)
+                result.Append((char)c);
+
+            Assert.That(result.ToString(), Is.EqualTo(text));
+            Assert.That(reader.Line, Is.EqualTo(lines[text.Length]));
+            Assert.That(reader.Column, Is.EqualTo(columns[text.Length]));
+        }
     }
 }

@@ -1,6 +1,5 @@
 using System.Collections.Generic;
 using System.IO;
-using System.Linq;
 
 namespace JMW
 {
@@ -11,7 +10,9 @@ namespace JMW
     public class LineTrackingReader
     {
         private readonly TextReader _reader;
-        private List<char> _buffer = [];
+
+        // Pushed-back characters, the next one to read on top.
+        private readonly Stack<char> _buffer = new();
 
         /// <summary>
         /// The, currently read to, Line in our reader.
@@ -24,7 +25,7 @@ namespace JMW
         /// <value>The column.</value>
         public int Column { get; private set; } = 0;
 
-        private Stack<int> _lineLengths = new();
+        private readonly Stack<int> _lineLengths = new();
 
         public LineTrackingReader(TextReader reader)
         {
@@ -33,19 +34,10 @@ namespace JMW
 
         public int Read()
         {
-            int c;
-            if (_buffer.Count > 0)
-            {
-                c = _buffer.First();
-                _buffer = new List<char>(_buffer.Skip(1));
-            }
-            else
-            {
-                c = _reader.Read();
-            }
+            int c = _buffer.Count > 0 ? _buffer.Pop() : _reader.Read();
             if (c != -1)
             {
-                updateLineAndColumn(new[] { (char)c }, false);
+                advance((char)c);
             }
             return c;
         }
@@ -59,30 +51,18 @@ namespace JMW
         public int Read(char[] buffer)
         {
             var n = 0;
-            if (_buffer.Count > 0)
+            while (n < buffer.Length && _buffer.Count > 0)
             {
-                var delta = _buffer.Count - buffer.Length;
-                if (delta <= 0)
-                { // all of the internal buffer will fit in our output buffer.
-                    _buffer.CopyTo(buffer);
-                    n = _buffer.Count;
-                    _buffer.Clear();
-                }
-                else
-                { // only part of the _buffer will fit in our output buffer
-                    _buffer.CopyTo(0, buffer, 0, buffer.Length);
-                    _buffer = new List<char>(_buffer.Skip(buffer.Length));
-                    n = buffer.Length;
-                }
+                buffer[n++] = _buffer.Pop();
             }
             if (n < buffer.Length)
             {
-                var nn = _reader.Read(buffer, n, buffer.Length - n);
-                n += nn;
+                n += _reader.Read(buffer, n, buffer.Length - n);
             }
-            if (n != 0)
-                updateLineAndColumn(buffer.Take(n).ToArray(), false);
-            // track lines and columns
+            for (var i = 0; i < n; i++)
+            {
+                advance(buffer[i]);
+            }
             return n;
         }
 
@@ -94,64 +74,42 @@ namespace JMW
         /// <param name="buffer">Buffer.</param>
         public void PushBack(char[] buffer)
         {
-            updateLineAndColumn(buffer, true);
-            var tmp = new List<char>();
-            tmp.AddRange(buffer);
-            tmp.AddRange(_buffer);
-            _buffer = tmp;
+            for (var i = buffer.Length - 1; i >= 0; i--)
+            {
+                PushBack(buffer[i]);
+            }
         }
 
         public void PushBack(char c)
         {
-            PushBack([c]);
+            retreat(c);
+            _buffer.Push(c);
         }
 
-        private void decrementLine()
+        private void advance(char c)
         {
-            Line--;
-            Column = _lineLengths.Pop();
-        }
-
-        private void incrementLine()
-        {
-            Line++;
-            _lineLengths.Push(Column);
-            Column = 0;
-        }
-
-        private void updateLineAndColumn(IEnumerable<char> buffer, bool reverse)
-        {
-            if (reverse)
+            if (c == '\n')
             {
-                foreach (var c in buffer.Reverse())
-                {
-                    switch (c)
-                    {
-                        case '\n':
-                            decrementLine();
-                            break;
-
-                        default:
-                            Column--;
-                            break;
-                    }
-                }
+                Line++;
+                _lineLengths.Push(Column);
+                Column = 0;
             }
             else
             {
-                foreach (var c in buffer)
-                {
-                    switch (c)
-                    {
-                        case '\n':
-                            incrementLine();
-                            break;
+                Column++;
+            }
+        }
 
-                        default:
-                            Column++;
-                            break;
-                    }
-                }
+        private void retreat(char c)
+        {
+            if (c == '\n')
+            {
+                Line--;
+                Column = _lineLengths.Pop();
+            }
+            else
+            {
+                Column--;
             }
         }
     }
