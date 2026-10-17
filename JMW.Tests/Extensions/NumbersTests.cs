@@ -36,6 +36,21 @@ namespace JMW.Extensions.Tests
         [TestCase("1.5", false)]
         [TestCase("-1", false)]
         [TestCase("a", false)]
+        [TestCase("", false)]
+        [TestCase(" ", false)]
+        [TestCase("\t\n", false)]
+        [TestCase("1 2", false)]
+        [TestCase(" 1 2 ", false)]
+        [TestCase("1\t2", false)]
+        [TestCase("\t12\n", true)]
+        [TestCase("0", true)]
+        [TestCase("000", true)]
+        [TestCase("2147483647", true)]
+        [TestCase(" 2147483647 ", true)]
+        [TestCase("0002147483647", true)]
+        [TestCase("2147483648", false)]
+        [TestCase("3000000000", false)]
+        [TestCase("99999999999", false)]
         public void IsIntFastTest(string input, bool expected)
         {
             Assert.That(input.IsIntFast(), Is.EqualTo(expected));

@@ -65,18 +65,28 @@ public static class NumberExtensions
     /// <returns>If the string is a 32bit Integer, true, else false.</returns>
     public static bool IsIntFast(this string str)
     {
-        foreach (int c in str)
-        {
-            // ignore spaces
-            if (c < 33)
-                continue;
+        // surrounding whitespace is ignored, whitespace between digits is not.
+        var start = 0;
+        var end = str.Length;
+        while (start < end && IgnoreChar(str[start]))
+            start++;
+        while (end > start && IgnoreChar(str[end - 1]))
+            end--;
 
-            // make sure the characters are the digits 0-9
-            if (c < '0' || c > '9')
+        if (start == end)
+            return false;
+
+        for (var i = start; i < end; i++)
+        {
+            if (str[i] < '0' || str[i] > '9')
                 return false;
         }
 
-        return true;
+        while (start < end - 1 && str[start] == '0')
+            start++;
+
+        var digits = end - start;
+        return digits < 10 || (digits == 10 && string.CompareOrdinal(str, start, "2147483647", 0, 10) <= 0);
     }
 
     /// <summary>
