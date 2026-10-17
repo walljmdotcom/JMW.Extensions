@@ -538,6 +538,25 @@ namespace JMW.Templates.Tests
             Assert.That(sb.ToString(), Is.EqualTo(expected));
         }
 
+        // Column names in orderby and distinct match whatever their case, as column tags do.
+        [TestCase("<tab name=\"t\" orderby=\"Name\" order=\"desc\"><name/></tab>", "cba")]
+        [TestCase("<tab name=\"t\" orderby=\"name\"><Name/></tab>", "abc")]
+        [TestCase("<tab name=\"t\" distinct=\"Label\"><name/></tab>", "ab")]
+        [TestCase("<join left_table=\"t\" right_table=\"u\" left_key=\"Num\" right_key=\"Num\" orderby=\"left_Name\" order=\"desc\"><left_name/></join>", "cba")]
+        [TestCase("<join left_table=\"t\" right_table=\"u\" left_key=\"Num\" right_key=\"Num\" orderby=\"left_name\"><left_Name/></join>", "abc")]
+        [TestCase("<join left_table=\"t\" right_table=\"u\" left_key=\"Num\" right_key=\"Num\" distinct=\"Right_Code\"><left_name/></join>", "ac")]
+        public void TestMixedCaseColumnNames(string template, string expected)
+        {
+            var sb = new StringBuilder();
+            using var wr = new StringWriter(sb);
+            var i = new Interpreter(wr);
+            i.AddHandler(new Table(new TableData("t", ["Num,Name,Label", "10,a,x", "20,b,y", "30,c,x"]), i));
+            i.AddHandler(new Table(new TableData("u", ["Num,Code", "10,p", "20,p", "30,r"]), i));
+
+            i.Eval(template);
+
+            Assert.That(sb.ToString(), Is.EqualTo(expected));
+        }
 
         [Test]
         public void TestJoinError1()

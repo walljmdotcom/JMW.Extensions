@@ -87,7 +87,7 @@ namespace JMW.Templates.Tags
         {
             if (tag.Properties.TryGetValue(ATTR_ORDERBY, out var attrOrderBy))
             {
-                var column = table_data.ColumnIndexes[attrOrderBy];
+                var column = table_data.ColumnIndexes[attrOrderBy.Trim().ToLowerInvariant()];
                 if (
                        tag.Properties.TryGetValue(ATTR_ORDER, out var attrOrder)
                     && attrOrder == ATTR_ORDER_VALUE_DESC

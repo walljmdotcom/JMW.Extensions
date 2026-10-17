@@ -160,7 +160,7 @@ namespace JMW.Templates.Tags
 
                 var columns = _leftTableData.Columns.Select(c => JoinColumn.LEFT_PREFIX + c).Concat(_rightTableData.Columns.Select(c => JoinColumn.RIGHT_PREFIX + c)).ToList();
                 var i = 0;
-                var col_indexes = columns.ToDictionary(c => c, v => i++);
+                var col_indexes = columns.ToDictionary(c => c.ToLowerInvariant(), v => i++);
                 JoinedTableData = new TableData(Name, columns, col_indexes, joined);
                 _joinKey = join_key;
             }
