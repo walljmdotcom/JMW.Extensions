@@ -214,7 +214,7 @@ public class Variant : IEquatable<Variant>
         else
             hash = 0;
 
-        // kept positive and non-zero, which callers of the original reference-based hash could rely on
+        // kept positive and non-zero for callers that assume a positive hash
         return (hash & int.MaxValue) | 1;
     }
 }
