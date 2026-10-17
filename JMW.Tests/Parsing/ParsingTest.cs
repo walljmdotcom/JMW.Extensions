@@ -584,6 +584,20 @@ free      bird   is      awesome
         }
     }
 
+    [TestCase("")]
+    [TestCase("i")]
+    [TestCase("n")]
+    public void ExpressionTest_RegexCatastrophicBacktrackingTimesOut(string mods)
+    {
+        var exp = new RegularExpression([@"^(a+)+$"], mods);
+        var input = new string('a', 64) + "!";
+
+        var task = Task.Run(() => exp.Test(input));
+        var finished = task.ContinueWith(static _ => { }, TaskScheduler.Default).Wait(TimeSpan.FromSeconds(30));
+        Assert.That(finished, Is.True, "The regex test did not time out.");
+        Assert.That(task.Exception?.InnerException, Is.InstanceOf<System.Text.RegularExpressions.RegexMatchTimeoutException>());
+    }
+
     [Test]
     public void ExpresssionTest_Regex()
     {
