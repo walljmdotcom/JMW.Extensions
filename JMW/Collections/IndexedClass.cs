@@ -13,8 +13,6 @@ using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Runtime.CompilerServices;
-using JMW.Extensions;
-using JMW.Types;
 
 namespace JMW.Collections;
 
@@ -50,7 +48,7 @@ public abstract class IndexedClass : ObservableClass
     /// <summary>
     /// The number of registered handlers for the event.
     /// </summary>
-    public int IndexedPropertyChangedEventCount => _IndexedPropertyChanged?.HandlerCount ?? 0;
+    public int IndexedPropertyChangedEventCount => IndexedPropertyChanged?.GetInvocationList().Length ?? 0;
 
     #endregion Properties
 
@@ -63,7 +61,7 @@ public abstract class IndexedClass : ObservableClass
     /// </summary>
     public override void ClearEvents()
     {
-        _IndexedPropertyChanged?.Clear();
+        IndexedPropertyChanged = null;
         base.ClearEvents();
     }
 
@@ -72,32 +70,22 @@ public abstract class IndexedClass : ObservableClass
     /// </summary>
     public void ClearIndexedPropertyChanged()
     {
-        _IndexedPropertyChanged?.Clear();
+        IndexedPropertyChanged = null;
     }
 
     #endregion Public Methods
 
     #region Events
 
-    // Created on first subscribe; collections use the observer slots below instead.
-    private WeakEventSource<IndexedPropertyChangedEventArgs>? _IndexedPropertyChanged;
-
     // The collections holding this item: null, one IndexObserverToken, or a List of them. One collection is the
-    // common case, so it costs a single reference.
+    // common case, so it costs a single reference. Collections listen here rather than through the event.
     private object? _observers;
+
     /// <summary>
-    /// Fires when a property has changed.  This event will give you the before and after value of the
+    /// Fires before a property changes.  This event will give you the before and after value of the
     /// property, as well as the property name.
-    ///
-    /// <para>Event references are weak.  Events only fire if the connected
-    /// objects have not been collected by the GC.  <see cref="WeakReference"/>'s don't prevent
-    /// the GC from collecting the objects if there are no more references to them.</para>
     /// </summary>
-    public event IndexedPropertyChangedHandler IndexedPropertyChanged
-    {
-        add { EnsureCreated(ref _IndexedPropertyChanged).Subscribe(value.CastDelegate<EventHandler<IndexedPropertyChangedEventArgs>>()); }
-        remove { _IndexedPropertyChanged?.Unsubscribe(value.CastDelegate<EventHandler<IndexedPropertyChangedEventArgs>>()); }
-    }
+    public event IndexedPropertyChangedHandler? IndexedPropertyChanged;
 
     #endregion Events
 
@@ -192,8 +180,7 @@ public abstract class IndexedClass : ObservableClass
     {
         NotifyObservers(prop_name, before, after);
 
-        if (_IndexedPropertyChanged is { HandlerCount: > 0 } source)
-            source.Raise(this, new IndexedPropertyChangedEventArgs(prop_name, before, after));
+        IndexedPropertyChanged?.Invoke(this, new IndexedPropertyChangedEventArgs(prop_name, before, after));
     }
 
     #endregion Private Methods

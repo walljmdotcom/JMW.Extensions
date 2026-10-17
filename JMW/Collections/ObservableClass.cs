@@ -9,13 +9,9 @@ The above copyright notice and this permission notice shall be included in all c
 THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 */
 
-using JMW.Extensions;
-using JMW.Types;
-using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Runtime.CompilerServices;
-using System.Threading;
 
 namespace JMW.Collections
 {
@@ -31,12 +27,12 @@ namespace JMW.Collections
         /// <summary>
         /// The number of registered handlers for the event.
         /// </summary>
-        public int PropertyChangingEventCount => _PropertyChanging?.HandlerCount ?? 0;
+        public int PropertyChangingEventCount => PropertyChanging?.GetInvocationList().Length ?? 0;
 
         /// <summary>
         /// The number of registered handlers for the event.
         /// </summary>
-        public int PropertyChangedEventCount => _PropertyChanged?.HandlerCount ?? 0;
+        public int PropertyChangedEventCount => PropertyChanged?.GetInvocationList().Length ?? 0;
 
         #endregion Properties
 
@@ -58,7 +54,7 @@ namespace JMW.Collections
         /// </summary>
         public void ClearPropertyChanged()
         {
-            _PropertyChanged?.Clear();
+            PropertyChanged = null;
         }
 
         /// <summary>
@@ -66,43 +62,24 @@ namespace JMW.Collections
         /// </summary>
         public void ClearPropertyChanging()
         {
-            _PropertyChanging?.Clear();
+            PropertyChanging = null;
         }
 
         #endregion Public Methods
 
         #region Events
 
-        // Created on first subscribe: most instances are never observed, and three empty sources per object
-        // cost more memory than the object's own data.
-        private WeakEventSource<PropertyChangingEventArgs>? _PropertyChanging;
         /// <summary>
         /// The <see cref="INotifyPropertyChanging"/> event.  Gives you the property name before
         /// the value is changed.
-        ///
-        /// <para>Event references are weak.  Events only fire if the connected
-        /// objects have not been collected by the GC.  <see cref="WeakReference"/>'s don't prevent
-        /// the GC from collecting the objects if there are no more references to them.</para>
         /// </summary>
-        public event PropertyChangingEventHandler? PropertyChanging
-        {
-            add { if (value is not null) EnsureCreated(ref _PropertyChanging).Subscribe(value.CastDelegate<EventHandler<PropertyChangingEventArgs>>()); }
-            remove { if (value is not null) _PropertyChanging?.Unsubscribe(value.CastDelegate<EventHandler<PropertyChangingEventArgs>>()); }
-        }
+        public event PropertyChangingEventHandler? PropertyChanging;
 
-        private WeakEventSource<PropertyChangedEventArgs>? _PropertyChanged;
         /// <summary>
         /// The <see cref="INotifyPropertyChanged"/> event.  Gives you the property name after
         /// the value has changed.
-        /// <para>Event references are weak.  Events only fire if the connected
-        /// objects have not been collected by the GC.  <see cref="WeakReference"/>'s don't prevent
-        /// the GC from collecting the objects if there are no more references to them.</para>
         /// </summary>
-        public event PropertyChangedEventHandler? PropertyChanged
-        {
-            add { if (value is not null) EnsureCreated(ref _PropertyChanged).Subscribe(value.CastDelegate<EventHandler<PropertyChangedEventArgs>>()); }
-            remove { if (value is not null) _PropertyChanged?.Unsubscribe(value.CastDelegate<EventHandler<PropertyChangedEventArgs>>()); }
-        }
+        public event PropertyChangedEventHandler? PropertyChanged;
 
         #endregion Events
 
@@ -122,39 +99,10 @@ namespace JMW.Collections
             if (EqualityComparer<T>.Default.Equals(field, value))
                 return false;
 
-            RaisePropertyChanging(property_name);
+            PropertyChanging?.Invoke(this, new PropertyChangingEventArgs(property_name));
             field = value;
-            RaisePropertyChanged(property_name);
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(property_name));
             return true;
         }
-
-        #region Private Methods
-
-        /// <summary>
-        /// Returns <paramref name="field"/>, creating it first if it is null. Safe when two threads subscribe at once.
-        /// </summary>
-        private protected static TSource EnsureCreated<TSource>(ref TSource? field) where TSource : class, new()
-        {
-            if (field is not null)
-                return field;
-
-            var created = new TSource();
-            return Interlocked.CompareExchange(ref field, created, null) ?? created;
-        }
-
-        // The args are only allocated when someone is listening.
-        private void RaisePropertyChanged(string prop)
-        {
-            if (_PropertyChanged is { HandlerCount: > 0 } source)
-                source.Raise(this, new PropertyChangedEventArgs(prop));
-        }
-
-        private void RaisePropertyChanging(string prop)
-        {
-            if (_PropertyChanging is { HandlerCount: > 0 } source)
-                source.Raise(this, new PropertyChangingEventArgs(prop));
-        }
-
-        #endregion Private Methods
     }
 }
