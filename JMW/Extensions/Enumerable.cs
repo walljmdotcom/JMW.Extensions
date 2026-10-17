@@ -221,17 +221,18 @@ namespace JMW.Extensions.Enumerable
         public static string ToDelimitedString(this IEnumerable Ss, string delimiter, bool trimend = true)
         {
             var o = new StringBuilder();
+            var first = true;
             foreach (var s in Ss)
             {
-                o.Append(s); o.Append(delimiter);
+                if (!first) o.Append(delimiter);
+                o.Append(s);
+                first = false;
             }
-            string? r;
-            if (trimend)
-            {
-                r = o.ToString().TrimEnd(delimiter.ToCharArray());
-            }
-            else r = o.ToString();
-            return r;
+
+            if (!trimend && !first)
+                o.Append(delimiter);
+
+            return o.ToString();
         }
 
         /// <summary>

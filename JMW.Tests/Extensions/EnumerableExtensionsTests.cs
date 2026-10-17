@@ -100,6 +100,29 @@ namespace JMW.Extensions.Enumerable.Tests
             Assert.That("1,,2,,3,,4,,", Is.EqualTo(lst.ToDelimitedString(",,", false)));
         }
 
+        [TestCase(new[] { "a," }, ",", "a,", "a,,")]
+        [TestCase(new[] { "a", "b," }, ",", "a,b,", "a,b,,")]
+        [TestCase(new[] { "a", "" }, ",", "a,", "a,,")]
+        [TestCase(new[] { "", "" }, ",", ",", ",,")]
+        [TestCase(new[] { "" }, ",", "", ",")]
+        [TestCase(new[] { "a" }, ",", "a", "a,")]
+        [TestCase(new string[0], ",", "", "")]
+        [TestCase(new[] { "ab", "cba" }, "ab", "ababcba", "ababcbaab")]
+        [TestCase(new[] { "x;", "y" }, ";", "x;;y", "x;;y;")]
+        [TestCase(new[] { "a ", "b " }, "", "a b ", "a b ")]
+        [TestCase(new[] { "a", "b", "c" }, ", ", "a, b, c", "a, b, c, ")]
+        public void ToDelimitedStringKeepsTrailingData(string[] items, string delimiter, string trimmed, string untrimmed)
+        {
+            Assert.That(items.ToDelimitedString(delimiter), Is.EqualTo(trimmed));
+            Assert.That(items.ToDelimitedString(delimiter), Is.EqualTo(string.Join(delimiter, items)));
+            Assert.That(items.ToDelimitedString(delimiter, false), Is.EqualTo(untrimmed));
+            if (delimiter.Length == 1)
+            {
+                Assert.That(items.ToDelimitedString(delimiter[0]), Is.EqualTo(trimmed));
+                Assert.That(items.ToDelimitedString(delimiter[0], false), Is.EqualTo(untrimmed));
+            }
+        }
+
         private static readonly int[] sourceArray = [1, 2, 3, 4];
 
         [Test]
