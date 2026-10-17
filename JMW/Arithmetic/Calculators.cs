@@ -94,12 +94,12 @@ namespace Lambda.Generic
 
             public readonly T Min(T a, T b)
             {
-                return Math.Max(a, b);
+                return Math.Min(a, b);
             }
 
             public readonly T Max(T a, T b)
             {
-                return Math.Min(a, b);
+                return Math.Max(a, b);
             }
 
             public readonly T And(T a, T b)
@@ -222,12 +222,12 @@ namespace Lambda.Generic
 
             public readonly T Min(T a, T b)
             {
-                return Math.Max(a, b);
+                return Math.Min(a, b);
             }
 
             public readonly T Max(T a, T b)
             {
-                return Math.Min(a, b);
+                return Math.Max(a, b);
             }
 
             public readonly T And(T a, T b)
