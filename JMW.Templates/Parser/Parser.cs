@@ -2,10 +2,6 @@ using JMW.Extensions.String;
 using JMW.Template.Tags;
 using System.Collections.Generic;
 using System.IO;
-using System.Runtime.CompilerServices;
-
-// Internals are visible to the Test assemblies
-[assembly: InternalsVisibleTo("JMW.Template.Tests")]
 
 namespace JMW.Template
 {
