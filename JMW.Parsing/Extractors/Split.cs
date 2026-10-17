@@ -22,19 +22,77 @@ public class Split : Base
              : StringSplitOptions.None;
         var isCaseInsensitive = this.Search.Mods.Contains(Constants.CASE_INSENSITIVE);
 
-        var splitSeparators = isCaseInsensitive
-            ? this.Search.Query.Select(o => o.ToLowerInvariant()).ToArray()
-            : [.. this.Search.Query];
+        string field;
+        if (isCaseInsensitive && this.Search.Query.Any(static s => s.Length > 0))
+        {
+            if (!TryGetFieldIgnoreCase(value, this.Search.Query, splitOptions == StringSplitOptions.RemoveEmptyEntries, this.Index, out field))
+                throw new IndexOutOfRangeException();
+        }
+        else
+        {
+            string[] fields = value.Split([.. this.Search.Query], splitOptions);
+            field = fields.Length > this.Index ? fields[this.Index] : throw new IndexOutOfRangeException();
+        }
 
-        string[] fields = isCaseInsensitive
-            ? value.ToLowerInvariant().Split(splitSeparators, splitOptions)
-            : value.Split(splitSeparators, splitOptions);
+        return this.Search.Mods.Contains(Constants.TRIM) // should trim the output?
+            ? field.Trim()
+            : field;
+    }
 
-        return fields.Length > this.Index
-            ? this.Search.Mods.Contains(Constants.TRIM) // should trim the output?
-                ? fields[this.Index].Trim()
-                : fields[this.Index]
-            : throw new IndexOutOfRangeException();
+    // Finds the field string.Split would return at the index, matching separators in any case. Splitting a lowercased
+    // copy instead would return lowercased text.
+    private static bool TryGetFieldIgnoreCase(string value, List<string> separators, bool remove_empty, int index, out string field)
+    {
+        var found = 0;
+        var start = 0;
+        var position = 0;
+        while (true)
+        {
+            var separatorLength = position < value.Length ? SeparatorLengthAt(value, position, separators) : 0;
+            if (separatorLength == 0 && position < value.Length)
+            {
+                position++;
+                continue;
+            }
+
+            if (!remove_empty || position > start)
+            {
+                if (found == index)
+                {
+                    field = value.Substring(start, position - start);
+                    return true;
+                }
+
+                found++;
+            }
+
+            if (position == value.Length)
+            {
+                field = string.Empty;
+                return false;
+            }
+
+            position += separatorLength;
+            start = position;
+        }
+    }
+
+    // Like string.Split, the first separator in the list that matches wins.
+    private static int SeparatorLengthAt(string value, int position, List<string> separators)
+    {
+        foreach (var separator in separators)
+        {
+            if (
+                separator.Length > 0
+                && separator.Length <= value.Length - position
+                && string.Compare(value, position, separator, 0, separator.Length, StringComparison.OrdinalIgnoreCase) == 0
+            )
+            {
+                return separator.Length;
+            }
+        }
+
+        return 0;
     }
 
     public Split(Tag t) : base(t)

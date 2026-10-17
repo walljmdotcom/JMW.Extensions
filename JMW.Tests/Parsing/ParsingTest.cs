@@ -1270,6 +1270,27 @@ free      bird   is      awesome
         }
     }
 
+    // The "i" mod matches separators in any case and returns the field as it appears in the input.
+    [TestCase(new[] { "foo" }, "i", 0, "Blah FOO Blue", "Blah ")]
+    [TestCase(new[] { "foo" }, "i", 1, "Blah FOO Blue", " Blue")]
+    [TestCase(new[] { "foo" }, "it", 1, "Blah Foo BLUE ", "BLUE")]
+    [TestCase(new[] { "FOO" }, "i", 1, "a foo B", " B")]
+    [TestCase(new[] { "foo" }, "ir", 1, "A fooFOO B", " B")]
+    [TestCase(new[] { "foo" }, "i", 1, "A fooFOO B", "")]
+    [TestCase(new[] { "foo" }, "i", 0, "No Match", "No Match")]
+    [TestCase(new[] { "foo" }, "i", 0, "", "")]
+    [TestCase(new[] { "foo" }, "i", 1, "fOo", "")]
+    [TestCase(new[] { "x", "yy" }, "i", 2, "1X2YY3", "3")]
+    [TestCase(new[] { "a", "ab" }, "i", 1, "xABy", "By")]
+    [TestCase(new[] { "ab", "a" }, "i", 1, "xABy", "y")]
+    [TestCase(new[] { "a", "ab" }, "", 1, "xaby", "by")]
+    [TestCase(new[] { "foo" }, "", 1, "a FOO b foo C", " C")]
+    public void Extractor_Split_KeepsInputCase(string[] query, string mods, int index, string input, string expected)
+    {
+        var ext = new Split([.. query], mods, index);
+        Assert.That(ext.Parse(input), Is.EqualTo(expected));
+    }
+
     [Test]
     public void Extractor_Column()
     {
