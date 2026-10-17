@@ -121,7 +121,7 @@ namespace JMW.Template.Tests
             }
             catch (Exception ex)
             {
-                Assert.That("Missing attribute: 'value' Line: 2 Column: 1", Is.EqualTo(ex.Message));
+                Assert.That("Missing attribute: 'value' Line: 4 Column: 1", Is.EqualTo(ex.Message));
             }
         }
 
@@ -147,7 +147,7 @@ namespace JMW.Template.Tests
             }
             catch (Exception ex)
             {
-                Assert.That("Missing attribute: 'type' Line: 2 Column: 1", Is.EqualTo(ex.Message));
+                Assert.That("Missing attribute: 'type' Line: 4 Column: 1", Is.EqualTo(ex.Message));
             }
         }
 
@@ -173,7 +173,7 @@ namespace JMW.Template.Tests
             }
             catch (Exception ex)
             {
-                Assert.That("Missing attribute.  You must have either a 'type' and a 'value' attribute or an 'exp' attribute. Line: 2 Column: 1", Is.EqualTo(ex.Message));
+                Assert.That("Missing attribute.  You must have either a 'type' and a 'value' attribute or an 'exp' attribute. Line: 4 Column: 1", Is.EqualTo(ex.Message));
             }
         }
 
@@ -199,7 +199,7 @@ namespace JMW.Template.Tests
             }
             catch (Exception ex)
             {
-                Assert.That("Invalid property value for 'type' property on 'if' tag. Allowed values: 'equals', 'notequals', 'contains', 'notcontains', 'startswith', 'notstartswith', 'endswith', 'notendswith', 'eq', 'neq', 'cnt', 'ncnt', 'strt', 'nstrt', 'ends', 'nends'. Line: 2 Column: 1", Is.EqualTo(ex.Message));
+                Assert.That("Invalid property value for 'type' property on 'if' tag. Allowed values: 'equals', 'notequals', 'contains', 'notcontains', 'startswith', 'notstartswith', 'endswith', 'notendswith', 'eq', 'neq', 'cnt', 'ncnt', 'strt', 'nstrt', 'ends', 'nends'. Line: 4 Column: 1", Is.EqualTo(ex.Message));
             }
         }
 

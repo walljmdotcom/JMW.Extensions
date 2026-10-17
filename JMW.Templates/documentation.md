@@ -1,5 +1,18 @@
 ﻿# Templating Tag Reference
 
+## Line breaks
+
+Line breaks in the template source never reach the output. LF, CRLF, and a lone CR are all dropped the same way, in text and inside attribute values, so a template gives the same output whatever line endings it was saved or checked out with. Write `\n` wherever the output needs a line break; each one emits CRLF. A source line break still ends a `#` comment and still separates a tag's name and attributes, so tags may span lines. Included files follow the same rule.
+
+```xml
+hello
+world\n
+# this comment ends at the line break
+again\n
+```
+
+Output: `helloworld` CRLF `again` CRLF.
+
 
 ## Tag: `<if>`
 

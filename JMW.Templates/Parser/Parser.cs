@@ -2,6 +2,7 @@ using JMW.Extensions.String;
 using JMW.Template.Tags;
 using System.Collections.Generic;
 using System.IO;
+using System.Text;
 
 namespace JMW.Template
 {
@@ -51,11 +52,15 @@ namespace JMW.Template
         /// <returns>List of parsed Tag objects</returns>
         public List<Tag> Parse(string block)
         {
-            block = handleNewLines(block);
-            return Parse(new StringReader(block));
+            return parse(new StringReader(handleNewLines(block)), dropSourceLineBreaks: true);
         }
 
         public List<Tag> Parse(TextReader reader)
+        {
+            return parse(reader, dropSourceLineBreaks: false);
+        }
+
+        private List<Tag> parse(TextReader reader, bool dropSourceLineBreaks)
         {
             var tokenizer = new Tokenizer(reader);
             var stack = new Stack<Tag>();
@@ -144,15 +149,22 @@ namespace JMW.Template
                         }
                         if (currParam.IsNotEmpty())
                         {
-                            stack.Peek().Properties[currParam] = token.Value;
+                            stack.Peek().Properties[currParam] = dropSourceLineBreaks
+                                ? removeSourceLineBreaks(token.Value)
+                                : token.Value;
                         }
                         // reset currParam since we found a value for it.
                         currParam = string.Empty;
                         break;
 
                     case TokenType.TEXT:
+                        var text = dropSourceLineBreaks ? removeSourceLineBreaks(token.Value) : token.Value;
+                        if (text.Length == 0)
+                        {
+                            break;
+                        }
                         tag.TagType = TagTypes.Text;
-                        tag.TokenText = token.Value;
+                        tag.TokenText = text;
                         if (stack.Count > 0)
                         {
                             stack.Peek().Children.Add(tag);
@@ -175,11 +187,35 @@ namespace JMW.Template
                 : ast;
         }
 
+        // Source line breaks become a bare LF, so they still end comments and separate tag attributes,
+        // and a \n escape becomes CRLF. After this every CR comes from an escape.
         private static string handleNewLines(string current_template)
         {
-            current_template = current_template.Replace("\r\n", string.Empty);
+            current_template = current_template.Replace("\r\n", "\n");
+            current_template = current_template.Replace("\r", "\n");
             current_template = current_template.Replace("\\n", "\r\n");
             return current_template;
+        }
+
+        // Drops each LF that came from the template source, keeping the CRLF pairs that \n escapes produced.
+        private static string removeSourceLineBreaks(string value)
+        {
+            if (value.IndexOf('\n') < 0)
+            {
+                return value;
+            }
+
+            var sb = new StringBuilder(value.Length);
+            for (var i = 0; i < value.Length; i++)
+            {
+                var c = value[i];
+                if (c == '\n' && (i == 0 || value[i - 1] != '\r'))
+                {
+                    continue;
+                }
+                sb.Append(c);
+            }
+            return sb.ToString();
         }
     }
 }
