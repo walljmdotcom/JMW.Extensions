@@ -92,6 +92,40 @@ namespace JMW.Extensions.Reflection.Tests
             Assert.That(d1(string.Empty) == d2(string.Empty));
         }
 
+        private delegate void Recorder(List<string> calls);
+
+        private static void RecordA(List<string> calls) => calls.Add("a");
+
+        private static void RecordB(List<string> calls) => calls.Add("b");
+
+        private static void RecordC(List<string> calls) => calls.Add("c");
+
+        [TestCase(1)]
+        [TestCase(2)]
+        [TestCase(3)]
+        public void CastDelegateKeepsEveryHandler(int count)
+        {
+            Action<List<string>>[] handlers = [RecordA, RecordB, RecordC];
+            Action<List<string>>? multi = null;
+            for (var i = 0; i < count; i++)
+                multi += handlers[i];
+
+            var cast = (multi ?? throw new InvalidOperationException()).CastDelegate<Recorder>();
+
+            var calls = new List<string>();
+            cast(calls);
+
+            Assert.That(cast.GetInvocationList(), Has.Length.EqualTo(count));
+            Assert.That(calls, Is.EqualTo(new[] { "a", "b", "c" }[..count]));
+        }
+
+        [Test]
+        public void CastDelegateIncompatibleSignatureThrows()
+        {
+            Jason d1 = s => s;
+            Assert.That(() => d1.CastDelegate<Action>(), Throws.InstanceOf<ArgumentException>());
+        }
+
         private delegate string Jason(string one);
 
         private interface ITest

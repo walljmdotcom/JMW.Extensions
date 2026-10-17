@@ -50,12 +50,19 @@ namespace JMW.Types
 
         public void Unsubscribe(EventHandler<TEventArgs> handler)
         {
+            var parts = handler.GetInvocationList();
+
             lock (_handlers)
             {
-                int index = _handlers.FindIndex(h => h.IsMatch(handler));
+                // like delegate removal, take each part of a multicast handler off once, most recent first
+                for (var p = parts.Length - 1; p >= 0; p--)
+                {
+                    var part = parts[p];
+                    int index = _handlers.FindLastIndex(h => h.IsMatch(part));
 
-                if (index >= 0)
-                    _handlers.RemoveAt(index);
+                    if (index >= 0)
+                        _handlers.RemoveAt(index);
+                }
             }
         }
 
@@ -63,7 +70,7 @@ namespace JMW.Types
         {
             #region Open handler generation and cache
 
-            private delegate void OpenEventHandler(object target, object sender, TEventArgs e);
+            private delegate void OpenEventHandler(object? target, object sender, TEventArgs e);
 
             // ReSharper disable once StaticMemberInGenericType (by design)
             private static readonly ConcurrentDictionary<MethodInfo, OpenEventHandler> _openHandlerCache =
@@ -124,16 +131,12 @@ namespace JMW.Types
                         return false;
                 }
 
-                if (target is null)
-                {
-                    throw new InvalidOperationException();
-                }
-
+                // a static handler has no target, and its open handler ignores the target argument
                 _openHandler(target, sender, e);
                 return true;
             }
 
-            public bool IsMatch(EventHandler<TEventArgs> handler)
+            public bool IsMatch(Delegate handler)
             {
                 if (_weakTarget is null && !_method.IsStatic) return false;
                 return _method.IsStatic

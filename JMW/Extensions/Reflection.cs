@@ -18,10 +18,21 @@ namespace JMW.Extensions.Reflection;
 
 public static class Extensions
 {
+    /// <summary>
+    /// Converts a delegate to another delegate type with a compatible signature. Every handler in a multicast
+    /// delegate is converted, in order.
+    /// </summary>
     public static T CastDelegate<T>(this Delegate src) where T : class
     {
-        // throwOnBindFailure: true means CreateDelegate throws rather than returning null.
-        return (T)(object)Delegate.CreateDelegate(typeof(T), src.Target, src.Method, true);
+        var parts = src.GetInvocationList();
+        var cast = new Delegate?[parts.Length];
+        for (var i = 0; i < parts.Length; i++)
+        {
+            // throwOnBindFailure: true means CreateDelegate throws rather than returning null.
+            cast[i] = Delegate.CreateDelegate(typeof(T), parts[i].Target, parts[i].Method, true);
+        }
+
+        return Delegate.Combine(cast) as T ?? throw new InvalidOperationException("The delegate could not be cast.");
     }
 
     /// <summary>
