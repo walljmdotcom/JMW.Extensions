@@ -118,12 +118,12 @@ namespace Lambda.Generic.Arithmetic
             return o.Compare(a, b) > 0;
         }
 
-        public readonly int CompareTo(T? other)
+        public readonly int CompareTo(T other)
         {
             return value.CompareTo(other);
         }
 
-        public readonly bool Equals(T? other)
+        public readonly bool Equals(T other)
         {
             return value.Equals(other);
         }
@@ -148,9 +148,9 @@ namespace Lambda.Generic.Arithmetic
             return value.ToString(format, formatProvider);
         }
 
-        public override readonly string? ToString()
+        public override readonly string ToString()
         {
-            return value.ToString();
+            return value.ToString() ?? string.Empty;
         }
 
         public readonly int CompareTo(object? obj)

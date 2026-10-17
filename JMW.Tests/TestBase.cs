@@ -1,5 +1,5 @@
-﻿using System.IO;
-using System.Reflection;
+﻿using System;
+using System.IO;
 
 namespace JMW.Tests;
 
@@ -9,6 +9,6 @@ public class TestBase
 
     public TestBase()
     {
-        this.ExecutionPath = Path.Combine(Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location), "..", "..", "..");
+        this.ExecutionPath = Path.Combine(AppContext.BaseDirectory, "..", "..", "..");
     }
 }

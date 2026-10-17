@@ -26,17 +26,17 @@ namespace JMW.Types.Tests
             Assert.That(new List<Variant> { "jason" }, Is.EqualTo(v2.ListValue));
 
             Variant tv2 = new List<Variant> { "jason" };
-            Assert.That(1, Is.EqualTo(((List<Variant>)tv2).Count));
-            Assert.That(1, Is.EqualTo(((List<string>)tv2).Count));
+            Assert.That((List<Variant>?)tv2, Has.Count.EqualTo(1));
+            Assert.That((List<string>?)tv2, Has.Count.EqualTo(1));
             Assert.That(tv2.IsList, Is.True);
             Assert.That(true, Is.EqualTo(tv2.IsList));
             Assert.That(new List<Variant> { "jason" }, Is.EqualTo(tv2.ListValue));
             Assert.That(tv2.Equals(new List<Variant> { "jason" }), Is.True);
+            Assert.That("(List) Count: 1", Is.EqualTo(tv2.ToString()));
             Assert.That(tv2.Equals(null), Is.False);
             Assert.That(((Variant)new List<string> { "jason" }).IsList, Is.True);
             v2.ListValue = [];
-            Assert.That(0, Is.EqualTo(v2.ListValue.Count));
-            Assert.That("(List) Count: 1", Is.EqualTo(tv2.ToString()));
+            Assert.That(v2.ListValue, Is.Empty);
             Assert.That(v2.GetHashCode() > 0, Is.True);
 
             var v3 = new Variant(new Dictionary<string, Variant> { { "one", "jason" } });
@@ -48,9 +48,9 @@ namespace JMW.Types.Tests
             Assert.That(new Dictionary<string, Variant> { { "one", "jason" } }, Is.EqualTo(tv3.DictValue));
             Assert.That(tv3.Equals(new Dictionary<string, Variant> { { "one", "jason" } }), Is.True);
             Assert.That(((Variant)new Dictionary<string, Variant> { { "one", "jason" } }).IsDict, Is.True);
-            Assert.That(1, Is.EqualTo(((Dictionary<string, Variant>)tv3).Count));
+            Assert.That((Dictionary<string, Variant>?)tv3, Has.Count.EqualTo(1));
             v3.DictValue = [];
-            Assert.That(0, Is.EqualTo(v3.DictValue.Count));
+            Assert.That(v3.DictValue, Is.Empty);
             Assert.That("(Dict) Count: 1", Is.EqualTo(tv3.ToString()));
             Assert.That(v3.GetHashCode() > 0, Is.True);
 

@@ -185,11 +185,7 @@ namespace JMW.Types
         /// </summary>
         public string RangeToString()
         {
-            string? r;
-            if (Start == Stop) r = Start.ToString();
-            else r = Start + "-" + Stop;
-
-            return r;
+            return Start == Stop ? Start.ToString() : Start + "-" + Stop;
         }
 
         /// <summary>

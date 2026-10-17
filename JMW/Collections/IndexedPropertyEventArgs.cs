@@ -21,19 +21,19 @@ public class IndexedPropertyChangedEventArgs : EventArgs
     /// <summary>
     /// The Value of the object before it was changed
     /// </summary>
-    public object Before { get; }
+    public object? Before { get; }
 
     /// <summary>
     /// The Value of the object after it was changed
     /// </summary>
-    public object After { get; }
+    public object? After { get; }
 
     /// <summary>
     /// The name of the property being changed
     /// </summary>
     public string PropertyName { get; }
 
-    public IndexedPropertyChangedEventArgs(string prop_name, object before, object after)
+    public IndexedPropertyChangedEventArgs(string prop_name, object? before, object? after)
     {
         Before = before;
         After = after;

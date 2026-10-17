@@ -81,7 +81,7 @@ namespace JMW.Collections.Tests
             Assert.That(idx.TryGetByUniqueIndex(p => p.Bar, "jeremy", out var t1));
             Assert.That(t1 == f1);
             Assert.That(idx.TryGetByIndex(p => p.BarCollection, "one", out var t2));
-            Assert.That(t2[0] == f1);
+            Assert.That(t2?[0] == f1);
 
             Assert.That(!idx.TryGetByUniqueIndex(p => p.BarCollection, "jeremy", out t1));
             Assert.That(!idx.TryGetByIndex(p => p.Bar, "one", out t2));

@@ -118,7 +118,7 @@ public abstract class IndexedClass : ObservableClass
 
     #region Private Methods
 
-    private void RaiseIndexedPropertyChanging(string prop_name, object before, object after)
+    private void RaiseIndexedPropertyChanging(string prop_name, object? before, object? after)
     {
         _IndexedPropertyChanged.Raise(this, new IndexedPropertyChangedEventArgs(prop_name, before, after));
     }

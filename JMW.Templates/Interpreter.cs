@@ -188,6 +188,9 @@ namespace JMW.Template
             if (is_table)
             {
                 var h = (Table)handler;
+                if (h.TableData is null)
+                    throw new ArgumentException("A table handler needs table data.", nameof(handler));
+
                 if (h.TableData.Name.IsEmpty())
                     name = Table.ANON_TABLE_NAME;
                 else
@@ -196,11 +199,11 @@ namespace JMW.Template
 
             // join tables get registered as the table name.
             else if (handler.TagName == Join.TAG)
-                name = ((Join)handler).Name;
+                name = ((Join)handler).Name ?? throw new ArgumentException("A join handler needs a name.", nameof(handler));
 
             // lookup tables get registered as the table name.
             else if (handler.TagName == Lookup.TAG)
-                name = ((Lookup)handler).Name;
+                name = ((Lookup)handler).Name ?? throw new ArgumentException("A lookup handler needs a name.", nameof(handler));
 
             // add the handler
             if (!Handlers.ContainsKey(handler.TagName))
@@ -208,15 +211,13 @@ namespace JMW.Template
                 Handlers.Add(name, handler);
 
                 // add the column tags to the parser
-                if (is_table)
+                if (is_table && handler is Table { TableData: { } tableData } h)
                 {
-                    var h = (Table)handler;
-
                     // add the table_name tag.
-                    Parser.AddTag(h.TableData.Name, h);
+                    Parser.AddTag(tableData.Name, h);
 
                     // add the column_names.
-                    foreach (var c in h.TableData.Columns)
+                    foreach (var c in tableData.Columns)
                         Parser.AddColumnTag(c);
                 }
             }

@@ -2,7 +2,7 @@
 
 public class Token
 {
-    public string? Value;
+    public string Value = string.Empty;
     public TokenType Type;
     public int Line;
     public int Column;

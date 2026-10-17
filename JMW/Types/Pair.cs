@@ -10,14 +10,14 @@ namespace JMW.Types;
 /// <typeparam name="T">Type of the item</typeparam>
 public class Pair<T> : IStructuralEquatable, IStructuralComparable, IComparable, IEquatable<Pair<T>>, IEqualityComparer<Pair<T>>, IComparable<Pair<T>>
 {
-    public Pair(T? a, T? b)
+    public Pair(T a, T b)
     {
         A = a;
         B = b;
     }
 
-    public T? A { get; }
-    public T? B { get; }
+    public T A { get; }
+    public T B { get; }
 
     #region IComparable
 

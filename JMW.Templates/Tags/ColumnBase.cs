@@ -10,9 +10,6 @@ namespace JMW.Template.Tags
     {
         public static readonly HashSet<string> ALLOWED = [ATTR_EXP, ATTR_OCT];
 
-        // ReSharper disable once UnassignedGetOnlyAutoProperty
-        public override string? TagName { get; }
-
         public override HashSet<string> ALLOWEDPROPS { get; } = ALLOWED;
 
         public const string ATTR_EXP = "exp";

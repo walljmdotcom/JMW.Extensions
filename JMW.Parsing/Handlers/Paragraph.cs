@@ -91,7 +91,7 @@ public class Paragraph : Base, IParser, IProperty
 
         var paragraph = new List<string>();
         var started = false;
-        string line;
+        string? line;
         while ((line = sr.ReadLine()) is not null)
         {
             if (

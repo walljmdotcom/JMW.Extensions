@@ -171,9 +171,9 @@ public class Maybe<T> : IEquatable<T>
     {
         var r = false;
 
-        if (Success && internalValue is not null)
+        if (Success && internalValue is T value)
         {
-            other.Do(ifSuccess: data => r = data.Equals(internalValue), ifException: err => { });
+            other.Do(ifSuccess: data => r = value.Equals(data), ifException: err => { });
         }
 
         return r;
@@ -190,7 +190,7 @@ public class Maybe<T> : IEquatable<T>
     {
         unchecked
         {
-            var hashCode = EqualityComparer<T>.Default.GetHashCode(internalValue);
+            var hashCode = internalValue is null ? 0 : EqualityComparer<T>.Default.GetHashCode(internalValue);
             hashCode = (hashCode * 397) ^ (exception?.GetHashCode() ?? 0);
             hashCode = (hashCode * 397) ^ Success.GetHashCode();
             return hashCode;

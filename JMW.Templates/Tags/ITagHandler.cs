@@ -6,5 +6,5 @@ public interface ITagHandler
 
     void Validate(Tag tag, Token token);
 
-    string? TagName { get; }
+    string TagName { get; }
 }

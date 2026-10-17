@@ -18,11 +18,10 @@ namespace JMW.Extensions.Reflection;
 
 public static class Extensions
 {
-    public static T? CastDelegate<T>(this Delegate src) where T : class
+    public static T CastDelegate<T>(this Delegate src) where T : class
     {
-        var obj = (object?)Delegate.CreateDelegate(typeof(T), src.Target, src.Method, true);
-
-        return (T?)obj; // throw on fail
+        // throwOnBindFailure: true means CreateDelegate throws rather than returning null.
+        return (T)(object)Delegate.CreateDelegate(typeof(T), src.Target, src.Method, true);
     }
 
     /// <summary>

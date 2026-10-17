@@ -75,9 +75,9 @@ namespace JMW.Extensions.Reflection.Tests
         public void GetValueTest1()
         {
             var obj = new Test1 { Prop1 = "Jason" };
-            var t = obj.GetType().GetProperty("Prop1");
+            var t = obj.GetType().GetProperty("Prop1") ?? throw new InvalidOperationException("Prop1 not found.");
             var v = t.GetValue(obj);
-            Assert.That(v.ToString() == "Jason");
+            Assert.That(v?.ToString() == "Jason");
             Assert.That(t.GetValue<string>(obj) == "Jason");
         }
 

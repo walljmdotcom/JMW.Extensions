@@ -18,6 +18,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Collections.Specialized;
+using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using System.Linq.Expressions;
 using System.Reflection;
@@ -67,7 +68,7 @@ namespace JMW.Collections
         /// <param name="key">The value in the index that the object is keyed to.</param>
         /// <param name="value">The object identified by the <paramref name="key"/>.</param>
         /// <returns>True if the operation succeeded.</returns>
-        public bool TryGetByIndex(string name, object key, out List<T>? value)
+        public bool TryGetByIndex(string name, object key, [NotNullWhen(true)] out List<T>? value)
         {
             if (!_indexCollection.TryGetValue(name, out var internalValue))
             {
@@ -86,7 +87,7 @@ namespace JMW.Collections
         /// <param name="key">The value in the index that the object is keyed to.</param>
         /// <param name="value">The object identified by the <paramref name="key"/>.</param>
         /// <returns>True if the operation succeeded.</returns>
-        public bool TryGetByIndex(Expression<Func<T, object>> property_lambda, object key, out List<T>? value)
+        public bool TryGetByIndex(Expression<Func<T, object>> property_lambda, object key, [NotNullWhen(true)] out List<T>? value)
         {
             var name = Linq.GetPropertyName(property_lambda);
 
@@ -152,7 +153,7 @@ namespace JMW.Collections
         /// <param name="key">The value in the index that the object is keyed to.</param>
         /// <param name="value">The object identified by the <paramref name="key"/>.</param>
         /// <returns>True if the operation succeeded.</returns>
-        public bool TryGetByUniqueIndex(string name, object key, out T? value)
+        public bool TryGetByUniqueIndex(string name, object key, [NotNullWhen(true)] out T? value)
         {
             if (!_uniqueIndexCollection.TryGetValue(name, out var internalValue))
             {
@@ -171,7 +172,7 @@ namespace JMW.Collections
         /// <param name="key">The value in the index that the object is keyed to.</param>
         /// <param name="value">The object identified by the <paramref name="key"/>.</param>
         /// <returns>True if the operation succeeded.</returns>
-        public bool TryGetByUniqueIndex(Expression<Func<T, object>> property_lambda, object key, out T? value)
+        public bool TryGetByUniqueIndex(Expression<Func<T, object>> property_lambda, object key, [NotNullWhen(true)] out T? value)
         {
             var name = Linq.GetPropertyName(property_lambda);
 
@@ -437,19 +438,26 @@ namespace JMW.Collections
 
                 if (prop.IsCollection)
                 {
-                    var before = ((IEnumerable)e.Before).GetEnumerator();
-                    var after = ((IEnumerable)e.After).GetEnumerator();
+                    if (e.Before is IEnumerable before)
+                    {
+                        foreach (var item in before)
+                        {
+                            if (item?.ToString() is string key) unique_index.Remove(key);
+                        }
+                    }
 
-                    while (before.MoveNext())
-                        unique_index.Remove(before.Current?.ToString() ?? string.Empty);
-
-                    while (after.MoveNext())
-                        unique_index.Add(after.Current?.ToString() ?? string.Empty, (T)sender);
+                    if (e.After is IEnumerable after)
+                    {
+                        foreach (var item in after)
+                        {
+                            if (item?.ToString() is string key) unique_index.Add(key, (T)sender);
+                        }
+                    }
                 }
                 else
                 {
-                    if (e.Before is not null) unique_index.Remove(e.Before.ToString() ?? string.Empty);
-                    unique_index.Add(e.After.ToString() ?? string.Empty, (T)sender);
+                    if (e.Before?.ToString() is string beforeKey) unique_index.Remove(beforeKey);
+                    if (e.After?.ToString() is string afterKey) unique_index.Add(afterKey, (T)sender);
                 }
             }
             else
@@ -458,14 +466,17 @@ namespace JMW.Collections
 
                 if (prop.IsCollection)
                 {
-                    var before = ((IEnumerable)e.Before).GetEnumerator();
-                    var after = ((IEnumerable)e.After).GetEnumerator();
+                    if (e.Before is IEnumerable before)
+                    {
+                        foreach (var item in before)
+                            RemoveFromIndex(sender, item, index);
+                    }
 
-                    while (before.MoveNext())
-                        RemoveFromIndex(sender, before.Current, index);
-
-                    while (after.MoveNext())
-                        AddToIndex(sender, after.Current, index);
+                    if (e.After is IEnumerable after)
+                    {
+                        foreach (var item in after)
+                            AddToIndex(sender, item, index);
+                    }
                 }
                 else
                 {
@@ -481,11 +492,11 @@ namespace JMW.Collections
         /// <param name="sender">The value/object being added.</param>
         /// <param name="item">The current value of the property</param>
         /// <param name="index">The altered value.</param>
-        private static void RemoveFromIndex(object sender, object item, Dictionary<string, List<T>>? index)
+        private static void RemoveFromIndex(object sender, object? item, Dictionary<string, List<T>>? index)
         {
             ArgumentNullException.ThrowIfNull(index);
-            
-            var key = item.ToString() ?? string.Empty;
+
+            if (item?.ToString() is not string key) return;
 
             if (!index.TryGetValue(key, out List<T>? value)) return;
 
@@ -501,10 +512,10 @@ namespace JMW.Collections
         /// <param name="sender">The value/object being added.</param>
         /// <param name="item">The current value of the property</param>
         /// <param name="index">The altered value.</param>
-        private static void AddToIndex(object sender, object item, Dictionary<string, List<T>>? index)
+        private static void AddToIndex(object sender, object? item, Dictionary<string, List<T>>? index)
         {
             ArgumentNullException.ThrowIfNull(index);
-            var key = item.ToString() ?? string.Empty;
+            if (item?.ToString() is not string key) return;
             if (index.TryGetValue(key, out List<T>? value))
                 value.Add((T)sender);
             else

@@ -20,8 +20,8 @@ public static class Differential
     public static CollectionDifferential<T, M> RunCollectionDifferential<T, M>(
         IList<T> lstA,
         IList<T> lstB,
-        Func<T, IList<T>, T> retriever,
-        Func<T, T, ObjectDifferential<T, M>> comparer)
+        Func<T, IList<T>, T?> retriever,
+        Func<T, T, ObjectDifferential<T, M>?> comparer)
     {
         // some objects to hold things.
         var diff = new CollectionDifferential<T, M>();
@@ -79,7 +79,7 @@ public static class Differential
         IEnumerable<T> lst_a,
         IEnumerable<T> lst_b,
         Func<T, TKey> key_selector,
-        Func<T, T, ObjectDifferential<T, M>> object_differ)
+        Func<T, T, ObjectDifferential<T, M>?> object_differ)
     {
         // some objects to hold things.
         var diff = new CollectionDifferential<T, M>();
@@ -153,8 +153,8 @@ public static class Differential
     public static CollectionDifferentialSimple<Ta, Tb> RunCollectionDifferential<Ta, Tb>(
         IEnumerable<Ta> lst_a,
         IEnumerable<Tb> lst_b,
-        Func<Ta, IEnumerable<Tb>, Tb> retriever_a,
-        Func<Tb, IEnumerable<Ta>, Ta> retriever_b)
+        Func<Ta, IEnumerable<Tb>, Tb?> retriever_a,
+        Func<Tb, IEnumerable<Ta>, Ta?> retriever_b)
     {
         // some objects to hold things.
         var diff = new CollectionDifferentialSimple<Ta, Tb>();

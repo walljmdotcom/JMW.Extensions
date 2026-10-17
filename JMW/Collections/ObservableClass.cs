@@ -83,8 +83,8 @@ namespace JMW.Collections
         /// </summary>
         public event PropertyChangingEventHandler? PropertyChanging
         {
-            add { _PropertyChanging?.Subscribe(value.CastDelegate<EventHandler<PropertyChangingEventArgs>>()); }
-            remove { _PropertyChanging?.Unsubscribe(value.CastDelegate<EventHandler<PropertyChangingEventArgs>>()); }
+            add { if (value is not null) _PropertyChanging.Subscribe(value.CastDelegate<EventHandler<PropertyChangingEventArgs>>()); }
+            remove { if (value is not null) _PropertyChanging.Unsubscribe(value.CastDelegate<EventHandler<PropertyChangingEventArgs>>()); }
         }
 
         private readonly WeakEventSource<PropertyChangedEventArgs> _PropertyChanged = new();
@@ -97,8 +97,8 @@ namespace JMW.Collections
         /// </summary>
         public event PropertyChangedEventHandler? PropertyChanged
         {
-            add { _PropertyChanged?.Subscribe(value.CastDelegate<EventHandler<PropertyChangedEventArgs>>()); }
-            remove { _PropertyChanged?.Unsubscribe(value.CastDelegate<EventHandler<PropertyChangedEventArgs>>()); }
+            add { if (value is not null) _PropertyChanged.Subscribe(value.CastDelegate<EventHandler<PropertyChangedEventArgs>>()); }
+            remove { if (value is not null) _PropertyChanged.Unsubscribe(value.CastDelegate<EventHandler<PropertyChangedEventArgs>>()); }
         }
 
         #endregion Events

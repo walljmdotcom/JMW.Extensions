@@ -650,7 +650,7 @@ namespace JMW.Template.Tests
         [Test]
         public void TestTableOutput()
         {
-            Directory.SetCurrentDirectory(Path.GetDirectoryName(System.Reflection.Assembly.GetAssembly(typeof(InterpreterTests)).Location));
+            Directory.SetCurrentDirectory(AppContext.BaseDirectory);
             "foo.txt".IfExists(File.Delete);
 
             var sb = new StringBuilder();
@@ -678,7 +678,7 @@ namespace JMW.Template.Tests
             try
 
             {
-                Directory.SetCurrentDirectory(Path.GetDirectoryName(System.Reflection.Assembly.GetAssembly(typeof(InterpreterTests)).Location));
+                Directory.SetCurrentDirectory(AppContext.BaseDirectory);
                 "foo.txt".IfExists(File.Delete);
 
                 var sb = new StringBuilder();
@@ -708,7 +708,7 @@ namespace JMW.Template.Tests
             try
 
             {
-                Directory.SetCurrentDirectory(Path.GetDirectoryName(System.Reflection.Assembly.GetAssembly(typeof(InterpreterTests)).Location));
+                Directory.SetCurrentDirectory(AppContext.BaseDirectory);
                 "foo.txt".IfExists(File.Delete);
 
                 var sb = new StringBuilder();
@@ -735,7 +735,7 @@ namespace JMW.Template.Tests
         [Test]
         public void TestTableOutput_withNew()
         {
-            Directory.SetCurrentDirectory(Path.GetDirectoryName(System.Reflection.Assembly.GetAssembly(typeof(InterpreterTests)).Location));
+            Directory.SetCurrentDirectory(AppContext.BaseDirectory);
             "foo.txt".IfExists(File.Delete);
 
             var sb = new StringBuilder();
@@ -796,7 +796,7 @@ namespace JMW.Template.Tests
         [Test]
         public void TestNamedIncludesError1()
         {
-            Directory.SetCurrentDirectory(Path.GetDirectoryName(System.Reflection.Assembly.GetAssembly(typeof(InterpreterTests)).Location));
+            Directory.SetCurrentDirectory(AppContext.BaseDirectory);
             try
             {
                 var sb = new StringBuilder();
@@ -822,7 +822,7 @@ namespace JMW.Template.Tests
         [Test]
         public void TestNamedIncludesError2()
         {
-            Directory.SetCurrentDirectory(Path.GetDirectoryName(System.Reflection.Assembly.GetAssembly(typeof(InterpreterTests)).Location));
+            Directory.SetCurrentDirectory(AppContext.BaseDirectory);
             try
             {
                 var sb = new StringBuilder();
@@ -848,7 +848,7 @@ namespace JMW.Template.Tests
         [Test]
         public void TestPathIncludes()
         {
-            Directory.SetCurrentDirectory(Path.GetDirectoryName(System.Reflection.Assembly.GetAssembly(typeof(InterpreterTests)).Location));
+            Directory.SetCurrentDirectory(AppContext.BaseDirectory);
 
             var sb = new StringBuilder();
             using var wr = new StringWriter(sb);
@@ -870,7 +870,7 @@ namespace JMW.Template.Tests
         [Test]
         public void TestPathIncludesError()
         {
-            Directory.SetCurrentDirectory(Path.GetDirectoryName(System.Reflection.Assembly.GetAssembly(typeof(InterpreterTests)).Location));
+            Directory.SetCurrentDirectory(AppContext.BaseDirectory);
             try
             {
                 var sb = new StringBuilder();
