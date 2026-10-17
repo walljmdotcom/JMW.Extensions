@@ -47,7 +47,11 @@ When an `<include>` is used with the `name` attribute, there must be correspondi
 `<include define=string.Empty>` tag somewhere in the template.
 
 Only one of the attributes can be used at a time.
- 
+
+A `path` is resolved against the interpreter's `FileRoot`, which defaults to the current directory, and must stay inside it. A path that leaves the root, whether absolute or through `..`, is rejected with an `UnauthorizedAccessException`. Set `RestrictFilePaths = false` on the `Interpreter` to allow any path, but only when you trust every template it will run.
+
+Included files can include other files. Includes that form a loop, or nest more than 32 levels deep, are an error.
+
 #### Examples
 
 ##### Template 1
@@ -71,12 +75,12 @@ and i also want to print it here:
 
 ```
 ##### Files 2
-###### c:\foo.tmpl
+###### foo.tmpl (in the FileRoot directory)
 ```
    foo text, lets here it!
 ```
 
-###### ..\bar.txt
+###### parts\bar.txt
 ```
    bar text, we are the best!
 ```
@@ -84,9 +88,9 @@ and i also want to print it here:
 ##### Template 2
 ```xml
 this is a template.  I want to print template text from foo.tmpl here:\n
-<include path="c:\foo.tmpl"/>\n
+<include path="foo.tmpl"/>\n
 and i also want to print template text fro bar.txt here:\n
-<include name="..\bar.txt"/>\n
+<include path="parts\bar.txt"/>\n
 ```
 
 ##### Output 2
@@ -434,7 +438,7 @@ be written to a location specified by the `filename` attribute.
 
 | Attr | Description |
 | ---- | ----------- |
-| `filename` | **required**: The name of the file you want to write to.  This can be an absolute or relative file path. |
+| `filename` | **required**: The name of the file you want to write to.  Relative paths are resolved against the interpreter's `FileRoot`, and the file must be inside it unless `RestrictFilePaths` is false (see `<include>`). |
 | `mode` |**optional**: Can have a value of `new` or `append`.  `append` is the default value. If a value of `new` is present, then a file will be created each time the tag is encountered, and the `filename` attribute will append an iteration count to the end fo the filename.  If `append` is used, the data will be added to the end of the file.  If the `excel` attribute is present the data will be appended to the specified sheet.  If `append` is used a new column will be created for each encounter of the `<output>` tag.|
 | `excel` |**optional**: If present, this indicates that the output format should be an excel file.  The value of this attribute is the name of the sheet to write the data to. |
 | `column_name` |**optional**: The name of the column used when writing to an excel sheet.  Default value is `output`.|
@@ -738,7 +742,7 @@ The last expression evaluated is always the one returned.
 ```
 <var:var1 exp="x1 = x1 + 3;  x1 = x1+5"/>
 ```
-will return a value of 10 if the initial value of the variable `var1` was 2, because 2 + 3 + 3 == 10.
+will return a value of 10 if the initial value of the variable `var1` was 2, because 2 + 3 + 5 == 10.
 
 ##### Variable Names
 
@@ -753,3 +757,22 @@ As an example, for a table with 5 columns, the following is a valid example.
 ```
 
 *Variable names do not need to present in an expression.*
+
+`x1` is always the first value, `x2` the second, and so on, whatever order they appear in the expression. Using an `xN` with no matching value is an error. A value that reads as a number, such as `42` or `-1.5`, is a number in the expression; anything else is a string.
+
+##### Supported syntax
+
+Expressions use a subset of JavaScript, evaluated with JavaScript's rules for comparing and converting values.
+
+| Feature | Syntax |
+| ------- | ------ |
+| Literals | numbers, `'single'` or `"double"` quoted strings, `true`, `false`, `null`, `undefined` |
+| Arithmetic | `+ - * / %`, with `+` joining strings when either side is a string |
+| Comparison | `== != === !== < > <= >=` |
+| Logic | `&& \|\| !` and `test ? a : b` |
+| Assignment | `= += -= *= /= %=`, and `++`/`--` before or after a variable |
+| Statements | separated by `;`, and the last value is the result |
+| String functions | `length`, `substr`, `substring`, `slice`, `indexOf`, `lastIndexOf`, `includes`, `startsWith`, `endsWith`, `charAt`, `toLowerCase`, `toUpperCase`, `trim`, `trimStart`, `trimEnd`, `replace` (first match, plain text), `padStart`, `padEnd` |
+| Number functions | `toFixed`, `toString` |
+
+Loops, functions, objects, arrays, and regular expressions are not supported, and an expression that uses them is an error. Because there are no loops, every expression finishes.
