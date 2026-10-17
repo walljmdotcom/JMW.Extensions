@@ -88,35 +88,42 @@ namespace JMW.Types
         /// <remarks>
         /// A '-' at the start of the text, or straight after the '-' separator, is a sign, so "-5--3" is -5 to -3
         /// and "1--3" is 1 to -3, which is rejected because Start is greater than Stop.
+        /// More than two parts, such as "1,3,5" or "1-3-5", is rejected; a list of ranges is a RangeCollection.
         /// </remarks>
         /// <param name="rng"></param>
         public Range(string rng)
         {
+            const string tooManyParts =
+                "A range has at most a start and a stop. Use RangeCollection for a list such as \"1-3,5\".";
             var text = rng.Trim();
-            if (text.Contains(','))
+            var separatorChar = text.Contains(',') ? ',' : text.Contains(':') ? ':' : '-';
+            int separator;
+            int stopAt;
+            if (separatorChar == '-')
             {
-                Start = Signed<T, C>.Parse(text.Split(',')[0]);
-                Stop = Signed<T, C>.Parse(text.Split(',')[1]);
-            }
-            else if (text.Contains(':'))
-            {
-                Start = Signed<T, C>.Parse(text.Split(':')[0]);
-                Stop = Signed<T, C>.Parse(text.Split(':')[1]);
+                // skip index 0 so a leading sign is not taken for the separator, and allow a sign after it
+                separator = text.Length > 1 ? text.IndexOf('-', 1) : -1;
+                stopAt = separator + 2;
             }
             else
             {
-                // skip index 0 so a leading sign is not taken for the separator
-                var separator = text.Length > 1 ? text.IndexOf('-', 1) : -1;
-                if (separator < 0)
-                {
-                    Start = Signed<T, C>.Parse(text);
-                    Stop = Start;
-                }
-                else
-                {
-                    Start = Signed<T, C>.Parse(text.Substring(0, separator));
-                    Stop = Signed<T, C>.Parse(text.Substring(separator + 1));
-                }
+                separator = text.IndexOf(separatorChar);
+                stopAt = separator + 1;
+            }
+
+            if (separator < 0)
+            {
+                Start = Signed<T, C>.Parse(text);
+                Stop = Start;
+            }
+            else if (stopAt < text.Length && text.IndexOf(separatorChar, stopAt) >= 0)
+            {
+                throw new ArgumentException(tooManyParts, nameof(rng));
+            }
+            else
+            {
+                Start = Signed<T, C>.Parse(text.Substring(0, separator));
+                Stop = Signed<T, C>.Parse(text.Substring(separator + 1));
             }
 
             if (Start > Stop)

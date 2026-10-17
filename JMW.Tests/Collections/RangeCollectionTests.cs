@@ -229,6 +229,27 @@ namespace JMW.Collections.Tests
             Assert.That(() => new IntegerRange(input), Throws.Exception);
         }
 
+        // a single range has two parts in every separator form; a list belongs in a RangeCollection
+        [TestCase("1-3-5")]
+        [TestCase("1,3,5")]
+        [TestCase("1:3:5")]
+        [TestCase("1,3,")]
+        [TestCase("1:3:")]
+        [TestCase(" 1 , 3 , 5 ")]
+        [TestCase("-1--3--5")]
+        [TestCase("1-3-")]
+        public void ParseRejectsMoreThanTwoParts(string input)
+        {
+            Assert.That(
+                () => new IntegerRange(input),
+                Throws.ArgumentException.With.Message.Contains("RangeCollection")
+            );
+            Assert.That(
+                () => new LongRange(input),
+                Throws.ArgumentException.With.Message.Contains("RangeCollection")
+            );
+        }
+
         [TestCase(-5, -5)]
         [TestCase(-5, -3)]
         [TestCase(-10, 5)]
