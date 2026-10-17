@@ -10,88 +10,41 @@ namespace JMW.Template.Tests
         [Test]
         public void EvaluateBooleanExpressionErrorTest()
         {
-            try
-            {
-                TagHelpers.EvaluateBooleanExpression("x1.substr(0,2)", ["jason"]);
-            }
-            catch (Exception ex)
-            {
-                Assert.That("The expression:\nx1.substr(0,2)\ndid not evaluate to a boolean value.", Is.EqualTo(ex.Message));
-            }
+            Assert.That(
+                () => TagHelpers.EvaluateBooleanExpression("x1.substr(0,2)", ["jason"]),
+                Throws.Exception.With.Message.EqualTo("The expression:\nx1.substr(0,2)\ndid not evaluate to a boolean value."));
         }
 
         [Test]
         public void EvaluateArithmeticExpressionErrorTest()
         {
-            try
-            {
-                TagHelpers.EvaluateArithmeticExpression("x1.substr(0,2)", ["jason"]);
-            }
-            catch (Exception ex)
-            {
-                Assert.That("The expression:\nx1.substr(0,2)\ndid not evaluate to a numeric value.", Is.EqualTo(ex.Message));
-            }
+            Assert.That(
+                () => TagHelpers.EvaluateArithmeticExpression("x1.substr(0,2)", ["jason"]),
+                Throws.Exception.With.Message.EqualTo("The expression:\nx1.substr(0,2)\ndid not evaluate to a numeric value."));
         }
 
         [Test]
         public void RetrieveOctetErrorTest()
         {
-            try
-            {
-                TagHelpers.RetrieveOctet("1.1.1.1", "0");
-            }
-            catch (Exception ex)
-            {
-                Assert.That("The value provided for octet argument was invalid. Must be a number between 1 and 4.", Is.EqualTo(ex.Message));
-            }
-
-            try
-            {
-                TagHelpers.RetrieveOctet("1.1.1.1", "5");
-            }
-            catch (Exception ex)
-            {
-                Assert.That("The value provided for octet argument was invalid. Must be a number between 1 and 4.", Is.EqualTo(ex.Message));
-            }
-
-            try
-            {
-                TagHelpers.RetrieveOctet("1.1.1.1", "x");
-            }
-            catch (Exception ex)
-            {
-                Assert.That("The value provided for octet argument was invalid. Must be a number between 1 and 4.", Is.EqualTo(ex.Message));
-            }
+            const string invalidOctet = "The value provided for octet argument was invalid. Must be a number between 1 and 4.";
+            Assert.That(() => TagHelpers.RetrieveOctet("1.1.1.1", "0"), Throws.Exception.With.Message.EqualTo(invalidOctet));
+            Assert.That(() => TagHelpers.RetrieveOctet("1.1.1.1", "5"), Throws.Exception.With.Message.EqualTo(invalidOctet));
+            Assert.That(() => TagHelpers.RetrieveOctet("1.1.1.1", "x"), Throws.Exception.With.Message.EqualTo(invalidOctet));
 
             var data = "1.1.1";
-            try
-            {
-                TagHelpers.RetrieveOctet(data, "1");
-            }
-            catch (Exception ex)
-            {
-                Assert.That("There was a problem parsing octets from the IP: '" + data + "'. Please check formatting.", Is.EqualTo(ex.Message));
-            }
+            Assert.That(
+                () => TagHelpers.RetrieveOctet(data, "1"),
+                Throws.Exception.With.Message.EqualTo("There was a problem parsing octets from the IP: '" + data + "'. Please check formatting."));
 
             data = "1.1.1.1.1";
-            try
-            {
-                TagHelpers.RetrieveOctet(data, "1");
-            }
-            catch (Exception ex)
-            {
-                Assert.That("There was a problem parsing octets from the IP: '" + data + "'. Please check formatting.", Is.EqualTo(ex.Message));
-            }
+            Assert.That(
+                () => TagHelpers.RetrieveOctet(data, "1"),
+                Throws.Exception.With.Message.EqualTo("There was a problem parsing octets from the IP: '" + data + "'. Please check formatting."));
 
             data = "11111";
-            try
-            {
-                TagHelpers.RetrieveOctet(data, "1");
-            }
-            catch (Exception ex)
-            {
-                Assert.That("The provided column value: '" + data + "' is not an IP.", Is.EqualTo(ex.Message));
-            }
+            Assert.That(
+                () => TagHelpers.RetrieveOctet(data, "1"),
+                Throws.Exception.With.Message.EqualTo("The provided column value: '" + data + "' is not an IP."));
         }
 
         [Test]
@@ -104,35 +57,26 @@ namespace JMW.Template.Tests
         [Test]
         public void SetupEngineErrorTest()
         {
-            try
-            {
-                TagHelpers.EvaluateBooleanExpression("x1.substr(0,2); x2", ["jason"]);
-            }
-            catch (Exception ex)
-            {
-                Assert.That("The list of arguments provided in:\njason\n is greater that the number of variables listed in the expression: x1.substr(0,2); x2\n" +
-                                "Variables must be specified in the format: x1, x2, x3 etc. and must be equal or less than the argumenst provided.", Is.EqualTo(ex.Message));
-            }
+            Assert.That(
+                () => TagHelpers.EvaluateBooleanExpression("x1.substr(0,2); x2", ["jason"]),
+                Throws.Exception.With.Message.EqualTo(
+                    "The list of arguments provided in:\njason\n is greater that the number of variables listed in the expression: x1.substr(0,2); x2\n" +
+                    "Variables must be specified in the format: x1, x2, x3 etc. and must be equal or less than the argumenst provided."));
         }
 
         [Test]
         public void CheckAllowedAttributesErrorTest()
         {
-            try
+            var t = new Tag
             {
-                var t = new Tag
-                {
-                    Name = "foo",
-                    TagType = TagTypes.Tag
-                };
-                t.Properties.Add("foo", "bar");
+                Name = "foo",
+                TagType = TagTypes.Tag
+            };
+            t.Properties.Add("foo", "bar");
 
-                TagHelpers.CheckAllowedAttributes(t, ["blah"], new Token());
-            }
-            catch (Exception ex)
-            {
-                Assert.That("Invalid attribute found on tag. Allowed attributes: blah Line: 1 Column: 1", Is.EqualTo(ex.Message));
-            }
+            Assert.That(
+                () => TagHelpers.CheckAllowedAttributes(t, ["blah"], new Token()),
+                Throws.Exception.With.Message.EqualTo("Invalid attribute found on tag. Allowed attributes: blah Line: 1 Column: 1"));
         }
     }
 }

@@ -48,22 +48,8 @@ namespace JMW.Functional.Tests
 
             Assert.That("jason", Is.EqualTo(m1.Do(ifSuccess: v => v, ifException: null)));
             Assert.That("wat!?", Is.EqualTo(m2.Do(ifSuccess: null, ifException: err => "wat!?")));
-            try
-            {
-                m2.Do(null, null);
-            }
-            catch (Exception ex)
-            {
-                Assert.That(ex.GetType() == typeof(ArgumentException));
-            }
-            try
-            {
-                m1.Do(null, null);
-            }
-            catch (Exception ex)
-            {
-                Assert.That(ex.GetType() == typeof(ArgumentException));
-            }
+            Assert.That(() => m2.Do(null, null), Throws.TypeOf<ArgumentException>());
+            Assert.That(() => m1.Do(null, null), Throws.TypeOf<ArgumentException>());
         }
     }
 }

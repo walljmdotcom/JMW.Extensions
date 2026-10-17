@@ -17,14 +17,7 @@ namespace JMW.Extensions.Reflection.Tests
         {
             Assert.That("Prop1" == Linq.GetPropertyName<Test1>(p => p.Prop1));
 
-            try
-            {
-                Linq.GetPropertyName<Test1>(p => p.Prop1 + 1);
-            }
-            catch(Exception ex)
-            {
-                Assert.That(ex.GetType() == typeof(ArgumentException));
-            }
+            Assert.That(() => Linq.GetPropertyName<Test1>(p => p.Prop1 + 1), Throws.TypeOf<ArgumentException>());
         }
 
         [Test]

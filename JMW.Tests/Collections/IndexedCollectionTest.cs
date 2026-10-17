@@ -103,35 +103,14 @@ namespace JMW.Collections.Tests
             Assert.That(() => idx.Insert(0, f1), Throws.TypeOf<OperationCanceledException>());
             Assert.That(idx.Count == 2);
 
-            try
-            {
-                idx.Add(f1);
-            }
-            catch (Exception ex)
-            {
-                Assert.That(ex.GetType() == typeof(OperationCanceledException));
-            }
+            Assert.That(() => idx.Add(f1), Throws.TypeOf<OperationCanceledException>());
             idx.RefreshIndices();
             Assert.That(idx.TryAdd(f1) == false);
             idx.RefreshIndices();
-            try
-            {
-                f1.BazCollection = [1, 2, 5, 5];
-            }
-            catch (Exception ex)
-            {
-                Assert.That(ex.GetType() == typeof(ArgumentException));
-            }
-            try
-            {
-                var f3 = new Foo { Bar = "wall", BarCollection = ["three", "two"], Baz = "me", BazCollection = [6, 7, 7] };
-                idx.Add(f3);
-            }
-            catch
-            (Exception ex)
-            {
-                Assert.That(ex.GetType() == typeof(OperationCanceledException));
-            }
+            Assert.That(() => f1.BazCollection = [1, 2, 5, 5], Throws.TypeOf<ArgumentException>());
+
+            var f3 = new Foo { Bar = "wall", BarCollection = ["three", "two"], Baz = "me", BazCollection = [6, 7, 7] };
+            Assert.That(() => idx.Add(f3), Throws.TypeOf<OperationCanceledException>());
             f1.BarCollection = ["1", "2", "3"];
 
             f1.PropertyChanged += f1_PropertyChanged;
@@ -185,14 +164,11 @@ namespace JMW.Collections.Tests
             var f3 = new Foo { Bar = "wall", BarCollection = ["three", "two"], Baz = "me", BazCollection = [3, 4] };
             idx.Add(f1);
             idx.Add(f2);
-            try
-            {
-                idx.Add(f3);
-            }
-            catch (OperationCanceledException ex)
-            {
-                Assert.That("Operation was cancelled due to an index violation. The Index may have been violated.", Is.EqualTo(ex.Message));
-            }
+            Assert.That(
+                () => idx.Add(f3),
+                Throws.TypeOf<OperationCanceledException>()
+                    .With.Message.EqualTo("Operation was cancelled due to an index violation. The Index may have been violated.")
+            );
 
             Assert.That(1,Is.EqualTo(cnt));
             Assert.That("Value violated index 'Bar' using key 'wall'", Is.EqualTo(msg));

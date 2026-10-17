@@ -76,131 +76,106 @@ namespace JMW.Template.Tests
         [Test]
         public void TestTableVarIf3()
         {
-            try
-            {
-                var sb = new StringBuilder();
-                using var wr = new StringWriter(sb);
-                var i = new Interpreter(wr);
-                i.AddVariable("walljm", "wooooo");
+            var sb = new StringBuilder();
+            using var wr = new StringWriter(sb);
+            var i = new Interpreter(wr);
+            i.AddVariable("walljm", "wooooo");
 
-                var data = new TableData("test", ["foo,bar,ip", "blah,flaw,1.1.1.1", "floo,blue,1.2.3.4"]);
-                var tbl = new Table(data, i);
-                i.AddHandler(tbl);
+            var data = new TableData("test", ["foo,bar,ip", "blah,flaw,1.1.1.1", "floo,blue,1.2.3.4"]);
+            var tbl = new Table(data, i);
+            i.AddHandler(tbl);
 
-                i.Eval(@"
+            Assert.That(
+                () => i.Eval(@"
 <table name=""test"">
 <if column=""ip,bar"" oct=""4"" exp=""x1==1""><ip/>\n</if>
 </table>
-");
-            }
-            catch (Exception ex)
-            {
-                Assert.That("The 'oct' attribute is currently incompatible with multiple arguments for the 'if' tag.", Is.EqualTo(ex.Message));
-            }
+"),
+                Throws.Exception.With.Message.EqualTo("The 'oct' attribute is currently incompatible with multiple arguments for the 'if' tag."));
         }
 
         [Test]
         public void TestTableIf4()
         {
-            try
-            {
-                var sb = new StringBuilder();
-                using var wr = new StringWriter(sb);
-                var i = new Interpreter(wr);
-                i.AddVariable("walljm", "wooooo");
+            var sb = new StringBuilder();
+            using var wr = new StringWriter(sb);
+            var i = new Interpreter(wr);
+            i.AddVariable("walljm", "wooooo");
 
-                var data = new TableData("test", ["foo,bar,ip", "blah,flaw,1.1.1.1", "floo,blue,1.2.3.4"]);
-                var tbl = new Table(data, i);
-                i.AddHandler(tbl);
+            var data = new TableData("test", ["foo,bar,ip", "blah,flaw,1.1.1.1", "floo,blue,1.2.3.4"]);
+            var tbl = new Table(data, i);
+            i.AddHandler(tbl);
 
-                i.Eval(@"
+            Assert.That(
+                () => i.Eval(@"
 <table name=""test"">
 <if column=""ip"" type='eq'><ip/>\n</if>
 </table>
-");
-            }
-            catch (Exception ex)
-            {
-                Assert.That("Missing attribute: 'value' Line: 4 Column: 1", Is.EqualTo(ex.Message));
-            }
+"),
+                Throws.Exception.With.Message.EqualTo("Missing attribute: 'value' Line: 4 Column: 1"));
         }
 
         [Test]
         public void TestTableIf5()
         {
-            try
-            {
-                var sb = new StringBuilder();
-                using var wr = new StringWriter(sb);
-                var i = new Interpreter(wr);
-                i.AddVariable("walljm", "wooooo");
+            var sb = new StringBuilder();
+            using var wr = new StringWriter(sb);
+            var i = new Interpreter(wr);
+            i.AddVariable("walljm", "wooooo");
 
-                var data = new TableData("test", ["foo,bar,ip", "blah,flaw,1.1.1.1", "floo,blue,1.2.3.4"]);
-                var tbl = new Table(data, i);
-                i.AddHandler(tbl);
+            var data = new TableData("test", ["foo,bar,ip", "blah,flaw,1.1.1.1", "floo,blue,1.2.3.4"]);
+            var tbl = new Table(data, i);
+            i.AddHandler(tbl);
 
-                i.Eval(@"
+            Assert.That(
+                () => i.Eval(@"
 <table name=""test"">
 <if column=""ip"" value='foo'><ip/>\n</if>
 </table>
-");
-            }
-            catch (Exception ex)
-            {
-                Assert.That("Missing attribute: 'type' Line: 4 Column: 1", Is.EqualTo(ex.Message));
-            }
+"),
+                Throws.Exception.With.Message.EqualTo("Missing attribute: 'type' Line: 4 Column: 1"));
         }
 
         [Test]
         public void TestTableIf6()
         {
-            try
-            {
-                var sb = new StringBuilder();
-                using var wr = new StringWriter(sb);
-                var i = new Interpreter(wr);
-                i.AddVariable("walljm", "wooooo");
+            var sb = new StringBuilder();
+            using var wr = new StringWriter(sb);
+            var i = new Interpreter(wr);
+            i.AddVariable("walljm", "wooooo");
 
-                var data = new TableData("test", ["foo,bar,ip", "blah,flaw,1.1.1.1", "floo,blue,1.2.3.4"]);
-                var tbl = new Table(data, i);
-                i.AddHandler(tbl);
+            var data = new TableData("test", ["foo,bar,ip", "blah,flaw,1.1.1.1", "floo,blue,1.2.3.4"]);
+            var tbl = new Table(data, i);
+            i.AddHandler(tbl);
 
-                i.Eval(@"
+            Assert.That(
+                () => i.Eval(@"
 <table name=""test"">
 <if column=""ip""><ip/>\n</if>
 </table>
-");
-            }
-            catch (Exception ex)
-            {
-                Assert.That("Missing attribute.  You must have either a 'type' and a 'value' attribute or an 'exp' attribute. Line: 4 Column: 1", Is.EqualTo(ex.Message));
-            }
+"),
+                Throws.Exception.With.Message.EqualTo("Missing attribute.  You must have either a 'type' and a 'value' attribute or an 'exp' attribute. Line: 4 Column: 1"));
         }
 
         [Test]
         public void TestTableIf7()
         {
-            try
-            {
-                var sb = new StringBuilder();
-                using var wr = new StringWriter(sb);
-                var i = new Interpreter(wr);
-                i.AddVariable("walljm", "wooooo");
+            var sb = new StringBuilder();
+            using var wr = new StringWriter(sb);
+            var i = new Interpreter(wr);
+            i.AddVariable("walljm", "wooooo");
 
-                var data = new TableData("", ["foo,bar,ip", "blah,flaw,1.1.1.1", "floo,blue,1.2.3.4"]);
-                var tbl = new Table(data, i);
-                i.AddHandler(tbl);
+            var data = new TableData("", ["foo,bar,ip", "blah,flaw,1.1.1.1", "floo,blue,1.2.3.4"]);
+            var tbl = new Table(data, i);
+            i.AddHandler(tbl);
 
-                i.Eval(@"
+            Assert.That(
+                () => i.Eval(@"
 <table>
 <if column=""ip"" type='blah' value='foo'><ip/>\n</if>
 </table>
-");
-            }
-            catch (Exception ex)
-            {
-                Assert.That("Invalid property value for 'type' property on 'if' tag. Allowed values: 'equals', 'notequals', 'contains', 'notcontains', 'startswith', 'notstartswith', 'endswith', 'notendswith', 'eq', 'neq', 'cnt', 'ncnt', 'strt', 'nstrt', 'ends', 'nends'. Line: 4 Column: 1", Is.EqualTo(ex.Message));
-            }
+"),
+                Throws.Exception.With.Message.EqualTo("Invalid property value for 'type' property on 'if' tag. Allowed values: 'equals', 'notequals', 'contains', 'notcontains', 'startswith', 'notstartswith', 'endswith', 'notendswith', 'eq', 'neq', 'cnt', 'ncnt', 'strt', 'nstrt', 'ends', 'nends'. Line: 4 Column: 1"));
         }
 
         [Test]
@@ -503,149 +478,88 @@ namespace JMW.Template.Tests
         [Test]
         public void TestJoinError1()
         {
-            try
-            {
-                var sb = new StringBuilder();
-                using var wr = new StringWriter(sb);
-                var i = new Interpreter(wr);
-                i.AddVariable("walljm", "wooooo");
+            var sb = new StringBuilder();
+            using var wr = new StringWriter(sb);
+            var i = new Interpreter(wr);
+            i.AddVariable("walljm", "wooooo");
 
-                var data1 = new TableData("test1", ["foo,bar", "green,flaw", "blue,blue", "red,flaw", "black,blue"]);
-                var tbl1 = new Table(data1, i);
+            var data1 = new TableData("test1", ["foo,bar", "green,flaw", "blue,blue", "red,flaw", "black,blue"]);
+            var tbl1 = new Table(data1, i);
 
-                i.AddHandler(tbl1);
+            i.AddHandler(tbl1);
 
-                var data2 = new TableData("test2", ["baz,bar", "green,yellow", "blue,purple", "red,pink", "black,brown"]);
-                var tbl2 = new Table(data2, i);
-                i.AddHandler(tbl2);
+            var data2 = new TableData("test2", ["baz,bar", "green,yellow", "blue,purple", "red,pink", "black,brown"]);
+            var tbl2 = new Table(data2, i);
+            i.AddHandler(tbl2);
 
-                i.Eval(@"
+            Assert.That(
+                () => i.Eval(@"
 <join left_table=""test3"" right_table=""test2"" left_key_exp=""x1"" right_key=""baz"">
 <left_foo/><left_bar/>\n
 </join>
-");
-                Assert.Fail();
-            }
-            catch (Exception ex)
-            {
-                Assert.That("Specified table: 'test3' in 'left_table' attribute does not exist.", Is.EqualTo(ex.Message));
-            }
+"),
+                Throws.Exception.With.Message.EqualTo("Specified table: 'test3' in 'left_table' attribute does not exist."));
 
-            try
-            {
-                var sb = new StringBuilder();
-                using var wr = new StringWriter(sb);
-                var i = new Interpreter(wr);
-                i.AddVariable("walljm", "wooooo");
-
-                var data1 = new TableData("test1", ["foo,bar", "green,flaw", "blue,blue", "red,flaw", "black,blue"]);
-                var tbl1 = new Table(data1, i);
-
-                i.AddHandler(tbl1);
-
-                var data2 = new TableData("test2", ["baz,bar", "green,yellow", "blue,purple", "red,pink", "black,brown"]);
-                var tbl2 = new Table(data2, i);
-                i.AddHandler(tbl2);
-
-                i.Eval(@"
+            Assert.That(
+                () => i.Eval(@"
 <join left_table=""test1"" right_table=""test3"" left_key_exp=""x1"" right_key=""baz"">
 <left_foo/><left_bar/>\n
 </join>
-");
-                Assert.Fail();
-            }
-            catch (Exception ex)
-            {
-                Assert.That("Specified table: 'test3' in 'right_table' attribute does not exist.", Is.EqualTo(ex.Message));
-            }
+"),
+                Throws.Exception.With.Message.EqualTo("Specified table: 'test3' in 'right_table' attribute does not exist."));
         }
 
         [Test]
         public void TestJoinError2()
         {
-            try
-            {
-                var sb = new StringBuilder();
-                using var wr = new StringWriter(sb);
-                var i = new Interpreter(wr);
-                i.AddVariable("walljm", "wooooo");
+            var sb = new StringBuilder();
+            using var wr = new StringWriter(sb);
+            var i = new Interpreter(wr);
+            i.AddVariable("walljm", "wooooo");
 
-                var data1 = new TableData("test1", ["foo,bar", "foo,flaw", "foo,blue", "red,flaw", "black,blue"]);
-                var tbl1 = new Table(data1, i);
+            var data1 = new TableData("test1", ["foo,bar", "foo,flaw", "foo,blue", "red,flaw", "black,blue"]);
+            var tbl1 = new Table(data1, i);
 
-                i.AddHandler(tbl1);
+            i.AddHandler(tbl1);
 
-                var data2 = new TableData("test2", ["baz,bar", "green,yellow", "blue,purple", "red,pink", "black,brown"]);
-                var tbl2 = new Table(data2, i);
-                i.AddHandler(tbl2);
+            var data2 = new TableData("test2", ["baz,bar", "green,yellow", "blue,purple", "red,pink", "black,brown"]);
+            var tbl2 = new Table(data2, i);
+            i.AddHandler(tbl2);
 
-                i.Eval(@"
+            Assert.That(
+                () => i.Eval(@"
 <join left_table=""test1"" right_table=""test2"" left_key_exp=""x1"" right_key=""baz"">
 <left_foo/><left_bar/>\n
 </join>
-");
-                Assert.Fail();
-            }
-            catch (Exception ex)
-            {
-                Assert.That("Key expression does not produce a unique key.  Please provide a key expression that produces a unique key.  Duplicate key: 'foo'", Is.EqualTo(ex.Message));
-            }
+"),
+                Throws.Exception.With.Message.EqualTo("Key expression does not produce a unique key.  Please provide a key expression that produces a unique key.  Duplicate key: 'foo'"));
 
-            try
-            {
-                var sb = new StringBuilder();
-                using var wr = new StringWriter(sb);
-                var i = new Interpreter(wr);
-                i.AddVariable("walljm", "wooooo");
+            var sb2 = new StringBuilder();
+            using var wr2 = new StringWriter(sb2);
+            var i2 = new Interpreter(wr2);
+            i2.AddVariable("walljm", "wooooo");
 
-                var data1 = new TableData("test1", ["foo,bar", "green,flaw", "blue,blue", "red,flaw", "black,blue"]);
-                var tbl1 = new Table(data1, i);
+            var uniqueData1 = new TableData("test1", ["foo,bar", "green,flaw", "blue,blue", "red,flaw", "black,blue"]);
+            i2.AddHandler(new Table(uniqueData1, i2));
 
-                i.AddHandler(tbl1);
+            var uniqueData2 = new TableData("test2", ["baz,bar", "green,yellow", "blue,purple", "red,pink", "black,brown"]);
+            i2.AddHandler(new Table(uniqueData2, i2));
 
-                var data2 = new TableData("test2", ["baz,bar", "green,yellow", "blue,purple", "red,pink", "black,brown"]);
-                var tbl2 = new Table(data2, i);
-                i.AddHandler(tbl2);
-
-                i.Eval(@"
+            Assert.That(
+                () => i2.Eval(@"
 <join left_table=""test1"" right_table=""test2"" right_key=""baz"">
 <left_foo/><left_bar/>\n
 </join>
-");
-                Assert.Fail();
-            }
-            catch (Exception ex)
-            {
-                Assert.That("Require attribute is missing. A 'left_key_exp' or a 'left_key' attribute is required.", Is.EqualTo(ex.Message));
-            }
+"),
+                Throws.Exception.With.Message.EqualTo("Require attribute is missing. A 'left_key_exp' or a 'left_key' attribute is required."));
 
-            try
-            {
-                var sb = new StringBuilder();
-                using var wr = new StringWriter(sb);
-                var i = new Interpreter(wr);
-                i.AddVariable("walljm", "wooooo");
-
-                var data1 = new TableData("test1", ["foo,bar", "green,flaw", "blue,blue", "red,flaw", "black,blue"]);
-                var tbl1 = new Table(data1, i);
-
-                i.AddHandler(tbl1);
-
-                var data2 = new TableData("test2", ["baz,bar", "green,yellow", "blue,purple", "red,pink", "black,brown"]);
-                var tbl2 = new Table(data2, i);
-                i.AddHandler(tbl2);
-
-                i.Eval(@"
+            Assert.That(
+                () => i2.Eval(@"
 <join left_table=""test1"" right_table=""test2"">
 <left_foo/><left_bar/>\n
 </join>
-");
-                Assert.Fail();
-            }
-            catch (Exception ex)
-            {
-                Assert.That("Require attribute is missing. A 'left_key_exp' or a 'left_key' attribute is required.", Is.EqualTo(ex.Message));
-            }
+"),
+                Throws.Exception.With.Message.EqualTo("Require attribute is missing. A 'left_key_exp' or a 'left_key' attribute is required."));
         }
 
         [Test]
@@ -676,61 +590,49 @@ namespace JMW.Template.Tests
         [Test]
         public void TestTableOutputError1()
         {
-            try
+            Directory.SetCurrentDirectory(AppContext.BaseDirectory);
+            "foo.txt".IfExists(File.Delete);
 
-            {
-                Directory.SetCurrentDirectory(AppContext.BaseDirectory);
-                "foo.txt".IfExists(File.Delete);
+            var sb = new StringBuilder();
+            using var wr = new StringWriter(sb);
+            var i = new Interpreter(wr);
+            i.AddVariable("walljm", "wooooo");
 
-                var sb = new StringBuilder();
-                using var wr = new StringWriter(sb);
-                var i = new Interpreter(wr);
-                i.AddVariable("walljm", "wooooo");
+            var data = new TableData("test", ["foo,bar", "blah,flaw", "floo,blue", "blah,flaw", "floo,blue"]);
+            var tbl = new Table(data, i);
+            i.AddHandler(tbl);
 
-                var data = new TableData("test", ["foo,bar", "blah,flaw", "floo,blue", "blah,flaw", "floo,blue"]);
-                var tbl = new Table(data, i);
-                i.AddHandler(tbl);
-
-                i.Eval(@"
+            Assert.That(
+                () => i.Eval(@"
 <table name=""test"">
 <output filename=""foo.txt"" mode='blah'><foo/>\n</output>
 </table>
-");
-            }
-            catch (Exception ex)
-            {
-                Assert.That("Unknown attribute file for 'mode'.  Allowed values are: 'new' and 'append'", Is.EqualTo(ex.Message));
-            }
+"),
+                Throws.Exception.With.Message.EqualTo("Unknown attribute file for 'mode'.  Allowed values are: 'new' and 'append'"));
         }
 
         [Test]
         public void TestTableOutputError2()
         {
-            try
+            Directory.SetCurrentDirectory(AppContext.BaseDirectory);
+            "foo.txt".IfExists(File.Delete);
 
-            {
-                Directory.SetCurrentDirectory(AppContext.BaseDirectory);
-                "foo.txt".IfExists(File.Delete);
+            var sb = new StringBuilder();
+            using var wr = new StringWriter(sb);
+            var i = new Interpreter(wr);
+            i.AddVariable("walljm", "wooooo");
 
-                var sb = new StringBuilder();
-                using var wr = new StringWriter(sb);
-                var i = new Interpreter(wr);
-                i.AddVariable("walljm", "wooooo");
+            var data = new TableData("test", ["foo,bar", "blah,flaw", "floo,blue", "blah,flaw", "floo,blue"]);
+            var tbl = new Table(data, i);
+            i.AddHandler(tbl);
 
-                var data = new TableData("test", ["foo,bar", "blah,flaw", "floo,blue", "blah,flaw", "floo,blue"]);
-                var tbl = new Table(data, i);
-                i.AddHandler(tbl);
-
-                i.Eval(@"
+            Assert.That(
+                () => i.Eval(@"
 <table name=""test"">
 <output mode='blah'><foo/>\n</output>
 </table>
-");
-            }
-            catch (Exception ex)
-            {
-                Assert.That("The 'filename' attribute is required.", Is.EqualTo(ex.Message));
-            }
+"),
+                Throws.Exception.With.Message.EqualTo("The 'filename' attribute is required."));
         }
 
         [Test]
@@ -798,52 +700,42 @@ namespace JMW.Template.Tests
         public void TestNamedIncludesError1()
         {
             Directory.SetCurrentDirectory(AppContext.BaseDirectory);
-            try
-            {
-                var sb = new StringBuilder();
-                using var wr = new StringWriter(sb);
-                var i = new Interpreter(wr);
+            var sb = new StringBuilder();
+            using var wr = new StringWriter(sb);
+            var i = new Interpreter(wr);
 
-                var data = new TableData("test", ["foo,bar", "blah,flaw", "floo,blue", "blah,flaw", "floo,blue"]);
-                var tbl = new Table(data, i);
-                i.AddHandler(tbl);
+            var data = new TableData("test", ["foo,bar", "blah,flaw", "floo,blue", "blah,flaw", "floo,blue"]);
+            var tbl = new Table(data, i);
+            i.AddHandler(tbl);
 
-                i.Eval(@"
+            Assert.That(
+                () => i.Eval(@"
 <table name=""test"">
 <include name='foo'/>
 </table>
-");
-            }
-            catch (Exception ex)
-            {
-                Assert.That("The <include> tag referenced named include 'foo' which does not exist in the template.", Is.EqualTo(ex.Message));
-            }
+"),
+                Throws.Exception.With.Message.EqualTo("The <include> tag referenced named include 'foo' which does not exist in the template."));
         }
 
         [Test]
         public void TestNamedIncludesError2()
         {
             Directory.SetCurrentDirectory(AppContext.BaseDirectory);
-            try
-            {
-                var sb = new StringBuilder();
-                using var wr = new StringWriter(sb);
-                var i = new Interpreter(wr);
+            var sb = new StringBuilder();
+            using var wr = new StringWriter(sb);
+            var i = new Interpreter(wr);
 
-                var data = new TableData("test", ["foo,bar", "blah,flaw", "floo,blue", "blah,flaw", "floo,blue"]);
-                var tbl = new Table(data, i);
-                i.AddHandler(tbl);
+            var data = new TableData("test", ["foo,bar", "blah,flaw", "floo,blue", "blah,flaw", "floo,blue"]);
+            var tbl = new Table(data, i);
+            i.AddHandler(tbl);
 
-                i.Eval(@"
+            Assert.That(
+                () => i.Eval(@"
 <table name=""test"">
 <include/>
 </table>
-");
-            }
-            catch (Exception ex)
-            {
-                Assert.That("The <include> tag requires either a 'name' attribute or a 'path' attribute.", Is.EqualTo(ex.Message));
-            }
+"),
+                Throws.Exception.With.Message.EqualTo("The <include> tag requires either a 'name' attribute or a 'path' attribute."));
         }
 
         [Test]
@@ -872,26 +764,21 @@ namespace JMW.Template.Tests
         public void TestPathIncludesError()
         {
             Directory.SetCurrentDirectory(AppContext.BaseDirectory);
-            try
-            {
-                var sb = new StringBuilder();
-                using var wr = new StringWriter(sb);
-                var i = new Interpreter(wr);
+            var sb = new StringBuilder();
+            using var wr = new StringWriter(sb);
+            var i = new Interpreter(wr);
 
-                var data = new TableData("test", ["foo,bar", "blah,flaw", "floo,blue", "blah,flaw", "floo,blue"]);
-                var tbl = new Table(data, i);
-                i.AddHandler(tbl);
+            var data = new TableData("test", ["foo,bar", "blah,flaw", "floo,blue", "blah,flaw", "floo,blue"]);
+            var tbl = new Table(data, i);
+            i.AddHandler(tbl);
 
-                i.Eval(@"
+            Assert.That(
+                () => i.Eval(@"
 <table name=""test"">
 <include path=""" + Path.Combine(".", "Templates", "asdf.tmpl") + @"""/>
 </table>
-");
-            }
-            catch (Exception ex)
-            {
-                Assert.That(ex.Message.Contains("The <include> tag refers to a template which does not exist", StringComparison.Ordinal), Is.True);
-            }
+"),
+                Throws.Exception.With.Message.Contains("The <include> tag refers to a template which does not exist"));
         }
 
         [Test]
@@ -950,88 +837,73 @@ namespace JMW.Template.Tests
         [Test]
         public void TestLookupError1()
         {
-            try
-            {
-                var sb = new StringBuilder();
-                using var wr = new StringWriter(sb);
-                var i = new Interpreter(wr);
-                i.AddVariable("walljm", "wooooo");
+            var sb = new StringBuilder();
+            using var wr = new StringWriter(sb);
+            var i = new Interpreter(wr);
+            i.AddVariable("walljm", "wooooo");
 
-                var data1 = new TableData("test1", ["foo,bar,ip", "green,flaw,1.1.1.1", "blue,blue,1.1.1.1", "red,flaw,1.1.1.1", "black,blue,1.1.1.1"]);
-                var tbl1 = new Table(data1, i);
+            var data1 = new TableData("test1", ["foo,bar,ip", "green,flaw,1.1.1.1", "blue,blue,1.1.1.1", "red,flaw,1.1.1.1", "black,blue,1.1.1.1"]);
+            var tbl1 = new Table(data1, i);
 
-                i.AddHandler(tbl1);
+            i.AddHandler(tbl1);
 
-                i.Eval(@"
+            Assert.That(
+                () => i.Eval(@"
 <lookup table=""test2"" key_col=""bar"">
 <row key=""blue"">
 <foo/><bar/><ip oct=""3"" exp=""++x1""/>\n
 </row>
 </lookup>
-");
-            }
-            catch (Exception ex)
-            {
-                Assert.That("Specified table: 'test2' in 'table' attribute does not exist.", Is.EqualTo(ex.Message));
-            }
+"),
+                Throws.Exception.With.Message.EqualTo("Specified table: 'test2' in 'table' attribute does not exist."));
         }
 
         [Test]
         public void TestLookupError2()
         {
-            try
-            {
-                var sb = new StringBuilder();
-                using var wr = new StringWriter(sb);
-                var i = new Interpreter(wr);
-                i.AddVariable("walljm", "wooooo");
+            var sb = new StringBuilder();
+            using var wr = new StringWriter(sb);
+            var i = new Interpreter(wr);
+            i.AddVariable("walljm", "wooooo");
 
-                var data1 = new TableData("test1", ["foo,bar,ip", "green,flaw,1.1.1.1", "blue,blue,1.1.1.1", "red,flaw,1.1.1.1", "black,blue,1.1.1.1"]);
-                var tbl1 = new Table(data1, i);
+            var data1 = new TableData("test1", ["foo,bar,ip", "green,flaw,1.1.1.1", "blue,blue,1.1.1.1", "red,flaw,1.1.1.1", "black,blue,1.1.1.1"]);
+            var tbl1 = new Table(data1, i);
 
-                i.AddHandler(tbl1);
+            i.AddHandler(tbl1);
 
-                i.Eval(@"
+            Assert.That(
+                () => i.Eval(@"
 <lookup table=""test1"">
 <row key=""blue"">
 <foo/><bar/><ip oct=""3"" exp=""++x1""/>\n
 </row>
 </lookup>
-");
-            }
-            catch (Exception ex)
-            {
-                Assert.That("Require attribute is missing. A 'key_exp' or 'key_col' attribute is required.", Is.EqualTo(ex.Message));
-            }
+"),
+                Throws.Exception.With.Message.EqualTo("Require attribute is missing. A 'key_exp' or 'key_col' attribute is required."));
         }
 
         [Test]
         public void TestLookupRowError1()
         {
-            try
-            {
-                var sb = new StringBuilder();
-                using var wr = new StringWriter(sb);
-                var i = new Interpreter(wr);
-                i.AddVariable("walljm", "wooooo");
+            var sb = new StringBuilder();
+            using var wr = new StringWriter(sb);
+            var i = new Interpreter(wr);
+            i.AddVariable("walljm", "wooooo");
 
-                var data1 = new TableData("test1", ["foo,bar,ip", "green,flaw,1.1.1.1", "blue,blue,1.1.1.1", "red,flaw,1.1.1.1", "black,blue,1.1.1.1"]);
-                var tbl1 = new Table(data1, i);
+            var data1 = new TableData("test1", ["foo,bar,ip", "green,flaw,1.1.1.1", "blue,blue,1.1.1.1", "red,flaw,1.1.1.1", "black,blue,1.1.1.1"]);
+            var tbl1 = new Table(data1, i);
 
-                i.AddHandler(tbl1);
+            i.AddHandler(tbl1);
 
-                i.Eval(@"
+            Assert.That(
+                () => i.Eval(@"
 <lookup table=""test1"" key_col='foo'>
 <row>
 <foo/><bar/><ip oct=""3"" exp=""++x1""/>\n
 </row>
 </lookup>
-");
-            }
-            catch (Exception ex)
-            {
-                Assert.That("The 'key' attribute is required.", Is.EqualTo(ex.Message));
-            }
+"),
+                Throws.Exception.With.Message.EqualTo("The 'key' attribute is required."));
         }
 
         [Test]
@@ -1122,19 +994,13 @@ datetime: <timestamp format=""M-d-yy hh:mm:ss"" exp=""x1.substr(0,x1.indexOf(' '
         [Test]
         public void TestTimestampError()
         {
-            try
-            {
-                var sb = new StringBuilder();
-                using var wr = new StringWriter(sb);
-                var i = new Interpreter(wr);
+            var sb = new StringBuilder();
+            using var wr = new StringWriter(sb);
+            var i = new Interpreter(wr);
 
-                i.Eval(@"datetime: <timestamp format=""123!@*(&^$@(^%"" />");
-                Assert.Fail();
-            }
-            catch (Exception ex)
-            {
-                Assert.That("Unable to interpret tag 'timestamp' with format: '123!@*(&^$@(^%'. Error Message: Input string was not in a correct format.", Is.EqualTo(ex.Message));
-            }
+            Assert.That(
+                () => i.Eval(@"datetime: <timestamp format=""123!@*(&^$@(^%"" />"),
+                Throws.Exception.With.Message.EqualTo("Unable to interpret tag 'timestamp' with format: '123!@*(&^$@(^%'. Error Message: Input string was not in a correct format."));
         }
 
         [Test]
@@ -1182,46 +1048,23 @@ datetime: <timestamp format=""M-d-yy hh:mm:ss"" exp=""x1.substr(0,x1.indexOf(' '
         [Test]
         public void TestVar1()
         {
-            try
+            var sb = new StringBuilder();
+            using (var wr = new StringWriter(sb))
             {
-                var sb = new StringBuilder();
-                using var wr = new StringWriter(sb);
                 var i = new Interpreter(wr);
                 i.AddVariable("IP", "1.1.1.1");
 
-                i.Eval(@"<var:IP oct='2' exp='x+5' store='atrue' print='false'/>");
-            }
-            catch (Exception ex)
-            {
-                Assert.That("The 'store' attribute value 'atrue' was invalid. Value must be either 'true' or 'false'.", Is.EqualTo(ex.Message));
-            }
+                Assert.That(
+                    () => i.Eval(@"<var:IP oct='2' exp='x+5' store='atrue' print='false'/>"),
+                    Throws.Exception.With.Message.EqualTo("The 'store' attribute value 'atrue' was invalid. Value must be either 'true' or 'false'."));
 
-            try
-            {
-                var sb = new StringBuilder();
-                using var wr = new StringWriter(sb);
-                var i = new Interpreter(wr);
-                i.AddVariable("IP", "1.1.1.1");
+                Assert.That(
+                    () => i.Eval(@"<var:IP oct='2' exp='x+5' store='true' print='afalse'/>"),
+                    Throws.Exception.With.Message.EqualTo("The 'print' attribute value 'afalse' was invalid. Value must be either 'true' or 'false'."));
 
-                i.Eval(@"<var:IP oct='2' exp='x+5' store='true' print='afalse'/>");
-            }
-            catch (Exception ex)
-            {
-                Assert.That("The 'print' attribute value 'afalse' was invalid. Value must be either 'true' or 'false'.", Is.EqualTo(ex.Message));
-            }
-
-            try
-            {
-                var sb = new StringBuilder();
-                using var wr = new StringWriter(sb);
-                var i = new Interpreter(wr);
-                i.AddVariable("IP", "1.1.1.1");
-
-                i.Eval(@"<var />");
-            }
-            catch (Exception ex)
-            {
-                Assert.That("'var' tag requires both 'name' and 'value' attributes.", Is.EqualTo(ex.Message));
+                Assert.That(
+                    () => i.Eval(@"<var />"),
+                    Throws.Exception.With.Message.EqualTo("'var' tag requires both 'name' and 'value' attributes."));
             }
 
             var sb1 = new StringBuilder();
@@ -1248,16 +1091,12 @@ datetime: <timestamp format=""M-d-yy hh:mm:ss"" exp=""x1.substr(0,x1.indexOf(' '
         [Test]
         public void TestVar2()
         {
-            try
-            {
-                var v = new Variable("var");
-                v.AddVariable("jason", "foo");
-                v.AddVariable("jason", "foo");
-            }
-            catch (Exception ex)
-            {
-                Assert.That("Variable: 'jason' already exists.", Is.EqualTo(ex.Message));
-            }
+            var v = new Variable("var");
+            v.AddVariable("jason", "foo");
+
+            Assert.That(
+                () => v.AddVariable("jason", "foo"),
+                Throws.Exception.With.Message.EqualTo("Variable: 'jason' already exists."));
         }
 
         [Test]
