@@ -52,15 +52,18 @@ namespace JMW.Template
         /// <returns>List of parsed Tag objects</returns>
         public List<Tag> Parse(string block)
         {
-            return parse(new StringReader(handleNewLines(block)), dropSourceLineBreaks: true);
+            return parse(new StringReader(handleNewLines(block)));
         }
 
+        /// <summary>
+        /// Parses a template read from <paramref name="reader"/>, with the same line-break rules as <see cref="Parse(string)"/>.
+        /// </summary>
         public List<Tag> Parse(TextReader reader)
         {
-            return parse(reader, dropSourceLineBreaks: false);
+            return Parse(reader.ReadToEnd());
         }
 
-        private List<Tag> parse(TextReader reader, bool dropSourceLineBreaks)
+        private List<Tag> parse(TextReader reader)
         {
             var tokenizer = new Tokenizer(reader);
             var stack = new Stack<Tag>();
@@ -149,16 +152,14 @@ namespace JMW.Template
                         }
                         if (currParam.IsNotEmpty())
                         {
-                            stack.Peek().Properties[currParam] = dropSourceLineBreaks
-                                ? removeSourceLineBreaks(token.Value)
-                                : token.Value;
+                            stack.Peek().Properties[currParam] = removeSourceLineBreaks(token.Value);
                         }
                         // reset currParam since we found a value for it.
                         currParam = string.Empty;
                         break;
 
                     case TokenType.TEXT:
-                        var text = dropSourceLineBreaks ? removeSourceLineBreaks(token.Value) : token.Value;
+                        var text = removeSourceLineBreaks(token.Value);
                         if (text.Length == 0)
                         {
                             break;

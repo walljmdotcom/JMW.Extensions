@@ -107,12 +107,18 @@ namespace JMW.Template.Tests
             }
         }
 
-        [Test]
-        public void ParseFromReaderKeepsLineBreaks()
+        [TestCase("a\nb")]
+        [TestCase("a\r\nb")]
+        [TestCase("a\rb")]
+        [TestCase("<foo\nbar='x'\r\n/>\\n")]
+        [TestCase("")]
+        public void ParseFromReaderMatchesParseFromString(string template)
         {
-            var tags = new Parser().Parse(new StringReader("a\nb"));
+            var fromReader = new Parser().Parse(new StringReader(template));
+            var fromString = new Parser().Parse(template);
 
-            Assert.That(tags.ConvertAll(t => t.TokenText), Is.EqualTo(new[] { "a\nb" }));
+            Assert.That(fromReader.ConvertAll(t => t.TokenText), Is.EqualTo(fromString.ConvertAll(t => t.TokenText)));
+            Assert.That(fromReader.ConvertAll(t => t.Name), Is.EqualTo(fromString.ConvertAll(t => t.Name)));
         }
     }
 }
