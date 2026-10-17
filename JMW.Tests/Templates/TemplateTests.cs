@@ -518,6 +518,24 @@ namespace JMW.Templates.Tests
 
         private const string JoinTables = "left_table=\"t\" right_table=\"u\" left_key=\"num\" right_key=\"num\"";
 
+        [TestCase("<if column=\"left_name\" exp=\"x1 == 'b'\">B</if>,", ",B,,")]
+        [TestCase("<if column=\"left_name, right_label\" exp=\"x1 == 'c' && x2 == 'r'\">C</if>,", ",,C,")]
+        [TestCase("<if column=\"right_label\" type=\"eq\" value=\"p\">P</if>,", "P,P,,")]
+        [TestCase("<transform columns=\"right_label\" exp=\"x1\"/>,", "p,p,r,")]
+        [TestCase("<transform columns=\"left_num, right_label\" exp=\"x1 + x2\"/>,", "10p,20p,30r,")]
+        public void TestJoinColumnLists(string body, string expected)
+        {
+            var sb = new StringBuilder();
+            using var wr = new StringWriter(sb);
+            var i = new Interpreter(wr);
+            i.AddHandler(new Table(new TableData("t", ["num,name", "10,a", "20,b", "30,c"]), i));
+            i.AddHandler(new Table(new TableData("u", ["num,label", "10,p", "20,p", "30,r"]), i));
+
+            i.Eval("<join " + JoinTables + ">" + body + "</join>");
+
+            Assert.That(sb.ToString(), Is.EqualTo(expected));
+        }
+
         // A second join over the same tables and keys starts from every joined row, whatever the first one filtered.
         [TestCase("where=\"x2 != 'b'\"", "ac|abc")]
         [TestCase("orderby=\"left_name\" order=\"desc\"", "cba|abc")]

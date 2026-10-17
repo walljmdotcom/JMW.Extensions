@@ -72,8 +72,8 @@ namespace JMW.Templates.Tags
 
             Name = _leftTableData.Name + "_" + _rightTableData.Name;
 
-            interp.Retrievers.Add(Name + JoinColumn.LEFT_PREFIX + leftTableData.Name.ToLowerInvariant(), RetrieveColumnValue);
-            interp.Retrievers.Add(Name + JoinColumn.RIGHT_PREFIX + rightTableData.Name.ToLowerInvariant(), RetrieveColumnValue);
+            // Column lists inside the join body are prefixed with the join name, as in "t_u:left_name".
+            interp.Retrievers.Add(Name.ToLowerInvariant(), RetrieveColumnValue);
 
             // A joined row is the left row followed by the right row, so the column positions are known now.
             for (var i = 0; i < leftTableData.Columns.Count; i++)
