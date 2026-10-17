@@ -54,7 +54,7 @@ public class Parser
                     if (stack.Count > 0)
                         stack.Pop(); // you don't need the current word.
                     tag.TagType = TagTypes.Array;
-                    tag.Name = token.Value.ToLower().Trim();
+                    tag.Name = token.Value.ToLowerInvariant().Trim();
                     tag.Children = new Stack<Tag>();
                     stack.Push(tag);
                     break;

@@ -35,10 +35,10 @@ namespace JMW.Template.Tags
 
         public Table(TableData table_data, Interpreter interp)
         {
-            _name = table_data.Name.ToLower();
+            _name = table_data.Name.ToLowerInvariant();
             TableData = table_data;
 
-            interp.Retrievers.Add(table_data.Name.ToLower(), RetrieveColumnValue);
+            interp.Retrievers.Add(table_data.Name.ToLowerInvariant(), RetrieveColumnValue);
 
             foreach (var column in table_data.Columns)
                 interp.AddHandler(MakeColumnHandler(column));
@@ -109,7 +109,7 @@ namespace JMW.Template.Tags
                 var dict = new Dictionary<string, List<string>>();
                 foreach (var row in table_data.Data)
                 {
-                    var key = cols.Select(f => row[table_data.ColumnIndexes[f.Trim().ToLower()]]).ToDelimitedString("|");
+                    var key = cols.Select(f => row[table_data.ColumnIndexes[f.Trim().ToLowerInvariant()]]).ToDelimitedString("|");
                     dict.AddIfNotPresent(key, row);
                 }
 
@@ -119,12 +119,12 @@ namespace JMW.Template.Tags
 
         public string RetrieveColumnValue(string column)
         {
-            return TableData?.Data[CurrentRow][TableData.ColumnIndexes[column.ToLower()]] ?? string.Empty;
+            return TableData?.Data[CurrentRow][TableData.ColumnIndexes[column.ToLowerInvariant()]] ?? string.Empty;
         }
 
         private TableColumn MakeColumnHandler(string column_name)
         {
-            return new TableColumn(_name + ":" + column_name.ToLower().Trim(), this);
+            return new TableColumn(_name + ":" + column_name.ToLowerInvariant().Trim(), this);
         }
 
         public static bool IsTable(Tag tag)

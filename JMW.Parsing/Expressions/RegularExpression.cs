@@ -21,7 +21,7 @@ public class RegularExpression : Base
     public override bool Test(string s)
     {
         bool v = this.Search.Mods.Contains(Constants.CASE_INSENSITIVE)
-            ? this.Search.Query.Any(sr => Regex.IsMatch(s, sr, RegexOptions.IgnoreCase))
+            ? this.Search.Query.Any(sr => Regex.IsMatch(s, sr, RegexOptions.IgnoreCase | RegexOptions.CultureInvariant))
             : this.Search.Query.Any(sr => Regex.IsMatch(s, sr));
 
         return this.Search.Mods.Contains(Constants.NEGATE) ? !v : v;

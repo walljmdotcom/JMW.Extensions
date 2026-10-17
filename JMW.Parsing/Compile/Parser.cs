@@ -36,13 +36,13 @@ public class Parser
             {
                 case TokenType.ObjectStart:
                     tag.TagType = TagTypes.Object;
-                    tag.Name = token.Value?.ToLower().Trim() ?? string.Empty;
+                    tag.Name = token.Value?.ToLowerInvariant().Trim() ?? string.Empty;
                     stack.Push(tag);
                     break;
 
                 case TokenType.ArrayStart:
                     tag.TagType = TagTypes.Array;
-                    tag.Name = token.Value?.ToLower().Trim() ?? string.Empty;
+                    tag.Name = token.Value?.ToLowerInvariant().Trim() ?? string.Empty;
                     tag.Value = new Stack<Tag>();
                     stack.Push(tag);
 
@@ -118,7 +118,7 @@ public class Parser
                         break;
                     }
                 case TokenType.PropertyName:
-                    tag.Name = token.Value?.ToLower().Trim() ?? string.Empty;
+                    tag.Name = token.Value?.ToLowerInvariant().Trim() ?? string.Empty;
                     tag.TagType = TagTypes.Property;
                     stack.Push(tag);
 

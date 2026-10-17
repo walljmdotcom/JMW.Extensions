@@ -7,6 +7,7 @@ using JMW.Parsing.IO;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.Globalization;
 using System.IO;
 using System.Linq;
 using System.Text;
@@ -49,8 +50,8 @@ public class Table : Base, IParser, IProperty
         {
             var v = validateTag.Value.ToString() ?? string.Empty;
             if (
-                   !v.Equals("true", StringComparison.CurrentCultureIgnoreCase)
-                && !v.Equals("false", StringComparison.CurrentCultureIgnoreCase)
+                   !v.Equals("true", StringComparison.OrdinalIgnoreCase)
+                && !v.Equals("false", StringComparison.OrdinalIgnoreCase)
             )
             {
                 throw new ParseException("Property must be either 'true' or 'false'.");
@@ -203,23 +204,23 @@ public class Table : Base, IParser, IProperty
 
             if (i + 1 == columns.Length) // we're on the last one
             {
-                o.Start = columnnames.LastIndexOf(" " + col, StringComparison.Ordinal).ToString().ToInt() + 1;
+                o.Start = columnnames.LastIndexOf(" " + col, StringComparison.Ordinal) + 1;
                 o.Length = -1;
             }
             else if (i + 2 == columns.Length) // we're on the second to last, but that means the next column is the last.
             {
-                o.Start = columnnames.IndexOf(" " + col + " ", StringComparison.Ordinal).ToString().ToInt() + 1;
-                o.Length = columnnames.LastIndexOf(" " + columns[i + 1], StringComparison.Ordinal) - o.Start.ToString().ToInt() + 1;
+                o.Start = columnnames.IndexOf(" " + col + " ", StringComparison.Ordinal) + 1;
+                o.Length = columnnames.LastIndexOf(" " + columns[i + 1], StringComparison.Ordinal) - o.Start + 1;
             }
             else if (i == 0) // we're on the first, treat the start special.
             {
-                o.Start = columnnames.IndexOf(col + " ", StringComparison.Ordinal).ToString().ToInt();
-                o.Length = columnnames.IndexOf(" " + columns[i + 1] + " ", StringComparison.Ordinal) - o.Start.ToString().ToInt() + 1;
+                o.Start = columnnames.IndexOf(col + " ", StringComparison.Ordinal);
+                o.Length = columnnames.IndexOf(" " + columns[i + 1] + " ", StringComparison.Ordinal) - o.Start + 1;
             }
             else
             {
-                o.Start = columnnames.IndexOf(" " + col + " ", StringComparison.Ordinal).ToString().ToInt() + 1;
-                o.Length = columnnames.IndexOf(" " + columns[i + 1] + " ", StringComparison.Ordinal) - o.Start.ToString().ToInt() + 1;
+                o.Start = columnnames.IndexOf(" " + col + " ", StringComparison.Ordinal) + 1;
+                o.Length = columnnames.IndexOf(" " + columns[i + 1] + " ", StringComparison.Ordinal) - o.Start + 1;
             }
             o.Name = columns[i];
             o.Key = columns[i];
@@ -342,17 +343,17 @@ public class Table : Base, IParser, IProperty
                     var len = id.Length;
                     var old = field_positions[id];
                     field_positions.Remove(id);
-                    id = p.Name.Substring(0, len - increment.ToString().Length) + increment;
+                    id = p.Name.Substring(0, len - increment.ToString(CultureInfo.InvariantCulture).Length) + increment;
                     while (field_positions.ContainsKey(id))
                     {
                         increment++;
-                        id = p.Name.Substring(0, len - increment.ToString().Length) + increment;
+                        id = p.Name.Substring(0, len - increment.ToString(CultureInfo.InvariantCulture).Length) + increment;
                     }
                     field_positions.Add(id, old);
 
                     increment++;
                     len = p.Name.Length;
-                    id = p.Name.Substring(0, len - increment.ToString().Length) + increment;
+                    id = p.Name.Substring(0, len - increment.ToString(CultureInfo.InvariantCulture).Length) + increment;
                     increment++;
                 }
                 field_positions.Add(id, p);
@@ -382,7 +383,7 @@ public class Table : Base, IParser, IProperty
                 var n = 0;
                 while (columnnames.Contains(col))
                 {
-                    var nc = columnnames.ParseToIndexOf(col) + col.Substring(0, col.Length - n.ToString().Length) + n + columnnames.ParseAfterIndexOf_PlusLength(col);
+                    var nc = columnnames.ParseToIndexOf(col) + col.Substring(0, col.Length - n.ToString(CultureInfo.InvariantCulture).Length) + n + columnnames.ParseAfterIndexOf_PlusLength(col);
                     columnnames = nc;
                     n++;
                 }

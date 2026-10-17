@@ -62,7 +62,7 @@ namespace JMW.Template.Tags
                     {
                         var retriever = column.ParseToLastIndexOf(":").Trim();
                         var col = column.ParseAfterLastIndexOf_PlusLength(":").Trim();
-                        values.Add(_retrievers[retriever.ToLower()](col.ToLower()));
+                        values.Add(_retrievers[retriever.ToLowerInvariant()](col.ToLowerInvariant()));
                     }
                 }
 
@@ -87,8 +87,8 @@ namespace JMW.Template.Tags
                 var columnID = split_data[1];
 
                 var value = token.Properties[ATTR_VALUE];
-                var operatorID = token.Properties[ATTR_TYPE].ToLower();
-                var actualValue = _retrievers[sheetID.ToLower()](columnID);
+                var operatorID = token.Properties[ATTR_TYPE].ToLowerInvariant();
+                var actualValue = _retrievers[sheetID.ToLowerInvariant()](columnID);
 
                 switch (operatorID)
                 {
@@ -123,28 +123,28 @@ namespace JMW.Template.Tags
                     case "strt":
                     case "startswith":
                         {
-                            if (actualValue.StartsWith(value))
+                            if (actualValue.StartsWith(value, StringComparison.Ordinal))
                                 condition_met = true;
                             break;
                         }
                     case "nstrt":
                     case "notstartswith":
                         {
-                            if (!actualValue.StartsWith(value))
+                            if (!actualValue.StartsWith(value, StringComparison.Ordinal))
                                 condition_met = true;
                             break;
                         }
                     case "ends":
                     case "endswith":
                         {
-                            if (actualValue.EndsWith(value))
+                            if (actualValue.EndsWith(value, StringComparison.Ordinal))
                                 condition_met = true;
                             break;
                         }
                     case "nends":
                     case "notendswith":
                         {
-                            if (!actualValue.EndsWith(value))
+                            if (!actualValue.EndsWith(value, StringComparison.Ordinal))
                                 condition_met = true;
                             break;
                         }
@@ -172,7 +172,7 @@ namespace JMW.Template.Tags
 
             if (tag.Properties.ContainsKey(ATTR_TYPE))
             {
-                var type = tag.Properties[ATTR_TYPE].ToLower();
+                var type = tag.Properties[ATTR_TYPE].ToLowerInvariant();
 
                 if (!ALLOWEDPROPVALUES.Contains(type))
                 {

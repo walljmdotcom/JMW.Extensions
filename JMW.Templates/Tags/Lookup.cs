@@ -28,7 +28,7 @@ namespace JMW.Template.Tags
 
         public Lookup(TableData table_data, Interpreter interp)
         {
-            Name = "lookup_" + table_data.Name.ToLower();
+            Name = "lookup_" + table_data.Name.ToLowerInvariant();
             TableData = table_data;
 
             interp.Retrievers.Add(Name, RetrieveColumnValue);
@@ -61,7 +61,7 @@ namespace JMW.Template.Tags
                     if (tag.Properties.TryGetValue(ATTR_KEY_EXP, out attrKeyExp))
                         key = TagHelpers.EvaluateExpression(attrKeyExp, lr);
                     else if (tag.Properties.TryGetValue(ATTR_KEY_COL, out attrKeyCol)) // use the value of the key column
-                        key = lr[TableData.ColumnIndexes[attrKeyCol.ToLower()]];
+                        key = lr[TableData.ColumnIndexes[attrKeyCol.ToLowerInvariant()]];
                     else
                         throw new Exception("Require attribute is missing. A '" + ATTR_KEY_EXP + "' or '" + ATTR_KEY_COL + "' attribute is required.");
 
@@ -81,12 +81,12 @@ namespace JMW.Template.Tags
                 throw new InvalidOperationException();
             }
 
-            return LookupTable[Key][CurrentRow][TableData.ColumnIndexes[column.ToLower()]];
+            return LookupTable[Key][CurrentRow][TableData.ColumnIndexes[column.ToLowerInvariant()]];
         }
 
         private LookupColumn MakeColumnHandler(string column_name)
         {
-            return new LookupColumn(Name + ":" + column_name.ToLower().Trim(), this);
+            return new LookupColumn(Name + ":" + column_name.ToLowerInvariant().Trim(), this);
         }
     }
 }

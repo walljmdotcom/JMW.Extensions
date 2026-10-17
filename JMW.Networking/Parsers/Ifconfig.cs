@@ -124,7 +124,7 @@ public static class Ifconfig
             if (char.IsDigit(current) || char.IsLetter(current))
             {
                 sb.Append(last is null || char.IsWhiteSpace(last.Value)
-                    ? char.ToUpper(current)
+                    ? char.ToUpperInvariant(current)
                     : current);
             }
             last = current;

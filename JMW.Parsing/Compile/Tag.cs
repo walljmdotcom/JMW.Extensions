@@ -11,7 +11,7 @@ namespace JMW.Parsing.Compile
         public string Name
         {
             get { return this._Name; }
-            set { this._Name = value.Trim().ToLower(); }
+            set { this._Name = value.Trim().ToLowerInvariant(); }
         }
 
         public Dictionary<string, Tag> Properties { get; set; } = [];

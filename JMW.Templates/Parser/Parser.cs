@@ -73,7 +73,7 @@ namespace JMW.Template
                 {
                     case TokenType.OPENTAG:
                         tag.TagType = TagTypes.Tag;
-                        tag.Name = token.Value.ToLower().Trim();
+                        tag.Name = token.Value.ToLowerInvariant().Trim();
 
                         if (stack.Count > 0)
                         {
@@ -95,7 +95,7 @@ namespace JMW.Template
                         }
                         var curr = stack.Pop();
 
-                        if (curr.Name != token.Value.ToLower().Trim() && token.Type != TokenType.SINGLEClOSE)
+                        if (curr.Name != token.Value.ToLowerInvariant().Trim() && token.Type != TokenType.SINGLEClOSE)
                         {
                             throw new ParseException("Invalid end tag.", token);
                         }
@@ -106,7 +106,7 @@ namespace JMW.Template
                         }
 
                         // handle the special case of prefixed vars.
-                        else if (curr.Name.StartsWith(Variable.TAG + ":"))
+                        else if (curr.Name.StartsWith(Variable.TAG + ":", System.StringComparison.Ordinal))
                         {
                             new Variable().Validate(curr, token);
                         }
@@ -138,7 +138,7 @@ namespace JMW.Template
                         {
                             stack.Peek().Properties[currParam] = string.Empty;
                         }
-                        currParam = token.Value.ToLower();
+                        currParam = token.Value.ToLowerInvariant();
                         break;
 
                     case TokenType.PARAMVALUE:

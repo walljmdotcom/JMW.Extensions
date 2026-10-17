@@ -1,4 +1,5 @@
 ﻿using JMW.Parsing.Compile;
+using System;
 using System.Collections.Generic;
 
 namespace JMW.Parsing.Expressions;
@@ -18,6 +19,6 @@ public class EndsWith : Base
 
     public override bool Test(string s)
     {
-        return base.Test(s, (str, sch) => str.EndsWith(sch));
+        return base.Test(s, (str, sch) => str.EndsWith(sch, StringComparison.Ordinal));
     }
 }

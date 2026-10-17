@@ -23,11 +23,11 @@ public class Split : Base
         var isCaseInsensitive = this.Search.Mods.Contains(Constants.CASE_INSENSITIVE);
 
         var splitSeparators = isCaseInsensitive
-            ? this.Search.Query.Select(o => o.ToLower()).ToArray()
+            ? this.Search.Query.Select(o => o.ToLowerInvariant()).ToArray()
             : [.. this.Search.Query];
 
         string[] fields = isCaseInsensitive
-            ? value.ToLower().Split(splitSeparators, splitOptions)
+            ? value.ToLowerInvariant().Split(splitSeparators, splitOptions)
             : value.Split(splitSeparators, splitOptions);
 
         return fields.Length > this.Index

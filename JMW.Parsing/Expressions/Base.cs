@@ -45,7 +45,7 @@ public abstract class Base : IExpression
     public bool Test(string s, Func<string, string, bool> func)
     {
         bool v = this.Search.Mods.Contains(Constants.CASE_INSENSITIVE) // run case insensitive
-            ? this.Search.Query.Any(sr => func(s.ToLower(), sr.ToLower()))
+            ? this.Search.Query.Any(sr => func(s.ToLowerInvariant(), sr.ToLowerInvariant()))
             : this.Search.Query.Any(sr => func(s, sr));
 
         return this.Search.Mods.Contains(Constants.NEGATE) ? !v : v;

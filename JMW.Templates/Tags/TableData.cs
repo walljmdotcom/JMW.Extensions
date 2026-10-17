@@ -26,7 +26,7 @@ namespace JMW.Template
             var i = 0;
             foreach (var column in Columns)
             {
-                ColumnIndexes.Add(column.ToLower(), i);
+                ColumnIndexes.Add(column.ToLowerInvariant(), i);
                 i++;
             }
         }
@@ -74,7 +74,7 @@ namespace JMW.Template
             var i = 0;
             foreach (var column in Columns)
             {
-                ColumnIndexes.Add(column.ToLower(), i);
+                ColumnIndexes.Add(column.ToLowerInvariant(), i);
                 i++;
             }
         }

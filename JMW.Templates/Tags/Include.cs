@@ -20,10 +20,10 @@ namespace JMW.Template.Tags
                 var tag = tags[i];
 
                 // ignore the include definitions.
-                if (tag.Properties.ContainsKey(ATTR_DEFINE) && tag.Name.ToLower() == TAG)
+                if (tag.Properties.ContainsKey(ATTR_DEFINE) && tag.Name.ToLowerInvariant() == TAG)
                     continue;
 
-                if (tag.TagType == TagTypes.Tag && tag.Name.ToLower().Equals(TAG))
+                if (tag.TagType == TagTypes.Tag && string.Equals(tag.Name.ToLowerInvariant(), TAG, StringComparison.Ordinal))
                 {
                     if (tag.Properties.ContainsKey(ATTR_PATH))
                     {

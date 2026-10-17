@@ -127,7 +127,7 @@ public static class TagHelpers
 
         var split = data.Split(dotSeparator, StringSplitOptions.RemoveEmptyEntries);
 
-        split[int.Parse(octet) - 1] = octet_result.ToString(CultureInfo.InvariantCulture);
+        split[int.Parse(octet, CultureInfo.InvariantCulture) - 1] = octet_result.ToString(CultureInfo.InvariantCulture);
 
         data = string.Empty;
         for (var i = 0; i < split.Length; i++)
@@ -162,7 +162,7 @@ public static class TagHelpers
 
         try
         {
-            return double.Parse(result);
+            return double.Parse(result, CultureInfo.InvariantCulture);
         }
         catch (Exception)
         {

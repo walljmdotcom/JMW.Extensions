@@ -21,7 +21,7 @@ namespace JMW.Template.Tags
                 if (tag.Properties.ContainsKey(ATTR_FORMAT))
                     format = tag.Properties[ATTR_FORMAT];
 
-                var value = DateTime.Now.ToString(format);
+                var value = DateTime.Now.ToString(format, CultureInfo.InvariantCulture);
 
                 if (tag.Properties.ContainsKey(ATTR_EXP))
                 {

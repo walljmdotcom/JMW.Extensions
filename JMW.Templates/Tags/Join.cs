@@ -61,8 +61,8 @@ namespace JMW.Template.Tags
 
             Name = _leftTableData.Name + "_" + _rightTableData.Name;
 
-            interp.Retrievers.Add(Name + JoinColumn.LEFT_PREFIX + leftTableData.Name.ToLower(), RetrieveColumnValue);
-            interp.Retrievers.Add(Name + JoinColumn.RIGHT_PREFIX + rightTableData.Name.ToLower(), RetrieveColumnValue);
+            interp.Retrievers.Add(Name + JoinColumn.LEFT_PREFIX + leftTableData.Name.ToLowerInvariant(), RetrieveColumnValue);
+            interp.Retrievers.Add(Name + JoinColumn.RIGHT_PREFIX + rightTableData.Name.ToLowerInvariant(), RetrieveColumnValue);
 
             foreach (var column in leftTableData.Columns)
                 interp.AddHandler(MakeColumnHandler(JoinColumn.LEFT_PREFIX + column));
@@ -110,7 +110,7 @@ namespace JMW.Template.Tags
                     }
                     else if (tag.Properties.TryGetValue(ATTR_LEFT_KEY, out var attrLeftkey)) // use the value of the key column
                     {
-                        var col = attrLeftkey.ToLower();
+                        var col = attrLeftkey.ToLowerInvariant();
                         left.Add(lr[_leftTableData.ColumnIndexes[col]], lr);
                     }
                     else
@@ -134,7 +134,7 @@ namespace JMW.Template.Tags
                         key = TagHelpers.EvaluateExpression(attrRightkeyExp, rr);
                     }
                     else if (tag.Properties.TryGetValue(ATTR_RIGHT_KEY, out var attrRightKey)) // use the value of the key column
-                        key = rr[_rightTableData.ColumnIndexes[attrRightKey.ToLower()]];
+                        key = rr[_rightTableData.ColumnIndexes[attrRightKey.ToLowerInvariant()]];
                     else
                         throw new Exception("Require attribute is missing. A '" + ATTR_RIGHT_KEY_EXP + "' or a '" + ATTR_RIGHT_KEY + "' attribute is required.");
 
@@ -180,12 +180,12 @@ namespace JMW.Template.Tags
             {
                 return string.Empty;
             }
-            return JoinedTableData?.Data[CurrentRow][JoinedTableData.ColumnIndexes[column.ToLower()]] ?? string.Empty;
+            return JoinedTableData?.Data[CurrentRow][JoinedTableData.ColumnIndexes[column.ToLowerInvariant()]] ?? string.Empty;
         }
 
         private JoinColumn MakeColumnHandler(string column_name)
         {
-            return new JoinColumn(Name + ":" + column_name.ToLower().Trim(), this);
+            return new JoinColumn(Name + ":" + column_name.ToLowerInvariant().Trim(), this);
         }
     }
 }

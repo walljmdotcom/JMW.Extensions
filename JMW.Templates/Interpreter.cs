@@ -97,7 +97,7 @@ namespace JMW.Template
                         if (tag.Name == Table.TAG || tag.Name == Table.TAB_TAG)
                         {
                             if (tag.Properties.TryGetValue(Table.ATTR_NAME, out var attrName))
-                                tag_name = attrName.ToLower();
+                                tag_name = attrName.ToLowerInvariant();
                             else
                                 tag_name = Table.ANON_TABLE_NAME;
                         }
@@ -114,8 +114,8 @@ namespace JMW.Template
                         if (tag.Name == Join.TAG)
                         {
                             // get the tables.
-                            var left_tag = tag.Properties[Join.ATTR_LEFT_TABLE].ToLower();
-                            var right_tag = tag.Properties[Join.ATTR_RIGHT_TABLE].ToLower();
+                            var left_tag = tag.Properties[Join.ATTR_LEFT_TABLE].ToLowerInvariant();
+                            var right_tag = tag.Properties[Join.ATTR_RIGHT_TABLE].ToLowerInvariant();
 
                             // this is how we build Join names.
                             tag_name = left_tag + "_" + right_tag;
@@ -140,7 +140,7 @@ namespace JMW.Template
                         if (tag.Name == Lookup.TAG)
                         {
                             // get the tables.
-                            var table_tag = tag.Properties[Lookup.ATTR_TABLE].ToLower();
+                            var table_tag = tag.Properties[Lookup.ATTR_TABLE].ToLowerInvariant();
 
                             // this is how we build Join names.
                             tag_name = "lookup_" + table_tag;
@@ -225,7 +225,7 @@ namespace JMW.Template
 
         public void AddVariable(string name, string value)
         {
-            _varHandler.AddVariable(name.ToLower(), value);
+            _varHandler.AddVariable(name.ToLowerInvariant(), value);
         }
 
         #endregion Public Functions

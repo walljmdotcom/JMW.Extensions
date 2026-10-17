@@ -7,7 +7,7 @@ namespace JMW.Template
         public TagTypes TagType { get; set; } = TagTypes.Text;
 
         private string _Name = string.Empty;
-        public string Name { get { return _Name; } set { _Name = value.Trim().ToLower(); } }
+        public string Name { get { return _Name; } set { _Name = value.Trim().ToLowerInvariant(); } }
 
         public Dictionary<string, string> Properties { get; set; } = [];
 

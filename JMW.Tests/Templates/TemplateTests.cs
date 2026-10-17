@@ -4,6 +4,7 @@ using NUnit.Framework;
 using System;
 using System.Collections.Generic;
 using System.Data;
+using System.Globalization;
 using System.IO;
 using System.Linq;
 using System.Text;
@@ -889,7 +890,7 @@ namespace JMW.Template.Tests
             }
             catch (Exception ex)
             {
-                Assert.That(ex.Message.Contains("The <include> tag refers to a template which does not exist"), Is.True);
+                Assert.That(ex.Message.Contains("The <include> tag refers to a template which does not exist", StringComparison.Ordinal), Is.True);
             }
         }
 
@@ -1046,7 +1047,7 @@ version: <version/>
 ");
 
                 var output = sb.ToString();
-                Assert.That(output.Contains("version: Templating Engine Version "), Is.True);
+                Assert.That(output.Contains("version: Templating Engine Version ", StringComparison.Ordinal), Is.True);
             }
             sb = new StringBuilder();
             using (var wr = new StringWriter(sb))
@@ -1058,7 +1059,7 @@ version: <version prefix=""TE: "" />
 ");
 
                 var output = sb.ToString();
-                Assert.That(output.Contains("version: TE: "), Is.True);
+                Assert.That(output.Contains("version: TE: ", StringComparison.Ordinal), Is.True);
             }
 
             sb = new StringBuilder();
@@ -1071,7 +1072,7 @@ version: <version prefix=""TE: "" exp=""x1.substr(0, 7)""/>
 ");
 
                 var output = sb.ToString();
-                Assert.That(output.Contains("version: TE: "), Is.True);
+                Assert.That(output.Contains("version: TE: ", StringComparison.Ordinal), Is.True);
             }
         }
 
@@ -1088,7 +1089,7 @@ datetime: <timestamp/>
 ");
 
                 var output = sb.ToString();
-                Assert.That(output.StartsWith("datetime: " + DateTime.Now.ToString("M/d/yyyy hh:mm")), Is.True);
+                Assert.That(output.StartsWith("datetime: " + DateTime.Now.ToString("M/d/yyyy hh:mm", CultureInfo.InvariantCulture), StringComparison.Ordinal), Is.True);
             }
 
             sb = new StringBuilder();
@@ -1101,7 +1102,7 @@ datetime: <timestamp format=""M-d-yy""/>
 ");
 
                 var output = sb.ToString();
-                Assert.That(output, Is.EqualTo("datetime: " + DateTime.Now.ToString("M-d-yy")));
+                Assert.That(output, Is.EqualTo("datetime: " + DateTime.Now.ToString("M-d-yy", CultureInfo.InvariantCulture)));
             }
 
             sb = new StringBuilder();
@@ -1114,7 +1115,7 @@ datetime: <timestamp format=""M-d-yy hh:mm:ss"" exp=""x1.substr(0,x1.indexOf(' '
 ");
 
                 var output = sb.ToString();
-                Assert.That(output, Is.EqualTo("datetime: " + DateTime.Now.ToString("M-d-yy")));
+                Assert.That(output, Is.EqualTo("datetime: " + DateTime.Now.ToString("M-d-yy", CultureInfo.InvariantCulture)));
             }
         }
 
@@ -1330,7 +1331,7 @@ datetime: <timestamp format=""M-d-yy hh:mm:ss"" exp=""x1.substr(0,x1.indexOf(' '
 
         public override void Handler(Tag token, Interpreter interp)
         {
-            interp.OutputStream.Write(token.Children.First().TokenText.ToUpper());
+            interp.OutputStream.Write(token.Children.First().TokenText.ToUpperInvariant());
         }
     }
 }

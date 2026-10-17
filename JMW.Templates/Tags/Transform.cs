@@ -53,7 +53,7 @@ namespace JMW.Template.Tags
                         {
                             var retriever = column.ParseToLastIndexOf(":").Trim();
                             var col = column.ParseAfterLastIndexOf_PlusLength(":").Trim();
-                            values.Add(_retrievers[retriever.ToLower()](col.ToLower()));
+                            values.Add(_retrievers[retriever.ToLowerInvariant()](col.ToLowerInvariant()));
                         }
                     }
 

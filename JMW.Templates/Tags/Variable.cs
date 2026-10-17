@@ -33,10 +33,10 @@ namespace JMW.Template.Tags
         public override void Handler(Tag token, Interpreter interp)
         {
             //<Var name=”IP” value=”192.168.1.1” />
-            if (token.Name.ToLower() == TAG)
+            if (token.Name.ToLowerInvariant() == TAG)
             {
                 // then its declaring the var, not calling it.
-                _variables[token.Properties[ATTR_NAME].ToLower()] = token.Properties[ATTR_VALUE];
+                _variables[token.Properties[ATTR_NAME].ToLowerInvariant()] = token.Properties[ATTR_VALUE];
                 return;
             }
 
@@ -96,10 +96,10 @@ namespace JMW.Template.Tags
 
         public void AddVariable(string name, string value)
         {
-            if (_variables.ContainsKey(name.ToLower()))
+            if (_variables.ContainsKey(name.ToLowerInvariant()))
                 throw new Exception("Variable: '" + name + "' already exists.");
 
-            _variables.Add(name.ToLower(), value);
+            _variables.Add(name.ToLowerInvariant(), value);
         }
 
         public void ReplaceVariables(Tag token)
@@ -107,7 +107,7 @@ namespace JMW.Template.Tags
             var keys = token.Properties.Keys.ToList();
             foreach (var key in keys)
             {
-                var property_value = token.Properties[key].ToLower();
+                var property_value = token.Properties[key].ToLowerInvariant();
                 while (property_value.Contains("[" + TAG + ":") && property_value.Contains(']'))
                 {
                     var full_variable = property_value.ParseAfterIndexOf("[" + TAG + ":").ParseToIndexOf("]") + "]";
@@ -116,13 +116,13 @@ namespace JMW.Template.Tags
 
                     if (_variables.ContainsKey(variable))
                     {
-                        token.Properties[key] = Regex.Replace(token.Properties[key], Regex.Escape(full_variable), _variables[variable], RegexOptions.IgnoreCase);
+                        token.Properties[key] = Regex.Replace(token.Properties[key], Regex.Escape(full_variable), _variables[variable], RegexOptions.IgnoreCase | RegexOptions.CultureInvariant);
                     }
                     else
                     {
                         throw new Exception("Reference to variable which has not been declared: " + variable + ".");
                     }
-                    property_value = token.Properties[key].ToLower();
+                    property_value = token.Properties[key].ToLowerInvariant();
                 }
             }
         }
