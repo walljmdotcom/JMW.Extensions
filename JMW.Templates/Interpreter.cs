@@ -22,6 +22,9 @@ namespace JMW.Templates
 
         #endregion Handlers
 
+        // How many Eval calls are running. Above zero, Eval is running a body inside a tag that is already prepared.
+        private int evalDepth;
+
         #region Properties
 
         public readonly Dictionary<string, ValueRetriever> Retrievers = [];
@@ -84,6 +87,25 @@ namespace JMW.Templates
         /// <param name="tags">The template tags to interpret</param>
         public void Eval(List<Tag> tags)
         {
+            // Includes and declarations are resolved once for the whole tree. Table, join, and lookup bodies call
+            // back in here once per row, and redoing it there would declare every nested <var> a second time.
+            if (evalDepth == 0)
+                Prepare(tags);
+
+            evalDepth++;
+            try
+            {
+                foreach (var tag in tags)
+                    EvalTag(_varHandler.WithVariablesReplaced(tag));
+            }
+            finally
+            {
+                evalDepth--;
+            }
+        }
+
+        private void Prepare(List<Tag> tags)
+        {
             // find the named includes.
             var includes = tags.Where(o => o.TagType == TagTypes.Tag && o.Name == Include.TAG && o.Properties.ContainsKey(Include.ATTR_DEFINE))
                 .ToDictionary(k => k.Properties[Include.ATTR_DEFINE], v => v);
@@ -93,95 +115,92 @@ namespace JMW.Templates
 
             // now populated the variables declared in the template using the <var name="varname" value="varvalue" /> syntax.
             _varHandler.PopulateVariables(tags, this);
+        }
 
-            foreach (var tag in tags)
+        private void EvalTag(Tag tag)
+        {
+            switch (tag.TagType)
             {
-                //  handle variable replacements in tag properties.
-                _varHandler.ReplaceVariables(tag);
+                case TagTypes.Tag:
+                    var tag_name = tag.Name;
 
-                switch (tag.TagType)
-                {
-                    case TagTypes.Tag:
-                        var tag_name = tag.Name;
-
-                        // tables are registered by their name attribute.  so if its a table tag,
-                        //  then you need to get the name attribute.
-                        if (tag.Name == Table.TAG || tag.Name == Table.TAB_TAG)
-                        {
-                            if (tag.Properties.TryGetValue(Table.ATTR_NAME, out var attrName))
-                                tag_name = attrName.ToLowerInvariant();
-                            else
-                                tag_name = Table.ANON_TABLE_NAME;
-                        }
-
-                        if (tag.Name == Transform.TAGALT1 || tag.Name == Transform.TAGALT2)
-                        {
-                            tag_name = Transform.TAG;
-                        }
-
-                        // Join tag handlers are built when they are found using table data
-                        // from tables that have already been added. No need to make the user
-                        // prep the tag before hand.  Besides, you won't know what the data
-                        // source is until you've seen the tag in the template.
-                        if (tag.Name == Join.TAG)
-                        {
-                            // get the tables.
-                            var left_tag = tag.Properties[Join.ATTR_LEFT_TABLE].ToLowerInvariant();
-                            var right_tag = tag.Properties[Join.ATTR_RIGHT_TABLE].ToLowerInvariant();
-
-                            // this is how we build Join names.
-                            tag_name = left_tag + "_" + right_tag;
-
-                            // if we haven't built this join before, build it now.
-                            if (!Handlers.ContainsKey(tag_name))
-                            {
-                                // we need to create the handler here using the data from the tables specified.
-                                if (!Handlers.TryGetValue(left_tag, out var leftHandler) || leftHandler is not Table left || left.TableData is null)
-                                    throw new Exception("Specified table: '" + left_tag + "' in '" + Join.ATTR_LEFT_TABLE + "' attribute does not exist.");
-                                if (!Handlers.TryGetValue(right_tag, out var rightHandler) || rightHandler is not Table right || right.TableData is null)
-                                    throw new Exception("Specified table: '" + right_tag + "' in '" + Join.ATTR_RIGHT_TABLE + "' attribute does not exist.");
-
-                                AddHandler(new Join(left.TableData, right.TableData, this));
-                            }
-                        }
-
-                        // Lookup tag handlers are also built when they are found using table data
-                        // from tables that have already been added. No need to make the user
-                        // prep the tag before hand.  Besides, you won't know what the data
-                        // source is until you've seen the tag in the template.
-                        if (tag.Name == Lookup.TAG)
-                        {
-                            // get the tables.
-                            var table_tag = tag.Properties[Lookup.ATTR_TABLE].ToLowerInvariant();
-
-                            // this is how we build Join names.
-                            tag_name = "lookup_" + table_tag;
-
-                            // if we haven't built this join before, build it now.
-                            if (!Handlers.ContainsKey(tag_name))
-                            {
-                                // we need to create the handler here using the data from the tables specified.
-                                if (!Handlers.TryGetValue(table_tag, out var tableHandler) || tableHandler is not Table table || table.TableData is null)
-                                    throw new Exception("Specified table: '" + table_tag + "' in '" + Lookup.ATTR_TABLE + "' attribute does not exist.");
-
-                                AddHandler(new Lookup(table.TableData, this));
-                            }
-                        }
-
-                        if (Handlers.TryGetValue(tag_name, out var tagHandler))
-                            tagHandler.Handler(tag, this);
-                        else if (tag_name.Contains(':') && Handlers.ContainsKey(tag_name.ParseToIndexOf(":"))) // handle variables
-                        {
-                            Handlers[tag_name.ParseToIndexOf(":")].Handler(tag, this);
-                        }
+                    // tables are registered by their name attribute.  so if its a table tag,
+                    //  then you need to get the name attribute.
+                    if (tag.Name == Table.TAG || tag.Name == Table.TAB_TAG)
+                    {
+                        if (tag.Properties.TryGetValue(Table.ATTR_NAME, out var attrName))
+                            tag_name = attrName.ToLowerInvariant();
                         else
-                            DefaultHandler.Do(h => h(tag, this));
-                        break;
+                            tag_name = Table.ANON_TABLE_NAME;
+                    }
 
-                    case TagTypes.Text:
-                        _textHandler.Handler(tag, this);
-                        break;
-                }
+                    if (tag.Name == Transform.TAGALT1 || tag.Name == Transform.TAGALT2)
+                    {
+                        tag_name = Transform.TAG;
+                    }
+
+                    // Join tag handlers are built when they are found using table data
+                    // from tables that have already been added. No need to make the user
+                    // prep the tag before hand.  Besides, you won't know what the data
+                    // source is until you've seen the tag in the template.
+                    if (tag.Name == Join.TAG)
+                    {
+                        // get the tables.
+                        var left_tag = tag.Properties[Join.ATTR_LEFT_TABLE].ToLowerInvariant();
+                        var right_tag = tag.Properties[Join.ATTR_RIGHT_TABLE].ToLowerInvariant();
+
+                        // this is how we build Join names.
+                        tag_name = left_tag + "_" + right_tag;
+
+                        // if we haven't built this join before, build it now.
+                        if (!Handlers.ContainsKey(tag_name))
+                        {
+                            // we need to create the handler here using the data from the tables specified.
+                            if (!Handlers.TryGetValue(left_tag, out var leftHandler) || leftHandler is not Table left || left.TableData is null)
+                                throw new Exception("Specified table: '" + left_tag + "' in '" + Join.ATTR_LEFT_TABLE + "' attribute does not exist.");
+                            if (!Handlers.TryGetValue(right_tag, out var rightHandler) || rightHandler is not Table right || right.TableData is null)
+                                throw new Exception("Specified table: '" + right_tag + "' in '" + Join.ATTR_RIGHT_TABLE + "' attribute does not exist.");
+
+                            AddHandler(new Join(left.TableData, right.TableData, this));
+                        }
+                    }
+
+                    // Lookup tag handlers are also built when they are found using table data
+                    // from tables that have already been added. No need to make the user
+                    // prep the tag before hand.  Besides, you won't know what the data
+                    // source is until you've seen the tag in the template.
+                    if (tag.Name == Lookup.TAG)
+                    {
+                        // get the tables.
+                        var table_tag = tag.Properties[Lookup.ATTR_TABLE].ToLowerInvariant();
+
+                        // this is how we build Join names.
+                        tag_name = "lookup_" + table_tag;
+
+                        // if we haven't built this join before, build it now.
+                        if (!Handlers.ContainsKey(tag_name))
+                        {
+                            // we need to create the handler here using the data from the tables specified.
+                            if (!Handlers.TryGetValue(table_tag, out var tableHandler) || tableHandler is not Table table || table.TableData is null)
+                                throw new Exception("Specified table: '" + table_tag + "' in '" + Lookup.ATTR_TABLE + "' attribute does not exist.");
+
+                            AddHandler(new Lookup(table.TableData, this));
+                        }
+                    }
+
+                    if (Handlers.TryGetValue(tag_name, out var tagHandler))
+                        tagHandler.Handler(tag, this);
+                    else if (tag_name.Contains(':') && Handlers.ContainsKey(tag_name.ParseToIndexOf(":"))) // handle variables
+                    {
+                        Handlers[tag_name.ParseToIndexOf(":")].Handler(tag, this);
+                    }
+                    else
+                        DefaultHandler.Do(h => h(tag, this));
+                    break;
+
+                case TagTypes.Text:
+                    _textHandler.Handler(tag, this);
+                    break;
             }
         }
 

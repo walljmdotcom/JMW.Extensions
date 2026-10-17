@@ -115,22 +115,53 @@ namespace JMW.Templates.Tags
             var keys = token.Properties.Keys.ToList();
             foreach (var key in keys)
             {
-                var value = token.Properties[key];
-                var pass = 0;
-                while (TryReplaceReferences(value, out var replaced))
-                {
-                    if (++pass > MAX_SUBSTITUTION_PASSES || replaced.Length > MAX_SUBSTITUTED_LENGTH)
-                    {
-                        throw new Exception(
-                            "Variable references in the '" + key + "' attribute did not finish expanding. Check for a variable whose value refers to itself."
-                        );
-                    }
+                token.Properties[key] = ExpandReferences(key, token.Properties[key]);
+            }
+        }
 
-                    value = replaced;
+        /// <summary>
+        /// Returns a copy of the tag with <c>[var:name]</c> references in its attribute values expanded, sharing the
+        /// original's children. The tag itself is left alone, so a body run once per row sees each row's values.
+        /// A tag with no references is returned as is.
+        /// </summary>
+        internal Tag WithVariablesReplaced(Tag token)
+        {
+            Tag? expanded = null;
+            foreach (var property in token.Properties)
+            {
+                if (property.Value.IndexOf(REFERENCE_START, StringComparison.OrdinalIgnoreCase) < 0)
+                    continue;
+
+                expanded ??= new Tag
+                {
+                    TagType = token.TagType,
+                    Name = token.Name,
+                    TokenText = token.TokenText,
+                    Children = token.Children,
+                    Properties = new Dictionary<string, string>(token.Properties),
+                };
+                expanded.Properties[property.Key] = ExpandReferences(property.Key, property.Value);
+            }
+
+            return expanded ?? token;
+        }
+
+        private string ExpandReferences(string key, string value)
+        {
+            var pass = 0;
+            while (TryReplaceReferences(value, out var replaced))
+            {
+                if (++pass > MAX_SUBSTITUTION_PASSES || replaced.Length > MAX_SUBSTITUTED_LENGTH)
+                {
+                    throw new Exception(
+                        "Variable references in the '" + key + "' attribute did not finish expanding. Check for a variable whose value refers to itself."
+                    );
                 }
 
-                token.Properties[key] = value;
+                value = replaced;
             }
+
+            return value;
         }
 
         // One left-to-right pass. Substituted values are copied literally and not rescanned until the next pass.
