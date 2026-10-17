@@ -53,7 +53,14 @@ public class ParsingBenchmarks
         <tab name="t" where="x2 == 'up'"><num exp="x1 + 1"/>\n</tab>
         """;
 
+    private const int BodyRows = 5_000;
+
+    private const string BodyTemplate = """
+        <tab name="w"><c0/>,<c1/>,<c2/>,<c3/>,<c4/>,<c5/>,<c6/>,<c7/>,<c8/>,<c9/><if column="c1" exp="x1 == 'up'">,U</if><if column="c2, c3" exp="x1 == x2">,S</if>\n</tab>
+        """;
+
     private List<string> templateRows = [];
+    private List<string> bodyRows = [];
     private string tableText = string.Empty;
     private string netstatText = string.Empty;
     private int[] fragmented = [];
@@ -65,6 +72,12 @@ public class ParsingBenchmarks
     public void GlobalSetup()
     {
         templateRows = ["num,state", .. Enumerable.Range(0, Rows).Select(static i => i + "," + (i % 2 == 0 ? "up" : "down"))];
+        bodyRows =
+        [
+            "c0,c1,c2,c3,c4,c5,c6,c7,c8,c9",
+            .. Enumerable.Range(0, BodyRows).Select(static i =>
+                i + "," + (i % 2 == 0 ? "up" : "down") + "," + i % 3 + "," + i % 5 + ",Gi1/0/" + i % 48 + ",full,1000," + i % 4094 + ",copper,desc" + i)
+        ];
 
         var table = new StringBuilder("Interface  Status  Speed  Duplex  Vlan  Type\n");
         for (int i = 0; i < Rows; i++)
@@ -87,12 +100,14 @@ public class ParsingBenchmarks
 
         // Each benchmark has to do the work it names, or it measures an early exit.
         int filtered = TemplateWhere().Split('\n').Length - 1;
+        string body = TemplateRowBody();
+        int bodyLines = body.Split('\n').Length - 1;
         int parsed = ParseTable();
         int routes = NetstatParse();
-        Console.WriteLine($"// setup counts: where {filtered}, table {parsed}, netstat {routes}");
-        if (filtered < Rows / 2 || parsed < Rows || routes < Rows)
+        Console.WriteLine($"// setup counts: where {filtered}, body {bodyLines}, table {parsed}, netstat {routes}");
+        if (filtered < Rows / 2 || bodyLines != BodyRows || !body.Contains(",U", StringComparison.Ordinal) || !body.Contains(",S", StringComparison.Ordinal) || parsed < Rows || routes < Rows)
         {
-            throw new InvalidOperationException($"Unexpected counts: where {filtered}, table {parsed}, netstat {routes}.");
+            throw new InvalidOperationException($"Unexpected counts: where {filtered}, body {bodyLines}, table {parsed}, netstat {routes}.");
         }
     }
 
@@ -104,6 +119,17 @@ public class ParsingBenchmarks
         var interpreter = new Interpreter(writer);
         interpreter.AddHandler(new TemplateTable(new TableData("t", templateRows), interpreter));
         interpreter.Eval(WhereTemplate);
+        return sb.ToString();
+    }
+
+    [Benchmark]
+    public string TemplateRowBody()
+    {
+        var sb = new StringBuilder();
+        using var writer = new StringWriter(sb);
+        var interpreter = new Interpreter(writer);
+        interpreter.AddHandler(new TemplateTable(new TableData("w", bodyRows), interpreter));
+        interpreter.Eval(BodyTemplate);
         return sb.ToString();
     }
 
