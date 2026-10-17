@@ -218,6 +218,70 @@ namespace JMW.Collections.Tests
             Assert.That(second, Is.EqualTo(first));
         }
 
+        [TestCase(3, 1, false, 0, 0)]
+        [TestCase(3, 1, true, 0, 0)]
+        [TestCase(3, 2, false, 0, 1)]
+        [TestCase(3, 2, true, 1, 0)]
+        [TestCase(3, 3, false, 0, 2)]
+        [TestCase(3, 3, true, 2, 0)]
+        [TestCase(3, 4, false, 1, 3)]
+        [TestCase(3, 4, true, 3, 1)]
+        [TestCase(3, 7, false, 4, 6)]
+        [TestCase(3, 7, true, 6, 4)]
+        [TestCase(1, 5, false, 4, 4)]
+        [TestCase(1, 5, true, 4, 4)]
+        public void FirstAndLastFollowEnumerationOrder(int capacity, int adds, bool reverse, int first, int last)
+        {
+            var buff = new RingBuffer<int>(capacity, reverse);
+            for (var i = 0; i < adds; i++)
+                buff.Add(i);
+
+            var enumerated = buff.ToArray();
+            Assert.That(buff.First(), Is.EqualTo(first));
+            Assert.That(buff.Last(), Is.EqualTo(last));
+            Assert.That(buff.First(), Is.EqualTo(enumerated[0]));
+            Assert.That(buff.Last(), Is.EqualTo(enumerated[^1]));
+        }
+
+        [TestCase(false, 3, 5)]
+        [TestCase(true, 5, 3)]
+        public void FirstAndLastFromArrayConstructor(bool reverse, int first, int last)
+        {
+            var buff = new RingBuffer<int>([3, 4, 5], reverse);
+            Assert.That(buff.First(), Is.EqualTo(first));
+            Assert.That(buff.Last(), Is.EqualTo(last));
+
+            var sized = new RingBuffer<int>(10, [3, 4, 5], reverse);
+            Assert.That(sized.First(), Is.EqualTo(first));
+            Assert.That(sized.Last(), Is.EqualTo(last));
+        }
+
+        [Test]
+        public void FirstAndLastTrackReverseToggle()
+        {
+            var buff = new RingBuffer<int>(4) { 1, 2, 3, 4, 5 };
+            Assert.That((buff.First(), buff.Last()), Is.EqualTo((2, 5)));
+
+            buff.ReverseIteration = true;
+            Assert.That((buff.First(), buff.Last()), Is.EqualTo((5, 2)));
+
+            buff.ReverseIteration = false;
+            Assert.That((buff.First(), buff.Last()), Is.EqualTo((2, 5)));
+        }
+
+        [TestCase(false)]
+        [TestCase(true)]
+        public void FirstAndLastThrowWhenEmpty(bool reverse)
+        {
+            var buff = new RingBuffer<int>(3, reverse);
+            Assert.That(() => buff.First(), Throws.InvalidOperationException);
+            Assert.That(() => buff.Last(), Throws.InvalidOperationException);
+
+            var zero = new RingBuffer<int>(0, reverse);
+            zero.Add(1);
+            Assert.That(() => zero.First(), Throws.InvalidOperationException);
+        }
+
         [Test]
         public void RingBufferTest6()
         {

@@ -92,7 +92,7 @@ public class RingBuffer<T> : IEnumerable<T>
     }
 
     /// <summary>
-    /// The most recently added item, or the oldest item when <see cref="ReverseIteration"/> is set.
+    /// The last item in enumeration order: the newest item, or the oldest when <see cref="ReverseIteration"/> is set.
     /// </summary>
     public T Last()
     {
@@ -103,14 +103,14 @@ public class RingBuffer<T> : IEnumerable<T>
     }
 
     /// <summary>
-    /// The oldest item in the buffer.
+    /// The first item in enumeration order: the oldest item, or the newest when <see cref="ReverseIteration"/> is set.
     /// </summary>
     public T First()
     {
         if (Count == 0)
             throw new InvalidOperationException("The buffer is empty.");
 
-        return this[0];
+        return ReverseIteration ? this[Count - 1] : this[0];
     }
 
     public void Clear()
