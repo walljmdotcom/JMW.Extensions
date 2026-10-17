@@ -9,6 +9,7 @@
     <File Path=".github/workflows/dotnet.yml" />
     <File Path=".github/workflows/nuget.yml" />
   </Folder>
+  <Project Path="JMW.Benchmarks/JMW.Benchmarks.csproj" />
   <Project Path="JMW.Networking/JMW.Networking.csproj" />
   <Project Path="JMW.Parsing/JMW.Parsing.csproj" />
   <Project Path="JMW.Templates/JMW.Templates.csproj" />
