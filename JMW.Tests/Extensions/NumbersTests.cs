@@ -1,5 +1,6 @@
 ﻿using JMW.Types;
 using NUnit.Framework;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -122,6 +123,77 @@ namespace JMW.Extensions.Numbers.Tests
             Assert.That(1431234121, Is.EqualTo("1431234121".ToInt64OrNeg1()));
             Assert.That(1000, Is.EqualTo("1k".ToInt64OrNeg1()));
             Assert.That(1000, Is.EqualTo("1k".ToInt64()));
+        }
+
+        [TestCase("8.2m", 8200000L)]
+        [TestCase("8.2M", 8200000L)]
+        [TestCase("1k", 1000L)]
+        [TestCase("1.5k", 1500L)]
+        [TestCase("0.001k", 1L)]
+        [TestCase("-1.5k", -1500L)]
+        [TestCase("4.7g", 4700000000L)]
+        [TestCase("4.7b", 4700000000L)]
+        [TestCase("1.1t", 1100000000000L)]
+        [TestCase("2.3p", 2300000000000000L)]
+        [TestCase("9223.372036854775807p", long.MaxValue)]
+        [TestCase("0k", 0L)]
+        [TestCase("1,000k", 1000000L)]
+        [TestCase("12", 12L)]
+        [TestCase("-12", -12L)]
+        [TestCase("9223372036854775807", long.MaxValue)]
+        [TestCase("-9223372036854775808", long.MinValue)]
+        public void ToInt64Abbreviated(string input, long expected)
+        {
+            Assert.That(input.ToInt64(), Is.EqualTo(expected));
+            Assert.That(input.ToInt64orDefault(42), Is.EqualTo(expected));
+        }
+
+        [TestCase("", typeof(FormatException))]
+        [TestCase("k", typeof(FormatException))]
+        [TestCase("x", typeof(FormatException))]
+        [TestCase("1.5", typeof(FormatException))]
+        [TestCase("1.0005k", typeof(FormatException))]
+        [TestCase("8.2x", typeof(FormatException))]
+        [TestCase("abck", typeof(FormatException))]
+        [TestCase("9223.372036854775808p", typeof(OverflowException))]
+        [TestCase("143123412000001b", typeof(OverflowException))]
+        [TestCase("1e20p", typeof(OverflowException))]
+        [TestCase("-1e20p", typeof(OverflowException))]
+        [TestCase("9223372036854775808", typeof(OverflowException))]
+        public void ToInt64Invalid(string input, Type exception)
+        {
+            Assert.That(() => input.ToInt64(), Throws.TypeOf(exception));
+            Assert.That(input.ToInt64orDefault(42), Is.EqualTo(42));
+        }
+
+        [TestCase("8.2m", 8200000)]
+        [TestCase("8.2M", 8200000)]
+        [TestCase("1k", 1000)]
+        [TestCase("1.5k", 1500)]
+        [TestCase("-1.5k", -1500)]
+        [TestCase("2.147483647g", int.MaxValue)]
+        [TestCase("-2.147483648g", int.MinValue)]
+        [TestCase("0m", 0)]
+        [TestCase("12", 12)]
+        [TestCase("2147483647", int.MaxValue)]
+        public void ToIntAbbreviated(string input, int expected)
+        {
+            Assert.That(input.ToInt(), Is.EqualTo(expected));
+            Assert.That(input.ToIntOrDefault(42), Is.EqualTo(expected));
+        }
+
+        [TestCase("", typeof(FormatException))]
+        [TestCase("m", typeof(FormatException))]
+        [TestCase("x", typeof(FormatException))]
+        [TestCase("1.5", typeof(FormatException))]
+        [TestCase("1.0005k", typeof(FormatException))]
+        [TestCase("2.147483648g", typeof(OverflowException))]
+        [TestCase("1t", typeof(OverflowException))]
+        [TestCase("2147483648", typeof(OverflowException))]
+        public void ToIntInvalid(string input, Type exception)
+        {
+            Assert.That(() => input.ToInt(), Throws.TypeOf(exception));
+            Assert.That(input.ToIntOrDefault(42), Is.EqualTo(42));
         }
 
         [Test]

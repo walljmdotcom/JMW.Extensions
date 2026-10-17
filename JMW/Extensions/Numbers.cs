@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 using JMW.Types;
 using Lambda.Generic.Arithmetic;
@@ -306,15 +307,79 @@ public static class Extensions
         return Convert.ToDouble(i);
     }
 
-    private static readonly Dictionary<string, long> numAbbreviations = new()
+    private static long abbreviationMultiplier(char c) => char.ToLowerInvariant(c) switch
     {
-        { "k", 1000 },
-        { "m", 1000000 },
-        { "g", 1000000000 },
-        { "b", 1000000000 },
-        { "t", 1000000000000 },
-        { "p", 1000000000000000 }
+        'k' => 1000,
+        'm' => 1000000,
+        'g' => 1000000000,
+        'b' => 1000000000,
+        't' => 1000000000000,
+        'p' => 1000000000000000,
+        _ => 0
     };
+
+    /// <summary>
+    /// Parses an abbreviated number such as "8.2m" exactly, using decimal arithmetic so that the product is not
+    /// subject to binary floating point rounding.
+    /// </summary>
+    /// <returns>False if the text is not a number followed by a known abbreviation.</returns>
+    private static bool tryParseAbbreviated(string s, out decimal value)
+    {
+        value = 0;
+        if (s.Length < 2)
+            return false;
+
+        var multiplier = abbreviationMultiplier(s[s.Length - 1]);
+        if (multiplier == 0)
+            return false;
+
+        if (!decimal.TryParse(
+                s.Substring(0, s.Length - 1),
+                NumberStyles.Float | NumberStyles.AllowThousands,
+                CultureInfo.InvariantCulture,
+                out var prefix
+            ))
+            return false;
+
+        // saturate rather than overflow decimal; any saturated value is outside the range of long anyway
+        if (Math.Abs(prefix) > decimal.MaxValue / multiplier)
+            value = prefix < 0 ? decimal.MinValue : decimal.MaxValue;
+        else
+            value = prefix * multiplier;
+
+        return true;
+    }
+
+    private static bool tryToInt64(decimal d, out long value)
+    {
+        value = 0;
+        if (d != decimal.Truncate(d) || d < long.MinValue || d > long.MaxValue)
+            return false;
+
+        value = (long)d;
+        return true;
+    }
+
+    private static bool tryToInt32(decimal d, out int value)
+    {
+        value = 0;
+        if (d != decimal.Truncate(d) || d < int.MinValue || d > int.MaxValue)
+            return false;
+
+        value = (int)d;
+        return true;
+    }
+
+    private static decimal requireWhole(decimal d, string s, decimal min, decimal max)
+    {
+        if (d != decimal.Truncate(d))
+            throw new FormatException("The value '" + s + "' is not a whole number.");
+
+        if (d < min || d > max)
+            throw new OverflowException("The value '" + s + "' is outside the range of the target type.");
+
+        return d;
+    }
 
     /// <summary>
     /// Handles converting text to an <see cref="long"/>. Will properly deal with the following common abbreviations
@@ -332,14 +397,10 @@ public static class Extensions
     /// <returns>Value as a <see cref="long"/></returns>
     public static long ToInt64(this string i)
     {
-        var last = i.ToLower().ToCharArray().Last().ToString();
-        var prefix = i.ToLower().Substring(0, i.Length - 1);
+        if (tryParseAbbreviated(i, out var n))
+            return (long)requireWhole(n, i, long.MinValue, long.MaxValue);
 
-        // first, check if its abbreviated.
-        if (!numAbbreviations.TryGetValue(last, out var value) || !prefix.IsDouble()) return long.Parse(i);
-
-        var n = prefix.ToDouble() * value;
-        return long.Parse(n.ToString());
+        return long.Parse(i, NumberStyles.Integer, CultureInfo.InvariantCulture);
     }
 
     /// <summary>
@@ -379,19 +440,10 @@ public static class Extensions
     public static long ToInt64orDefault(this string i, long def = -1)
     {
         long val;
-        if (i.Length == 0) return def;
+        if (tryParseAbbreviated(i, out var n))
+            return tryToInt64(n, out val) ? val : def;
 
-        var last = i.ToLower().ToCharArray().Last().ToString();
-        var prefex = i.ToLower().Substring(0, i.Length - 1);
-        // first, check if its abbreviated.
-        if (numAbbreviations.TryGetValue(last, out var value) && prefex.IsDouble())
-        {
-            var n = prefex.ToDouble() * value;
-
-            return long.TryParse(n.ToString(), out val) ? val : def;
-        }
-
-        return long.TryParse(i, out val) ? val : def;
+        return long.TryParse(i, NumberStyles.Integer, CultureInfo.InvariantCulture, out val) ? val : def;
     }
 
     /// <summary>
@@ -406,20 +458,10 @@ public static class Extensions
     /// <returns>Value as a <see cref="int"/></returns>
     public static int ToInt(this string i)
     {
-        if (i.Length == 0)
-            throw new ArgumentOutOfRangeException(nameof(i), i, "Value must be a valid integer.");
+        if (tryParseAbbreviated(i, out var n))
+            return (int)requireWhole(n, i, int.MinValue, int.MaxValue);
 
-        var last = i.ToLower().ToCharArray().Last().ToString();
-        var prefex = i.ToLower().Substring(0, i.Length - 1);
-        // first, check if its abbreviated.
-        if (numAbbreviations.TryGetValue(last, out var value) && prefex.IsDouble())
-        {
-            var n = prefex.ToDouble() * value;
-
-            return int.Parse(n.ToString());
-        }
-
-        return int.Parse(i);
+        return int.Parse(i, NumberStyles.Integer, CultureInfo.InvariantCulture);
     }
 
     /// <summary>
@@ -451,20 +493,10 @@ public static class Extensions
     public static int ToIntOrDefault(this string i, int def = -1)
     {
         int val;
-        if (i.Length == 0)
-            return def;
+        if (tryParseAbbreviated(i, out var n))
+            return tryToInt32(n, out val) ? val : def;
 
-        var last = i.ToLower().ToCharArray().Last().ToString();
-        var prefex = i.ToLower().Substring(0, i.Length - 1);
-        // first, check if its abbreviated.
-        if (numAbbreviations.TryGetValue(last, out var value) && prefex.IsDouble())
-        {
-            var n = prefex.ToDouble() * value;
-
-            return int.TryParse(n.ToString(), out val) ? val : def;
-        }
-
-        return int.TryParse(i, out val) ? val : def;
+        return int.TryParse(i, NumberStyles.Integer, CultureInfo.InvariantCulture, out val) ? val : def;
     }
 
     public static float? ToFloat(this string s)
