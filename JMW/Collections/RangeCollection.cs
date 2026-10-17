@@ -117,7 +117,7 @@ namespace JMW.Collections
         private static IEnumerable<Range<T, C>> getCleanNumbers(IEnumerable<string> rng)
         {
             var rngs = rng.Select(o => o.Trim()) // trim whitespace
-                .Where(o => o.Length > 0 && (o.Contains('-') || o.IsIntFast())) // eliminate empty strings
+                .Where(o => o.Length > 0 && (o.Contains('-') || o.Contains(':') || o.IsIntFast())) // eliminate empty strings
                 .Select(o => new Range<T, C>(o))// create ranges
                 .OrderBy(r => r.Start)
                 .ToList();
@@ -142,7 +142,8 @@ namespace JMW.Collections
 
         public void AddRange(IEnumerable<Range<T, C>> items)
         {
-            var lst = mergeVlanRanges(Ranges.Values.ToList(), items.ToList());
+            // the merge walks both lists in Start order, so the new items must be sorted too
+            var lst = mergeVlanRanges(Ranges.Values.ToList(), items.OrderBy(r => r.Start).ToList());
             Ranges.Clear();
             lst.Each(o => Ranges.Add(o.Start, o));
         }
@@ -371,7 +372,8 @@ namespace JMW.Collections
                 var prev = rngs[i - 1];
                 var next = rngs[i];
 
-                if (prev.Stop + Signed<T, C>.One >= next.Start)
+                // prev.Stop + One wraps when prev.Stop is the type's MaxValue, so test overlap separately
+                if (prev.Stop >= next.Start || prev.Stop + Signed<T, C>.One == next.Start)
                 {
                     if (prev.Stop <= next.Stop)
                         rngs[i - 1] = new Range<T, C>(prev.Start, next.Stop);

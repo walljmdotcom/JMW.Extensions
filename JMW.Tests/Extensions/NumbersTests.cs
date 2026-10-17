@@ -19,6 +19,26 @@ namespace JMW.Extensions.Numbers.Tests
             Assert.That("14a".IsInt(), Is.False);
         }
 
+        [TestCase("0", true)]
+        [TestCase("9", true)]
+        [TestCase("1234567890", true)]
+        [TestCase(" 12 ", true)]
+        [TestCase(":", false)]
+        [TestCase(";", false)]
+        [TestCase("@", false)]
+        [TestCase("A", false)]
+        [TestCase("G", false)]
+        [TestCase("1:3", false)]
+        [TestCase("12A", false)]
+        [TestCase("1/", false)]
+        [TestCase("1.5", false)]
+        [TestCase("-1", false)]
+        [TestCase("a", false)]
+        public void IsIntFastTest(string input, bool expected)
+        {
+            Assert.That(input.IsIntFast(), Is.EqualTo(expected));
+        }
+
         [Test]
         public void IsDoubleTest()
         {

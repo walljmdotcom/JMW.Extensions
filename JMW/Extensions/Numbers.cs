@@ -85,8 +85,8 @@ public static class Extensions
             if (c < 33)
                 continue;
 
-            // make sure the numbers are 1-9
-            if (c < 48 || c > 71)
+            // make sure the characters are the digits 0-9
+            if (c < '0' || c > '9')
                 return false;
         }
 

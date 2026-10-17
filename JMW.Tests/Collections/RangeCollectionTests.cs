@@ -4,6 +4,7 @@ using Lambda.Generic.Arithmetic;
 using NUnit.Framework;
 using System;
 using System.Collections.Generic;
+using System.Globalization;
 
 namespace JMW.Collections.Tests
 {
@@ -101,6 +102,61 @@ namespace JMW.Collections.Tests
 
             Assert.That(rngs.Contains(range), Is.EqualTo(expected));
             Assert.That(rngs.Contains(new IntegerRange(range)), Is.EqualTo(expected));
+        }
+
+        [TestCase("", new[] { "10-12", "1-3" }, "1-3,10-12")]
+        [TestCase("", new[] { "1-3", "10-12" }, "1-3,10-12")]
+        [TestCase("", new[] { "20", "10-12", "1-3" }, "1-3,10-12,20")]
+        [TestCase("", new[] { "5-6", "1-2", "5-7" }, "1-2,5-7")]
+        [TestCase("", new[] { "1-3", "1-5" }, "1-5")]
+        [TestCase("", new[] { "1-5", "1-3" }, "1-5")]
+        [TestCase("", new[] { "4-6", "1-3" }, "1-6")]
+        [TestCase("", new[] { "7" }, "7")]
+        [TestCase("", new string[0], "")]
+        [TestCase("5-6", new[] { "10-12", "1-3" }, "1-3,5-6,10-12")]
+        [TestCase("5-6", new[] { "5-9", "5-7" }, "5-9")]
+        [TestCase("5-6", new[] { "5-6" }, "5-6")]
+        [TestCase("5-6,20-30", new[] { "25-40", "1-4" }, "1-6,20-40")]
+        public void AddRangeUnsorted(string initial, string[] items, string expected)
+        {
+            var rngs = new IntegerRangeCollection(initial);
+            rngs.AddRange(items);
+            Assert.That(rngs.ToString(), Is.EqualTo(expected));
+
+            var longRngs = new LongRangeCollection(initial);
+            longRngs.AddRange(items);
+            Assert.That(longRngs.ToString(), Is.EqualTo(expected));
+
+            var added = new IntegerRangeCollection(initial);
+            foreach (var item in items)
+            {
+                added.Add(new IntegerRange(item));
+            }
+            Assert.That(added.ToString(), Is.EqualTo(expected));
+        }
+
+        [Test]
+        public void AddRangeAtMaxValue()
+        {
+            var rngs = new IntegerRangeCollection();
+            rngs.AddRange([new IntegerRange(10, int.MaxValue), new IntegerRange(20, 30)]);
+            Assert.That(rngs.Count, Is.EqualTo(1));
+            Assert.That(rngs.Ranges.Values[0].Start.ToString(), Is.EqualTo("10"));
+            Assert.That(rngs.Ranges.Values[0].Stop.ToString(), Is.EqualTo(int.MaxValue.ToString(CultureInfo.InvariantCulture)));
+
+            rngs.AddRange([new IntegerRange(int.MaxValue, int.MaxValue)]);
+            Assert.That(rngs.Count, Is.EqualTo(1));
+        }
+
+        [TestCase("1:3", "1-3")]
+        [TestCase("1:3,5", "1-3,5")]
+        [TestCase("1-3,5:7", "1-3,5-7")]
+        [TestCase("1-4,7", "1-4,7")]
+        [TestCase("a,1-2", "1-2")]
+        [TestCase("1-2, ,3", "1-3")]
+        public void ConstructFromStringFormats(string input, string expected)
+        {
+            Assert.That(new IntegerRangeCollection(input).ToString(), Is.EqualTo(expected));
         }
 
         [Test]
