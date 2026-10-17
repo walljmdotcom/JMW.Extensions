@@ -1,9 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using JMW.Extensions.String;
+using JMW.Extensions;
 
-namespace JMW.Template.Tags
+namespace JMW.Templates.Tags
 {
     public class Transform : TagHandlerBase
     {

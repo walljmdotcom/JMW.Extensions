@@ -3,9 +3,9 @@ using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
 using System.Text;
-using JMW.Extensions.String;
+using JMW.Extensions;
 
-namespace JMW.Template.Tags
+namespace JMW.Templates.Tags
 {
     public class Variable : TagHandlerBase
     {

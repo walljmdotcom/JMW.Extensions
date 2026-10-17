@@ -1,7 +1,6 @@
-﻿using JMW.Extensions.Enumerable;
+﻿using JMW.Extensions;
 using JMW.Parsing.Compile;
 using JMW.Parsing.Expressions;
-using JMW.Parsing.IO;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;

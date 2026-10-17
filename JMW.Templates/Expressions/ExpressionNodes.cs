@@ -2,7 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Globalization;
 
-namespace JMW.Template.Expressions;
+namespace JMW.Templates.Expressions;
 
 internal abstract class ExpressionNode
 {

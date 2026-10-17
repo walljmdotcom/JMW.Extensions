@@ -2,9 +2,9 @@
 using System;
 using System.IO;
 
-namespace JMW.Extensions.IO;
+namespace JMW.Extensions;
 
-public static class Extensions
+public static class TextReaderExtensions
 {
     ///<summary>Returns the last <paramref name="lineCount"/> of lines from a <paramref name="reader"/>.</summary>
     ///<param name="reader">The reader to read from.</param>

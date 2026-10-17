@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Globalization;
 
-namespace JMW.Template.Tags
+namespace JMW.Templates.Tags
 {
     public class Timestamp : TagHandlerBase
     {

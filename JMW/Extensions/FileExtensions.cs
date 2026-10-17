@@ -1,7 +1,7 @@
 ﻿using System;
 using System.IO;
 
-namespace JMW.IO;
+namespace JMW.Extensions;
 
 public static class FileExtensions
 {

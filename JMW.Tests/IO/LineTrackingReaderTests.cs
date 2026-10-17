@@ -2,7 +2,7 @@ using NUnit.Framework;
 using System.IO;
 using System.Text;
 
-namespace JMW.IO.Tests
+namespace JMW.Tests
 {
     [TestFixture]
     public class LineTrackingReaderTests

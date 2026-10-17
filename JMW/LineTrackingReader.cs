@@ -2,7 +2,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 
-namespace JMW.IO
+namespace JMW
 {
     /// <summary>
     /// A wrapper for a TextReader that keeps track line and column as well as allowing

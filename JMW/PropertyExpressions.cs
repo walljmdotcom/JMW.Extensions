@@ -1,9 +1,9 @@
 ﻿using System;
 using System.Linq.Expressions;
 
-namespace JMW.Reflection;
+namespace JMW;
 
-public static class Linq
+public static class PropertyExpressions
 {
     public static string GetPropertyName<T>(Expression<Func<T, object>> propertyLambda)
     {

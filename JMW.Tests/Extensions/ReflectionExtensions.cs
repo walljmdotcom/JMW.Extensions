@@ -1,13 +1,10 @@
 ﻿using System.Collections.Generic;
-using JMW.Extensions.Reflection;
 using NUnit.Framework;
 using System.Linq;
-using JMW.Reflection;
 using System;
 using JMW.Collections;
-using JMW.Extensions.Enumerable;
 
-namespace JMW.Extensions.Reflection.Tests
+namespace JMW.Extensions.Tests
 {
     [TestFixture]
     public class ReflectionExtensions
@@ -15,9 +12,9 @@ namespace JMW.Extensions.Reflection.Tests
         [Test]
         public void GetPropertyNameTest1()
         {
-            Assert.That("Prop1" == Linq.GetPropertyName<Test1>(p => p.Prop1));
+            Assert.That("Prop1" == PropertyExpressions.GetPropertyName<Test1>(p => p.Prop1));
 
-            Assert.That(() => Linq.GetPropertyName<Test1>(p => p.Prop1 + 1), Throws.TypeOf<ArgumentException>());
+            Assert.That(() => PropertyExpressions.GetPropertyName<Test1>(p => p.Prop1 + 1), Throws.TypeOf<ArgumentException>());
         }
 
         [Test]

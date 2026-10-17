@@ -1,7 +1,7 @@
 using System;
 using System.Globalization;
 
-namespace JMW.Template.Expressions;
+namespace JMW.Templates.Expressions;
 
 internal enum ScriptValueKind
 {

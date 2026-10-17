@@ -1,6 +1,6 @@
-﻿using JMW.Extensions.String;
+﻿using JMW.Extensions;
 
-namespace JMW.Template.Tags;
+namespace JMW.Templates.Tags;
 
 public class JoinColumn : ColumnBase
 {

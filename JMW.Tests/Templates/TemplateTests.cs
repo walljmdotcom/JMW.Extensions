@@ -1,5 +1,5 @@
-﻿using JMW.IO;
-using JMW.Template.Tags;
+﻿using JMW.Extensions;
+using JMW.Templates.Tags;
 using NUnit.Framework;
 using System;
 using System.Collections.Generic;
@@ -9,7 +9,7 @@ using System.IO;
 using System.Linq;
 using System.Text;
 
-namespace JMW.Template.Tests
+namespace JMW.Templates.Tests
 {
     [TestFixture]
     public class InterpreterTests

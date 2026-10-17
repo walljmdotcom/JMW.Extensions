@@ -1,7 +1,7 @@
 using System;
 using System.Collections.Generic;
 
-namespace JMW.Template.Expressions;
+namespace JMW.Templates.Expressions;
 
 internal static class ScriptEvaluator
 {

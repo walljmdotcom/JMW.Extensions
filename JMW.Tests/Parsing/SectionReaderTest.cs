@@ -4,7 +4,6 @@ using System.Linq;
 using System.Text;
 using JMW.Parsing.Compile;
 using JMW.Parsing.Expressions;
-using JMW.Parsing.IO;
 using NUnit.Framework;
 
 namespace JMW.Parsing.Tests

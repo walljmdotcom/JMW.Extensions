@@ -14,9 +14,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 
-namespace JMW.Extensions.Reflection;
+namespace JMW.Extensions;
 
-public static class Extensions
+public static class ReflectionExtensions
 {
     /// <summary>
     /// Converts a delegate to another delegate type with a compatible signature. Every handler in a multicast

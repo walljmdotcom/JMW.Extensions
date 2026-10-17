@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace JMW.Template.Tags
+namespace JMW.Templates.Tags
 {
     public class Text : TagHandlerBase
     {

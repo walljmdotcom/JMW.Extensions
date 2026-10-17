@@ -9,10 +9,8 @@ The above copyright notice and this permission notice shall be included in all c
 THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 */
 
-using JMW.Extensions.Enumerable;
-using JMW.Extensions.Reflection;
+using JMW.Extensions;
 using JMW.Functional;
-using JMW.Reflection;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -93,7 +91,7 @@ namespace JMW.Collections
         /// <returns>True if the operation succeeded.</returns>
         public bool TryGetByIndex(Expression<Func<T, object>> property_lambda, object key, [NotNullWhen(true)] out List<T>? value)
         {
-            var name = Linq.GetPropertyName(property_lambda);
+            var name = PropertyExpressions.GetPropertyName(property_lambda);
 
             return TryGetByIndex(name, key, out value);
         }
@@ -122,7 +120,7 @@ namespace JMW.Collections
         /// <returns>A <see cref="Maybe{T}"/> that holds the object.</returns>
         public Maybe<List<T>> MaybeGetByIndex(Expression<Func<T, object>> property_lambda, object key)
         {
-            var name = Linq.GetPropertyName(property_lambda);
+            var name = PropertyExpressions.GetPropertyName(property_lambda);
 
             return MaybeGetByIndex(name, key);
         }
@@ -148,7 +146,7 @@ namespace JMW.Collections
         /// <returns>A <see cref="List{T}"/> that holds the object.</returns>
         public List<T> GetByIndex(Expression<Func<T, object>> property_lambda, object key)
         {
-            var name = Linq.GetPropertyName(property_lambda);
+            var name = PropertyExpressions.GetPropertyName(property_lambda);
 
             return GetByIndex(name, key);
         }
@@ -182,7 +180,7 @@ namespace JMW.Collections
         /// <returns>True if the operation succeeded.</returns>
         public bool TryGetByUniqueIndex(Expression<Func<T, object>> property_lambda, object key, [NotNullWhen(true)] out T? value)
         {
-            var name = Linq.GetPropertyName(property_lambda);
+            var name = PropertyExpressions.GetPropertyName(property_lambda);
 
             return TryGetByUniqueIndex(name, key, out value);
         }
@@ -211,7 +209,7 @@ namespace JMW.Collections
         /// <returns>A <see cref="Maybe{T}"/> that holds the object.</returns>
         public Maybe<T> MaybeGetByUniqueIndex(Expression<Func<T, object>> property_lambda, object key)
         {
-            var name = Linq.GetPropertyName(property_lambda);
+            var name = PropertyExpressions.GetPropertyName(property_lambda);
 
             return MaybeGetByUniqueIndex(name, key);
         }
@@ -237,7 +235,7 @@ namespace JMW.Collections
         /// <returns>A <see cref="T"/> that holds the object.</returns>
         public T GetByUniqueIndex(Expression<Func<T, object>> property_lambda, object key)
         {
-            var name = Linq.GetPropertyName(property_lambda);
+            var name = PropertyExpressions.GetPropertyName(property_lambda);
 
             return GetByUniqueIndex(name, key);
         }
@@ -265,7 +263,7 @@ namespace JMW.Collections
         /// <returns>A <see cref="Maybe{T}"/> with a copy of the dictionary.</returns>
         public Maybe<Dictionary<string, T>> MaybeGetUniqueIndex(Expression<Func<T, object>> property_lambda)
         {
-            var name = Linq.GetPropertyName(property_lambda);
+            var name = PropertyExpressions.GetPropertyName(property_lambda);
             return MaybeGetUniqueIndex(name);
         }
 
@@ -292,7 +290,7 @@ namespace JMW.Collections
         /// <returns>A <see cref="Dictionary{TKey, TValue}"/> with a copy of the dictionary.</returns>
         public Dictionary<string, T> GetUniqueIndex(Expression<Func<T, object>> property_lambda)
         {
-            var name = Linq.GetPropertyName(property_lambda);
+            var name = PropertyExpressions.GetPropertyName(property_lambda);
             return GetUniqueIndex(name);
         }
 
@@ -317,7 +315,7 @@ namespace JMW.Collections
         /// <returns>A <see cref="Maybe{T}"/> with a copy of the dictionary.</returns>
         public Maybe<Dictionary<string, List<T>>> MaybeGetIndex(Expression<Func<T, object>> propertyLambda)
         {
-            var name = Linq.GetPropertyName(propertyLambda);
+            var name = PropertyExpressions.GetPropertyName(propertyLambda);
 
             return MaybeGetIndex(name);
         }
@@ -343,7 +341,7 @@ namespace JMW.Collections
         /// <returns>A <see cref="Dictionary{TKey, TValue}"/> with a copy of the dictionary.</returns>
         public Dictionary<string, List<T>> GetIndex(Expression<Func<T, object>> propertyLambda)
         {
-            var name = Linq.GetPropertyName(propertyLambda);
+            var name = PropertyExpressions.GetPropertyName(propertyLambda);
 
             return GetIndex(name);
         }

@@ -12,15 +12,15 @@ THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLI
 using JMW.Functional;
 using System;
 
-namespace JMW.Extensions.Conversions;
+namespace JMW.Extensions;
 
-public static class Extensions
+public static class ConversionExtensions
 {
     /// <summary>
     /// Converts a string into an <typeref name="short"/> safely.
     /// </summary>
     /// <param name="s">String to convert.</param>
-    public static Maybe<short> ToInt16(this string s)
+    public static Maybe<short> MaybeToInt16(this string s)
     {
         short v;
         return short.TryParse(s, out v)
@@ -32,7 +32,7 @@ public static class Extensions
     /// Converts a string into an <typeref name="ushort"/> safely.
     /// </summary>
     /// <param name="s">String to convert.</param>
-    public static Maybe<ushort> ToUInt16(this string s)
+    public static Maybe<ushort> MaybeToUInt16(this string s)
     {
         ushort v;
         return ushort.TryParse(s, out v)
@@ -44,7 +44,7 @@ public static class Extensions
     /// Converts a string into an <typeref name="int"/> safely.
     /// </summary>
     /// <param name="s">String to convert.</param>
-    public static Maybe<int> ToInt32(this string s)
+    public static Maybe<int> MaybeToInt32(this string s)
     {
         int v;
         return int.TryParse(s, out v) ? new Maybe<int>(v) : new Maybe<int>(new ArgumentException("Argument " + s + " is not a number."));
@@ -54,7 +54,7 @@ public static class Extensions
     /// Converts a string into an <typeref name="uint"/> safely.
     /// </summary>
     /// <param name="s">String to convert.</param>
-    public static Maybe<uint> ToUInt32(this string s)
+    public static Maybe<uint> MaybeToUInt32(this string s)
     {
         uint v;
         return uint.TryParse(s, out v) ? new Maybe<uint>(v) : new Maybe<uint>(new ArgumentException("Argument " + s + " is not a number."));
@@ -64,7 +64,7 @@ public static class Extensions
     /// Converts a string into an <typeref name="long"/> safely.
     /// </summary>
     /// <param name="s">String to convert.</param>
-    public static Maybe<long> ToInt64(this string s)
+    public static Maybe<long> MaybeToInt64(this string s)
     {
         long v;
         return long.TryParse(s, out v) ? new Maybe<long>(v) : new Maybe<long>(new ArgumentException("Argument " + s + " is not a number."));
@@ -74,7 +74,7 @@ public static class Extensions
     /// Converts a string into an <typeref name="ulong"/> safely.
     /// </summary>
     /// <param name="s">String to convert.</param>
-    public static Maybe<ulong> ToUInt64(this string s)
+    public static Maybe<ulong> MaybeToUInt64(this string s)
     {
         ulong v;
         return ulong.TryParse(s, out v)
@@ -86,7 +86,7 @@ public static class Extensions
     /// Converts a string into an <typeref name="decimal"/> safely.
     /// </summary>
     /// <param name="s">String to convert.</param>
-    public static Maybe<decimal> ToDecimal(this string s)
+    public static Maybe<decimal> MaybeToDecimal(this string s)
     {
         decimal v;
         return decimal.TryParse(s, out v)
@@ -98,7 +98,7 @@ public static class Extensions
     /// Converts a string into an <typeref name="float"/> safely.
     /// </summary>
     /// <param name="s">String to convert.</param>
-    public static Maybe<float> ToFloat(this string s)
+    public static Maybe<float> MaybeToFloat(this string s)
     {
         float v;
         return float.TryParse(s, out v)
@@ -110,7 +110,7 @@ public static class Extensions
     /// Converts a string into an <typeref name="double"/> safely.
     /// </summary>
     /// <param name="s">String to convert.</param>
-    public static Maybe<double> ToDouble(this string s)
+    public static Maybe<double> MaybeToDouble(this string s)
     {
         double v;
         return double.TryParse(s, out v)
@@ -129,7 +129,7 @@ public static class Extensions
     ///  t/f
     /// </summary>
     /// <param name="s">String to convert.</param>
-    public static Maybe<bool> ToBoolean(this string s)
+    public static Maybe<bool> MaybeToBoolean(this string s)
     {
         bool v;
         if (bool.TryParse(s, out v))

@@ -1,4 +1,4 @@
-﻿namespace JMW.Template.Tags;
+﻿namespace JMW.Templates.Tags;
 
 public interface ITagHandler
 {

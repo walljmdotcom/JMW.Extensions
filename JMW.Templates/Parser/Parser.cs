@@ -1,10 +1,10 @@
-using JMW.Extensions.String;
-using JMW.Template.Tags;
+using JMW.Extensions;
+using JMW.Templates.Tags;
 using System.Collections.Generic;
 using System.IO;
 using System.Text;
 
-namespace JMW.Template
+namespace JMW.Templates
 {
     /// <summary>
     ///   Parses template tags for a simple generic templating engine.

@@ -5,9 +5,9 @@ using System.Linq;
 using JMW.Types;
 using Lambda.Generic.Arithmetic;
 
-namespace JMW.Extensions.Numbers;
+namespace JMW.Extensions;
 
-public static class Extensions
+public static class NumberExtensions
 {
     /// <summary>
     /// Indicates if the string is an <see cref="int"/>
@@ -582,7 +582,7 @@ public static class Extensions
         }
 
         if (prev != current)
-            r += sorted.Last();
+            r += sorted[sorted.Count - 1];
 
         r = r.Trim().Trim(',');
 
@@ -635,7 +635,7 @@ public static class Extensions
         }
 
         if (prev != current)
-            r += sorted.Last();
+            r += sorted[sorted.Count - 1];
 
         r = r.Trim().Trim(',');
 
@@ -703,7 +703,7 @@ public static class Extensions
 
         if (prev != current)
         {
-            r.Add(new Range<T, C>(sorted.Last(), sorted.Last()));
+            r.Add(new Range<T, C>(sorted[sorted.Count - 1], sorted[sorted.Count - 1]));
         }
 
         return r;

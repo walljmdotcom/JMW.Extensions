@@ -15,9 +15,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
-namespace JMW.Extensions.Enumerable
+namespace JMW.Extensions
 {
-    public static class Extensions
+    public static class EnumerableExtensions
     {
         public static IEnumerable<T> ReverseOrder<T>(this IList<T> lst)
         {

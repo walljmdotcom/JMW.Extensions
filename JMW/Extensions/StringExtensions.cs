@@ -14,9 +14,9 @@ using System.Collections.Generic;
 using System.IO;
 using System.Text;
 
-namespace JMW.Extensions.String;
+namespace JMW.Extensions;
 
-public static class Extensions
+public static class StringExtensions
 {
     #region ParseToIndexOf
 

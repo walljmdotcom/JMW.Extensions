@@ -1,7 +1,7 @@
 ﻿using System.IO;
 using NUnit.Framework;
 
-namespace JMW.Template.Tests
+namespace JMW.Templates.Tests
 {
     [TestFixture]
     public class TokenizerTest

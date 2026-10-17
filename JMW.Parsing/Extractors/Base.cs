@@ -1,4 +1,4 @@
-﻿using JMW.Extensions.Numbers;
+﻿using JMW.Extensions;
 using JMW.Parsing.Compile;
 using System;
 using System.Collections.Generic;

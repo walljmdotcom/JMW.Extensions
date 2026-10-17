@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 
-namespace JMW.Template.Tags
+namespace JMW.Templates.Tags
 {
     /// <summary>
     /// This is the base class for column handlers.  This is not intended to be used by itself,

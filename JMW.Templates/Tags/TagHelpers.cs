@@ -1,12 +1,11 @@
-﻿using JMW.Extensions.Enumerable;
-using JMW.Extensions.String;
-using JMW.Template.Expressions;
+﻿using JMW.Extensions;
+using JMW.Templates.Expressions;
 using System;
 using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
 
-namespace JMW.Template.Tags;
+namespace JMW.Templates.Tags;
 
 public static class TagHelpers
 {

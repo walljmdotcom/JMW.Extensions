@@ -1,6 +1,6 @@
 using System.Collections.Generic;
 
-namespace JMW.Template.Expressions;
+namespace JMW.Templates.Expressions;
 
 /// <summary>
 /// Variables visible to one expression evaluation. <c>x1</c> (or <c>X1</c>) is the first argument,

@@ -13,7 +13,7 @@ using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Runtime.CompilerServices;
-using JMW.Extensions.Reflection;
+using JMW.Extensions;
 using JMW.Types;
 
 namespace JMW.Collections;

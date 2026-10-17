@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 
-namespace JMW.Template.Tags
+namespace JMW.Templates.Tags
 {
     public class Join : TagHandlerBase
     {

@@ -2,7 +2,7 @@
 using JMW.Parsing.Handlers;
 using System.IO;
 
-namespace JMW.Parsing.IO;
+namespace JMW.Parsing;
 
 public class SectionReader
 {

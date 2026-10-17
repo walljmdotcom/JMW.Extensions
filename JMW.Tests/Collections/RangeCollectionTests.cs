@@ -1,4 +1,4 @@
-﻿using JMW.Extensions.Enumerable;
+﻿using JMW.Extensions;
 using JMW.Types;
 using Lambda.Generic.Arithmetic;
 using NUnit.Framework;

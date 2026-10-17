@@ -1,8 +1,8 @@
-﻿using JMW.Template.Tags;
+﻿using JMW.Templates.Tags;
 using NUnit.Framework;
 using System;
 
-namespace JMW.Template.Tests
+namespace JMW.Templates.Tests
 {
     [TestFixture]
     public class TagHelpersTest

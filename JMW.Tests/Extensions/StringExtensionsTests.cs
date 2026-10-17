@@ -1,7 +1,7 @@
 ﻿using System.Linq;
 using NUnit.Framework;
 
-namespace JMW.Extensions.String.Tests
+namespace JMW.Extensions.Tests
 {
     [TestFixture]
     public class StringExtensionsTests

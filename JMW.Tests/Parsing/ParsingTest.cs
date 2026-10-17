@@ -1,5 +1,5 @@
 ﻿using JMW.Collections;
-using JMW.Extensions.String;
+using JMW.Extensions;
 using JMW.Parsing.Compile;
 using JMW.Parsing.Expressions;
 using JMW.Parsing.Extractors;

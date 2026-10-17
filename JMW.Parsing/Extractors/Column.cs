@@ -1,4 +1,4 @@
-﻿using JMW.Extensions.Enumerable;
+﻿using JMW.Extensions;
 using JMW.Parsing.Compile;
 using JMW.Parsing.Handlers;
 using System;

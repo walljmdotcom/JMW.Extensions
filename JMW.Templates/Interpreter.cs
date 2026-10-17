@@ -1,13 +1,13 @@
-using JMW.Extensions.String;
+using JMW.Extensions;
 using JMW.Functional;
-using JMW.Template.Tags;
+using JMW.Templates.Tags;
 using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using Version = JMW.Template.Tags.Version;
+using Version = JMW.Templates.Tags.Version;
 
-namespace JMW.Template
+namespace JMW.Templates
 {
     public delegate void Handler(Tag token, Interpreter interpreter);
 

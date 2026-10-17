@@ -1,6 +1,6 @@
 using System.Collections.Generic;
 
-namespace JMW.Template
+namespace JMW.Templates
 {
     public class Tag
     {

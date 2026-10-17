@@ -2,7 +2,7 @@
 using System;
 using System.IO;
 
-namespace JMW.Extensions.IO.Tests
+namespace JMW.Extensions.Tests
 {
     [TestFixture]
     public class IOTests

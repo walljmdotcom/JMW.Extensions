@@ -1,6 +1,6 @@
 using System.Collections.Generic;
 
-namespace JMW.Template.Expressions;
+namespace JMW.Templates.Expressions;
 
 /// <summary>
 /// Parses the JavaScript subset template expressions use: literals, the <c>x1..xN</c> variables, arithmetic, comparison,

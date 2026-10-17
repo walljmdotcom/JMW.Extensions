@@ -1,9 +1,9 @@
-using JMW.Template.Expressions;
+using JMW.Templates.Expressions;
 using NUnit.Framework;
 using System;
 using System.Linq;
 
-namespace JMW.Template.Tests
+namespace JMW.Templates.Tests
 {
     [TestFixture]
     public class ExpressionTests

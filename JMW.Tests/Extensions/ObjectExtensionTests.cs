@@ -1,7 +1,6 @@
-﻿using JMW.Extensions.String;
-using NUnit.Framework;
+﻿using NUnit.Framework;
 
-namespace JMW.Extensions.Object.Tests
+namespace JMW.Extensions.Tests
 {
     [TestFixture]
     public class ObjectExtensionTests

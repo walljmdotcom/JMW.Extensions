@@ -2,7 +2,7 @@
 using System.Data;
 using System.Linq;
 
-namespace JMW.Template
+namespace JMW.Templates
 {
     public class TableData
     {

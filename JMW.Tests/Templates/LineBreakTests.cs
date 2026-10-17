@@ -3,7 +3,7 @@ using System;
 using System.IO;
 using System.Text;
 
-namespace JMW.Template.Tests
+namespace JMW.Templates.Tests
 {
     [TestFixture]
     public class LineBreakTests

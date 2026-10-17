@@ -1,6 +1,6 @@
 using System;
 
-namespace JMW.Template;
+namespace JMW.Templates;
 
 [Serializable]
 public class ParseException : Exception

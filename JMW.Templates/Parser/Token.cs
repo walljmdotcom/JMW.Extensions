@@ -1,4 +1,4 @@
-namespace JMW.Template;
+namespace JMW.Templates;
 
 public class Token
 {

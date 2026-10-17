@@ -1,9 +1,9 @@
-﻿using JMW.Extensions.Enumerable;
+﻿using JMW.Extensions;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 
-namespace JMW.Template.Tags
+namespace JMW.Templates.Tags
 {
     public class Table : TagHandlerBase
     {

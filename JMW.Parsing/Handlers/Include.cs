@@ -1,4 +1,4 @@
-﻿using JMW.Extensions.Conversions;
+﻿using JMW.Extensions;
 using JMW.Parsing.Compile;
 using JMW.Parsing.Expressions;
 
@@ -35,11 +35,11 @@ namespace JMW.Parsing.Handlers
             }
             if (t.Properties.TryGetValue(INCLUDESTART, out var includeStartTag))
             {
-                includeStartTag.Value.ToString()?.ToBoolean().IfSuccess(v => this.IncludeStart = v);
+                includeStartTag.Value.ToString()?.MaybeToBoolean().IfSuccess(v => this.IncludeStart = v);
             }
             if (t.Properties.TryGetValue(INCLUDESTOP, out var includeStopTag))
             {
-                includeStopTag.Value.ToString()?.ToBoolean().IfSuccess(v => this.IncludeStop = v);
+                includeStopTag.Value.ToString()?.MaybeToBoolean().IfSuccess(v => this.IncludeStop = v);
             }
         }
     }

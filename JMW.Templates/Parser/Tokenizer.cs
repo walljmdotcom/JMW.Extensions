@@ -4,12 +4,11 @@ using System.IO;
 using System.Linq;
 using System.Runtime.CompilerServices;
 using System.Text;
-using JMW.IO;
 
 // Internals are visible to the Test assemblies
 [assembly: InternalsVisibleTo("JMW.Tests")]
 
-namespace JMW.Template
+namespace JMW.Templates
 {
     public class Tokenizer
     {

@@ -2,7 +2,7 @@ using System.Collections.Generic;
 using System.Globalization;
 using System.Text;
 
-namespace JMW.Template.Expressions;
+namespace JMW.Templates.Expressions;
 
 internal enum ExpressionTokenKind
 {

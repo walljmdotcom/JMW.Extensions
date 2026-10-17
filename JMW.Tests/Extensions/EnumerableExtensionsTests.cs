@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
 
-namespace JMW.Extensions.Enumerable.Tests
+namespace JMW.Extensions.Tests
 {
     [TestFixture]
     public class ExtensionsTests

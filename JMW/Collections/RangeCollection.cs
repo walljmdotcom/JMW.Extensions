@@ -2,8 +2,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
-using JMW.Extensions.Enumerable;
-using JMW.Extensions.Numbers;
+using JMW.Extensions;
 using JMW.Types;
 using Lambda.Generic.Arithmetic;
 

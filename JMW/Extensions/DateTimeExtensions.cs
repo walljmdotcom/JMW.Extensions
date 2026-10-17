@@ -1,9 +1,9 @@
 ﻿using System;
 using System.Globalization;
 
-namespace JMW.Extensions.DateAndTime;
+namespace JMW.Extensions;
 
-public static class Extensions
+public static class DateTimeExtensions
 {
     public static string GetElapsedTime(this DateTime curr, DateTime time)
     {

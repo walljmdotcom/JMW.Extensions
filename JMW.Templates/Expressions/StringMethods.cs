@@ -1,7 +1,7 @@
 using System;
 using System.Text;
 
-namespace JMW.Template.Expressions;
+namespace JMW.Templates.Expressions;
 
 /// <summary>
 /// The JavaScript String.prototype methods available to template expressions.
