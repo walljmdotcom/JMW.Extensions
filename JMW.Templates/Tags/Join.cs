@@ -22,6 +22,7 @@ namespace JMW.Templates.Tags
 
         private readonly TableData? _leftTableData;
         private readonly TableData? _rightTableData;
+        private readonly HashSet<string> _columnTags = [];
 
         public const string TAG = "join";
         public override string TagName { get; } = TAG;
@@ -71,6 +72,10 @@ namespace JMW.Templates.Tags
             _rightTableData = rightTableData;
 
             Name = _leftTableData.Name + "_" + _rightTableData.Name;
+            _columnTags = TagHelpers.ColumnTagNames(
+                leftTableData.Columns.Select(c => JoinColumn.LEFT_PREFIX + c)
+                    .Concat(rightTableData.Columns.Select(c => JoinColumn.RIGHT_PREFIX + c))
+            );
 
             // Column lists inside the join body are prefixed with the join name, as in "t_u:left_name".
             interp.Retrievers.Add(Name.ToLowerInvariant(), RetrieveColumnValue);
@@ -90,7 +95,7 @@ namespace JMW.Templates.Tags
                 throw new InvalidOperationException();
             }
 
-            TagHelpers.PrefixTags(tag.Children, Name);
+            TagHelpers.PrefixTags(tag.Children, Name, _columnTags);
 
             // The joined rows are reused until the join attributes or either table's row list change.
             var join_key = new JoinKey(

@@ -8,6 +8,7 @@ namespace JMW.Templates.Tags
     public class Table : TagHandlerBase
     {
         private readonly string _name;
+        private readonly HashSet<string> _columnTags;
 
         public const string TAG = "table";
         public const string TAB_TAG = "tab";
@@ -31,12 +32,14 @@ namespace JMW.Templates.Tags
         public Table()
         {
             _name = string.Empty;
+            _columnTags = [];
         }
 
         public Table(TableData table_data, Interpreter interp)
         {
             _name = table_data.Name.ToLowerInvariant();
             TableData = table_data;
+            _columnTags = TagHelpers.ColumnTagNames(table_data.Columns);
 
             interp.Retrievers.Add(table_data.Name.ToLowerInvariant(), RetrieveColumnValue);
 
@@ -52,7 +55,7 @@ namespace JMW.Templates.Tags
             }
 
             // prefix the names of the columns
-            TagHelpers.PrefixTags(tag.Children, _name);
+            TagHelpers.PrefixTags(tag.Children, _name, _columnTags);
 
             EvalFilteredRows(tag, TableData, interp, row => CurrentRow = row);
         }

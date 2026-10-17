@@ -9,6 +9,10 @@ namespace JMW.Templates.Tags
         private string? indexedKeyExp;
         private string? indexedKeyCol;
 
+        // The lookup body holds its row tags, and a row body holds the column tags.
+        private readonly HashSet<string> _bodyTags = [];
+        internal HashSet<string> ColumnTags { get; } = [];
+
         public const string TAG = "lookup";
         public override string TagName { get; } = TAG;
         public override HashSet<string> ALLOWEDPROPS { get; } = [ATTR_KEY_EXP, ATTR_KEY_COL, ATTR_TABLE];
@@ -31,6 +35,8 @@ namespace JMW.Templates.Tags
         {
             Name = "lookup_" + table_data.Name.ToLowerInvariant();
             TableData = table_data;
+            ColumnTags = TagHelpers.ColumnTagNames(table_data.Columns);
+            _bodyTags = [.. ColumnTags, LookupRow.TAG];
 
             interp.Retrievers.Add(Name, RetrieveColumnValue);
 
@@ -47,7 +53,7 @@ namespace JMW.Templates.Tags
                 throw new InvalidOperationException();
             }
 
-            TagHelpers.PrefixTags(tag.Children, Name);
+            TagHelpers.PrefixTags(tag.Children, Name, _bodyTags);
 
             tag.Properties.TryGetValue(ATTR_KEY_EXP, out var attrKeyExp);
             tag.Properties.TryGetValue(ATTR_KEY_COL, out var attrKeyCol);

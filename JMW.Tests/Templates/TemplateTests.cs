@@ -556,6 +556,39 @@ namespace JMW.Templates.Tests
             Assert.That(sb.ToString(), Is.EqualTo(expected));
         }
 
+        // Only the table's own columns belong to it. Every other tag in the body keeps its own handler.
+        [TestCase("<tab name=\"t\"><name/><timestamp format=\"'T'\"/><num/>,</tab>", "aT10,bT20,cT30,")]
+        [TestCase("<tab name=\"u\"><label/><lookup table=\"t\" key_col=\"num\"><row key=\"20\"><name/></row></lookup>,</tab>", "pb,pb,rb,")]
+        [TestCase("<tab name=\"u\"><label/><join " + JoinTables + "><left_name/></join>,</tab>", "pabc,pabc,rabc,")]
+        [TestCase("<tab name=\"t\" where=\"x1 == '10'\"><join " + JoinTables + ">[<left_name/>]</join></tab><join " + JoinTables + "><left_name/></join>", "[a]abc")]
+        [TestCase("<join " + JoinTables + "><left_name/><timestamp format=\"'T'\"/><right_label/>,</join>", "aTp,bTp,cTr,")]
+        [TestCase("<lookup table=\"t\" key_col=\"num\"><row key=\"20\"><name/><timestamp format=\"'T'\"/><num/></row></lookup>", "bT20")]
+        public void TestTagsNestedInTable(string template, string expected)
+        {
+            var sb = new StringBuilder();
+            using var wr = new StringWriter(sb);
+            var i = new Interpreter(wr);
+            i.AddHandler(new Table(new TableData("t", ["num,name", "10,a", "20,b", "30,c"]), i));
+            i.AddHandler(new Table(new TableData("u", ["num,label", "10,p", "20,p", "30,r"]), i));
+
+            i.Eval(template);
+
+            Assert.That(sb.ToString(), Is.EqualTo(expected));
+        }
+
+        [Test]
+        public void TestVersionNestedInTable()
+        {
+            var sb = new StringBuilder();
+            using var wr = new StringWriter(sb);
+            var i = new Interpreter(wr);
+            i.AddHandler(new Table(new TableData("t", ["num,name", "10,a", "20,b"]), i));
+
+            i.Eval("<tab name=\"t\"><name/><version prefix=\"V\"/><num/>,</tab>");
+
+            Assert.That(sb.ToString(), Does.Match("^aV[0-9.]+10,bV[0-9.]+20,$"));
+        }
+
         // Column names in orderby and distinct match whatever their case, as column tags do.
         [TestCase("<tab name=\"t\" orderby=\"Name\" order=\"desc\"><name/></tab>", "cba")]
         [TestCase("<tab name=\"t\" orderby=\"name\"><Name/></tab>", "abc")]

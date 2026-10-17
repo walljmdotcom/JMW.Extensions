@@ -9,7 +9,12 @@ namespace JMW.Templates.Tags;
 
 public static class TagHelpers
 {
-    public static void PrefixTags(IEnumerable<Tag> tags, string sheet_name)
+    /// <summary>
+    /// Prefixes the tags in <paramref name="tags"/> named in <paramref name="column_tags"/>, and the column lists of
+    /// if and transform tags, with <paramref name="sheet_name"/>. Every other tag keeps its own handler.
+    /// </summary>
+    /// <param name="column_tags">The sheet's tag names, lowercase, as the parser writes tag names.</param>
+    public static void PrefixTags(IEnumerable<Tag> tags, string sheet_name, ISet<string> column_tags)
     {
         foreach (var tag in tags)
         {
@@ -17,7 +22,7 @@ public static class TagHelpers
             {
                 PrefixIfColumns(tag, sheet_name);
             }
-            else if (tag.TagType == TagTypes.Tag && !Output.IsOutput(tag) && !Table.IsTable(tag) && !Variable.IsVariable(tag) && !tag.Name.Contains(':'))
+            else if (tag.TagType == TagTypes.Tag && column_tags.Contains(tag.Name) && !Output.IsOutput(tag) && !Table.IsTable(tag) && !Variable.IsVariable(tag))
             {
                 PrefixTag(tag, sheet_name);
             }
@@ -25,9 +30,21 @@ public static class TagHelpers
             // handle children
             if (Output.IsOutput(tag) || Conditional.IsConditional(tag))
             {
-                PrefixTags(tag.Children, sheet_name);
+                PrefixTags(tag.Children, sheet_name, column_tags);
             }
         }
+    }
+
+    /// <summary>
+    /// The tag names for <paramref name="columns"/>, lowercase and trimmed to match parsed tag names.
+    /// </summary>
+    internal static HashSet<string> ColumnTagNames(IEnumerable<string> columns)
+    {
+        var names = new HashSet<string>(StringComparer.Ordinal);
+        foreach (var column in columns)
+            names.Add(column.ToLowerInvariant().Trim());
+
+        return names;
     }
 
     public static void PrefixTag(Tag tag, string name)

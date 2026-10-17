@@ -29,7 +29,7 @@ namespace JMW.Templates.Tags
                 throw new InvalidOperationException();
             }
 
-            TagHelpers.PrefixTags(tag.Children, _tab.Name);
+            TagHelpers.PrefixTags(tag.Children, _tab.Name, _tab.ColumnTags);
 
             if (tag.Properties.TryGetValue(ATTR_KEY, out var attrKey))
             {
