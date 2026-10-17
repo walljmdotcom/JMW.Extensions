@@ -562,8 +562,7 @@ public static class Ifconfig
             }
             // sometimes the key:value pairs are separated
             //  by a single colon.  split these.
-            var colonCount = CountChars(sb, ':');
-            if (colonCount[':'] == 1)
+            if (CountChar(sb, ':') == 1)
             {
                 var tokens = sb.ToString().Split(':');
                 yield return tokens[0];
@@ -632,16 +631,16 @@ public static class Ifconfig
         return true;
     }
 
-    private static Dictionary<char, int> CountChars(StringBuilder sb, params char[] target)
+    private static int CountChar(StringBuilder sb, char target)
     {
-        var chars = target.ToDictionary(k => k, v => 0);
+        var count = 0;
         for (int i = 0; i < sb.Length; i++)
         {
-            if (chars.TryGetValue(sb[i], out var value))
+            if (sb[i] == target)
             {
-                chars[sb[i]] = ++value;
+                count++;
             }
         }
-        return chars;
+        return count;
     }
 }
