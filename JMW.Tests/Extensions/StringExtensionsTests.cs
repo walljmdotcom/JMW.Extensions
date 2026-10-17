@@ -195,5 +195,39 @@ namespace JMW.Extensions.String.Tests
             Assert.That("ThisIsAnother", Is.EqualTo(str.ToPascalCase()));
             Assert.That("This_IsAnother", Is.EqualTo("This _ is another".ToPascalCase()));
         }
+
+        [TestCase("", "")]
+        [TestCase(" ", "")]
+        [TestCase("   ", "")]
+        [TestCase("a", "A")]
+        [TestCase("a  b", "AB")]
+        [TestCase(" leading", "Leading")]
+        [TestCase("trailing ", "Trailing")]
+        [TestCase("  both  ends  ", "BothEnds")]
+        [TestCase("already Pascal", "AlreadyPascal")]
+        [TestCase("mIxed caSe", "MIxedCaSe")]
+        [TestCase("in/valid name", "InvalidName")]
+        [TestCase("/abc", "Abc")]
+        [TestCase("i stay i", "IStayI")]
+        public void ToPascalCaseHandlesEmptyWords(string input, string expected)
+        {
+            Assert.That(input.ToPascalCase(), Is.EqualTo(expected));
+        }
+
+        [TestCase("", "", false, 0)]
+        [TestCase("abc", "", false, 0)]
+        [TestCase("abc", "", true, 0)]
+        [TestCase("", "a", false, 0)]
+        [TestCase("aaa", "a", false, 3)]
+        [TestCase("aaaa", "aa", false, 2)]
+        [TestCase("port portindex port", "port", false, 3)]
+        [TestCase("port portindex port", "port", true, 2)]
+        [TestCase("port", "port", true, 1)]
+        [TestCase("Port port", "port", false, 1)]
+        [TestCase("abc", "abcd", false, 0)]
+        public void CountInstancesTest(string test, string c, bool wordBoundaries, int expected)
+        {
+            Assert.That(test.CountInstances(c, wordBoundaries), Is.EqualTo(expected));
+        }
     }
 }

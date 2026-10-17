@@ -12,6 +12,7 @@ THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLI
 using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Text;
 
 namespace JMW.Extensions.String;
 
@@ -601,18 +602,25 @@ public static class Extensions
     /// <param name="str">string to convert</param>
     public static string ToPascalCase(this string str)
     {
-        var v = str;
-        foreach (var c in Path.GetInvalidFileNameChars())
-            v = v.Replace(c.ToString(), string.Empty);
+        var invalid = Path.GetInvalidFileNameChars();
+        var r = new StringBuilder(str.Length);
+        var startOfWord = true;
+        foreach (var c in str)
+        {
+            if (Array.IndexOf(invalid, c) >= 0)
+                continue;
 
-        foreach (var c in Path.GetInvalidFileNameChars())
-            v = v.Replace(c.ToString(), string.Empty);
+            if (c == ' ')
+            {
+                startOfWord = true;
+                continue;
+            }
 
-        var words = v.Split(' ');
-        var r = string.Empty;
-        foreach (var w in words)
-            r += string.Concat(w.Substring(0, 1).ToUpper(), w.Substring(1));
-        return r;
+            r.Append(startOfWord ? char.ToUpperInvariant(c) : c);
+            startOfWord = false;
+        }
+
+        return r.ToString();
     }
 
     /// <summary>
@@ -625,12 +633,17 @@ public static class Extensions
     /// <returns>int</returns>
     public static int CountInstances(this string test, string c, bool respect_word_boundaries = false)
     {
+        // an empty search string would match at every position without advancing
+        if (c.Length == 0)
+            return 0;
+
         var s = test + " "; // to avoid geriatrics with strings not ending in a word boundary.
         var cnt = 0;
         if (respect_word_boundaries) c += " ";
-        while (s.Contains(c))
+        var pos = 0;
+        while ((pos = s.IndexOf(c, pos, StringComparison.Ordinal)) >= 0)
         {
-            s = s.Substring(s.IndexOf(c, StringComparison.Ordinal) + c.Length);
+            pos += c.Length;
             cnt++;
         }
         return cnt;
