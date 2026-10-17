@@ -8,8 +8,6 @@ namespace JMW.Parsing.Compile;
 /// </summary>
 public class Parser
 {
-    private readonly Stack<Tag> stack = new();
-
     public Parser()
     {
     }
@@ -27,6 +25,7 @@ public class Parser
     public List<Tag> Parse(TextReader reader)
     {
         var tokenizer = new Tokenizer(reader);
+        var stack = new Stack<Tag>();
         var ast = new List<Tag>();
         Tag? last = null;
         while (tokenizer.Next() != TokenType.Error)
@@ -38,51 +37,71 @@ public class Parser
                 case TokenType.ObjectStart:
                     tag.TagType = TagTypes.Object;
                     tag.Name = token.Value?.ToLower().Trim() ?? string.Empty;
-                    this.stack.Push(tag);
+                    stack.Push(tag);
                     break;
 
                 case TokenType.ArrayStart:
                     tag.TagType = TagTypes.Array;
                     tag.Name = token.Value?.ToLower().Trim() ?? string.Empty;
                     tag.Value = new Stack<Tag>();
-                    this.stack.Push(tag);
+                    stack.Push(tag);
 
                     break;
 
                 case TokenType.ArrayStop:
                     {
-                        var curr = this.stack.Pop();
-                        last = curr;
-                        if (this.stack.Count > 0 && this.stack.Peek().TagType == TagTypes.Property)
+                        if (stack.Count == 0)
                         {
-                            var t = this.stack.Pop();
-                            this.stack.Peek().Properties[t.Name] = curr;
+                            throw new ParseException("Unexpected ] with no open [.", token);
+                        }
+                        var curr = stack.Pop();
+                        last = curr;
+                        if (stack.Count > 0 && stack.Peek().TagType == TagTypes.Property)
+                        {
+                            var t = stack.Pop();
+                            if (stack.Count == 0)
+                            {
+                                throw new ParseException("Property '" + t.Name + "' is not inside an object.", token);
+                            }
+                            stack.Peek().Properties[t.Name] = curr;
                             break;
                         }
-                        this.stack.Peek().Properties[curr.Name] = curr;
+                        if (stack.Count == 0)
+                        {
+                            throw new ParseException("Array '" + curr.Name + "' is not inside an object.", token);
+                        }
+                        stack.Peek().Properties[curr.Name] = curr;
                         break;
                     }
                 case TokenType.ObjectStop:
                     {
-                        var curr = this.stack.Pop();
-                        last = curr;
-                        if (this.stack.Count > 0 && this.stack.Peek().TagType == TagTypes.Array)
+                        if (stack.Count == 0)
                         {
-                            var o = (Stack<Tag>)this.stack.Peek().Value;
+                            throw new ParseException("Unexpected } with no open {.", token);
+                        }
+                        var curr = stack.Pop();
+                        last = curr;
+                        if (stack.Count > 0 && stack.Peek().TagType == TagTypes.Array)
+                        {
+                            var o = (Stack<Tag>)stack.Peek().Value;
                             o.Push(curr);
                             break;
                         }
-                        if (this.stack.Count > 0 && this.stack.Peek().TagType == TagTypes.Property)
+                        if (stack.Count > 0 && stack.Peek().TagType == TagTypes.Property)
                         {
-                            var t = this.stack.Pop();
-                            this.stack.Peek().Properties[t.Name] = curr;
+                            var t = stack.Pop();
+                            if (stack.Count == 0)
+                            {
+                                throw new ParseException("Property '" + t.Name + "' is not inside an object.", token);
+                            }
+                            stack.Peek().Properties[t.Name] = curr;
                             break;
                         }
 
-                        if (this.stack.Count > 0 && this.stack.Peek().TagType == TagTypes.Object)
+                        if (stack.Count > 0 && stack.Peek().TagType == TagTypes.Object)
                         {
                             // its an object like an Or or and And that has a list of expressions.
-                            var o = this.stack.Peek();
+                            var o = stack.Peek();
                             if (o.Value.GetType() != typeof(Stack<Tag>))
                             {
                                 o.Value = new Stack<Tag>();
@@ -92,7 +111,7 @@ public class Parser
                             break;
                         }
 
-                        if (this.stack.Count == 0)
+                        if (stack.Count == 0)
                         {
                             ast.Add(curr);
                         }
@@ -101,7 +120,7 @@ public class Parser
                 case TokenType.PropertyName:
                     tag.Name = token.Value?.ToLower().Trim() ?? string.Empty;
                     tag.TagType = TagTypes.Property;
-                    this.stack.Push(tag);
+                    stack.Push(tag);
 
                     break;
 
@@ -113,20 +132,24 @@ public class Parser
                     break;
 
                 case TokenType.Value:
-                    if (this.stack.Count > 0 && this.stack.Peek().TagType == TagTypes.Property)
+                    if (stack.Count > 0 && stack.Peek().TagType == TagTypes.Property)
                     {
-                        var o = this.stack;
-                        if (this.stack.Count > 0 && this.stack.Peek().TagType == TagTypes.Array)
-                            o = (Stack<Tag>)this.stack.Peek().Value;
+                        var o = stack;
+                        if (stack.Count > 0 && stack.Peek().TagType == TagTypes.Array)
+                            o = (Stack<Tag>)stack.Peek().Value;
 
                         var t = o.Pop();
                         t.Value = token.Value ?? string.Empty;
                         t.TagType = TagTypes.Property;
-                        this.stack.Peek().Properties[t.Name] = t;
+                        if (stack.Count == 0)
+                        {
+                            throw new ParseException("Property '" + t.Name + "' is not inside an object.", token);
+                        }
+                        stack.Peek().Properties[t.Name] = t;
                     }
-                    if (this.stack.Count > 0 && this.stack.Peek().TagType == TagTypes.Array)
+                    if (stack.Count > 0 && stack.Peek().TagType == TagTypes.Array)
                     {
-                        var o = (Stack<Tag>)this.stack.Peek().Value;
+                        var o = (Stack<Tag>)stack.Peek().Value;
                         tag.TagType = TagTypes.Word;
                         tag.Name = string.Empty;
                         tag.Value = token.Value ?? string.Empty;
@@ -141,7 +164,7 @@ public class Parser
             throw new ParseException(tokenizer.Token);
         }
 
-        return this.stack.Count != 0
+        return stack.Count != 0
             ? throw new ParseException("Parsing code ended prematurely. Did you forget a closing }?", tokenizer.Token)
             : ast;
     }

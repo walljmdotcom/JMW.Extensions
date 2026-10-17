@@ -95,7 +95,21 @@ public class Tokenizer
                 return this.ConsumePropertyValue();
             }
 
-            return this.MaybeReadWord() ? this.ConsumeWord() : this.ConsumeWhitespace();
+            if (this.MaybeReadWord())
+            {
+                return this.ConsumeWord();
+            }
+
+            var next = this.Peek();
+            if (next == -1)
+            {
+                this.eof = true;
+                return this.SetupErrorToken("EOF");
+            }
+
+            return IsSkippable(next)
+                ? this.ConsumeWhitespace()
+                : this.SetupErrorToken("Unexpected character '" + (char)next + "'");
         }
         catch (Exception ex)
         {
@@ -243,7 +257,7 @@ public class Tokenizer
     private TokenType ConsumeWhitespace()
     {
         var c = this.lineReader.Read();
-        while (c != -1 && (char.IsWhiteSpace((char)c) || c == ';') || c == ',') // ignore the ';', its optional.
+        while (IsSkippable(c)) // ignore the ';', its optional.
         {
             c = this.lineReader.Read();
             // This is the unicode invalid character. If we encounter this it means we parsed the
@@ -263,6 +277,21 @@ public class Tokenizer
             this.lineReader.PushBack((char)c);
         }
         return this.Next();
+    }
+
+    private static bool IsSkippable(int c)
+    {
+        return c != -1 && (char.IsWhiteSpace((char)c) || c == ';' || c == ',');
+    }
+
+    private int Peek()
+    {
+        var c = this.lineReader.Read();
+        if (c != -1)
+        {
+            this.lineReader.PushBack((char)c);
+        }
+        return c;
     }
 
     private bool MaybeReadWord()
@@ -306,9 +335,7 @@ public class Tokenizer
 
     private bool MaybeReadBeginPropertyValue()
     {
-        var c = this.lineReader.Read();
-        this.lineReader.PushBack((char)c);
-
+        var c = this.Peek();
         return c == '"' || c == '\'';
     }
 

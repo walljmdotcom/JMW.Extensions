@@ -9,7 +9,10 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Runtime.ExceptionServices;
 using System.Text;
+using System.Threading;
+using System.Threading.Tasks;
 using Base = JMW.Parsing.Expressions.Base;
 using Contains = JMW.Parsing.Expressions.Contains;
 
@@ -1153,5 +1156,92 @@ free      bird   is      awesome
         ext.Start = 5;
         ext.Length = 20;
         Assert.That("56789", Is.EqualTo(ext.GetColumnValue("0123456789")));
+    }
+
+    // Parsing runs on a worker task so a tokenizer that loops forever fails the test instead of hanging the run.
+    private static List<Tag> ParseWithin(Parser parser, string input, CancellationToken cancellationToken)
+    {
+        var task = Task.Run(() => parser.Parse(input), cancellationToken);
+        try
+        {
+            task.Wait(cancellationToken);
+        }
+        catch (AggregateException ex) when (ex.InnerException is not null)
+        {
+            ExceptionDispatchInfo.Capture(ex.InnerException).Throw();
+        }
+        return task.Result;
+    }
+
+    [TestCase("foo { }")]
+    [TestCase("foo { }\n")]
+    [TestCase("foo { }\r\n")]
+    [TestCase("foo {\n}\n")]
+    [TestCase("foo {\r\n}\r\n")]
+    [TestCase("foo { } # trailing comment")]
+    [TestCase("foo { } # trailing comment\n")]
+    [TestCase("foo { } # trailing comment\r\n")]
+    [TestCase("# leading comment\nfoo { }")]
+    [TestCase("foo { };")]
+    [TestCase("foo { },")]
+    [TestCase("foo { bar: \"x\" }")]
+    [CancelAfter(10000)]
+    public void CompileParse_WellFormed_ReturnsOneObject(string input, CancellationToken cancellationToken)
+    {
+        var tags = ParseWithin(new Parser(), input, cancellationToken);
+
+        Assert.That(tags, Has.Count.EqualTo(1));
+        Assert.That(tags[0].Name, Is.EqualTo("foo"));
+    }
+
+    [TestCase("")]
+    [TestCase(" ")]
+    [TestCase("\n")]
+    [TestCase("\r\n")]
+    [TestCase(" \t\r\n ")]
+    [TestCase(";")]
+    [TestCase(",")]
+    [TestCase("# only a comment")]
+    [TestCase("# only a comment\r\n")]
+    [CancelAfter(10000)]
+    public void CompileParse_NothingToParse_ReturnsEmpty(string input, CancellationToken cancellationToken)
+    {
+        Assert.That(ParseWithin(new Parser(), input, cancellationToken), Is.Empty);
+    }
+
+    [TestCase("Foo { }")]
+    [TestCase("1 { }")]
+    [TestCase("! { }")]
+    [TestCase("foo { Bar: \"x\" }")]
+    [TestCase("foo { bar: \"x\" 9 }")]
+    [TestCase("foo { }\n!")]
+    [TestCase("foo { }\r\nX")]
+    [TestCase("}")]
+    [TestCase("]")]
+    [TestCase("foo { } }")]
+    [TestCase("foo { ] }")]
+    [TestCase("bar: \"x\"")]
+    [TestCase("s: [\"x\"]")]
+    [TestCase("[\"x\"]")]
+    [TestCase("bar: foo { }")]
+    [TestCase("foo {")]
+    [TestCase("foo { bar: \"x")]
+    [CancelAfter(10000)]
+    public void CompileParse_Malformed_ThrowsParseException(string input, CancellationToken cancellationToken)
+    {
+        Assert.Throws<ParseException>(() => ParseWithin(new Parser(), input, cancellationToken));
+    }
+
+    [Test]
+    [CancelAfter(10000)]
+    public void CompileParse_AfterFailure_SameParserStartsClean(CancellationToken cancellationToken)
+    {
+        var parser = new Parser();
+        Assert.Throws<ParseException>(() => ParseWithin(parser, "foo {", cancellationToken));
+
+        var tags = ParseWithin(parser, "bar { }", cancellationToken);
+
+        Assert.That(tags, Has.Count.EqualTo(1));
+        Assert.That(tags[0].Name, Is.EqualTo("bar"));
     }
 }
