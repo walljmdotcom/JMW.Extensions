@@ -40,19 +40,13 @@ public static class TagHelpers
 
     public static void PrefixIfColumns(Tag tag, string name)
     {
-        var columns = new List<string>();
-        var attr = string.Empty;
+        var attr = Transform.IsTransform(tag) ? Transform.ATTR_COLUMN : Conditional.ATTR_COLUMN;
 
-        if (Transform.IsTransform(tag))
-        {
-            columns = [.. tag.Properties[Transform.ATTR_COLUMN].Split(',')];
-            attr = Transform.ATTR_COLUMN;
-        }
-        else if (Conditional.IsConditional(tag))
-        {
-            columns = [.. tag.Properties[Conditional.ATTR_COLUMN].Split(',')];
-            attr = Conditional.ATTR_COLUMN;
-        }
+        // The column list is optional, for an expression that reads no columns.
+        if (!tag.Properties.TryGetValue(attr, out var columnList))
+            return;
+
+        List<string> columns = [.. columnList.Split(',')];
 
         if (columns.Count > 1)
         {

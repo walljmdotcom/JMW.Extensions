@@ -115,6 +115,25 @@ namespace JMW.Templates.Tests
                 Throws.Exception.With.Message.EqualTo("Missing attribute: 'value' Line: 4 Column: 1"));
         }
 
+        [TestCase("<if exp=\"1 == 1\">y</if>", "yy")]
+        [TestCase("<if exp=\"1 == 2\">y</if>", "")]
+        [TestCase("<if column=\"foo\" exp=\"x1 == 'blah'\">y</if>", "y")]
+        [TestCase("<if column=\"foo, bar\" exp=\"x1 == 'floo' && x2 == 'blue'\">y</if>", "y")]
+        [TestCase("<transform exp=\"'z'\"/>", "zz")]
+        [TestCase("<transform columns=\"foo\" exp=\"x1\"/>", "blahfloo")]
+        [TestCase("<transform columns=\"foo, bar\" exp=\"x2\"/>", "flawblue")]
+        public void TestTableColumnListIsOptional(string body, string expected)
+        {
+            var sb = new StringBuilder();
+            using var wr = new StringWriter(sb);
+            var i = new Interpreter(wr);
+            i.AddHandler(new Table(new TableData("test", ["foo,bar", "blah,flaw", "floo,blue"]), i));
+
+            i.Eval("<table name=\"test\">" + body + "</table>");
+
+            Assert.That(sb.ToString(), Is.EqualTo(expected));
+        }
+
         [Test]
         public void TestTableIf5()
         {
