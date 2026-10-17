@@ -292,6 +292,27 @@ namespace JMW.Extensions.Tests
             Assert.That(long.MinValue.ToString(CultureInfo.InvariantCulture).IsLong(), Is.True);
         }
 
+        [TestCase(new int[0], "")]
+        [TestCase(new[] { 5 }, "5")]
+        [TestCase(new[] { 5, 6 }, "5-6")]
+        [TestCase(new[] { 5, 7 }, "5, 7")]
+        [TestCase(new[] { 1, 2, 4 }, "1-2, 4")]
+        [TestCase(new[] { 1, 3, 4 }, "1, 3-4")]
+        [TestCase(new[] { 4, 1, 2, 2, 4, 3 }, "1-4")]
+        [TestCase(new[] { 1, 3, 5, 7 }, "1, 3, 5, 7")]
+        [TestCase(new[] { 3, 1, 1, 3, 3 }, "1, 3")]
+        [TestCase(new[] { 7, 7 }, "7")]
+        [TestCase(new[] { -3, -2, -1, 1 }, "-3--1, 1")]
+        [TestCase(new[] { -1, 0, 1 }, "-1-1")]
+        [TestCase(new[] { -1 }, "-1")]
+        [TestCase(new[] { int.MaxValue - 1, int.MaxValue }, "2147483646-2147483647")]
+        [TestCase(new[] { int.MinValue, int.MinValue + 1, 0 }, "-2147483648--2147483647, 0")]
+        public void CollapseToRangesFormats(int[] values, string expected)
+        {
+            Assert.That(values.CollapseIntsToRanges(), Is.EqualTo(expected));
+            Assert.That(values.Select(static v => (long)v).CollapseLongsToRanges(), Is.EqualTo(expected));
+        }
+
         [Test]
         public void CollapseIntsToRangesTest()
         {

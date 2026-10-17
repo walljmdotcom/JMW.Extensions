@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
+using System.Text;
 using JMW.Types;
 using Lambda.Generic.Arithmetic;
 
@@ -543,50 +544,7 @@ public static class NumberExtensions
 
     public static string CollapseIntsToRanges(this IEnumerable<int> ints)
     {
-        var r = string.Empty;
-        var prev = -1;
-        var current = -1;
-
-        var sorted = ints.Distinct().OrderBy(i => i).ToList();
-
-        if (sorted.Count > 1)
-        {
-            for (var i = 1; i < sorted.Count; i++)
-            {
-                prev = sorted[i - 1];
-                current = sorted[i];
-
-                if (prev + 1 == current) // you're at the start of a range.
-                {
-                    r += prev + "-";
-
-                    while (prev + 1 == current)
-                    {
-                        prev = current;
-                        if (i < sorted.Count - 1)
-                            current = sorted[++i];
-                        else
-                            break;
-                    }
-                    r += prev + ", ";
-                }
-                else // its a single.
-                {
-                    r += prev + ", ";
-                }
-            }
-        }
-        else if (sorted.Count == 1)
-        {
-            r = sorted[0].ToString(CultureInfo.InvariantCulture);
-        }
-
-        if (prev != current)
-            r += sorted[sorted.Count - 1];
-
-        r = r.Trim().Trim(',');
-
-        return r;
+        return ints.Select(static i => (long)i).CollapseLongsToRanges();
     }
 
     public static string CollapseLongsToRanges(this IEnumerable<string> ints)
@@ -596,50 +554,29 @@ public static class NumberExtensions
 
     public static string CollapseLongsToRanges(this IEnumerable<long> ints)
     {
-        var r = string.Empty;
-        long prev = -1;
-        long current = -1;
-
-        var sorted = ints.Distinct().OrderBy(i => i).ToList();
-
-        if (sorted.Count > 1)
+        var sorted = ints.ToArray();
+        Array.Sort(sorted);
+        var r = new StringBuilder();
+        var i = 0;
+        while (i < sorted.Length)
         {
-            for (var i = 1; i < sorted.Count; i++)
+            var first = sorted[i];
+            var last = first;
+            // duplicates extend nothing, so step over them along with the run
+            while (i + 1 < sorted.Length && (sorted[i + 1] == last || sorted[i + 1] == last + 1))
             {
-                prev = sorted[i - 1];
-                current = sorted[i];
-
-                if (prev + 1 == current) // you're at the start of a range.
-                {
-                    r += prev + "-";
-
-                    while (prev + 1 == current)
-                    {
-                        prev = current;
-                        if (i < sorted.Count - 1)
-                            current = sorted[++i];
-                        else
-                            break;
-                    }
-                    r += prev + ", ";
-                }
-                else // its a single.
-                {
-                    r += prev + ", ";
-                }
+                last = sorted[++i];
             }
+            i++;
+
+            if (r.Length > 0)
+                r.Append(", ");
+            r.Append(first.ToString(CultureInfo.InvariantCulture));
+            if (last != first)
+                r.Append('-').Append(last.ToString(CultureInfo.InvariantCulture));
         }
-        else if (sorted.Count == 1)
-        {
-            r = sorted[0].ToString(CultureInfo.InvariantCulture);
-        }
 
-        if (prev != current)
-            r += sorted[sorted.Count - 1];
-
-        r = r.Trim().Trim(',');
-
-        return r;
+        return r.ToString();
     }
 
     public static IEnumerable<IntegerRange> CollapseIntsToIntegerRanges(this IEnumerable<int> ints)
