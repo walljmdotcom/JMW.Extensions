@@ -1,11 +1,10 @@
-﻿using Jint;
-using JMW.Extensions.Enumerable;
+﻿using JMW.Extensions.Enumerable;
 using JMW.Extensions.String;
+using JMW.Template.Expressions;
 using System;
 using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
-using System.Text.RegularExpressions;
 
 namespace JMW.Template.Tags;
 
@@ -140,74 +139,26 @@ public static class TagHelpers
 
     public static bool EvaluateBooleanExpression(string expression, List<string> arguments)
     {
-        var engine = SetupEngine(expression, arguments);
+        var result = ScriptEvaluator.Evaluate(expression, arguments).ToString();
 
-        var result = engine.Evaluate(expression).ToString();
+        if (bool.TryParse(result, out var value))
+            return value;
 
-        try
-        {
-            return bool.Parse(result);
-        }
-        catch (Exception)
-        {
-            throw new Exception("The expression:\n" + expression + "\ndid not evaluate to a boolean value.");
-        }
+        throw new Exception("The expression:\n" + expression + "\ndid not evaluate to a boolean value.");
     }
 
     public static double EvaluateArithmeticExpression(string expression, List<string> arguments)
     {
-        var engine = SetupEngine(expression, arguments);
+        var result = ScriptEvaluator.Evaluate(expression, arguments).ToString();
 
-        var result = engine.Evaluate(expression).ToString();
+        if (double.TryParse(result, NumberStyles.Float | NumberStyles.AllowThousands, CultureInfo.InvariantCulture, out var value))
+            return value;
 
-        try
-        {
-            return double.Parse(result, CultureInfo.InvariantCulture);
-        }
-        catch (Exception)
-        {
-            throw new Exception("The expression:\n" + expression + "\ndid not evaluate to a numeric value.");
-        }
+        throw new Exception("The expression:\n" + expression + "\ndid not evaluate to a numeric value.");
     }
 
     public static string EvaluateExpression(string expression, List<string> arguments)
     {
-        var engine = SetupEngine(expression, arguments);
-        return engine.Evaluate(expression).ToString();
+        return ScriptEvaluator.Evaluate(expression, arguments).ToString();
     }
-
-    private static Engine SetupEngine(string expression, IReadOnlyList<string> arguments)
-    {
-        var result = new Engine();
-        var variables = new List<string>();
-
-        var matches = variableRegex.Matches(expression);
-        foreach (var match in matches)
-        {
-            variables.Add(match.ToString());
-        }
-
-        variables = variables.Distinct().ToList();
-        if (variables.Count > arguments.Count)
-        {
-            throw new ArgumentException("The list of arguments provided in:\n" + arguments.ToDelimitedString(",") +
-                                        "\n is greater that the number of variables listed in the expression: " + expression + "\n" +
-                                        "Variables must be specified in the format: x1, x2, x3 etc. and must be equal or less than the argumenst provided.");
-        }
-
-        var i = 0;
-        while (i < variables.Count && i < arguments.Count)
-        {
-            // try to convert to a number if possible
-            if (double.TryParse(arguments[i], out var argument))
-                result.SetValue(variables[i], argument);
-            else // else, use a string.
-                result.SetValue(variables[i], arguments[i]);
-            i++;
-        }
-
-        return result;
-    }
-
-    private static readonly Regex variableRegex = new(@"(x|X)\d+", RegexOptions.Compiled | RegexOptions.CultureInvariant);
 }
