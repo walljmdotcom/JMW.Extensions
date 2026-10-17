@@ -122,8 +122,8 @@ namespace JMW.Templates.Tags
                 var joined = new List<List<string>>();
 
                 var rdata = _rightTableData.Data;
-                if (tag.Properties.ContainsKey(ATTR_LEFT_WHERE))
-                    rdata = _rightTableData.Data.Where(r => TagHelpers.EvaluateBooleanExpression(tag.Properties[ATTR_RIGHT_WHERE], r)).ToList();
+                if (tag.Properties.TryGetValue(ATTR_RIGHT_WHERE, out var attrRightWhere))
+                    rdata = _rightTableData.Data.Where(r => TagHelpers.EvaluateBooleanExpression(attrRightWhere, r)).ToList();
 
                 foreach (var rr in rdata)
                 {

@@ -388,6 +388,28 @@ namespace JMW.Templates.Tests
             Assert.That(output, Is.EqualTo("f\r\nf\r\n|||\r\n1.1.2.1\r\n1.2.4.4\r\n10.130.1.12\r\n192.168.13.56\r\n"));
         }
 
+        // each where filters only its own side
+        [TestCase("", "greenyellow\r\nbluepurple\r\nredpink\r\nblackbrown\r\n")]
+        [TestCase(@"left_where=""x2 == 'flaw'""", "greenyellow\r\nredpink\r\n")]
+        [TestCase(@"right_where=""x1 != 'blue'""", "greenyellow\r\nredpink\r\nblackbrown\r\n")]
+        [TestCase(@"left_where=""x2 == 'flaw'"" right_where=""x1 != 'red'""", "greenyellow\r\n")]
+        public void JoinWhereFiltersItsOwnSide(string where, string expected)
+        {
+            var sb = new StringBuilder();
+            using (var wr = new StringWriter(sb))
+            {
+                var i = new Interpreter(wr);
+                i.AddHandler(new Table(new TableData("test1", ["foo,bar", "green,flaw", "blue,blue", "red,flaw", "black,blue"]), i));
+                i.AddHandler(new Table(new TableData("test2", ["baz,bar", "green,yellow", "blue,purple", "red,pink", "black,brown"]), i));
+
+                i.Eval(@"<join left_table=""test1"" right_table=""test2"" left_key=""foo"" right_key=""baz"" " + where + @">
+<right_baz/><right_bar/>\n
+</join>");
+            }
+
+            Assert.That(sb.ToString(), Is.EqualTo(expected));
+        }
+
         [Test]
         public void TestJoin()
         {
