@@ -70,9 +70,9 @@ namespace JMW.IO
                 }
                 else
                 { // only part of the _buffer will fit in our output buffer
-                    _buffer.CopyTo(0, buffer, 0, delta);
-                    _buffer = new List<char>(_buffer.Skip(delta));
-                    n = delta;
+                    _buffer.CopyTo(0, buffer, 0, buffer.Length);
+                    _buffer = new List<char>(_buffer.Skip(buffer.Length));
+                    n = buffer.Length;
                 }
             }
             if (n < buffer.Length)
