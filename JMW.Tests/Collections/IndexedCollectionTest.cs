@@ -191,6 +191,190 @@ namespace JMW.Collections.Tests
             Assert.That("Value violated index 'Bar' using key 'wall'", Is.EqualTo(msg));
         }
 
+        private static IndexedCollection<Foo> TwoFoos()
+        {
+            var idx = new IndexedCollection<Foo>
+            {
+                new Foo { Bar = "jason", BarCollection = ["one", "two"], Baz = "me", BazCollection = [1, 2] },
+                new Foo { Bar = "wall", BarCollection = ["three", "two"], Baz = "you", BazCollection = [3, 4] }
+            };
+            return idx;
+        }
+
+        [TestCase("Bar", "jason", true)]
+        [TestCase("Bar", "wall", true)]
+        [TestCase("Bar", "missing", false)]
+        [TestCase("Bar", "", false)]
+        [TestCase("Bar", "JASON", false)]
+        [TestCase("BazCollection", "1", true)]
+        [TestCase("BazCollection", "5", false)]
+        [TestCase("NotAProperty", "jason", false)]
+        [TestCase("Baz", "me", false)]
+        public void UniqueIndexLookupOfMissingKeyFails(string name, string key, bool found)
+        {
+            var idx = TwoFoos();
+
+            Assert.That(idx.TryGetByUniqueIndex(name, key, out var value), Is.EqualTo(found));
+            Assert.That(value is not null, Is.EqualTo(found));
+
+            var maybe = idx.MaybeGetByUniqueIndex(name, key);
+            Assert.That(maybe.Success, Is.EqualTo(found));
+        }
+
+        [TestCase("Baz", "me", 1)]
+        [TestCase("Baz", "you", 1)]
+        [TestCase("Baz", "missing", 0)]
+        [TestCase("Baz", "", 0)]
+        [TestCase("BarCollection", "two", 2)]
+        [TestCase("BarCollection", "one", 1)]
+        [TestCase("BarCollection", "four", 0)]
+        [TestCase("NotAProperty", "me", 0)]
+        [TestCase("Bar", "jason", 0)]
+        public void IndexLookupOfMissingKeyFails(string name, string key, int count)
+        {
+            var idx = TwoFoos();
+
+            Assert.That(idx.TryGetByIndex(name, key, out var value), Is.EqualTo(count > 0));
+            Assert.That(value?.Count ?? 0, Is.EqualTo(count));
+
+            var maybe = idx.MaybeGetByIndex(name, key);
+            Assert.That(maybe.Success, Is.EqualTo(count > 0));
+        }
+
+        [Test]
+        public void MissingKeyMaybeHoldsKeyNotFound()
+        {
+            var idx = TwoFoos();
+            idx.MaybeGetByIndex(p => p.Baz, "missing")
+                .Do(ifSuccess: null, ifException: ex => Assert.That(ex, Is.TypeOf<KeyNotFoundException>()));
+            idx.MaybeGetByUniqueIndex(p => p.Bar, "missing")
+                .Do(ifSuccess: null, ifException: ex => Assert.That(ex, Is.TypeOf<KeyNotFoundException>()));
+            Assert.That(idx.TryGetByIndex(p => p.Baz, "missing", out _), Is.False);
+            Assert.That(idx.TryGetByUniqueIndex(p => p.Bar, "missing", out _), Is.False);
+        }
+
+        [Test]
+        public void RemovingStaleKeyKeepsOtherItemsBucket()
+        {
+            var idx = new IndexedCollection<Foo>();
+            var f1 = new Foo { Bar = "a", BarCollection = ["one"], Baz = "x", BazCollection = [1] };
+            var f2 = new Foo { Bar = "b", BarCollection = ["two"], Baz = "y", BazCollection = [2] };
+            idx.Add(f1);
+            idx.Add(f2);
+
+            // mutating the list in place raises no event, so the index never learns f1 holds "two"
+            f1.BarCollection.Add("two");
+            f1.BarCollection = ["three"];
+
+            Assert.That(idx.TryGetByIndex(p => p.BarCollection, "two", out var two), Is.True);
+            Assert.That(two, Is.EqualTo(new[] { f2 }));
+            Assert.That(idx.TryGetByIndex(p => p.BarCollection, "three", out var three), Is.True);
+            Assert.That(three, Is.EqualTo(new[] { f1 }));
+            Assert.That(idx.TryGetByIndex(p => p.BarCollection, "one", out _), Is.False);
+        }
+
+        [Test]
+        public void RemovingSharedKeyKeepsOtherItems()
+        {
+            var idx = new IndexedCollection<Foo>();
+            var f1 = new Foo { Bar = "a", Baz = "same", BazCollection = [1] };
+            var f2 = new Foo { Bar = "b", Baz = "same", BazCollection = [2] };
+            idx.Add(f1);
+            idx.Add(f2);
+
+            f1.Baz = "other";
+            Assert.That(idx.GetByIndex(p => p.Baz, "same"), Is.EqualTo(new[] { f2 }));
+
+            idx.Remove(f2);
+            Assert.That(idx.TryGetByIndex(p => p.Baz, "same", out _), Is.False);
+            Assert.That(idx.GetByIndex(p => p.Baz, "other"), Is.EqualTo(new[] { f1 }));
+        }
+
+        [TestCase(null, null)]
+        [TestCase("a", null)]
+        [TestCase(null, "b")]
+        [TestCase("a", "b")]
+        public void NullPropertyValuesAreSkipped(string? name, string? tag)
+        {
+            var idx = new IndexedCollection<NullableFoo>();
+            var item = new NullableFoo { Name = name, Tags = tag is null ? [null] : [tag, null] };
+
+            idx.Add(item);
+            Assert.That(idx.GetIndex(nameof(NullableFoo.Name)).Count, Is.EqualTo(name is null ? 0 : 1));
+            Assert.That(idx.GetIndex(nameof(NullableFoo.Tags)).Count, Is.EqualTo(tag is null ? 0 : 1));
+
+            item.Name = name is null ? "set" : null;
+            item.Name = name;
+            Assert.That(idx.GetIndex(nameof(NullableFoo.Name)).Count, Is.EqualTo(name is null ? 0 : 1));
+
+            Assert.That(idx.Remove(item), Is.True);
+            Assert.That(idx, Is.Empty);
+            Assert.That(idx.GetIndex(nameof(NullableFoo.Name)), Is.Empty);
+            Assert.That(idx.GetIndex(nameof(NullableFoo.Tags)), Is.Empty);
+        }
+
+        [Test]
+        public void NullUniqueValuesDoNotViolateTheIndex()
+        {
+            var violations = 0;
+            var idx = new IndexedCollection<NullableFoo>();
+            idx.IndexViolated += (o, e) => violations++;
+
+            var a = new NullableFoo { Code = null, Codes = [null, "x"] };
+            var b = new NullableFoo { Code = null, Codes = [null] };
+            var c = new NullableFoo { Code = "c", Codes = null };
+
+            Assert.That(idx.TryAdd(a), Is.True);
+            Assert.That(idx.TryAdd(b), Is.True);
+            Assert.That(idx.TryAdd(c), Is.True);
+            Assert.That(violations, Is.EqualTo(0));
+            Assert.That(idx.GetUniqueIndex(nameof(NullableFoo.Code)).Keys, Is.EqualTo(new[] { "c" }));
+            Assert.That(idx.GetUniqueIndex(nameof(NullableFoo.Codes)).Keys, Is.EqualTo(new[] { "x" }));
+
+            Assert.That(idx.TryAdd(new NullableFoo { Code = "c" }), Is.False);
+            Assert.That(violations, Is.EqualTo(1));
+
+            Assert.That(idx.Remove(a), Is.True);
+            Assert.That(idx.Remove(b), Is.True);
+            Assert.That(idx.Remove(c), Is.True);
+            Assert.That(idx.GetUniqueIndex(nameof(NullableFoo.Codes)), Is.Empty);
+        }
+
+        private class NullableFoo : IndexedClass
+        {
+            private string? name;
+            [Indexed]
+            public string? Name
+            {
+                get => name;
+                set => Set(ref name, value);
+            }
+
+            private string? code;
+            [Indexed(IsUnique = true)]
+            public string? Code
+            {
+                get => code;
+                set => Set(ref code, value);
+            }
+
+            private List<string?>? codes;
+            [Indexed(IsUnique = true)]
+            public List<string?>? Codes
+            {
+                get => codes;
+                set => Set(ref codes, value);
+            }
+
+            private List<string?>? tags;
+            [Indexed]
+            public List<string?>? Tags
+            {
+                get => tags;
+                set => Set(ref tags, value);
+            }
+        }
+
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Style", "IDE1006:Naming Styles", Justification = "<Pending>")]
         private void f1_IndexedPropertyChanged(object? sender, IndexedPropertyChangedEventArgs e)
         {

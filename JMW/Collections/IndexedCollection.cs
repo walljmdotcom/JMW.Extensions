@@ -70,13 +70,14 @@ namespace JMW.Collections
         /// <returns>True if the operation succeeded.</returns>
         public bool TryGetByIndex(string name, object key, [NotNullWhen(true)] out List<T>? value)
         {
-            if (!_indexCollection.TryGetValue(name, out var internalValue))
+            if (!_indexCollection.TryGetValue(name, out var internalValue)
+                || key.ToString() is not string k
+                || !internalValue.TryGetValue(k, out value))
             {
                 value = null;
                 return false;
             }
 
-            value = internalValue[key.ToString()];
             return true;
         }
 
@@ -102,9 +103,12 @@ namespace JMW.Collections
         /// <returns>A <see cref="Maybe{T}"/> that holds the object.</returns>
         public Maybe<List<T>> MaybeGetByIndex(string name, object key)
         {
-            return !_indexCollection.TryGetValue(name, out var value)
-                ? new Maybe<List<T>>(new ArgumentException("Property does not have an index."))
-                : new Maybe<List<T>>(value[key.ToString()]);
+            if (!_indexCollection.TryGetValue(name, out var value))
+                return new Maybe<List<T>>(new ArgumentException("Property does not have an index."));
+
+            return key.ToString() is string k && value.TryGetValue(k, out var found)
+                ? new Maybe<List<T>>(found)
+                : new Maybe<List<T>>(new KeyNotFoundException("The key was not found in the index."));
         }
 
         /// <summary>
@@ -155,13 +159,14 @@ namespace JMW.Collections
         /// <returns>True if the operation succeeded.</returns>
         public bool TryGetByUniqueIndex(string name, object key, [NotNullWhen(true)] out T? value)
         {
-            if (!_uniqueIndexCollection.TryGetValue(name, out var internalValue))
+            if (!_uniqueIndexCollection.TryGetValue(name, out var internalValue)
+                || key.ToString() is not string k
+                || !internalValue.TryGetValue(k, out value))
             {
                 value = null;
                 return false;
             }
 
-            value = internalValue[key.ToString()];
             return true;
         }
 
@@ -187,9 +192,12 @@ namespace JMW.Collections
         /// <returns>A <see cref="Maybe{T}"/> that holds the object.</returns>
         public Maybe<T> MaybeGetByUniqueIndex(string name, object key)
         {
-            return !_uniqueIndexCollection.TryGetValue(name, out var value)
-                ? new Maybe<T>(new ArgumentException("Property does not have an index."))
-                : new Maybe<T>(value[key.ToString()]);
+            if (!_uniqueIndexCollection.TryGetValue(name, out var value))
+                return new Maybe<T>(new ArgumentException("Property does not have an index."));
+
+            return key.ToString() is string k && value.TryGetValue(k, out var found)
+                ? new Maybe<T>(found)
+                : new Maybe<T>(new KeyNotFoundException("The key was not found in the index."));
         }
 
         /// <summary>
@@ -496,14 +504,19 @@ namespace JMW.Collections
         {
             ArgumentNullException.ThrowIfNull(index);
 
-            if (item?.ToString() is not string key) return;
+            removeFromBucket(index, item?.ToString(), (T)sender);
+        }
 
-            if (!index.TryGetValue(key, out List<T>? value)) return;
+        /// <summary>
+        /// Removes <paramref name="item"/> from the bucket for <paramref name="key"/>, dropping the bucket once empty.
+        /// </summary>
+        private static void removeFromBucket(Dictionary<string, List<T>> index, string? key, T item)
+        {
+            if (key is null || !index.TryGetValue(key, out var bucket)) return;
 
-            if (value.Count == 1)
+            bucket.Remove(item);
+            if (bucket.Count == 0)
                 index.Remove(key);
-            else
-                index[key].Remove((T)sender);
         }
 
         /// <summary>
@@ -543,7 +556,8 @@ namespace JMW.Collections
 
                         foreach (var o in objs)
                         {
-                            var key = o.ToString();
+                            // null values are never indexed
+                            if (o?.ToString() is not string key) continue;
                             if (_uniqueIndexCollection[p.Name].AddIfNotPresent(key, val)) continue;
 
                             IndexViolated?.Invoke(this, new IndexViolationEventArgs<T>(val, "Value violated index '" + p.Name + "' using key '" + key + "'"));
@@ -552,7 +566,8 @@ namespace JMW.Collections
                     }
                     else
                     {
-                        var key = p.GetValue(val, null)?.ToString();
+                        // null values are never indexed
+                        if (p.GetValue(val, null)?.ToString() is not string key) continue;
                         if (_uniqueIndexCollection[p.Name].AddIfNotPresent(key, val)) continue;
 
                         IndexViolated?.Invoke(this, new IndexViolationEventArgs<T>(val, "Value violated index '" + p.Name + "' using key '" + key + "'"));
@@ -568,9 +583,9 @@ namespace JMW.Collections
 
                         foreach (var o in objs)
                         {
-                            var key = prop.IsDict 
-                                ? o.GetType().GetProperty(nameof(KeyValuePair<string, T>.Value))?.GetValue(o)?.ToString() 
-                                : o.ToString();
+                            var key = prop.IsDict
+                                ? o?.GetType().GetProperty(nameof(KeyValuePair<string, T>.Value))?.GetValue(o)?.ToString()
+                                : o?.ToString();
                             _indexCollection[p.Name].SafeAdd(key, val);
                         }
                     }
@@ -605,8 +620,7 @@ namespace JMW.Collections
 
                         foreach (var o in objs)
                         {
-                            var key = o.ToString();
-                            if (_uniqueIndexCollection[p.Name].Remove(key)) continue;
+                            if (o?.ToString() is not string key || _uniqueIndexCollection[p.Name].Remove(key)) continue;
 
                             IndexViolated?.Invoke(this, new IndexViolationEventArgs<T>(val, "Value was not found in index '" + p.Name + "' using key '" + key + "'"));
                             return false;
@@ -633,26 +647,16 @@ namespace JMW.Collections
 
                         foreach (var o in objs)
                         {
-                            var key = prop.IsDict ? o.GetType().GetProperty(nameof(KeyValuePair<string, T>.Value))?.GetValue(o).ToString() : o.ToString();
-                            var idx = _indexCollection[p.Name];
-                            if (key is null)
-                            {
-                                throw new InvalidOperationException("Unable to retrieve the value of the KeyValuePair.");
-                            }
-                            if (idx[key].Count > 1)
-                                idx[key].Remove(val);
-                            else
-                                idx.Remove(key);
+                            // null values are never indexed, so there is nothing to remove for them
+                            var key = prop.IsDict
+                                ? o?.GetType().GetProperty(nameof(KeyValuePair<string, T>.Value))?.GetValue(o)?.ToString()
+                                : o?.ToString();
+                            removeFromBucket(_indexCollection[p.Name], key, val);
                         }
                     }
                     else
                     {
-                        var key = p.GetValue(val).ToString();
-                        var idx = _indexCollection[p.Name];
-                        if (idx[key].Count > 1)
-                            idx[key].Remove(val);
-                        else
-                            idx.Remove(key);
+                        removeFromBucket(_indexCollection[p.Name], p.GetValue(val)?.ToString(), val);
                     }
                 }
             }
