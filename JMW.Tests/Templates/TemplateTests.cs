@@ -856,6 +856,32 @@ namespace JMW.Templates.Tests
             Assert.That(output, Is.EqualTo("blueblue1.1.2.1\r\nblackblue1.1.2.1\r\n"));
         }
 
+        [TestCase("key_col=\"bar\"", "key_col=\"bar\"", "blueblue\r\nblackblue\r\n", "blueblue\r\nblackblue\r\n")]
+        [TestCase("key_exp=\"x1\"", "key_exp=\"x1\"", "blueblue\r\n", "blueblue\r\n")]
+        [TestCase("key_exp=\"x1\"", "key_col=\"bar\"", "blueblue\r\n", "blueblue\r\nblackblue\r\n")]
+        [TestCase("key_col=\"bar\"", "key_exp=\"x1\"", "blueblue\r\nblackblue\r\n", "blueblue\r\n")]
+        [TestCase("key_col=\"bar\"", "key_col=\"foo\"", "blueblue\r\nblackblue\r\n", "blueblue\r\n")]
+        public void TestLookupRepeated(string first_key, string second_key, string first_output, string second_output)
+        {
+            var data1 = new TableData("test1", ["foo,bar", "green,flaw", "blue,blue", "red,flaw", "black,blue"]);
+            const string row = "<row key=\"blue\"><foo/><bar/>\\n</row>";
+            var template = "<lookup table=\"test1\" " + first_key + ">" + row + "</lookup>"
+                + "<lookup table=\"test1\" " + second_key + ">" + row + "</lookup>";
+
+            var sb = new StringBuilder();
+            using var wr = new StringWriter(sb);
+            var i = new Interpreter(wr);
+            i.AddHandler(new Table(data1, i));
+
+            i.Eval(template);
+            Assert.That(sb.ToString(), Is.EqualTo(first_output + second_output));
+
+            // A second Eval reuses the lookup handler built by the first.
+            sb.Clear();
+            i.Eval(template);
+            Assert.That(sb.ToString(), Is.EqualTo(first_output + second_output));
+        }
+
         [Test]
         public void TestLookupError1()
         {

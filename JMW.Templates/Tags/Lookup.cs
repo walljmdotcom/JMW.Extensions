@@ -5,8 +5,9 @@ namespace JMW.Templates.Tags
 {
     public class Lookup : TagHandlerBase
     {
-        private readonly bool hasBeenIndexed = false;
-        private readonly string indexDetails = string.Empty;
+        private List<List<string>>? indexedData;
+        private string? indexedKeyExp;
+        private string? indexedKeyCol;
 
         public const string TAG = "lookup";
         public override string TagName { get; } = TAG;
@@ -48,28 +49,33 @@ namespace JMW.Templates.Tags
 
             TagHelpers.PrefixTags(tag.Children, Name);
 
-            var index_details =
-                (tag.Properties.TryGetValue(ATTR_KEY_EXP, out var attrKeyExp) ? attrKeyExp : string.Empty) +
-                (tag.Properties.TryGetValue(ATTR_KEY_COL, out var attrKeyCol) ? attrKeyCol : string.Empty);
+            tag.Properties.TryGetValue(ATTR_KEY_EXP, out var attrKeyExp);
+            tag.Properties.TryGetValue(ATTR_KEY_COL, out var attrKeyCol);
 
-            if (!hasBeenIndexed || index_details != indexDetails)
+            if (attrKeyExp is null && attrKeyCol is null)
+                throw new Exception("Require attribute is missing. A '" + ATTR_KEY_EXP + "' or '" + ATTR_KEY_COL + "' attribute is required.");
+
+            // The index is reused until the key attributes or the table's row list change.
+            if (!ReferenceEquals(indexedData, TableData.Data) || attrKeyExp != indexedKeyExp || attrKeyCol != indexedKeyCol)
             {
+                LookupTable.Clear();
+                var keyColIndex = attrKeyExp is null && attrKeyCol is not null
+                    ? TableData.ColumnIndexes[attrKeyCol.ToLowerInvariant()]
+                    : -1;
+
                 foreach (var lr in TableData.Data)
                 {
-                    var key = string.Empty;
-
-                    if (tag.Properties.TryGetValue(ATTR_KEY_EXP, out attrKeyExp))
-                        key = TagHelpers.EvaluateExpression(attrKeyExp, lr);
-                    else if (tag.Properties.TryGetValue(ATTR_KEY_COL, out attrKeyCol)) // use the value of the key column
-                        key = lr[TableData.ColumnIndexes[attrKeyCol.ToLowerInvariant()]];
-                    else
-                        throw new Exception("Require attribute is missing. A '" + ATTR_KEY_EXP + "' or '" + ATTR_KEY_COL + "' attribute is required.");
+                    var key = attrKeyExp is not null ? TagHelpers.EvaluateExpression(attrKeyExp, lr) : lr[keyColIndex];
 
                     if (LookupTable.TryGetValue(key, out List<List<string>>? lookupValue))
                         lookupValue.Add(lr);
                     else
                         LookupTable.Add(key, [lr]);
                 }
+
+                indexedData = TableData.Data;
+                indexedKeyExp = attrKeyExp;
+                indexedKeyCol = attrKeyCol;
             }
             interp.HandleChildren(tag);
         }
