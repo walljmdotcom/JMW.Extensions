@@ -1,24 +1,16 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <OutputType>Library</OutputType>
     <TargetFramework>netstandard2.0</TargetFramework>
     <RootNamespace>JMW.Networking</RootNamespace>
     <AssemblyName>JMW.Networking</AssemblyName>
     <PackageId>JMW.Networking</PackageId>
-    <Version>1.0.0</Version>
-    <Authors>Jason Wall</Authors>
-    <Company>walljm</Company>
-    <Copyright>2020 Jason Wall</Copyright>
-    <PackageProjectUrl>https://github.com/walljm/jmw.extensions</PackageProjectUrl>
-    <RepositoryUrl>https://github.com/walljm/jmw.extensions</RepositoryUrl>
-    <RepositoryType>git</RepositoryType>
-    <NeutralLanguage>en</NeutralLanguage>
-    <Nullable>enable</Nullable>
+    <Description>Parsers for Junos configuration, netstat, and ifconfig output, and a firewall rules engine.</Description>
   </PropertyGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\JMW.Parsing\JMW.Parsing.csproj" />
-    <ProjectReference Include="..\JMW\JMW.csproj" />
+    <ProjectReference Include="$(RepoRoot)JMW.Parsing/JMW.Parsing.csproj" />
+    <ProjectReference Include="$(RepoRoot)JMW/JMW.csproj" />
   </ItemGroup>
+
 </Project>

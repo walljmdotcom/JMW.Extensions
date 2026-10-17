@@ -1,0 +1,17 @@
+<Solution>
+  <Folder Name="/Solution Items/">
+    <File Path=".editorconfig" />
+    <File Path="Directory.Build.props" />
+    <File Path="Directory.Build.targets" />
+    <File Path="global.json" />
+    <File Path="README.md" />
+    <File Path=".github/workflows/codeql-analysis.yml" />
+    <File Path=".github/workflows/dotnet.yml" />
+    <File Path=".github/workflows/nuget.yml" />
+  </Folder>
+  <Project Path="JMW.Networking/JMW.Networking.csproj" />
+  <Project Path="JMW.Parsing/JMW.Parsing.csproj" />
+  <Project Path="JMW.Templates/JMW.Templates.csproj" />
+  <Project Path="JMW.Tests/JMW.Tests.csproj" />
+  <Project Path="JMW/JMW.csproj" />
+</Solution>

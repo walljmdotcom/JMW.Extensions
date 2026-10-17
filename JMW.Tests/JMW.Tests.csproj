@@ -1,41 +1,32 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <OutputType>Library</OutputType>
     <TargetFramework>net10.0</TargetFramework>
     <RootNamespace>JMW.Tests</RootNamespace>
     <AssemblyName>JMW.Tests</AssemblyName>
-    <PackageId>JMW.Tests</PackageId>
-    <Version>1.0.0</Version>
-    <Authors>Jason Wall</Authors>
-    <Company>walljm</Company>
-    <Copyright>2020 Jason Wall</Copyright>
-    <PackageProjectUrl>https://github.com/walljm/jmw.extensions</PackageProjectUrl>
-    <RepositoryUrl>https://github.com/walljm/jmw.extensions</RepositoryUrl>
-    <RepositoryType>git</RepositoryType>
-    <NeutralLanguage>en</NeutralLanguage>
-    <Nullable>enable</Nullable>
+    <IsPackable>false</IsPackable>
+    <IsTestProject>true</IsTestProject>
   </PropertyGroup>
 
   <ItemGroup>
-    <None Include="..\.editorconfig"
+    <None Include="$(RepoRoot).editorconfig"
       Link=".editorconfig" />
   </ItemGroup>
 
   <ItemGroup>
     <PackageReference Include="NUnit"
-      Version="4.0.1" />
+      Version="4.6.1" />
     <PackageReference Include="NUnit3TestAdapter"
-      Version="4.5.0" />
+      Version="6.3.1" />
     <PackageReference Include="Microsoft.NET.Test.Sdk"
-      Version="17.9.0" />
+      Version="18.11.0" />
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\JMW.Networking\JMW.Networking.csproj" />
-    <ProjectReference Include="..\JMW.Parsing\JMW.Parsing.csproj" />
-    <ProjectReference Include="..\JMW.Templates\JMW.Templates.csproj" />
-    <ProjectReference Include="..\JMW\JMW.csproj" />
+    <ProjectReference Include="$(RepoRoot)JMW.Networking/JMW.Networking.csproj" />
+    <ProjectReference Include="$(RepoRoot)JMW.Parsing/JMW.Parsing.csproj" />
+    <ProjectReference Include="$(RepoRoot)JMW.Templates/JMW.Templates.csproj" />
+    <ProjectReference Include="$(RepoRoot)JMW/JMW.csproj" />
   </ItemGroup>
 
   <ItemGroup>
@@ -43,4 +34,5 @@
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
   </ItemGroup>
+
 </Project>

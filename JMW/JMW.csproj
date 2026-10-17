@@ -1,24 +1,11 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <OutputType>Library</OutputType>
     <TargetFramework>netstandard2.0</TargetFramework>
     <RootNamespace>JMW</RootNamespace>
     <AssemblyName>JMW</AssemblyName>
     <PackageId>JMW.Extensions</PackageId>
-    <Description>
-      Useful Extensions for string manipulation, list manipulation, conversions, as well as Types like the algebraic Maybe{T} and an IndexedCollection for when you need to look up values by more than one property.</Description>
-    <Version>1.0.0</Version>
-    <Authors>Jason Wall</Authors>
-    <Company>walljm</Company>
-    <Copyright>2020 Jason Wall</Copyright>
-    <PackageProjectUrl>https://github.com/walljm/jmw.extensions</PackageProjectUrl>
-    <RepositoryUrl>https://github.com/walljm/jmw.extensions</RepositoryUrl>
-    <RepositoryType>git</RepositoryType>
-    <NeutralLanguage>en</NeutralLanguage>
-    <Nullable>enable</Nullable>
-    <Nullable>enable</Nullable>
+    <Description>Useful Extensions for string manipulation, list manipulation, conversions, as well as Types like the algebraic Maybe{T} and an IndexedCollection for when you need to look up values by more than one property.</Description>
   </PropertyGroup>
-
 
 </Project>

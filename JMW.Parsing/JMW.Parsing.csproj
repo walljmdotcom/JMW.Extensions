@@ -1,23 +1,15 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <OutputType>Library</OutputType>
     <TargetFramework>netstandard2.0</TargetFramework>
     <RootNamespace>JMW.Parsing</RootNamespace>
     <AssemblyName>JMW.Parsing</AssemblyName>
     <PackageId>JMW.Parsing</PackageId>
-    <Version>1.0.0</Version>
-    <Authors>Jason Wall</Authors>
-    <Company>walljm</Company>
-    <Copyright>2020 Jason Wall</Copyright>
-    <PackageProjectUrl>https://github.com/walljm/jmw.extensions</PackageProjectUrl>
-    <RepositoryUrl>https://github.com/walljm/jmw.extensions</RepositoryUrl>
-    <RepositoryType>git</RepositoryType>
-    <NeutralLanguage>en</NeutralLanguage>
-    <Nullable>enable</Nullable>
+    <Description>A small instruction language for extracting properties, paragraphs, and tables from semi-structured text.</Description>
   </PropertyGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\JMW\JMW.csproj" />
+    <ProjectReference Include="$(RepoRoot)JMW/JMW.csproj" />
   </ItemGroup>
+
 </Project>
