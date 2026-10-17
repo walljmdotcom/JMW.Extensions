@@ -82,9 +82,7 @@ namespace JMW.Collections
 
         public RangeCollection(IEnumerable<Range<T, C>> rng)
         {
-            var rngs = rng.OrderBy(r => r.Start).ToList();
-            collapseRanges(rngs);
-            rngs.Each(i => Ranges.Add(i.Start, i)); // add them to the range.;
+            collapse(rng.OrderBy(r => r.Start).ToList()).Each(i => Ranges.Add(i.Start, i)); // add them to the range.
         }
 
         public RangeCollection(Range<T, C> rng)
@@ -120,8 +118,7 @@ namespace JMW.Collections
                 .Select(o => new Range<T, C>(o))// create ranges
                 .OrderBy(r => r.Start)
                 .ToList();
-            collapseRanges(rngs);
-            return rngs;
+            return collapse(rngs);
         }
 
         #endregion Constructors
@@ -136,15 +133,45 @@ namespace JMW.Collections
 
         public void Add(Range<T, C> item)
         {
-            AddRange(item.ToListOfItem());
+            ArgumentNullException.ThrowIfNull(item);
+
+            var start = item.Start;
+            var stop = item.Stop;
+            var merged = false;
+
+            // the only earlier range that can touch the item is the last one starting at or before it
+            var i = lastStartingAtOrBefore(start);
+            if (i >= 0 && touches(Ranges.Values[i].Stop, start))
+            {
+                start = Ranges.Values[i].Start;
+                if (Ranges.Values[i].Stop > stop) stop = Ranges.Values[i].Stop;
+                Ranges.RemoveAt(i);
+                merged = true;
+            }
+            else
+            {
+                i++;
+            }
+
+            while (i < Ranges.Count && touches(stop, Ranges.Values[i].Start))
+            {
+                if (Ranges.Values[i].Stop > stop) stop = Ranges.Values[i].Stop;
+                Ranges.RemoveAt(i);
+                merged = true;
+            }
+
+            Ranges.Add(start, merged ? new Range<T, C>(start, stop) : item);
         }
 
         public void AddRange(IEnumerable<Range<T, C>> items)
         {
-            // the merge walks both lists in Start order, so the new items must be sorted too
-            var lst = mergeVlanRanges(Ranges.Values.ToList(), items.OrderBy(r => r.Start).ToList());
+            var all = collapse(Ranges.Values.Concat(items).OrderBy(r => r.Start).ToList());
             Ranges.Clear();
-            lst.Each(o => Ranges.Add(o.Start, o));
+            Ranges.Capacity = all.Count;
+            foreach (var r in all)
+            {
+                Ranges.Add(r.Start, r);
+            }
         }
 
         public void AddRange(IEnumerable<string> items)
@@ -312,75 +339,49 @@ namespace JMW.Collections
 
         #endregion IList
 
-        private static List<Range<T, C>> mergeVlanRanges(IList<Range<T, C>> a, IList<Range<T, C>> b)
+        // A range ending at stop overlaps or adjoins one beginning at start. stop + One wraps when stop is the type's
+        // MaxValue, so overlap is tested separately.
+        private static bool touches(Signed<T, C> stop, Signed<T, C> start)
         {
-            var rngs = new List<Range<T, C>>();
-
-            while (b.Count > 0 && a.Count > 0)
-            {
-                Range<T, C> r;
-
-                if (b[0].Start <= a[0].Start)
-                {
-                    r = b[0];
-
-                    if (b[0].Stop >= a[0].Start)
-                    {
-                        if (b[0].Stop > a[0].Stop)
-                            r = new Range<T, C>(r.Start, b[0].Stop);
-                        else
-                            r = new Range<T, C>(r.Start, a[0].Stop);
-
-                        a.RemoveAt(0); // in this case, b includes a, so a should be removed also.
-                    }
-
-                    b.RemoveAt(0); // b is what we started with, so it always gets removed.
-                    rngs.Add(r);
-                }
-                else if (a[0].Start <= b[0].Start)
-                {
-                    r = a[0];
-
-                    if (a[0].Stop >= b[0].Start)
-                    {
-                        if (a[0].Stop > b[0].Stop)
-                            r = new Range<T, C>(r.Start, a[0].Stop);
-                        else
-                            r = new Range<T, C>(r.Start, b[0].Stop);
-
-                        b.RemoveAt(0); // in this case, a includes b, so b should be removed also.
-                    }
-
-                    a.RemoveAt(0); // a is what we started with, so it always gets removed.
-                    rngs.Add(r);
-                }
-            }
-            if (b.Count > 0) rngs.AddRange(b);
-            if (a.Count > 0) rngs.AddRange(a);
-
-            collapseRanges(rngs);
-
-            return rngs;
+            return stop >= start || stop + Signed<T, C>.One == start;
         }
 
-        private static void collapseRanges(IList<Range<T, C>> rngs)
+        // Merges overlapping and adjoining ranges in a list sorted by Start.
+        private static List<Range<T, C>> collapse(List<Range<T, C>> sorted)
         {
-            // collapse contiguous ranges together
-            for (var i = 1; i < rngs.Count; i++)
+            var result = new List<Range<T, C>>(sorted.Count);
+            foreach (var next in sorted)
             {
-                var prev = rngs[i - 1];
-                var next = rngs[i];
-
-                // prev.Stop + One wraps when prev.Stop is the type's MaxValue, so test overlap separately
-                if (prev.Stop >= next.Start || prev.Stop + Signed<T, C>.One == next.Start)
+                var last = result.Count - 1;
+                if (last >= 0 && touches(result[last].Stop, next.Start))
                 {
-                    if (prev.Stop <= next.Stop)
-                        rngs[i - 1] = new Range<T, C>(prev.Start, next.Stop);
-
-                    rngs.RemoveAt(i);
-                    i--;
+                    if (result[last].Stop < next.Stop)
+                        result[last] = new Range<T, C>(result[last].Start, next.Stop);
+                }
+                else
+                {
+                    result.Add(next);
                 }
             }
+
+            return result;
+        }
+
+        private int lastStartingAtOrBefore(Signed<T, C> start)
+        {
+            var keys = Ranges.Keys;
+            var lo = 0;
+            var hi = keys.Count - 1;
+            while (lo <= hi)
+            {
+                var mid = lo + ((hi - lo) >> 1);
+                if (keys[mid] <= start)
+                    lo = mid + 1;
+                else
+                    hi = mid - 1;
+            }
+
+            return hi;
         }
     }
 }

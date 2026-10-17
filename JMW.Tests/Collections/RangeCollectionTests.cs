@@ -11,6 +11,55 @@ namespace JMW.Collections.Tests
     [TestFixture]
     public class RangeCollectionTests
     {
+        // Random adds, one at a time and in batches, hold the same numbers as a plain set, and the ranges stay
+        // sorted, disjoint, and never adjoin.
+        [TestCase(1, 0, 60)]
+        [TestCase(2, -30, 30)]
+        [TestCase(3, int.MaxValue - 40, int.MaxValue)]
+        [TestCase(4, int.MinValue, int.MinValue + 40)]
+        public void AddMatchesASetOfNumbers(int seed, int min, int max)
+        {
+            var random = new Random(seed);
+            var collection = new IntegerRangeCollection();
+            var expected = new HashSet<int>();
+
+            for (var step = 0; step < 200; step++)
+            {
+                var batch = new List<IntegerRange>();
+                var size = step % 3 == 0 ? random.Next(1, 5) : 1;
+                for (var k = 0; k < size; k++)
+                {
+                    var a = random.Next(min, max);
+                    var b = Math.Min(max, a + random.Next(0, 4));
+                    batch.Add(new IntegerRange(a, b));
+                    for (long n = a; n <= b; n++)
+                        expected.Add((int)n);
+                }
+
+                if (batch.Count == 1)
+                    collection.Add(batch[0]);
+                else
+                    collection.AddRange(batch);
+
+                var ranges = collection.Ranges.Values;
+                for (var i = 0; i < ranges.Count; i++)
+                {
+                    Assert.That((int)ranges[i].Start, Is.LessThanOrEqualTo((int)ranges[i].Stop));
+                    Assert.That((int)collection.Ranges.Keys[i], Is.EqualTo((int)ranges[i].Start));
+                    if (i > 0)
+                        Assert.That((long)(int)ranges[i].Start, Is.GreaterThan((long)(int)ranges[i - 1].Stop + 1), "step " + step);
+                }
+
+                var actual = new HashSet<int>();
+                foreach (var r in ranges)
+                {
+                    for (long n = (int)r.Start; n <= (int)r.Stop; n++)
+                        actual.Add((int)n);
+                }
+                Assert.That(actual.SetEquals(expected), Is.True, "step " + step);
+            }
+        }
+
         [Test]
         public void RangeTest1()
         {
