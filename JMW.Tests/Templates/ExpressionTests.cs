@@ -38,6 +38,32 @@ namespace JMW.Templates.Tests
             Assert.That(Eval(expression, arguments), Is.EqualTo(expected));
         }
 
+        // Evaluating one expression text many times, as a table does once per row, sees only that row's arguments.
+        [TestCase("x1 = x1 + 3;  x1 = x1+5")]
+        [TestCase("y = x1; y++; y")]
+        [TestCase("x1++; x1")]
+        [TestCase("x1 + '|' + x2")]
+        public void RepeatedEvaluationKeepsNoStateBetweenCalls(string expression)
+        {
+            for (var row = 0; row < 3; row++)
+            {
+                var arguments = new[] { row.ToString(System.Globalization.CultureInfo.InvariantCulture), "b" };
+                var first = Eval(expression, arguments);
+                Assert.That(Eval(expression, arguments), Is.EqualTo(first), "row " + row);
+                Assert.That(Eval(expression, ["9", "b"]), Is.Not.EqualTo(first), "row " + row);
+            }
+        }
+
+        [TestCase("x1 +")]
+        [TestCase("x3")]
+        public void InvalidExpressionFailsEveryTime(string expression)
+        {
+            for (var i = 0; i < 3; i++)
+            {
+                Assert.That(() => Eval(expression, "1"), Throws.Exception);
+            }
+        }
+
         // Arguments bind by number, not by order of appearance, and only identifiers are variables.
         [TestCase("x2 + '-' + x1", new[] { "A", "B" }, "B-A")]
         [TestCase("x3 + x1", new[] { "a", "b", "c" }, "ca")]

@@ -1,10 +1,19 @@
 using System;
+using System.Collections.Concurrent;
 using System.Collections.Generic;
 
 namespace JMW.Templates.Expressions;
 
 internal static class ScriptEvaluator
 {
+    // Table tags evaluate the same expression once per row. Parsed trees hold no state, so they are shared. The
+    // limit keeps generated expression text from growing the cache without end.
+    private const int CacheLimit = 1024;
+
+    private static readonly ConcurrentDictionary<string, ParsedExpression> cache = new(StringComparer.Ordinal);
+
+    private readonly record struct ParsedExpression(ExpressionNode Program, int HighestArgument);
+
     /// <summary>
     /// Evaluates a template expression with <paramref name="arguments"/> bound to <c>x1</c>, <c>x2</c>, and so on.
     /// Argument text that reads as a number is bound as a number.
@@ -13,7 +22,19 @@ internal static class ScriptEvaluator
     /// <exception cref="ArgumentException">The expression uses an <c>xN</c> with no matching argument.</exception>
     public static ScriptValue Evaluate(string expression, IReadOnlyList<string> arguments)
     {
-        ExpressionNode program = ExpressionParser.Parse(expression, out int highestArgument);
+        if (!cache.TryGetValue(expression, out ParsedExpression parsed))
+        {
+            ExpressionNode node = ExpressionParser.Parse(expression, out int highest);
+            parsed = new ParsedExpression(node, highest);
+            if (cache.Count >= CacheLimit)
+            {
+                cache.Clear();
+            }
+
+            cache[expression] = parsed;
+        }
+
+        (ExpressionNode program, int highestArgument) = parsed;
         if (highestArgument > arguments.Count)
         {
             throw new ArgumentException(
