@@ -165,9 +165,37 @@ public class Table : Base, IParser, IProperty
     ///     holding the rows of the table.</param>
     /// <param name="validate_with_data">If true, uses the table data to validate the column positions</param>
     /// <returns>Dictionary object indexed by Column name, that has the starting position and length for each column.</returns>
+    private static bool IsColumnBreak(char c) => c is ' ' or '\r' or '\n' or '+';
+
+    // True when the trimmed row holds at least two different characters, counting any whitespace as a space.
+    private static bool HasTwoDistinctCharacters(string row)
+    {
+        int first = 0;
+        while (first < row.Length && char.IsWhiteSpace(row[first]))
+        {
+            first++;
+        }
+
+        int last = row.Length - 1;
+        while (last > first && char.IsWhiteSpace(row[last]))
+        {
+            last--;
+        }
+
+        for (int i = first + 1; i <= last; i++)
+        {
+            char c = char.IsWhiteSpace(row[i]) ? ' ' : row[i];
+            if (c != row[first])
+            {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
     public static ColumnPositionCollection DeriveColumnPositions(IList<string> table, bool validate_with_data = true)
     {
-        var whitespace = new HashSet<string> { " ", "\r", "\n", "+" };
         var original_column_string = "";
 
         #region Get Columns
@@ -244,12 +272,12 @@ public class Table : Base, IParser, IProperty
             {
                 var row = table[i];
 
-                if (row.Trim().GetCharHistogram().Count > 1) // don't bother with empty lines.
+                if (HasTwoDistinctCharacters(row)) // don't bother with empty lines or rules like "-----".
                 {
                     //check to see if the first column starts at the beginning of the line.
                     while (fieldPositions[keys[0]].Start != 0 &&
-                        row.Substring(fieldPositions[keys[0]].Start - 1, 1) != " " &&
-                        row.Substring(fieldPositions[keys[0]].Start - 1, 1) != "+")
+                        row[fieldPositions[keys[0]].Start - 1] != ' ' &&
+                        row[fieldPositions[keys[0]].Start - 1] != '+')
                     {
                         fieldPositions[keys[0]].Start--;
                         fieldPositions[keys[0]].Length++;
@@ -262,7 +290,7 @@ public class Table : Base, IParser, IProperty
 
                         var start = fieldPositions[key].Start + fieldPositions[key].Length - 1;
 
-                        while (start >= 0 && row.Length > start && !whitespace.Contains(row.Substring(start, 1)))
+                        while (start >= 0 && row.Length > start && !IsColumnBreak(row[start]))
                         {
                             fieldPositions[key].Length--; // only decrement the length if its not the last column
                             fieldPositions[keys[j + 1]].Start--; // only decrement the starting index of the next column if its not the last column
