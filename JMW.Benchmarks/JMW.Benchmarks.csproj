@@ -15,6 +15,15 @@
 
   <ItemGroup>
     <ProjectReference Include="$(RepoRoot)JMW/JMW.csproj" />
+    <ProjectReference Include="$(RepoRoot)JMW.Networking/JMW.Networking.csproj" />
+    <ProjectReference Include="$(RepoRoot)JMW.Parsing/JMW.Parsing.csproj" />
+    <ProjectReference Include="$(RepoRoot)JMW.Templates/JMW.Templates.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Include="$(RepoRoot)JMW.Tests/Networking/junos.txt"
+      Link="junos.txt"
+      CopyToOutputDirectory="PreserveNewest" />
   </ItemGroup>
 
 </Project>
