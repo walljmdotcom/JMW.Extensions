@@ -1,0 +1,1 @@
+table aligned header: Address | Interface | Ver/ Mode | Nbr Count | Query Intvl | DR Prior | DR

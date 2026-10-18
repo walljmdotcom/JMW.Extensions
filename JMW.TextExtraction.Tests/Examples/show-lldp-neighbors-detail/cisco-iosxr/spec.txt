@@ -1,0 +1,16 @@
+records split by rule
+  line "Local Interface:" => Local Interface: {Local Interface}
+  line "Chassis id:" => Chassis id: {Chassis id}
+  line "Port id:" => Port id: {Port id}
+  line "Port Description:" => Port Description: {Port Description}
+  line "System Name:" => System Name: {System Name}
+  text "System Description:" => System Description: {System Description}
+  line "Time remaining:" => Time remaining: {Time remaining}
+  line "Hold Time:" => Hold Time: {Hold Time}
+  line "System Capabilities:" => System Capabilities: {System Capabilities}
+  line "Enabled Capabilities:" => Enabled Capabilities: {Enabled Capabilities}
+  line "Management Addresses: / IPv4 address:" => IPv4 address: {Management Addresses / IPv4 address}
+  line "Management Addresses: / IPv6 address:" => IPv6 address: {Management Addresses / IPv6 address}
+
+single
+  line "Total entries displayed:" => Total entries displayed: {Total entries displayed}

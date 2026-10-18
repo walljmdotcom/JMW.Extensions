@@ -1,0 +1,23 @@
+records split by rule
+  line "show" => show cdp neighbors detail
+  line "Device ID:" => Device ID: {Device ID}
+  line "Entry address(es) : / IP address:" => IP address: {Entry address(es) / IP address}
+  line "Platform: Capabilities:" => Platform: {Platform} , Capabilities: {Capabilities}
+  line "Interface: Port ID :" => Interface: {Interface} , Port ID {?Port ID qualifier} : {Port ID}
+  line "Holdtime :" => Holdtime : {Holdtime}
+  text "Version :" => Version : {Version}
+  line "advertisement version:" => advertisement version: {advertisement version}
+  line "VTP Management Domain:" => VTP Management Domain: {VTP Management Domain}
+  line "Native VLAN:" => Native VLAN: {Native VLAN}
+  line "Duplex:" => Duplex: {Duplex}
+  line "Management address(es) : / IP address:" => IP address: {Management address(es) / IP address}
+  line "Power drawn:" => Power drawn: {Power drawn}
+  line "Power request id: Power management id:" => Power request id: {Power request id} , Power management id: {Power management id}
+  line "Power request levels are:" => Power request levels are: {Power request levels}
+  line "Second Port Status:" => Second Port Status: {Second Port Status}
+  line "Management address(es) :" => Management address(es) : {Management address(es)}
+  line "Total cdp entries displayed :" => Total cdp entries displayed : {Total cdp entries displayed}
+  line "Entry address(es) : / IPv6 address:" => IPv6 address: {Entry address(es) / IPv6 address}
+
+single
+  line "show" => show cdp neighbors detail

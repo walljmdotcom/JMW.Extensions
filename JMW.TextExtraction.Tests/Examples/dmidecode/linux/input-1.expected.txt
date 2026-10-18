@@ -1,0 +1,64 @@
+single lines 1-58
+  Handle = 0x0001
+  DMI type = 1
+  bytes = 27
+  System / Manufacturer = Example Systems
+  System / Product Name = XS-2200
+  System / Version = Not Specified
+  System / Serial Number = AA0000000001
+  System / UUID = 4c4c4544-0042-3010-8031-c2c04f000001
+  System / Wake-up Type = Power Switch
+  System / SKU Number = SKU-0001
+  System / Family = Rack Server
+  Handle = 0x1000
+  DMI type = 16
+  bytes = 23
+  Physical / Location = System Board Or Motherboard
+  Physical / Use = System Memory
+  Physical / Error Correction Type = Multi-bit ECC
+  Physical / Maximum Capacity = 1536 GB
+  Physical / Error Information Handle = Not Provided
+  Physical / Number Of Devices = 24
+  Handle = 0x1100
+  DMI type = 17
+  bytes = 40
+  Memory / Array Handle = 0x1000
+  Memory / Error Information Handle = Not Provided
+  Memory / Total Width = 72 bits
+  Memory / Data Width = 64 bits
+  Memory / Size = 32 GB
+  Memory / Form Factor = DIMM
+  Memory / Locator = A1
+  Memory / Type = DDR4
+  Memory / Speed = 2933 MT/s
+  Memory / Manufacturer = 00AD00B300AD
+  Memory / Serial Number = AB000001
+  Memory / Part Number = HMA84GR7CJR4N-WM
+  Handle = 0x1101
+  DMI type = 17
+  bytes = 40
+  Memory / Array Handle = 0x1000
+  Memory / Error Information Handle = Not Provided
+  Memory / Total Width = 72 bits
+  Memory / Data Width = 64 bits
+  Memory / Size = No Module Installed
+  Memory / Form Factor = DIMM
+  Memory / Locator = A2
+  Memory / Type = Unknown
+  Memory / Speed = Unknown
+  Memory / Manufacturer = Not Specified
+  Memory / Serial Number = Not Specified
+  Memory / Part Number = Not Specified
+  Handle = 0x0C00
+  DMI type = 32
+  bytes = 20
+  System / Status = No errors detected
+unclaimed 1: dmidecode -t system -t memory
+unclaimed 2: # dmidecode 3.3
+unclaimed 3: Getting SMBIOS data from sysfs.
+unclaimed 4: SMBIOS 2.8 present.
+unclaimed 7: System Information
+unclaimed 18: Physical Memory Array
+unclaimed 27: Memory Device
+unclaimed 42: Memory Device
+unclaimed 57: System Boot Information

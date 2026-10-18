@@ -1,0 +1,12 @@
+table aligned lines 4-13: Interface | IP-Address | Status | Protocol | Vrf-Name
+  row 5: Bundle-Ether1 | 192.0.2.13 | Up | Up | default
+  row 6: Bundle-Ether1.110 | 198.51.100.1 | Up | Up | blue-vrf
+  row 7: tunnel-te1 | unassigned | Up | Up | default
+  row 8: BVI100 | 203.0.113.4 | Down | Down | blue-vrf
+  row 9: Loopback0 | 192.0.2.222 | Up | Up | default
+  row 10: MgmtEth0/RSP0/CPU0/0 | 192.0.2.26 | Up | Up | mgmt
+  row 11: MgmtEth0/RSP0/CPU0/1 | unassigned | Shutdown | Down | default
+  row 12: TenGigE0/0/1/1.1551 | 198.51.100.22 | Down | Down | red-vrf
+  row 13: TenGigE0/0/2/1.1343 | unassigned | Up | Down | default
+unclaimed 1: show ipv4 vrf all interface brief
+unclaimed 2: Wed Dec  7 12:33:20.584 UTC

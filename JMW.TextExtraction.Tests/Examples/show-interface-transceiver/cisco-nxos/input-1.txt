@@ -1,0 +1,39 @@
+show interface transceiver
+Ethernet1/1
+    transceiver is present
+    type is 10Gbase-LR
+    name is CISCO-VENDORA
+    part number is PN0000LR-C1
+    revision is B
+    serial number is ABC0000A1BC
+    nominal bitrate is 10300 MBit/sec
+    Link length supported for 9/125um fiber is 10 km
+    cisco id is --
+    cisco extended id number is 4
+
+Ethernet1/2
+    transceiver is present
+    type is SFP-1000BASE-T
+    name is CISCO-VENDORB
+    part number is PN0001-E
+    revision is E
+    serial number is MTC0000B2CD
+    nominal bitrate is 1300 MBit/sec
+    Link length supported for copper is 100 m
+    cisco id is --
+    cisco extended id number is 4
+
+Ethernet1/3
+    transceiver is not present
+
+Ethernet1/4
+    transceiver is present
+    type is 10Gbase-SR
+    name is CISCO-VENDORC
+    part number is PN0002SR-C1
+    revision is 0000
+    serial number is ONT0000C3DE
+    nominal bitrate is 10300 MBit/sec
+    Link length supported for 50/125um OM3 fiber is 300 m
+    cisco id is --
+    cisco extended id number is 4

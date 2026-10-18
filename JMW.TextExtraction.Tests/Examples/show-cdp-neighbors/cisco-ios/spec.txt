@@ -1,0 +1,5 @@
+table aligned header: Device ID | Local Intrfce | Holdtme | Capability | Platform | Port ID
+
+single
+  line "Capability Codes:" => Capability Codes: {Capability Codes} , T - Trans Bridge , B - Source Route Bridge
+  line "Total cdp entries displayed :" => Total cdp entries displayed : {Total cdp entries displayed}

@@ -1,0 +1,18 @@
+records split by rule
+  line "Port: ~ Index: ~ Time:" => Port: {Port} Index: {Index} Time: {Time}
+  line "ChassisId:" => ChassisId: {ChassisId}
+  line "PortId:" => PortId: {PortId}
+  line "SysName:" => SysName: {SysName}
+  line "SysCap:" => SysCap: {SysCap}
+  line "PortDesc:" => PortDesc: {PortDesc}
+  line "SysDescr:" => SysDescr: {SysDescr}
+  line "SysDescr:" => SysDescr: {SysDescr} , V3 , SIP 9-4-2SR3-1
+  line "Technical Support:" => Technical Support: {Technical Support}
+  line "PVID:" => PVID: {PVID}
+  line "PPVID Supported:" => PPVID Supported: {PPVID Supported}
+  line "PPVID Enabled:" => PPVID Enabled: {PPVID Enabled}
+  line "VLAN Name List:" => VLAN Name List: {VLAN Name List}
+  line "~ Auto-neg: supported/enabled OperMAUtype:" => Dot3-MAC/PHY Auto-neg: {Dot3-MAC/PHY Auto-neg} OperMAUtype: {OperMAUtype}
+  line "PMD auto-neg:" => PMD auto-neg: {PMD auto-neg} , TFD ) , 100Base(TX , TXFD ) {Field2}
+  line "MED-Capabilities:" => MED-Capabilities: {MED-Capabilities}
+  line "MED-Device type:" => MED-Device type: {MED-Device type}

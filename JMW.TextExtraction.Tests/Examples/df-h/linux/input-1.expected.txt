@@ -1,0 +1,9 @@
+table aligned lines 2-9: Filesystem | Size | Used | Avail | Use% | Mounted on
+  row 3: udev | 7.8G | 0 | 7.8G | 0% | /dev
+  row 4: tmpfs | 1.6G | 2.1M | 1.6G | 1% | /run
+  row 5: /dev/mapper/vg0-root | 98G | 41G | 53G | 44% | /
+  row 6: /dev/sda1 | 974M | 263M | 644M | 29% | /boot
+  row 7: 192.0.2.50:/export/share | 2.0T | 1.1T | 921G | 55% | /mnt/shared files
+  row 8: /dev/sdb1 | 1.8T | 1.7T | 97G | 95% | /var/lib/backup
+  row 9: tmpfs | 1.6G | 4.0K | 1.6G | 1% | /run/user/1000
+unclaimed 1: df -h

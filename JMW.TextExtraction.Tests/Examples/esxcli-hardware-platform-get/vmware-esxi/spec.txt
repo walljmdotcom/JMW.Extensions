@@ -1,0 +1,10 @@
+single
+  line "esxcli" => esxcli hardware platform get
+  line "Platform" => Platform Information
+  line "Platform / UUID:" => UUID: {Platform / UUID}
+  line "Platform / Product Name:" => Product Name: {Platform / Product Name}
+  line "Platform / Vendor Name:" => Vendor Name: {Platform / Vendor Name}
+  line "Platform / Serial Number:" => Serial Number: {Platform / Serial Number}
+  line "Platform / Enclosure Serial Number:" => Enclosure Serial Number: {Platform / Enclosure Serial Number}
+  line "Platform / BIOS Asset Tag:" => BIOS Asset Tag: {Platform / BIOS Asset Tag}
+  line "Platform / IPMI Supported:" => IPMI Supported: {Platform / IPMI Supported}

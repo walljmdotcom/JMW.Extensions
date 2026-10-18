@@ -1,0 +1,4 @@
+single
+  line "uname" => uname -a
+  line "Linux" => Linux host1.example.net 5.15.0-105-generic #115-Ubuntu SMP Mon Apr {Linux host1.example.net 5.15.0-105-generic #115-Ubuntu SMP Mon Apr} UTC {UTC} x86_64 x86_64 x86_64 GNU/Linux
+  line "Linux" => Linux pi-4.example.net 6.1.21-v7+ #1642 SMP Mon Apr {Linux pi-4.example.net 6.1.21-v7+ #1642 SMP Mon Apr} BST {BST} armv7l GNU/Linux

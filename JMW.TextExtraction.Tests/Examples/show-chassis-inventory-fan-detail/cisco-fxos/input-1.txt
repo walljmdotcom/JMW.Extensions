@@ -1,0 +1,63 @@
+fpr-1# show chassis inventory fan detail
+Chassis 1:
+    Fan Modules:
+        Tray 1 Module 1:
+            Presence: Equipped
+            Product Name: Cisco Firepower 9000 Series Fan
+            PID: FPR9K-FAN
+            VID: 01
+            Vendor: Cisco Systems Inc
+            Serial (SN): AAA0000A001
+            HW Revision: 0
+
+            Fans:
+                ID 1:
+                    Product Name: Cisco Firepower 9000 Series Fan
+                    PID: FPR9K-FAN
+                    VID: V01
+                    Vendor: Cisco Systems Inc
+                    Serial (SN): AAA0000A001
+                    HW Revision: 0
+
+                ID 2:
+                    Product Name: Cisco Firepower 9000 Series Fan
+                    PID: FPR9K-FAN
+                    VID: V01
+                    Vendor: Cisco Systems Inc
+                    Serial (SN): AAA0000A001
+                    HW Revision: 0
+
+        Tray 1 Module 2:
+            Presence: Equipped
+            Product Name: Cisco Firepower 9000 Series Fan
+            PID: FPR9K-FAN
+            VID: 01
+            Vendor: Cisco Systems Inc
+            Serial (SN): AAA0000A002
+            HW Revision: 0
+
+            Fans:
+                ID 1:
+                    Product Name: Cisco Firepower 9000 Series Fan
+                    PID: FPR9K-FAN
+                    VID: V01
+                    Vendor: Cisco Systems Inc
+                    Serial (SN): AAA0000A002
+                    HW Revision: 0
+
+                ID 2:
+                    Product Name: Cisco Firepower 9000 Series Fan
+                    PID: FPR9K-FAN
+                    VID: V01
+                    Vendor: Cisco Systems Inc
+                    Serial (SN): AAA0000A002
+                    HW Revision: 0
+
+        Tray 1 Module 3:
+            Presence: Missing
+            Product Name:
+            PID:
+            VID:
+            Vendor:
+            Serial (SN):
+            HW Revision: 0

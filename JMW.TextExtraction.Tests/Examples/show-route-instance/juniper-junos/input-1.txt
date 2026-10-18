@@ -1,0 +1,21 @@
+show route instance | no-more
+Instance             Type
+         Primary RIB                                     Active/holddown/hidden
+master               forwarding
+         inet.0                                          38/0/0
+         inet.3                                          7/0/0
+         mpls.0                                          35/0/0
+         bgp.l3vpn.0                                     44/0/0
+
+__juniper_private1__ forwarding
+         __juniper_private1__.inet.0                     1/0/0
+         __juniper_private1__.inet6.0                    1/0/0
+
+__master.anon__      forwarding
+
+blue                 vrf
+         blue.inet.0                                     13/0/0
+
+red                  vrf
+         red.inet.0                                      9/0/2
+         red.inet6.0                                     4/0/0

@@ -1,0 +1,39 @@
+show hsrp detail
+Wed Dec  7 12:33:06.139 UTC
+TenGigE0/0/2/1.100 - IPv4 Group 26 (version 1)
+  Local state is Standby, priority 100, may preempt
+  Preemption delay for at least 300 secs
+  Hellotime 500 msec holdtime 1500 msec
+  Configured hellotime 500 msec holdtime 1500 msec
+  Minimum delay 1 sec, reload delay 5 sec
+  Hot standby IP address is 192.0.2.1 configured
+  Active router is 192.0.2.3, priority 110 expires in 00:00:01
+  Standby router is local
+  Standby virtual mac address is 0000.0c07.ac1a, state is reserved
+  23 state changes, last state change 7w5d
+  State change history:
+  Jun 27 12:35:58.003 UTC  Standby  -> Init     Interface Down update
+  Jun 27 12:54:10.801 UTC  Init     -> Listen   Delay timer expired
+  Jun 27 12:54:13.803 UTC  Speak    -> Standby  Standby timer expired
+  Last coup sent:       Never
+  Last coup received:   Oct 14 04:28:59.718 UTC
+  Last resign sent:     Oct 14 04:28:59.708 UTC
+  Last resign received: Never
+TenGigE0/0/2/1.110 - IPv4 Group 27 (version 1)
+  Local state is Active, priority 110, may preempt
+  Preemption delay for at least 300 secs
+  Hellotime 500 msec holdtime 1500 msec
+  Configured hellotime 500 msec holdtime 1500 msec
+  Minimum delay 1 sec, reload delay 5 sec
+  Hot standby IP address is 198.51.100.1 configured
+  Active router is local
+  Standby router is 198.51.100.2, priority 100 expires in 00:00:01
+  Standby virtual mac address is 0000.0c07.ac1b, state is active
+  20 state changes, last state change 23w0d
+  State change history:
+  Jun  6 12:18:20.271 UTC  Standby  -> Active   Active timer expired
+  Jun  6 12:18:22.292 UTC  Speak    -> Standby  Standby timer expired
+  Last coup sent:       Never
+  Last coup received:   Never
+  Last resign sent:     Never
+  Last resign received: Never

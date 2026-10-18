@@ -1,0 +1,20 @@
+table aligned lines 12-13: Network Destination | Netmask | Gateway | Interface | Metric
+  row 13: 0.0.0.0 | 0.0.0.0 | 192.0.2.1 | 192.0.2.42 | 25
+table words lines 14-19: Column1 | Column2 | Column3 | Column4 | Column5
+  row 14: 127.0.0.0 | 255.0.0.0 | On-link | 127.0.0.1 | 331
+  row 15: 127.0.0.1 | 255.255.255.255 | On-link | 127.0.0.1 | 331
+  row 16: 192.0.2.0 | 255.255.255.0 | On-link | 192.0.2.42 | 281
+  row 17: 192.0.2.42 | 255.255.255.255 | On-link | 192.0.2.42 | 281
+  row 18: 192.0.2.255 | 255.255.255.255 | On-link | 192.0.2.42 | 281
+  row 19: 224.0.0.0 | 240.0.0.0 | On-link | 127.0.0.1 | 331
+table aligned lines 22-23: Network Address | Netmask | Gateway Address | Metric
+  row 23: 198.51.100.0 | 255.255.255.0 | 192.0.2.1 | 1
+single lines 1-21
+  Interface / 1...........................Software Loopback Interface = 1
+  Active Routes = 
+  Persistent Routes = 
+unclaimed 1: C:\Users\alice>route print -4
+unclaimed 3: Interface List
+unclaimed 4: 12...02 00 5e 00 00 42 ......Intel(R) Ethernet Connection (16) I219-LM
+unclaimed 5: 7...02 00 5e 00 00 44 ......Intel(R) Wi-Fi 6E AX211 160MHz
+unclaimed 9: IPv4 Route Table

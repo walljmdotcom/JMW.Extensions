@@ -1,0 +1,9 @@
+Cisco IOS Software, C3750E Software (C3750E-UNIVERSALK9-M), Version 15.0(2)SE11
+Technical Support: http://www.cisco.com/techsupport
+Copyright (c) 1986-2017 by Cisco Systems, Inc.
+Compiled Sat 19-Aug-17 09:34 by prod_rel_team
+
+ROM: Bootstrap program is C3750E boot loader
+switch01 uptime is 2 years, 13 weeks, 4 days, 1 hour, 2 minutes
+System returned to ROM by power-on
+System image file is "flash:c3750e-universalk9-mz.150-2.SE11.bin"

@@ -1,0 +1,11 @@
+single
+  line "show" => show ntp status
+  line "Clock" => Clock is {Clock} , stratum {stratum} , {reference} reference {reference 2}
+  line "nominal freq" => nominal freq is {nominal freq} , actual freq is {actual freq} , precision is {precision}
+  line "ntp uptime" => ntp uptime is {ntp uptime} , resolution is {resolution}
+  line "reference time" => reference time is {reference time}
+  line "clock offset" => clock offset is {clock offset} , root delay is {root delay}
+  line "root dispersion" => root dispersion is {root dispersion} , peer dispersion is {peer dispersion}
+  line "loopfilter state" => loopfilter state is {loopfilter state} , drift is {drift}
+  line "system poll interval" => system poll interval is {system poll interval} , last update was {last update was} sec ago.
+  line "system poll interval" => system poll interval is {system poll interval} , never updated.

@@ -1,0 +1,50 @@
+show lldp neighbors detail
+Capability codes:
+  (R) Router, (B) Bridge, (T) Telephone, (C) DOCSIS Cable Device
+  (W) WLAN Access Point, (P) Repeater, (S) Station, (O) Other
+Device ID            Local Intf      Hold-time  Capability  Port ID
+
+Chassis id: 0200.5e30.0100
+Port id: Gi1/0/2
+Local Port id: mgmt0
+Port Description: uplink-mgmt
+System Name: access-sw3.example.net
+System Description: Cisco IOS Software, C3750E Software (C3750E-UNIVERSALK9-M), Version 15.2(4)E6, RELEASE SOFTWARE (fc4)
+Technical Support: http://www.cisco.com/techsupport
+Copyright (c) 1986-2018 by Cisco Systems, Inc.
+Compiled Thu 05-Apr-18 02:22 by prod_rel_team
+Time remaining: 113 seconds
+System Capabilities: B, R
+Enabled Capabilities: B
+Management Address: 192.0.2.32
+Vlan ID: 99
+
+
+Chassis id: 0200.5e30.0200
+Port id: Eth1/1
+Local Port id: Eth1/1
+Port Description: peer-link to nx-2
+System Name: nx-2.example.net
+System Description: Cisco Nexus Operating System (NX-OS) Software 9.3(8)
+TAC support: http://www.cisco.com/tac
+Copyright (c) 2002-2021, Cisco Systems, Inc. All rights reserved.
+Time remaining: 119 seconds
+System Capabilities: B, R
+Enabled Capabilities: B, R
+Management Address: 192.0.2.21
+Vlan ID: 1
+
+
+Chassis id: 0200.5e30.0300
+Port id: 0200.5e30.0304
+Local Port id: Eth1/2
+Port Description: not advertised
+System Name: not advertised
+System Description: not advertised
+Time remaining: 105 seconds
+System Capabilities: not advertised
+Enabled Capabilities: not advertised
+Management Address: not advertised
+Vlan ID: not advertised
+
+Total entries displayed: 3

@@ -1,0 +1,15 @@
+table aligned lines 3-8: VRF | RD | RT | AFI | SAFI
+  row 4: mgmt | not set |  |  | 
+  row 5: blue-vrf | 192.0.2.22:65000 |  |  | 
+  row 6:  |  | import  192.0.2.255:65000 | IPV4 | Unicast
+  row 7:  |  | export  192.0.2.255:65000 | IPV4 | Unicast
+  row 8: green-vrf | 192.0.2.23:65000 |  |  | 
+table words lines 12-14: Column1 | Column2 | Column3 | Column4
+  row 12: import | 203.0.113.255:65000 | IPV4 | Unicast
+  row 13: export | 203.0.113.255:65000 | IPV4 | Unicast
+  row 14: import | 203.0.113.254:65001 | IPV4 | Unicast
+unclaimed 1: show vrf all
+unclaimed 2: Wed Dec  7 12:34:28.630 UTC
+unclaimed 9: import  198.51.100.255:65000  IPV4  Unicast
+unclaimed 10: export  198.51.100.255:65000  IPV4  Unicast
+unclaimed 11: red-vrf              192.0.2.24:65000

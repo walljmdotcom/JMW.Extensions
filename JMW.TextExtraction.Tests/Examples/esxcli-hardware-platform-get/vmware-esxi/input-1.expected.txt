@@ -1,0 +1,8 @@
+single lines 1-9
+  Platform / UUID = 0x4c 0x4c 0x45 0x44 0x00 0x42 0x30 0x10 0x80 0x31 0xc2 0xc0 0x4f 0x00 0x00 0x01
+  Platform / Product Name = XS-2200
+  Platform / Vendor Name = Example Systems
+  Platform / Serial Number = AA0000000002
+  Platform / Enclosure Serial Number = AA0000000003
+  Platform / BIOS Asset Tag = 
+  Platform / IPMI Supported = true

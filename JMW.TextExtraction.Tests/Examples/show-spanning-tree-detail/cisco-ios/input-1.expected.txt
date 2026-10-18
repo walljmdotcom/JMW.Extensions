@@ -1,0 +1,95 @@
+record lines 3-13
+  Name = MST0
+  Status = executing the mstp compatible Spanning Tree protocol
+  Bridge Identifier has priority = 61440
+  sysid = 0
+  Configured hello time = 2
+  max age = 20
+  forward delay = 15
+  transmit hold-count = 6
+  Current root has priority = 4096
+  Root port = 53 (TenGigabitEthernet1/1/1)
+  cost of root path = 2000
+  Times = hold 1
+  topology change = 35
+  notification = 2 hello 2, max age 20, forward delay 15
+  Timers = hello 0
+  topology change 2 = 29
+  notification 2 = 0
+record lines 15-26
+  Name = Port 1 (GigabitEthernet1/0/1) of MST0
+  Status = designated forwarding
+  Port path cost = 20000
+  Port priority = 128
+  Port Identifier = 128.1.
+  Designated = root
+  has priority = 4096
+  address = 0200.5e10.0001
+  Designated = bridge
+  has priority = 61440
+  address = 0200.5e10.0100
+  Designated port id = 128.1
+  designated path cost = 2000
+  Timers = message age 0
+  forward delay 2 = 0
+  hold = 0
+  Number of transitions to forwarding state = 1
+  The port = in the portfast edge mode by default
+  Link type = point-to-point by default
+  Field2 = Internal
+  Bpdu guard = enabled by default
+  Loop guard = enabled by default on the port
+  BPDU = sent 150171
+  received = 0
+record lines 28-39
+  Name = Port 2 (GigabitEthernet1/0/2) of MST0
+  Status = designated forwarding
+  Port path cost = 200000
+  Port priority = 128
+  Port Identifier = 128.2.
+  Designated = root
+  has priority = 4096
+  address = 0200.5e10.0001
+  Designated = bridge
+  has priority = 61440
+  address = 0200.5e10.0100
+  Designated port id = 128.2
+  designated path cost = 2000
+  Timers = message age 0
+  forward delay 2 = 0
+  hold = 0
+  Number of transitions to forwarding state = 1
+  The port = in the portfast edge mode
+  Link type = point-to-point by default
+  Field2 = Internal
+  Bpdu guard = enabled by default
+  Loop guard = enabled by default on the port
+  BPDU = sent 288087
+  received = 0
+record lines 41-50
+  Name = Port 53 (TenGigabitEthernet1/1/1) of MST0
+  Status = root forwarding
+  Port path cost = 2000
+  Port priority = 128
+  Port Identifier = 128.53.
+  Designated = root
+  has priority = 4096
+  address = 0200.5e10.0001
+  Designated = bridge
+  has priority = 8192
+  address = 0200.5e10.0002
+  Designated port id = 128.25
+  designated path cost = 0
+  Timers = message age 3
+  forward delay 2 = 0
+  hold = 0
+  Number of transitions to forwarding state = 3
+  Link type = point-to-point by default
+  Field2 = Boundary PVST
+  Loop guard = enabled by default on the port
+  BPDU = sent 12
+  received = 4410922
+unclaimed 1: show spanning-tree detail
+unclaimed 8: Topology change flag set, detected flag not set
+unclaimed 9: Number of topology changes 1204 last change occurred 00:00:05 ago
+unclaimed 10: from GigabitEthernet1/0/4

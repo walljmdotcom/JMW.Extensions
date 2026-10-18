@@ -1,0 +1,8 @@
+table aligned header: Index | Lo Limit(C) | Temp(degC) | Hi Limit(C) | Location
+table aligned header: Index | Status | Current
+table aligned header: Index | Status | Low Limit(rpm) | Fan Speed(rpm)
+table aligned header: Index | Temp(degC) | Fan Speed(rpm)
+table aligned header: Name | BIG-IP 10200F
+table aligned header: Name | HD1
+table aligned header: Name | HD2
+table aligned header: Type | D113

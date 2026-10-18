@@ -1,0 +1,65 @@
+show lldp neighbors detail
+Interface Ethernet1 detected 1 LLDP neighbors:
+
+  Neighbor 0200.5e72.0001/"Ethernet49/1", age 18 seconds
+  Discovered 12 days, 3:04:55 ago; Last changed 12 days, 3:04:55 ago
+  - Chassis ID type: MAC address (4)
+    Chassis ID     : 0200.5e72.0001
+  - Port ID type: Interface name (5)
+    Port ID        : "Ethernet49/1"
+  - Time To Live: 120 seconds
+  - Port Description: "uplink to leaf-1"
+  - System Name: "spine-1.example.net"
+  - System Description: "Arista Networks EOS version 4.24.2F running on an Arista Networks DCS-7280SR-48C6"
+  - System Capabilities : Bridge, Router
+    Enabled Capabilities: Bridge, Router
+  - Management Address Subtype: IPv4
+    Management Address        : 192.0.2.11
+    Interface Number Subtype  : ifIndex (2)
+    Interface Number          : 999001
+    OID String                :
+  - IEEE802.1 Port VLAN ID: 1
+  - IEEE802.3 Maximum Frame Size: 9236 bytes
+
+Interface Ethernet2 detected 0 LLDP neighbors:
+
+Interface Ethernet3 detected 1 LLDP neighbors:
+
+  Neighbor 0200.5e72.0002/"Gi1/0/48", age 27 seconds
+  Discovered 40 days, 0:12:01 ago; Last changed 2 days, 6:40:13 ago
+  - Chassis ID type: MAC address (4)
+    Chassis ID     : 0200.5e72.0002
+  - Port ID type: Interface name (5)
+    Port ID        : "Gi1/0/48"
+  - Time To Live: 120 seconds
+  - Port Description: "GigabitEthernet1/0/48"
+  - System Name: "access-2.example.net"
+  - System Description: "Cisco IOS Software, C3750E Software (C3750E-UNIVERSALK9-M), Version 15.2(4)E10, RELEASE SOFTWARE (fc2)"
+  - System Capabilities : Bridge, Router
+    Enabled Capabilities: Bridge
+  - Management Address Subtype: IPv4
+    Management Address        : 192.0.2.12
+    Interface Number Subtype  : ifIndex (2)
+    Interface Number          : 10148
+    OID String                :
+  - IEEE802.1 Port VLAN ID: 10
+
+Interface Management1 detected 1 LLDP neighbors:
+
+  Neighbor 0200.5e72.0003/"ge-0/0/12", age 9 seconds
+  Discovered 3 days, 1:00:20 ago; Last changed 3 days, 1:00:20 ago
+  - Chassis ID type: MAC address (4)
+    Chassis ID     : 0200.5e72.0003
+  - Port ID type: Locally assigned (7)
+    Port ID        : "ge-0/0/12"
+  - Time To Live: 120 seconds
+  - Port Description: "mgmt sw port"
+  - System Name: "oob-1.example.net"
+  - System Description: "Juniper Networks, Inc. ex2300-48t Ethernet Switch, kernel JUNOS 20.4R3"
+  - System Capabilities : Bridge, Router
+    Enabled Capabilities: Bridge, Router
+  - Management Address Subtype: IPv4
+    Management Address        : 198.51.100.40
+    Interface Number Subtype  : ifIndex (2)
+    Interface Number          : 528
+    OID String                :

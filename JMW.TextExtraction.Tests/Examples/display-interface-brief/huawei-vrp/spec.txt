@@ -1,0 +1,8 @@
+table aligned header: Interface | PHY | Protocol | InUti | OutUti | inErrors | outErrors
+
+single
+  line "PHY:" => PHY: {PHY}
+  line "*down:" => *down: {*down}
+  line ":" => {?Field1} : {Field2}
+  line "^down:" => ^down: {^down}
+  line "InUti/OutUti:" => InUti/OutUti: {InUti/OutUti}

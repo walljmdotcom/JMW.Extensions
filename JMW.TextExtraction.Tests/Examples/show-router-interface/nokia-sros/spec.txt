@@ -1,0 +1,5 @@
+table aligned header: Interface-Name | Adm | Opr(v4/v6) | Mode | Port/SapId | IP-Address | PfxState
+
+single
+  line "Interface Table" => Interface Table ( Router: {Router}
+  line "Interfaces :" => Interfaces : {Interfaces}

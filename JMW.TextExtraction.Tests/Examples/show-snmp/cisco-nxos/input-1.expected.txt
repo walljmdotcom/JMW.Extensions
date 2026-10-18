@@ -1,0 +1,36 @@
+table ruled lines 2-4: Community | Group / Access | context | acl_filter
+  row 4: example-ro | network-operator |  | 
+table words lines 8-10: Column1 | Column2 | Column3 | Column4
+  row 8: 1425 | SNMP | packets | input
+  row 9: 4 | Bad | SNMP | versions
+  row 10: 139 | Unknown | community | name
+table words lines 15-17: Column1 | Column2 | Column3
+  row 15: 18 | Get-request | PDUs
+  row 16: 18 | Get-next | PDUs
+  row 17: 0 | Set-request | PDUs
+table words lines 23-25: Column1 | Column2 | Column3 | Column4
+  row 23: 72 | Unknown | Context | name
+  row 24: 821 | Out | Traps | PDU
+  row 25: 36 | Out | Get | Responses
+table ruled lines 35-38: User | Auth | Priv(enforce) | Groups
+  row 37: admin | md5 | des(no) | network-admin
+  row 38: monitor | sha | aes-128(yes) | network-operator
+table ruled lines 44-46: User | Auth | Priv
+  row 46: informer | md5 | des
+single lines 1-47
+  sys contact = noc@example.net
+  sys location = lab-row-1
+  Illegal operation for community name supplied = 0
+  Encoding errors = 139
+  Number of requested variables = 36
+  Number of altered variables = 0
+  SNMP packets output = 833
+  Too big errors = 0
+  No such name errors = 0
+  Bad values errors = 0
+  General errors = 0
+  Silent Drops = 0
+unclaimed 1: show snmp
+unclaimed 32: SNMP USERS
+unclaimed 41: NOTIFICATION TARGET USERS (configured  for sending V3 Inform)
+unclaimed 47: (EngineID 128:0:0:9:3:0:2:0:94:16:1)

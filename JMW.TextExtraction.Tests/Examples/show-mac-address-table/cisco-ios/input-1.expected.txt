@@ -1,0 +1,11 @@
+table ruled lines 5-12: Vlan | Mac Address | Type | Ports
+  row 7: All | 0100.0ccc.cccc | STATIC | CPU
+  row 8: All | 0100.0ccc.cccd | STATIC | CPU
+  row 9: 20 | 0200.5e01.000a | DYNAMIC | Gi1/0/3
+  row 10: 20 | 0200.5e01.000b | DYNAMIC | Gi1/0/22
+  row 11: 99 | 0200.5e02.0002 | DYNAMIC | Gi1/0/48
+  row 12: 1 | 0200.5e10.0101 | DYNAMIC | Te1/1/1
+single lines 1-13
+  Total Mac Addresses for this criterion = 6
+unclaimed 1: show mac address-table
+unclaimed 2: Mac Address Table

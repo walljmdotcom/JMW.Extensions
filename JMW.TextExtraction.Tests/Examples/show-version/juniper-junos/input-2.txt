@@ -1,0 +1,16 @@
+show version
+fpc0:
+--------------------------------------------------------------------------
+Hostname: sw1.example.net
+Model: ex4300-48p
+Junos: 21.4R3.15
+JUNOS OS Kernel 64-bit  [20230315.0b3c5d1_builder_stable_12_214]
+JUNOS OS libs [20230315.0b3c5d1_builder_stable_12_214]
+JUNOS OS runtime [20230315.0b3c5d1_builder_stable_12_214]
+JUNOS OS time zone information [20230315.0b3c5d1_builder_stable_12_214]
+JUNOS network stack and utilities [20230412.104617_builder_junos_214_r3]
+JUNOS libs [20230412.104617_builder_junos_214_r3]
+JUNOS OS 32-bit compatibility [20230315.0b3c5d1_builder_stable_12_214]
+JUNOS Packet Forwarding Engine Support (EX Common) [21.4R3.15]
+JUNOS Online Documentation [20230412.104617_builder_junos_214_r3]
+JUNOS Routing Software Suite [20230412.104617_builder_junos_214_r3]

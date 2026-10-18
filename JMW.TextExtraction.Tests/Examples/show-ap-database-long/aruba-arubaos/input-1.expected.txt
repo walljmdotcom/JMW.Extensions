@@ -1,0 +1,42 @@
+table ruled lines 5-9: Name | Group | AP Type | IP Address | Status | Flags | Switch IP | Standby IP | Wired MAC Address | Serial # | Port | FQLN | Outer IP | User
+  row 7: ap-lobby-1 | default | 225 | 192.0.2.21 | Up 12d:4h:3m:1s | i | 192.0.2.115 | 0.0.0.0 | 02:00:5e:50:00:21 | CN0000AA01 |  | N/A | N/A | 
+  row 8: ap-lobby-2 | default | 225 | 192.0.2.22 | Up 12d:4h:2m:9s | i | 192.0.2.115 | 0.0.0.0 | 02:00:5e:50:00:22 | CN0000AA02 |  | N/A | N/A | 
+  row 9: 02:00:5e:50:00:23 | default | 225 | 192.0.2.23 | Down | I | 192.0.2.115 | 0.0.0.0 | 02:00:5e:50:00:23 | CN0000AA03 |  | N/A | N/A | 
+single lines 1-22
+  Flags = 1
+  Field2 = 802.1x authenticated AP use EAP-PEAP
+  Field3 = 1+
+  Field4 = 802.1x use EST
+  Field5 = 1-
+  Field6 = 802.1x use factory cert
+  Field7 = 2
+  Field8 = Using IKE version 2
+  Flags / B = Built-in AP
+  Flags / C = Cellular RAP
+  Flags / D = Dirty or no config
+  Flags / E = Regulatory Domain Mismatch
+  Flags / F = AP failed 802.1x authentication
+  Flags / G = No such group
+  Flags / I = Inactive
+  Flags / J = USB cert at AP
+  Flags / L = Unlicensed
+  Flags / M = Mesh node
+  Flags / N = Duplicate name
+  Flags / P = PPPoe AP
+  Flags / R = Remote AP
+  Flags / R- = Remote AP requires Auth
+  Flags / S = Standby-mode AP
+  Flags / U = Unprovisioned
+  Flags / X = Maintenance Mode
+  Flags / Y = Mesh Recovery
+  Flags / c 2 = CERT-based RAP
+  Flags / e 2 = Custom EST cert
+  Flags / f 2 = No Spectrum FFT support
+  Flags / i 2 = Indoor
+  Flags / o = Outdoor
+  Flags / s 2 = LACP striping
+  Flags / u 2 = Custom-Cert RAP
+  Flags / z = Datazone AP
+  Total APs = 3
+unclaimed 1: show ap database long
+unclaimed 3: AP Database

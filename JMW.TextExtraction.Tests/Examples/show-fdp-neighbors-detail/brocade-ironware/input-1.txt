@@ -1,0 +1,28 @@
+show fdp neighbors detail
+Device ID: access-1.example.net
+Entry address(es):
+  IP address: 192.0.2.2
+Platform: cisco WS-C3560X-24P,  Capabilities: Router, Switch, IGMP
+Interface: ethernet0/1/17,  Port ID (outgoing port): GigabitEthernet0/17
+Holdtime : 141 seconds
+Cisco IOS Software, C3560E Software (C3560E-UNIVERSALK9-M), Version 15.2(4)E9, RELEASE SOFTWARE (fc2)
+Technical Support: http://www.cisco.com/techsupport
+Copyright (c) 1986-2019 by Cisco Systems, Inc.
+Compiled Mon 23-Sep-19 14:40 by prod_rel_team
+Device ID: core-1.example.net(SSI000000AA)
+Entry address(es):
+  IP address: 192.0.2.11
+Platform: N5K-C5548UP,  Capabilities: Switch, IGMP
+Interface: ethernet0/1/45,  Port ID (outgoing port): Ethernet1/8
+Holdtime : 124 seconds
+Cisco Nexus Operating System (NX-OS) Software, Version 7.1(0)N1(1a)
+Device ID: stack-2
+           configured as tag-type8100
+Entry address(es):
+  IP address: 192.0.2.18
+Platform: FCX624SHPOE Switch,  Capabilities: Switch
+Interface: ethernet0/1/47
+Port ID (outgoing port): ethernet1/1/3 is TAGGED in following VLAN(s):
+ 3065
+Holdtime : 173 seconds
+Brocade Communications Systems, Inc. FCX624S-HPOE, IronWare Version 08.0.30dT7f1 Compiled on Nov 03 2015 at 23:22:48 labeled as FCXS08030d

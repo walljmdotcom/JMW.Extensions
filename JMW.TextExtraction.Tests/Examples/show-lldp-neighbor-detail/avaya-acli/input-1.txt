@@ -1,0 +1,131 @@
+show lldp neighbor detail
+
+-------------------------------------------------------------------------------
+
+                            LLDP neighbor
+
+-------------------------------------------------------------------------------
+
+Port: 48    Index: 1                  Time: 0 days, 00:01:19
+
+        ChassisId: MAC address        02:00:5e:78:00:01
+
+        PortId:    Interface name     Fa0/10
+
+        SysName:   access-3.example.net
+
+        SysCap:    rB / B             (Supported/Enabled)
+
+        PortDesc:  FastEthernet0/10
+
+        SysDescr:
+
+Cisco IOS Software, C3560 Software (C3560-IPSERVICESK9-M), Version 15.0(2)SE7,
+
+RELEASE SOFTWARE (fc1)
+
+Technical Support: http://www.cisco.com/techsupport
+
+Copyright (c) 1986-2014 by Cisco Systems, Inc.
+
+Compiled Thu 23-Oct-14 14:13 by prod_rel_team
+
+
+
+ PVID: 110
+
+ PPVID Supported: none
+
+ PPVID Enabled: none
+
+ VLAN Name List: none
+
+
+
+ Dot3-MAC/PHY Auto-neg: supported/enabled       OperMAUtype:  100BaseTXFD
+
+ PMD auto-neg:          10Base(T, TFD), 100Base(TX, TXFD)
+
+
+
+ MED-Capabilities: Unknown / None     (Supported/Current)
+
+ MED-Device type:  Not Defined
+
+-------------------------------------------------------------------------------
+
+Port: 38    Index: 3                  Time: 9 days, 01:07:19
+
+        ChassisId: Network address    IPv4  192.0.2.7
+
+        PortId:    Locally assigned   0200.5E78.0002:P1
+
+        SysName:   SEP02005E780002.
+
+        SysCap:    TB / TB            (Supported/Enabled)
+
+        PortDesc:  SW Port
+
+        SysDescr:  Cisco IP Phone 8945, V3, SIP 9-4-2SR3-1
+
+
+
+ PVID: 0
+
+ PPVID Supported: none
+
+ PPVID Enabled: none
+
+ VLAN Name List: none
+
+
+
+ Dot3-MAC/PHY Auto-neg: supported/enabled       OperMAUtype:  1000BaseTFD
+
+ PMD auto-neg:          10Base(T, TFD), 100Base(TX, TXFD), 1000Base(TFD)
+
+
+
+ MED-Capabilities: CNDI / CNDI        (Supported/Current)
+
+ MED-Device type:  Endpoint Class 3
+
+-------------------------------------------------------------------------------
+
+Port: 12    Index: 4                  Time: 2 days, 11:40:02
+
+        ChassisId: MAC address        02:00:5e:78:00:03
+
+        PortId:    MAC address        02:00:5e:78:00:04
+
+        SysName:   ap-7.example.net
+
+        SysCap:    BW / BW            (Supported/Enabled)
+
+        PortDesc:  eth0
+
+        SysDescr:  ExampleOS AP software 8.10
+
+
+
+ PVID: 20
+
+ PPVID Supported: none
+
+ PPVID Enabled: none
+
+ VLAN Name List: none
+
+
+
+ Dot3-MAC/PHY Auto-neg: supported/enabled       OperMAUtype:  1000BaseTFD
+
+ PMD auto-neg:          10Base(T, TFD), 100Base(TX, TXFD), 1000Base(TFD)
+
+
+
+ MED-Capabilities: Unknown / None     (Supported/Current)
+
+ MED-Device type:  Not Defined
+
+-------------------------------------------------------------------------------

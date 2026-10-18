@@ -1,0 +1,15 @@
+single
+  line "ROM:" => ROM: {ROM} , Version {Version} ( {Field3} ) [ASR9K ROMMON] ,
+  line "xr-1.example.net" => xr-1.example.net uptime is {xr-1.example.net uptime} , {days} days , {hours} hours , {minutes} minutes
+  line "System image file" => System image file is {System image file}
+  line "P4040" => P4040 processor at 1500MHz , Revision {Revision}
+  line "~9 Management Ethernet" => {Management Ethernet} Management Ethernet
+  line "~9 TenGigE" => {TenGigE} TenGigE
+  line "~9 DWDM" => {DWDM controller(s)} DWDM controller(s)
+  line "~9 WANPHY" => {WANPHY controller(s)} WANPHY controller(s)
+  line "~9a bytes of" => 219k bytes of non-volatile configuration memory.
+  line "~9A bytes of hard" => 2868M bytes of hard disk.
+  line "~ bytes of disk0:" => 3915760k bytes of disk0: {3915760k bytes of disk0}
+  line "Configuration" => Configuration register on node 0/RSP0/CPU0 is {Configuration register on node 0/RSP0/CPU0}
+  line "Boot" => Boot device on node 0/RSP0/CPU0 is {Boot device on node 0/RSP0/CPU0}
+  text "Package active on node ~" => Package active on node 0/RSP0/CPU0: {Package active on node 0/RSP0/CPU0}

@@ -1,0 +1,47 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net10.0</TargetFramework>
+    <RootNamespace>JMW.TextExtraction.Tests</RootNamespace>
+    <AssemblyName>JMW.TextExtraction.Tests</AssemblyName>
+    <IsPackable>false</IsPackable>
+    <IsTestProject>true</IsTestProject>
+    <ImplicitUsings>enable</ImplicitUsings>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <None Include="$(RepoRoot).editorconfig"
+      Link=".editorconfig" />
+    <None Update="Samples\*.txt">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="Examples\**\*.txt">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="NUnit"
+      Version="5.0.0" />
+    <PackageReference Include="NUnit.Analyzers"
+      Version="4.15.0"
+      PrivateAssets="all" />
+    <PackageReference Include="NUnit3TestAdapter"
+      Version="6.3.1" />
+    <PackageReference Include="Microsoft.NET.Test.Sdk"
+      Version="18.11.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="$(RepoRoot)JMW.TextExtraction/JMW.TextExtraction.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Using Include="JMW.TextExtraction.Text" />
+    <Using Include="JMW.TextExtraction.Tables" />
+    <Using Include="JMW.TextExtraction.Records" />
+    <Using Include="JMW.TextExtraction.Singles" />
+    <Using Include="NUnit.Framework" />
+  </ItemGroup>
+
+</Project>

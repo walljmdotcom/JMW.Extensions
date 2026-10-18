@@ -1,0 +1,4 @@
+table aligned header: Slot | Config | Oper Status | HW Type | Product Code | Serial Num | HW Rev
+
+single
+  line "Box ID:" => Box ID: {Box ID}

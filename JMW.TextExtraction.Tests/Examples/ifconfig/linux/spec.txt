@@ -1,0 +1,9 @@
+records split by blank, head
+  line "@head" => {Name} flags = {flags} mtu {mtu}
+  line "inet" => inet {inet} netmask {netmask}
+  line "inet6" => inet6 {inet6} prefixlen {prefixlen} scopeid {scopeid}
+  line "ether" => ether {ether} txqueuelen {txqueuelen} ( Ethernet )
+  line "RX" => RX packets {RX packets} bytes {bytes} ( {Field3} )
+  line "RX" => RX errors {RX errors} dropped {dropped} overruns {overruns} frame {frame}
+  line "TX" => TX packets {TX packets} bytes {bytes 2} ( {Field3 2} )
+  line "TX" => TX errors {TX errors} dropped {dropped 2} overruns {overruns 2} carrier {carrier} collisions {collisions}

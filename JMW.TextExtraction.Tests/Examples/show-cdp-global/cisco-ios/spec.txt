@@ -1,0 +1,6 @@
+single
+  line "show" => show cdp global
+  line "Global CDP information: / CDP" => CDP enabled globally
+  line "Global CDP information: / Sending" => Sending CDP packets every {Global CDP information / Sending CDP packets every} seconds
+  line "Global CDP information: / Sending" => Sending a holdtime value of {Global CDP information / Sending a holdtime value of} seconds
+  line "Global CDP information: / Sending" => Sending CDPv2 advertisements is {Global CDP information / Sending CDPv2 advertisements}

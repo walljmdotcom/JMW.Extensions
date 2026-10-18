@@ -1,0 +1,12 @@
+single lines 1-12
+  Static hostname = host1.example.net
+  Static hostname / Icon name = computer-vm
+  Static hostname / Icon name / Chassis = vm
+  Static hostname / Machine ID = 0a1b2c3d4e5f60718293a4b5c6d7e8f9
+  Static hostname / Machine ID / Boot ID = 9f8e7d6c5b4a39281706f5e4d3c2b1a0
+  Static hostname / Virtualization = vmware
+  Operating System = Ubuntu 22.04.4 LTS
+  Operating System / Kernel = Linux 5.15.0-105-generic
+  Operating System / Architecture = x86-64
+  Operating System / Hardware Vendor = VMware, Inc.
+  Operating System / Hardware Vendor / Hardware Model = VMware Virtual Platform

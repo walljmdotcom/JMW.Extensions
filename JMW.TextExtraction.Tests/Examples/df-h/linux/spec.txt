@@ -1,0 +1,1 @@
+table aligned header: Filesystem | Size | Used | Avail | Use% | Mounted on

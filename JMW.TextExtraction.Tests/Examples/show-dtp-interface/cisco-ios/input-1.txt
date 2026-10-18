@@ -1,0 +1,54 @@
+show dtp interface
+DTP information for GigabitEthernet1/0/1:
+  TOS/TAS/TNS:                              ACCESS/OFF/ACCESS
+  TOT/TAT/TNT:                              NATIVE/802.1Q/NATIVE
+  Neighbor address 1:                       000000000000
+  Neighbor address 2:                       000000000000
+  Hello timer expiration (sec/state):       never/STOPPED
+  Access timer expiration (sec/state):      never/STOPPED
+  FSM state:                                S1:OFF
+  Enabled:                                  no
+  In STP:                                   no
+
+  Statistics
+  ----------
+  0 packets received (0 good)
+  0 packets dropped
+  0 packets output (0 good)
+  0 output errors
+
+DTP information for TenGigabitEthernet1/1/1:
+  TOS/TAS/TNS:                              TRUNK/ON/TRUNK
+  TOT/TAT/TNT:                              802.1Q/802.1Q/802.1Q
+  Neighbor address 1:                       02005E104000
+  Neighbor address 2:                       000000000000
+  Hello timer expiration (sec/state):       12/RUNNING
+  Access timer expiration (sec/state):      284/RUNNING
+  FSM state:                                S6:TRUNK
+  Enabled:                                  yes
+  In STP:                                   no
+
+  Statistics
+  ----------
+  4211 packets received (4211 good)
+  0 packets dropped
+  8423 packets output (8423 good)
+  0 output errors
+
+DTP information for GigabitEthernet1/0/2:
+  TOS/TAS/TNS:                              ACCESS/AUTO/ACCESS
+  TOT/TAT/TNT:                              NATIVE/NEGOTIATE/NATIVE
+  Neighbor address 1:                       000000000000
+  Neighbor address 2:                       000000000000
+  Hello timer expiration (sec/state):       5/RUNNING
+  Access timer expiration (sec/state):      never/STOPPED
+  FSM state:                                S2:ACCESS
+  Enabled:                                  yes
+  In STP:                                   no
+
+  Statistics
+  ----------
+  0 packets received (0 good)
+  0 packets dropped
+  6110 packets output (6110 good)
+  0 output errors

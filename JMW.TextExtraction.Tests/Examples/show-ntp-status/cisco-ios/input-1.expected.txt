@@ -1,0 +1,19 @@
+single lines 1-9
+  Clock = synchronized
+  stratum = 3
+  reference = 
+  reference 2 = is 192.0.2.123
+  nominal freq = 250.0000 Hz
+  actual freq = 250.0011 Hz
+  precision = 2**10
+  ntp uptime = 1755286108 (1/100 of seconds)
+  resolution = 4000
+  reference time = E5D0F90F.FC28F878 (16:35:11.985 UTC Mon Mar 7 2022)
+  clock offset = 1.1898 msec
+  root delay = 11.07 msec
+  root dispersion = 87.56 msec
+  peer dispersion = 1.04 msec
+  loopfilter state = 'CTRL' (Normal Controlled Loop)
+  drift = -0.000014869 s/s
+  system poll interval = 1024
+  last update was = 2878

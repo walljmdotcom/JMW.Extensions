@@ -1,0 +1,10 @@
+show ip ssh
+SSH Enabled - version 1.99
+Authentication methods:publickey,keyboard-interactive,password
+Authentication Publickey Algorithms:ssh-rsa
+Hostkey Algorithms:ssh-rsa
+Encryption Algorithms:aes128-ctr,aes256-ctr,aes128-cbc,3des-cbc
+MAC Algorithms:hmac-sha1,hmac-sha1-96
+KEX Algorithms:diffie-hellman-group-exchange-sha1,diffie-hellman-group14-sha1
+Authentication timeout: 120 secs; Authentication retries: 5
+Minimum expected Diffie Hellman key size : 1024 bits

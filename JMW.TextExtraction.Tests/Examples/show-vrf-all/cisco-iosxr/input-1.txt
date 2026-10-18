@@ -1,0 +1,14 @@
+show vrf all
+Wed Dec  7 12:34:28.630 UTC
+VRF                  RD                  RT                         AFI   SAFI
+mgmt                 not set
+blue-vrf             192.0.2.22:65000
+                                         import  192.0.2.255:65000   IPV4  Unicast
+                                         export  192.0.2.255:65000   IPV4  Unicast
+green-vrf            192.0.2.23:65000
+                                         import  198.51.100.255:65000  IPV4  Unicast
+                                         export  198.51.100.255:65000  IPV4  Unicast
+red-vrf              192.0.2.24:65000
+                                         import  203.0.113.255:65000  IPV4  Unicast
+                                         export  203.0.113.255:65000  IPV4  Unicast
+                                         import  203.0.113.254:65001  IPV4  Unicast

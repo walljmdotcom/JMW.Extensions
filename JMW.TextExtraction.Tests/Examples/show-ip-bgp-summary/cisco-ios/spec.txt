@@ -1,0 +1,9 @@
+table aligned header: Neighbor | V | AS | MsgRcvd | MsgSent | TblVer | InQ | OutQ | Up/Down | State/PfxRcd
+
+single
+  line "BGP" => BGP router identifier {BGP router identifier} , local AS number {local AS number}
+  line "BGP table version" => BGP table version is {BGP table version} , main routing table version {main routing table version}
+  line "~9 network entries using" => {network entries using} network entries using {network entries using bytes of memory} bytes of memory
+  line "~9 path entries using" => {path entries using} path entries using {path entries using bytes of memory} bytes of memory
+  line "~9/9 BGP" => {BGP path/bestpath attribute entries using} BGP path/bestpath attribute entries using {BGP path/bestpath attribute entries using bytes of memory} bytes of memory
+  line "~9 BGP" => {BGP} BGP {BGP entries using} entries using {entries using} bytes of memory

@@ -1,0 +1,73 @@
+record lines 2-21
+  Name = Interface GigabitEthernet0/0 ""
+  Status = up
+  line protocol = up
+  Hardware = i82574L rev00
+  BW = 1000 [Mbps]
+  DLY = 10 [usec]
+  Hardware / Input flow control = unsupported
+  Hardware / output flow control = off
+  Hardware / Description = trunk to core-1
+  Hardware / MTU = not set
+  Hardware / packets input = 914846830
+  Hardware / bytes = 493141583957
+  Hardware / no buffer = 0
+  Hardware / input errors = 348
+  Hardware / CRC = 0
+  Hardware / frame = 0
+  Hardware / overrun = 348
+  Hardware / ignored = 0
+  Hardware / abort = 0
+  Hardware / pause input = 0
+  Hardware / resume input = 0
+  Hardware / L2 decode drops = 112124910
+  Hardware / packets output = 808709128
+  Hardware / bytes 2 = 491323804147
+  Hardware / underruns = 0
+  Hardware / pause output = 0
+  Hardware / resume output = 0
+  Hardware / output errors = 0
+  Hardware / collisions = 0
+  Hardware / interface resets = 0
+  Hardware / late collisions = 0
+  Hardware / deferred = 0
+  Hardware / input reset drops = 0
+  Hardware / output reset drops = 0
+  Hardware / input queue (blocks free curr/low) = hardware (510/362)
+  Hardware / output queue (blocks free curr/low) = hardware (488/222)
+record lines 22-30
+  Name = Interface GigabitEthernet0/0.24 "dmz-a"
+  Status = up
+  line protocol = up
+  Hardware = i82574L rev00
+  BW = 1000 [Mbps]
+  DLY = 10 [usec]
+  Hardware / VLAN identifier = 24
+  Hardware / MTU = 1500
+  Hardware / IP address = 198.51.100.101
+  Hardware / subnet mask = 255.255.255.248
+  Traffic Statistics for / packets input = 2553830285
+  Traffic Statistics for / bytes = 1724366493454
+  Traffic Statistics for / packets output = 2594409838
+  Traffic Statistics for / bytes 2 = 1961940857734
+  Traffic Statistics for / packets dropped = 6617544
+record lines 31-39
+  Name = Interface GigabitEthernet0/0.25 "dmz-b"
+  Status = up
+  line protocol = up
+  Hardware = i82574L rev00
+  BW = 1000 [Mbps]
+  DLY = 10 [usec]
+  Hardware / VLAN identifier = 25
+  Hardware / MTU = 1500
+  Hardware / IP address = 198.51.100.109
+  Hardware / subnet mask = 255.255.255.248
+  Traffic Statistics for / packets input = 2480119616
+  Traffic Statistics for / bytes = 1800617412198
+  Traffic Statistics for / packets output = 2527923329
+  Traffic Statistics for / bytes 2 = 1550612964027
+  Traffic Statistics for / packets dropped = 10510422
+unclaimed 1: show interface
+unclaimed 4: Auto-Duplex(Full-duplex), Auto-Speed(1000 Mbps)
+unclaimed 7: Available but not configured via nameif
+unclaimed 11: Received 112180001 broadcasts, 0 runts, 0 giants

@@ -1,0 +1,8 @@
+single lines 1-8
+  Static hostname = pi-4.example.net
+  Static hostname / Icon name = computer
+  Static hostname / Machine ID = 1122334455667788990011aabbccddee
+  Static hostname / Machine ID / Boot ID = aabbccddeeff00112233445566778899
+  Operating System = Raspbian GNU/Linux 11 (bullseye)
+  Operating System / Kernel = Linux 6.1.21-v7+
+  Operating System / Architecture = arm

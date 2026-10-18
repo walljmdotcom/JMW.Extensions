@@ -1,0 +1,10 @@
+table aligned header: JUNOS | OS Kernel 64-bit | [20230315.0b3c5d1_builder_stable_12_214]
+
+single
+  line "show" => show version
+  line "Hostname:" => Hostname: {Hostname}
+  line "Model:" => Model: {Model}
+  line "Family:" => Family: {Family}
+  line "Junos:" => Junos: {Junos}
+  line "cRPD package version :" => cRPD package version : {cRPD package version}
+  line "fpc0:" => fpc0: {fpc0}

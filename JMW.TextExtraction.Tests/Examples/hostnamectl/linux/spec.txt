@@ -1,0 +1,13 @@
+single
+  line "hostnamectl" => hostnamectl
+  line "Static hostname:" => Static hostname: {Static hostname}
+  line "Static hostname: / Icon name:" => Icon name: {Static hostname / Icon name}
+  line "Static hostname: / Icon name: / Chassis:" => Chassis: {Static hostname / Icon name / Chassis}
+  line "Static hostname: / Machine ID:" => Machine ID: {Static hostname / Machine ID}
+  line "Static hostname: / Machine ID: / Boot ID:" => Boot ID: {Static hostname / Machine ID / Boot ID}
+  line "Static hostname: / Virtualization:" => Virtualization: {Static hostname / Virtualization}
+  line "Operating System:" => Operating System: {Operating System}
+  line "Operating System: / Kernel:" => Kernel: {Operating System / Kernel}
+  line "Operating System: / Architecture:" => Architecture: {Operating System / Architecture}
+  line "Operating System: / Hardware Vendor:" => Hardware Vendor: {Operating System / Hardware Vendor}
+  line "Operating System: / Hardware Vendor: / Hardware Model:" => Hardware Model: {Operating System / Hardware Vendor / Hardware Model}

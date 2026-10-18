@@ -1,0 +1,39 @@
+show spanning-tree
+
+VLAN0020
+  Spanning tree enabled protocol rstp
+  Root ID    Priority    24596
+             Address     0200.5e10.4000
+             Cost        2
+             Port        49 (TenGigabitEthernet1/1/1)
+             Hello Time   2 sec  Max Age 20 sec  Forward Delay 15 sec
+
+  Bridge ID  Priority    32788  (priority 32768 sys-id-ext 20)
+             Address     0200.5e10.7700
+             Hello Time   2 sec  Max Age 20 sec  Forward Delay 15 sec
+             Aging Time  300 sec
+
+Interface           Role Sts Cost      Prio.Nbr Type
+------------------- ---- --- --------- -------- --------------------------------
+Gi1/0/3             Desg FWD 4         128.3    P2p Edge
+Gi1/0/22            Desg FWD 4         128.22   P2p Edge
+Te1/1/1             Root FWD 2         128.49   P2p
+
+
+VLAN0099
+  Spanning tree enabled protocol rstp
+  Root ID    Priority    24675
+             Address     0200.5e10.4000
+             Cost        2
+             Port        49 (TenGigabitEthernet1/1/1)
+             Hello Time   2 sec  Max Age 20 sec  Forward Delay 15 sec
+
+  Bridge ID  Priority    32867  (priority 32768 sys-id-ext 99)
+             Address     0200.5e10.7700
+             Hello Time   2 sec  Max Age 20 sec  Forward Delay 15 sec
+             Aging Time  300 sec
+
+Interface           Role Sts Cost      Prio.Nbr Type
+------------------- ---- --- --------- -------- --------------------------------
+Gi1/0/48            Desg FWD 4         128.48   P2p
+Te1/1/1             Root FWD 2         128.49   P2p

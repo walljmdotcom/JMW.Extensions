@@ -1,0 +1,17 @@
+show ip bgp summary
+BGP router identifier 192.0.2.255, local AS number 64500
+BGP table version is 1042, main routing table version 1042
+812 network entries using 201376 bytes of memory
+1203 path entries using 163608 bytes of memory
+184/112 BGP path/bestpath attribute entries using 51520 bytes of memory
+21 BGP AS-PATH entries using 712 bytes of memory
+0 BGP route-map cache entries using 0 bytes of memory
+0 BGP filter-list cache entries using 0 bytes of memory
+BGP using 417216 total bytes of memory
+BGP activity 2211/1399 prefixes, 5120/3917 paths, scan interval 60 secs
+
+Neighbor        V           AS MsgRcvd MsgSent   TblVer  InQ OutQ Up/Down  State/PfxRcd
+192.0.2.11      4        64500  120392  120401     1042    0    0 12w0d          402
+198.51.100.1    4        64501   88213   91022     1042    0    0 9w3d           388
+203.0.113.9     4        64999       0       0        1    0    0 never    Idle
+2001:DB8::9     4        64999   10022    9981     1042    0    0 1d02h           22

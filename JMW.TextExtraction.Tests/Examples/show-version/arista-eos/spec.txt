@@ -1,0 +1,18 @@
+single
+  line "show" => show version
+  line "Arista" => Arista DCS-7050SX-64-F
+  line "Arista" => Arista cEOSLab
+  line "Hardware version:" => Hardware version: {Hardware version}
+  line "Serial number:" => Serial number: {Serial number}
+  line "System MAC address:" => System MAC address: {System MAC address}
+  line "Software image version:" => Software image version: {Software image version}
+  line "Architecture:" => Architecture: {Architecture}
+  line "Internal build version:" => Internal build version: {Internal build version}
+  line "Internal build ID:" => Internal build ID: {Internal build ID}
+  line "Uptime:" => Uptime: {Uptime}
+  line "Total memory:" => Total memory: {Total memory}
+  line "Free memory:" => Free memory: {Free memory}
+  line "Hardware MAC address:" => Hardware MAC address: {Hardware MAC address}
+  line "Image format version:" => Image format version: {Image format version}
+  line "Image optimization:" => Image optimization: {Image optimization}
+  line "Kernel version:" => Kernel version: {Kernel version}

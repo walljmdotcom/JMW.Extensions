@@ -1,0 +1,13 @@
+show mac address-table
+          Mac Address Table
+-------------------------------------------
+
+Vlan    Mac Address       Type        Ports
+----    -----------       --------    -----
+ All    0100.0ccc.cccc    STATIC      CPU
+ All    0100.0ccc.cccd    STATIC      CPU
+  20    0200.5e01.000a    DYNAMIC     Gi1/0/3
+  20    0200.5e01.000b    DYNAMIC     Gi1/0/22
+  99    0200.5e02.0002    DYNAMIC     Gi1/0/48
+   1    0200.5e10.0101    DYNAMIC     Te1/1/1
+Total Mac Addresses for this criterion: 6

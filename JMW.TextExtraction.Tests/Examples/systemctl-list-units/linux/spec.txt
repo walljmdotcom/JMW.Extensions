@@ -1,0 +1,8 @@
+table aligned header: UNIT | LOAD | ACTIVE | SUB | DESCRIPTION
+
+single
+  line "systemctl list-units --type =" => systemctl list-units --type = {systemctl list-units --type}
+  line "LOAD =" => LOAD = {LOAD}
+  line "ACTIVE =" => ACTIVE = {ACTIVE} , i.e. generalization of SUB.
+  line "SUB =" => SUB = {SUB} , values depend on unit type.
+  line "~9 loaded units" => {loaded units listed. Pass --all to see loaded but inactive units} loaded units listed. Pass --all to see loaded but inactive units , too.

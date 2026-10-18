@@ -1,0 +1,48 @@
+single lines 1-59
+  LLDP neighbor-information of port / Neighbor index = 2
+  LLDP neighbor-information of port / Update time = 56 days,11 hours,21 minutes,30 seconds
+  LLDP neighbor-information of port / Chassis type = MAC address
+  LLDP neighbor-information of port / Chassis ID = 0200-5e30-0001
+  LLDP neighbor-information of port / Port ID type = Locally assigned
+  LLDP neighbor-information of port / Port ID = Eth1/1
+  LLDP neighbor-information of port / Port description = uplink-a
+  LLDP neighbor-information of port / System name = core-1.example.net
+  LLDP neighbor-information of port / System description = Cisco Nexus Operating System (NX-OS) Software 7.1(0)N1(1a)
+  TAC support = http://www.cisco.com/tac
+  Copyright / System capabilities supported = Bridge
+  Copyright / System capabilities enabled = Bridge
+  Copyright / Management address type = ipv4
+  Copyright / Management address = 192.0.2.11
+  Copyright / Management address interface type = IfIndex
+  Copyright / Management address interface ID = 83886080
+  Copyright / Management address OID = 0
+  Copyright / Port VLAN ID (PVID) = 1
+  CDP neighbor-information of port / CDP neighbor index = 4
+  CDP neighbor-information of port / Chassis ID = core-1.example.net(SSI000000AA)
+  CDP neighbor-information of port / Address = 192.0.2.11
+  CDP neighbor-information of port / Port ID = Ethernet1/1
+  CDP neighbor-information of port / Software version = Cisco Nexus Operating System (NX-OS) Software
+  CDP neighbor-information of port / Platform = N5K-C5548UP
+  CDP neighbor-information of port / Duplex = Full
+  LLDP neighbor-information of port / Neighbor index = 1
+  LLDP neighbor-information of port / Update time = 0 days,0 hours,5 minutes,5 seconds
+  LLDP neighbor-information of port / Chassis type = MAC address
+  LLDP neighbor-information of port / Chassis ID = 0200-5e30-0002
+  LLDP neighbor-information of port / Port ID type = Interface name
+  LLDP neighbor-information of port / Port ID = Gi1/0/50
+  LLDP neighbor-information of port / Port description = GigabitEthernet1/0/50
+  LLDP neighbor-information of port / System name = access-2.example.net
+  LLDP neighbor-information of port / System description = Cisco IOS Software, C3750 Software (C3750-IPSERVICESK9-M), Version 12.2(55)SE9, RELEASE SOFTWARE (fc1)
+  Technical Support = http://www.cisco.com/techsupport
+  Compiled / System capabilities supported = Bridge,Router
+  Compiled / System capabilities enabled = Bridge
+  Compiled / Management address type = ipv4
+  Compiled / Management address = 192.0.2.13
+  Compiled / Management address interface type = SystemPortNumber
+  Compiled / Management address interface ID = 48
+  Compiled / Management address OID = 0
+  Compiled / Port VLAN ID (PVID) = 1
+unclaimed 1: display lldp neighbor-information
+unclaimed 14: Copyright (c) 2002-2015, Cisco Systems, Inc. All rights reserved.
+unclaimed 48: Copyright (c) 1986-2014 by Cisco Systems, Inc.
+unclaimed 49: Compiled Mon 03-Mar-14 22:45 by prod_rel_team

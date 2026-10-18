@@ -1,0 +1,58 @@
+dmidecode -t system -t memory
+# dmidecode 3.3
+Getting SMBIOS data from sysfs.
+SMBIOS 2.8 present.
+
+Handle 0x0001, DMI type 1, 27 bytes
+System Information
+	Manufacturer: Example Systems
+	Product Name: XS-2200
+	Version: Not Specified
+	Serial Number: AA0000000001
+	UUID: 4c4c4544-0042-3010-8031-c2c04f000001
+	Wake-up Type: Power Switch
+	SKU Number: SKU-0001
+	Family: Rack Server
+
+Handle 0x1000, DMI type 16, 23 bytes
+Physical Memory Array
+	Location: System Board Or Motherboard
+	Use: System Memory
+	Error Correction Type: Multi-bit ECC
+	Maximum Capacity: 1536 GB
+	Error Information Handle: Not Provided
+	Number Of Devices: 24
+
+Handle 0x1100, DMI type 17, 40 bytes
+Memory Device
+	Array Handle: 0x1000
+	Error Information Handle: Not Provided
+	Total Width: 72 bits
+	Data Width: 64 bits
+	Size: 32 GB
+	Form Factor: DIMM
+	Locator: A1
+	Type: DDR4
+	Speed: 2933 MT/s
+	Manufacturer: 00AD00B300AD
+	Serial Number: AB000001
+	Part Number: HMA84GR7CJR4N-WM
+
+Handle 0x1101, DMI type 17, 40 bytes
+Memory Device
+	Array Handle: 0x1000
+	Error Information Handle: Not Provided
+	Total Width: 72 bits
+	Data Width: 64 bits
+	Size: No Module Installed
+	Form Factor: DIMM
+	Locator: A2
+	Type: Unknown
+	Speed: Unknown
+	Manufacturer: Not Specified
+	Serial Number: Not Specified
+	Part Number: Not Specified
+
+Handle 0x0C00, DMI type 32, 20 bytes
+System Boot Information
+	Status: No errors detected

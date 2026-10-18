@@ -1,6 +1,6 @@
 # JMW.Extensions
 
-Helper libraries for C#. Every package targets .NET Standard 2.0 and has no dependencies outside this repository, so they run on .NET Framework 4.6.1+ and every modern .NET.
+Helper libraries for C#. Every package has no dependencies outside this repository. All but `JMW.TextExtraction` target .NET Standard 2.0, so they run on .NET Framework 4.6.1+ and every modern .NET; `JMW.TextExtraction` targets .NET 10.
 
 | Package | What it holds |
 |---|---|
@@ -8,10 +8,11 @@ Helper libraries for C#. Every package targets .NET Standard 2.0 and has no depe
 | `JMW.Parsing` | A small instruction language for pulling properties, paragraphs, and tables out of semi-structured text. See [JMW.Parsing/spec.md](JMW.Parsing/spec.md). |
 | `JMW.Networking` | Parsers for Junos configuration, `netstat`, and `ifconfig` output, plus a firewall rules engine. |
 | `JMW.Templates` | A tag-based text templating engine with tables, joins, lookups, and a JavaScript-subset expression language. See [JMW.Templates/documentation.md](JMW.Templates/documentation.md). |
+| `JMW.TextExtraction` | Infers the layout of command output (tables, repeated records, one-off documents) from samples, writes it as an editable spec, and reads text with it. Targets `net10.0`. See [JMW.TextExtraction/README.md](JMW.TextExtraction/README.md). |
 
 ## Building
 
-The .NET 10 SDK is required (see `global.json`). The libraries build for `netstandard2.0`, and the tests run on `net10.0`.
+The .NET 10 SDK is required (see `global.json`). The libraries build for `netstandard2.0`, except `JMW.TextExtraction`, which builds for `net10.0`, and the tests run on `net10.0`.
 
 ```
 dotnet build
@@ -22,7 +23,7 @@ APIs that `netstandard2.0` lacks are supplied by internal polyfills in `Polyfill
 
 ## Releasing
 
-Push a tag named `v<version>`, for example `v2.0.0`. The NuGet workflow builds, tests, and publishes all four packages at that version.
+Push a tag named `v<version>`, for example `v2.0.0`. The NuGet workflow builds, tests, and publishes every packable project at that version. Only `JMW.Extensions` is packable for now; the other packages set `IsPackable` to `false` and are held back.
 
 ## Contributing
 

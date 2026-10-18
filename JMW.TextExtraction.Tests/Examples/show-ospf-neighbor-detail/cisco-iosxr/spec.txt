@@ -1,0 +1,17 @@
+records split by blank, head
+  line "@head" => Neighbor {Neighbor} , interface address {interface address}
+  line "In" => In the area {In the area} via interface GigabitEthernet0/0/0/0
+  line "Neighbor priority" => Neighbor priority is {Neighbor priority} , State is {State} , {state changes} state changes
+  line "DR" => DR is {DR} BDR is {BDR}
+  line "Options" => Options is {Options}
+  line "LLS Options" => LLS Options is {LLS Options}
+  line "Dead" => Dead timer due in {Dead timer due in}
+  line "Neighbor" => Neighbor is {Neighbor 2}
+  line "Number" => Number of DBD retrans during last exchange {Number of DBD retrans during last exchange}
+  line "Index" => Index {Index} , retransmission queue length {retransmission queue length} , number of retransmission {number of retransmission}
+  line "First" => First 0(0)/0(0) Next 0(0)/0(0)
+  line "Last retransmission scan length" => Last retransmission scan length is {Last retransmission scan length} , maximum is {maximum}
+  line "Last retransmission scan time" => Last retransmission scan time is {Last retransmission scan time} , maximum is {maximum 2}
+
+single
+  line "Total neighbor count:" => Total neighbor count: {Total neighbor count}

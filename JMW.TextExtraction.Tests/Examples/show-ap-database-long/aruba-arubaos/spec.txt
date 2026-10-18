@@ -1,0 +1,14 @@
+table ruled header: Name | Group | AP Type | IP Address | Status | Flags | Switch IP | Standby IP | Wired MAC Address | Serial # | Port | FQLN | Outer IP | User
+
+single
+  line "Flags: ~ = ~ = ~ = ~ =" => Flags: {Flags} = {Field2} ; {Field3} = {Field4} ; {Field5} = {Field6} ; {Field7} = {Field8}
+  line "Flags: ~ = ~ = ~ = ~ = / B = C = D =" => B = {Flags / B} ; C = {Flags / C} ; D = {Flags / D}
+  line "Flags: ~ = ~ = ~ = ~ = / E = F =" => E = {Flags / E} ; F = {Flags / F}
+  line "Flags: ~ = ~ = ~ = ~ = / G = I = J = L =" => G = {Flags / G} ; I = {Flags / I} ; J = {Flags / J} ; L = {Flags / L}
+  line "Flags: ~ = ~ = ~ = ~ = / M =" => M = {Flags / M}
+  line "Flags: ~ = ~ = ~ = ~ = / N = P = R = R- =" => N = {Flags / N} ; P = {Flags / P} ; R = {Flags / R} ; R- = {Flags / R-}
+  line "Flags: ~ = ~ = ~ = ~ = / S = U = X =" => S = {Flags / S} ; U = {Flags / U} ; X = {Flags / X}
+  line "Flags: ~ = ~ = ~ = ~ = / Y =" => Y = {Flags / Y}
+  line "Flags: ~ = ~ = ~ = ~ = / c = e = f =" => c = {Flags / c 2} ; e = {Flags / e 2} ; f = {Flags / f 2}
+  line "Flags: ~ = ~ = ~ = ~ = / i = o = s = u = z =" => i = {Flags / i 2} ; o = {Flags / o} ; s = {Flags / s 2} ; u = {Flags / u 2} ; z = {Flags / z}
+  line "Total APs:" => Total APs: {Total APs}

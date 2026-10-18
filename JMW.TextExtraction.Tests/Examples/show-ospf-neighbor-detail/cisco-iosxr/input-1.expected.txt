@@ -1,0 +1,68 @@
+record lines 7-19
+  Neighbor = 192.0.2.11
+  interface address = 198.51.100.11
+  In the area = 0
+  Neighbor priority = 1
+  State = FULL
+  state changes = 6
+  DR = 198.51.100.20
+  BDR = 198.51.100.19
+  Options = 0x52
+  LLS Options = 0x1 (LR)
+  Dead timer due in = 00:00:35
+  Neighbor 2 = up for 2d03h
+  Number of DBD retrans during last exchange = 0
+  Index = 1/1
+  retransmission queue length = 0
+  number of retransmission = 2
+  Last retransmission scan length = 1
+  maximum = 1
+  Last retransmission scan time = 0 msec
+  maximum 2 = 0 msec
+record lines 21-33
+  Neighbor = 192.0.2.12
+  interface address = 198.51.100.12
+  In the area = 0
+  Neighbor priority = 1
+  State = 2WAY
+  state changes = 4
+  DR = 198.51.100.20
+  BDR = 198.51.100.19
+  Options = 0x52
+  LLS Options = 0x1 (LR)
+  Dead timer due in = 00:00:31
+  Neighbor 2 = up for 2d03h
+  Number of DBD retrans during last exchange = 0
+  Index = 0/0
+  retransmission queue length = 0
+  number of retransmission = 0
+  Last retransmission scan length = 0
+  maximum = 0
+  Last retransmission scan time = 0 msec
+  maximum 2 = 0 msec
+record lines 35-47
+  Neighbor = 192.0.2.20
+  interface address = 198.51.100.20
+  In the area = 0
+  Neighbor priority = 100
+  State = FULL
+  state changes = 6
+  DR = 198.51.100.20
+  BDR = 198.51.100.19
+  Options = 0x52
+  LLS Options = 0x1 (LR)
+  Dead timer due in = 00:00:38
+  Neighbor 2 = up for 5w1d
+  Number of DBD retrans during last exchange = 0
+  Index = 2/2
+  retransmission queue length = 0
+  number of retransmission = 7
+  Last retransmission scan length = 1
+  maximum = 2
+  Last retransmission scan time = 0 msec
+  maximum 2 = 1 msec
+single lines 1-50
+  Total neighbor count = 3
+unclaimed 1: show ospf neighbor detail
+unclaimed 3: * Indicates MADJ interface
+unclaimed 5: Neighbors for OSPF 100

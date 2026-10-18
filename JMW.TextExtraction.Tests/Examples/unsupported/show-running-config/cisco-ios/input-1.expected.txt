@@ -1,0 +1,34 @@
+single lines 1-34
+  Current configuration = 2211 bytes
+unclaimed 1: show running-config
+unclaimed 2: Building configuration...
+unclaimed 5: !
+unclaimed 6: version 15.2
+unclaimed 7: service timestamps debug datetime msec
+unclaimed 8: service timestamps log datetime msec
+unclaimed 9: !
+unclaimed 10: hostname access-sw9
+unclaimed 11: !
+unclaimed 12: vlan 20
+unclaimed 13: name users-floor2
+unclaimed 14: !
+unclaimed 15: vlan 99
+unclaimed 16: name management
+unclaimed 17: !
+unclaimed 18: interface GigabitEthernet1/0/1
+unclaimed 19: description uplink to core-rtr1
+unclaimed 20: switchport mode trunk
+unclaimed 21: !
+unclaimed 22: interface GigabitEthernet1/0/2
+unclaimed 23: description printer
+unclaimed 24: switchport access vlan 20
+unclaimed 25: switchport mode access
+unclaimed 26: spanning-tree portfast
+unclaimed 27: !
+unclaimed 28: interface Vlan99
+unclaimed 29: ip address 198.51.100.2 255.255.255.0
+unclaimed 30: !
+unclaimed 31: ip default-gateway 198.51.100.1
+unclaimed 32: ntp server 192.0.2.123
+unclaimed 33: !
+unclaimed 34: end

@@ -1,0 +1,15 @@
+table aligned lines 2-9: UNIT | LOAD | ACTIVE | SUB | DESCRIPTION
+  row 3: chronyd.service | loaded | active | running | NTP client/server
+  row 4: cron.service | loaded | active | running | Regular background program processing daemon
+  row 5: dbus.service | loaded | active | running | D-Bus System Message Bus
+  row 6: ● nfs-server.service | loaded | failed | failed | NFS server and services
+  row 7: rsyslog.service | loaded | active | running | System Logging Service
+  row 8: ssh.service | loaded | active | running | OpenBSD Secure Shell server
+  row 9: systemd-journald.service | loaded | active | running | Journal Service
+single lines 1-15
+  systemctl list-units --type = service --no-pager
+  LOAD = Reflects whether the unit definition was properly loaded.
+  ACTIVE = The high-level unit activation state
+  SUB = The low-level unit activation state
+  loaded units listed. Pass --all to see loaded but inactive units = 7
+unclaimed 15: To show all installed unit files use 'systemctl list-unit-files'.

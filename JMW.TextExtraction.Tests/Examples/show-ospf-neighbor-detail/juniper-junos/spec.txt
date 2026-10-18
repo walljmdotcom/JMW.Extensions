@@ -1,0 +1,8 @@
+table aligned headerless: 4
+table aligned header: Address | Interface | State | ID | Pri | Dead
+
+records split by indent
+  line "Instance:" => Instance: {Instance}
+  line "Area" => Area {Area} , opt {opt} , DR {DR} , BDR {BDR}
+  line "Up" => Up {Up} , adjacent {adjacent}
+  line "~9.9.9.9" => {ge-0/0/2.0 Full} ge-0/0/2.0 Full {ge-0/0/2.0 Full 2}

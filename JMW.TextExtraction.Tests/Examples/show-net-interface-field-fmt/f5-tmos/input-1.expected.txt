@@ -1,0 +1,34 @@
+record lines 2-17
+  net interface = 1.1
+  counters.bits-out = 3.4K
+  counters.collisions = 0
+  counters.drops-in = 0
+  counters.errors-in = 0
+  counters.pkts-in = 31
+  counters.pkts-out = 5
+  mtu = 9198
+  name = 1.1
+record lines 19-34
+  net interface = 1.2
+  counters.bits-out = 0
+  counters.collisions = 0
+  counters.drops-in = 0
+  counters.errors-in = 0
+  counters.pkts-in = 32
+  counters.pkts-out = 0
+  mtu = 9198
+  name = 1.2
+record lines 36-51
+  net interface = mgmt
+  counters.bits-out = 2.1G
+  counters.collisions = 0
+  counters.drops-in = 1204
+  counters.errors-in = 0
+  counters.pkts-in = 1.4M
+  counters.pkts-out = 900.2K
+  mtu = 1500
+  name = mgmt
+unclaimed 1: admin@(lb-1)(cfg-sync Standalone)(Active)(/Common)(tmos)# show net interface field-fmt all-properties
+unclaimed 18: }
+unclaimed 35: }
+unclaimed 52: }

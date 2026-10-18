@@ -1,0 +1,20 @@
+show sysinfo
+
+System Description............................. M4100-D12G ProSafe 12-port Gigabit L2+ Intelligent Edge Desktop Managed Switch, 10.0.2.20, B1.0.1.1
+System Name.................................... sw-12.example.net
+System Location................................ lab rack 4
+System Contact................................. noc@example.net
+System Object ID............................... 1.3.6.1.4.1.4526.100.11.22
+System Up Time................................. 18 days 10 hrs 38 mins 23 secs
+Current SNTP Synchronized Time................. SNTP Last Attempt Status Is Not Successful
+
+MIBs Supported:
+
+RFC 1907 - SNMPv2-MIB              The MIB module for SNMPv2 entities
+RFC 2819 - RMON-MIB                Remote Network Monitoring Management
+                                   Information Base
+HC-RMON-MIB                        The original version of this MIB, published
+                                   as RFC3273.
+HCNUM-TC                           A MIB module containing textual conventions
+                                   for high capacity data types.
+Broadcom-REF-MIB                   Broadcom Reference

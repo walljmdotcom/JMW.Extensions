@@ -1,0 +1,4 @@
+table aligned header: Device ID | Local Intf | Hold-time | Capability | Port ID
+
+single
+  line "Total entries displayed:" => Total entries displayed: {Total entries displayed}

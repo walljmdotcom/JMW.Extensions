@@ -1,0 +1,24 @@
+show interfaces
+Physical interface: lsi, UP, Physical link is UNKNOWN
+  Link-level type: ether, MTU: 65535
+  Interface index: 9
+  Current address: 02:00:5e:00:01:10
+Physical interface: eth4, UP, Physical link is UP
+  Link-level type: ether, MTU: 9500
+  Interface index: 766
+  Current address: 02:00:5e:00:01:06
+  Logical interface eth4.0 (Index 766)
+    Protocol inet
+        Local: 192.0.2.44/31
+Physical interface: ip6tnl0, UP, Physical link is UP
+  Link-level type: tunnel6, MTU: 1452
+  Interface index: 6
+Physical interface: eth2, DOWN, Physical link is DOWN
+  Link-level type: ether, MTU: 9500
+  Interface index: 769
+  Current address: 02:00:5e:00:01:18
+  Logical interface eth2.0 (Index 769)
+    Protocol inet
+        Local: 192.0.2.36/31
+    Protocol inet6
+        Local: 2001:db8:0:36::1/64

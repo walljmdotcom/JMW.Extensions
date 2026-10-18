@@ -1,0 +1,11 @@
+single
+  line "show" => show ip ssh
+  line "SSH" => SSH Enabled - version {SSH Enabled version}
+  line "Authentication methods:" => Authentication methods: {Authentication methods}
+  line "Authentication Publickey Algorithms:" => Authentication Publickey Algorithms: {Authentication Publickey Algorithms}
+  line "Hostkey Algorithms:" => Hostkey Algorithms: {Hostkey Algorithms}
+  line "Encryption Algorithms:" => Encryption Algorithms: {Encryption Algorithms}
+  line "MAC Algorithms:" => MAC Algorithms: {MAC Algorithms}
+  line "KEX Algorithms:" => KEX Algorithms: {KEX Algorithms}
+  line "Authentication timeout: Authentication retries:" => Authentication timeout: {Authentication timeout} ; Authentication retries: {Authentication retries}
+  line "Minimum" => Minimum expected Diffie Hellman key size : {Minimum expected Diffie Hellman key size}

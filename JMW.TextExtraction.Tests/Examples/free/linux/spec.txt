@@ -1,0 +1,5 @@
+table aligned header: Column1 | total | used | free | shared | buff/cache | available
+
+single
+  line "free" => free -m
+  line "free" => free -b

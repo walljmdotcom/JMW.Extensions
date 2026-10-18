@@ -1,0 +1,29 @@
+record lines 3-4
+  Name = Vlan20
+  Tx = disabled
+record lines 5-7
+  Name = Rx: disabled
+  Tx state = INIT
+  Rx state = INIT
+record lines 9-10
+  Name = GigabitEthernet1/0/1
+  Tx = enabled
+record lines 11-13
+  Name = Rx: enabled
+  Tx state = IDLE
+  Rx state = WAIT FOR FRAME
+record lines 15-16
+  Name = GigabitEthernet1/0/2
+  Tx = enabled
+record lines 17-19
+  Name = Rx: enabled
+  Tx state = INIT
+  Rx state = WAIT PORT OPER
+record lines 21-22
+  Name = TenGigabitEthernet1/1/1
+  Tx = enabled
+record lines 23-25
+  Name = Rx: enabled
+  Tx state = IDLE
+  Rx state = WAIT FOR FRAME
+unclaimed 1: show lldp interface

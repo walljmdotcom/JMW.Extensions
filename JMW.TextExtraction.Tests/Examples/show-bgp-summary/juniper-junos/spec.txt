@@ -1,0 +1,7 @@
+table aligned header: Peer | AS | InPkt | OutPkt | OutQ | Flaps | Last Up/Dwn | State #Active/Received/Accepted/Damped...
+table aligned header: Table | Tot Paths | Act Paths | Suppressed | History | Damp State | Pending
+
+single
+  line "Threading mode:" => Threading mode: {Threading mode}
+  line "Default eBGP mode:" => Default eBGP mode: {Default eBGP mode} , receive - accept
+  line "Groups: ~ Peers: ~ Down peers:" => Groups: {Groups} Peers: {Peers} peers: {peers 2}

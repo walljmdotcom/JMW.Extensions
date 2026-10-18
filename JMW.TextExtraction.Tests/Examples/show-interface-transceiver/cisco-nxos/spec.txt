@@ -1,0 +1,13 @@
+records split by indent, head
+  line "@head" => {Name}
+  line "transceiver" => transceiver is {transceiver}
+  line "type" => type is {type}
+  line "name" => name is {name 2}
+  line "part number" => part number is {part number}
+  line "revision" => revision is {revision}
+  line "serial number" => serial number is {serial number}
+  line "nominal bitrate" => nominal bitrate is {nominal bitrate}
+  line "Link" => Link length supported for {Link length supported for} fiber is {fiber}
+  line "cisco id" => cisco id is {cisco id}
+  line "cisco extended id number" => cisco extended id number is {cisco extended id number}
+  line "Link length supported for copper" => Link length supported for copper is {Link length supported for copper}

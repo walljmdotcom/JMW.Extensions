@@ -1,0 +1,7 @@
+single
+  line "Standard / ~9 permit" => {Standard / permit} permit {Standard / permit 2} ( {Standard / matches} matches )
+  line "Standard / ~9 deny any log" => {Standard / deny any log} deny any log ( {Standard / matches 2} matches )
+  line "Extended / ~9 permit tcp any host" => {Extended / permit tcp any host} permit tcp any host {Extended / permit tcp any host eq} eq {Extended / eq} ( {Extended / matches} matches )
+  line "Extended / ~9 deny ip any any" => {Extended / deny ip any any log} deny ip any any log ( {Extended / matches 2} matches )
+  line "Extended / ~9 permit udp any any" => {Extended / permit udp any any} permit udp any any {Extended / permit udp any any 2}
+  line "Extended / ~9 permit tcp any any" => {Extended / permit tcp any any eq} permit tcp any any eq {Extended / permit tcp any any eq 2}

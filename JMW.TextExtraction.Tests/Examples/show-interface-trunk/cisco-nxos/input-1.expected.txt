@@ -1,0 +1,27 @@
+table aligned lines 4-11: Port | Native Vlan | Status | Port Channel
+  row 7: Eth1/1 | 1001 | trnk-bndl | Po100
+  row 8: Eth1/3 | 1 | trunking | --
+  row 9: Eth1/4 | 1 | trunking | --
+  row 10: Eth1/5 | 1001 | trunking | --
+  row 11: Po100 | 1001 | trunking | --
+table aligned lines 14-20: Port | Vlans Allowed on Trunk
+  row 16: Eth1/1 | 2-999,1002-4094
+  row 17: Eth1/3 | 1-4094
+  row 18: Eth1/4 | 2-999,1002-4094
+  row 19: Eth1/5 | 1-2,60-77,1001,2050-2051,3554
+  row 20: Po100 | 2-999,1002-4094
+table aligned lines 23-29: Port | Vlans Err-disabled on Trunk
+  row 25: Eth1/1 | none
+  row 26: Eth1/3 | none
+  row 27: Eth1/4 | none
+  row 28: Eth1/5 | none
+  row 29: Po100 | none
+table aligned lines 32-38: Port | STP Forwarding
+  row 34: Eth1/1 | none
+  row 35: Eth1/3 | 1-3,12,24-25,29,60-77,80,85,100-101
+  row 36: Eth1/4 | 2-3,12,24-25,29,60-77,80,85,100-101
+  row 37: Eth1/5 | 1-2,60-77,1001,2050-2051,3554
+  row 38: Po100 | 2-3,12,24-25,29,60-77,80,85,100-101
+unclaimed 1: show interface trunk
+unclaimed 41: Port          Vlans in spanning tree forwarding state and not pruned
+unclaimed 45: Port          Vlans Forwarding on FabricPath

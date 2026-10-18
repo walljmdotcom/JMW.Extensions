@@ -1,0 +1,9 @@
+table words header: Neighbor | Spk | AS | MsgRcvd | MsgSent | TblVer | InQ | OutQ | Up/Down | St/PfxRcd
+table aligned header: Process | RcvTblVer | bRIB/RIB | LabelVer | ImportVer | SendTblVer | StandbyVer
+
+single
+  line "BGP" => BGP router identifier {BGP router identifier} , local AS number {local AS number}
+  line "BGP" => BGP is {BGP}
+  line "Non-stop" => Non-stop routing is {Non-stop routing}
+  line "BGP table state:" => BGP table state: {BGP table state}
+  line "Table ID: ~ RD version:" => Table ID: {Table ID} RD version: {RD version}

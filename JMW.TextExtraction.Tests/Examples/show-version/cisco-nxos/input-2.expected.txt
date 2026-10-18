@@ -1,0 +1,32 @@
+single lines 1-40
+  TAC support = http://www.cisco.com/tac
+  Field1 = 2002-2021
+  The copyrights to certain works contained = in this software
+  Field2 = 
+  A copy of each such license = available at
+  Software / BIOS = version 05.44
+  Software / NXOS = version 9.3(8)
+  Software / NXOS / BIOS compile time = 04/02/2021
+  Software / NXOS / NXOS image file = bootflash:///nxos.9.3.8.bin
+  Software / NXOS / NXOS compile time = 8/4/2021 13:00:00 [08/04/2021 22:25:26]
+  Hardware / CPU = D-1528
+  Hardware / with = 1.90GHz
+  Hardware / with kB of memory. = 24569352
+  Hardware / Processor Board ID = FDO0000B2CD
+  Hardware / Device name = nx-2.example.net
+  Hardware / bootflash = 115805708 kB
+  Kernel uptime = 10 day(s)
+  hour(s) = 23
+  minute(s) = 9
+  second(s) = 9
+  Last / Reason = Module PowerCycled
+  Last / System version = 
+  Last / Service = HW check by card-client
+  Active Package(s) = 
+unclaimed 5: All rights reserved.
+unclaimed 7: owned by other third parties and used and distributed under their own
+unclaimed 8: licenses, such as open source.  This software is provided "as is," and unless
+unclaimed 9: otherwise stated, there is no warranty, express or implied, including but not
+unclaimed 10: limited to warranties of merchantability and fitness for a particular purpose.
+unclaimed 12: http://www.opensource.org/licenses/gpl-2.0.php and
+unclaimed 13: http://www.opensource.org/licenses/lgpl-2.1.php

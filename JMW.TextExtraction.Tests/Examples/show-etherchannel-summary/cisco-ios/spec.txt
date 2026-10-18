@@ -1,0 +1,6 @@
+table ruled header: Group | Port-channel | Protocol | Ports
+
+single
+  line "Flags:" => Flags: {Flags}
+  line "Number of channel-groups in use:" => Number of channel-groups in use: {Number of channel-groups in use}
+  line "Number of aggregators:" => Number of aggregators: {Number of aggregators}

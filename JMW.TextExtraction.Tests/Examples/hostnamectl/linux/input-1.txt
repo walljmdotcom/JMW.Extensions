@@ -1,0 +1,12 @@
+hostnamectl
+   Static hostname: host1.example.net
+         Icon name: computer-vm
+           Chassis: vm
+        Machine ID: 0a1b2c3d4e5f60718293a4b5c6d7e8f9
+           Boot ID: 9f8e7d6c5b4a39281706f5e4d3c2b1a0
+    Virtualization: vmware
+  Operating System: Ubuntu 22.04.4 LTS
+            Kernel: Linux 5.15.0-105-generic
+      Architecture: x86-64
+   Hardware Vendor: VMware, Inc.
+    Hardware Model: VMware Virtual Platform

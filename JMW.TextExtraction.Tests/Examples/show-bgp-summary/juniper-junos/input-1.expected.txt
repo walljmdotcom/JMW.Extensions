@@ -1,0 +1,17 @@
+table aligned lines 5-9: Table | Tot Paths | Act Paths | Suppressed | History | Damp State | Pending
+  row 6-7: inet.0 | 79 | 39 | 0 | 0 | 0 | 0
+  row 8-9: inet6.0 | 6 | 3 | 0 | 0 | 0 | 0
+table aligned lines 10-16: Peer | AS | InPkt | OutPkt | OutQ | Flaps | Last Up/Dwn | State #Active/Received/Accepted/Damped...
+  row 11: 192.0.2.52 | 65002 | 14572 | 14556 | 0 | 0 | 4d 13:39:15 | Establ
+  row 12: inet.0: 11/40/37/0 |  |  |  |  |  |  | 
+  row 13: 198.51.100.45 | 65001 | 14372 | 14493 | 0 | 2 | 4d 13:27:20 | Establ
+  row 14: inet.0: 26/37/37/0 |  |  |  |  |  |  | 
+  row 15: inet6.0: 3/6/6/0 |  |  |  |  |  |  | 
+  row 16: 203.0.113.59 | 65003 | 0 | 0 | 0 | 5 | 1:02:41 | Active
+single lines 1-4
+  Threading mode = BGP I/O
+  Default eBGP mode = advertise - accept
+  Groups = 2
+  Peers = 3 Down
+  peers 2 = 1
+unclaimed 1: show bgp summary

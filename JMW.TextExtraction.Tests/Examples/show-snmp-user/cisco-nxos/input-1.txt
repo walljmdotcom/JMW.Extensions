@@ -1,0 +1,23 @@
+show snmp user
+______________________________________________________________
+                  SNMP USERS
+______________________________________________________________
+
+User                Auth      Priv(enforce) Groups              acl_filter
+____                ____      _____________ ______              __________
+admin               md5       des(no)       network-admin
+monitor             sha       aes-128(no)   network-operator
+poller-v3           sha       aes-128(yes)  poller-group        ipv4:snmp-acl
+______________________________________________________________
+ NOTIFICATION TARGET USERS (configured  for sending V3 Inform)
+______________________________________________________________
+
+User                          Auth  Priv
+____                          ____  ____
+trapper                       md5   des
+(EngineID )
+128:0:0:9:3:2:0:94:0:1:2
+
+informer                      sha   aes-128
+(EngineID )
+128:0:0:9:3:2:0:94:0:1:3

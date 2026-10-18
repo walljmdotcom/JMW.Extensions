@@ -1,0 +1,14 @@
+table ruled lines 6-10: User | Auth | Priv(enforce) | Groups | acl_filter
+  row 8: admin | md5 | des(no) | network-admin | 
+  row 9: monitor | sha | aes-128(no) | network-operator | 
+  row 10: poller-v3 | sha | aes-128(yes) | poller-group | ipv4:snmp-acl
+table ruled lines 15-19: User | Auth | Priv
+  row 17: trapper | md5 | des
+  row 18: EngineID |  | 
+  row 19: 128:0:0:9:3:2:0:94:0:1:2 |  | 
+table aligned lines 21-23: informer | sha | aes-128
+  row 22: EngineID |  | 
+  row 23: 128:0:0:9:3:2:0:94:0:1:3 |  | 
+unclaimed 1: show snmp user
+unclaimed 3: SNMP USERS
+unclaimed 12: NOTIFICATION TARGET USERS (configured  for sending V3 Inform)

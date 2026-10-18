@@ -1,0 +1,6 @@
+show lldp neighbors
+Local Interface    Parent Interface    Chassis Id          Port info          System Name
+ge-0/0/0           -                   02:00:5e:90:00:01   ge-0/0/47          access-9.example.net
+ge-0/0/1           ae0                 02:00:5e:90:00:02   Ethernet1/49       nx-2
+ge-0/0/2           ae0                 02:00:5e:90:00:02   Ethernet1/50       nx-2
+xe-0/2/0           -                   02:00:5e:90:00:03   xe-0/0/0           core-1.example.net

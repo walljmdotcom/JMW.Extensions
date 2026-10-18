@@ -1,0 +1,9 @@
+          Mac Address Table
+-------------------------------------------
+
+Vlan    Mac Address       Type        Ports
+----    -----------       --------    -----
+ 100    0011.2233.4455    DYNAMIC     Gi1/0/1
+ 100    0011.2233.4466    DYNAMIC     Gi1/0/2
+  20    00aa.bbcc.ddee    STATIC      Gi1/0/3
+Total Mac Addresses for this criterion: 3

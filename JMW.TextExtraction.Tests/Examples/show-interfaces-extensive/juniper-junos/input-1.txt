@@ -1,0 +1,120 @@
+show interfaces extensive | no-more
+Physical interface: ge-0/0/1, Enabled, Physical link is Up
+  Interface index: 9, SNMP ifIndex: 23, Generation: 131
+  Description: uplink to core-1
+  Type: Ethernet, Link-level type: Ethernet, MTU: 4484, Clocking: Unspecified,
+  Speed: 1000mbps
+  Device flags   : Present Running
+  Interface flags: SNMP-Traps
+  Link type      : Full-Duplex
+  Physical info  : Unspecified
+  Hold-times     : Up 0 ms, Down 0 ms
+  Current address: 02:00:5e:00:0a:af, Hardware address: 02:00:5e:00:0a:af
+  Alternate link address: Unspecified
+  Last flapped   : 2023-01-15 03:25:50 UTC (12w4d 09:30 ago)
+  Statistics last cleared: Never
+  Traffic statistics:
+   Input  bytes  :          56508979704
+   Output bytes  :          16984802450
+   Input  packets:            578981799
+   Output packets:            165544433
+   IPv6 transit statistics:
+    Input  bytes  :                   0
+    Output bytes  :                   0
+    Input  packets:                   0
+    Output packets:                   0
+  Input errors:
+    Errors: 0, Drops: 0, Framing errors: 0, Runts: 0, Giants: 0,
+    Policed discards: 0, Resource errors: 0
+  Output errors:
+    Carrier transitions: 1, Errors: 0, Drops: 0, MTU errors: 0,
+    Resource errors: 0
+
+  Logical interface ge-0/0/1.0 (Index 66) (SNMP ifIndex 24) (Generation 131)
+    Flags: SNMP-Traps Encapsulation: ENET2
+    Traffic statistics:
+     Input  bytes  :          54193305416
+     Output bytes  :          16794690548
+     Input  packets:            578981226
+     Output packets:            165544433
+    Local statistics:
+     Input  bytes  :          54193305416
+     Output bytes  :          16794690548
+     Input  packets:            578981226
+     Output packets:            165544433
+    Protocol inet, MTU: 4470, Generation: 138, Route table: 0
+      Flags: Sendbcast-pkt-to-re
+      Addresses, Flags: Is-Preferred Is-Primary
+        Destination: 192.0.2.6/31, Local: 192.0.2.7, Broadcast: Unspecified,
+        Generation: 132
+    Protocol mpls, MTU: 4458, Maximum labels: 3, Generation: 139,
+    Route table: 0
+      Flags: Is-Primary
+
+Physical interface: ge-0/0/2, Enabled, Physical link is Down
+  Interface index: 129, SNMP ifIndex: 116, Generation: 130
+  Description: spare
+  Type: Ethernet, Link-level type: Ethernet, MTU: 1514, Clocking: Unspecified,
+  Speed: 1000mbps
+  Device flags   : Present Running Down
+  Interface flags: Hardware-Down SNMP-Traps
+  Link type      : Full-Duplex
+  Physical info  : Unspecified
+  Hold-times     : Up 0 ms, Down 0 ms
+  Current address: 02:00:5e:00:0a:b9, Hardware address: 02:00:5e:00:0a:b9
+  Alternate link address: Unspecified
+  Last flapped   : 2023-02-03 11:02:14 UTC (9w6d 01:53 ago)
+  Statistics last cleared: Never
+  Traffic statistics:
+   Input  bytes  :                 1024
+   Output bytes  :                 2048
+   Input  packets:                   12
+   Output packets:                   24
+   IPv6 transit statistics:
+    Input  bytes  :                   0
+    Output bytes  :                   0
+    Input  packets:                   0
+    Output packets:                   0
+  Input errors:
+    Errors: 0, Drops: 0, Framing errors: 0, Runts: 0, Giants: 0,
+    Policed discards: 0, Resource errors: 0
+  Output errors:
+    Carrier transitions: 4, Errors: 0, Drops: 0, MTU errors: 0,
+    Resource errors: 0
+
+Physical interface: lo0, Enabled, Physical link is Up
+  Interface index: 6, SNMP ifIndex: 6, Generation: 129
+  Type: Loopback, Link-level type: Unspecified, MTU: Unlimited,
+  Clocking: Unspecified, Speed: Unspecified
+  Device flags   : Present Running Loopback
+  Interface flags: SNMP-Traps
+  Link type      : Unspecified
+  Physical info  : Unspecified
+  Hold-times     : Up 0 ms, Down 0 ms
+  Current address: Unspecified, Hardware address: Unspecified
+  Alternate link address: Unspecified
+  Last flapped   : Never
+  Statistics last cleared: Never
+  Traffic statistics:
+   Input  bytes  :               180040
+   Output bytes  :               180040
+   Input  packets:                 2310
+   Output packets:                 2310
+   IPv6 transit statistics:
+    Input  bytes  :                   0
+    Output bytes  :                   0
+    Input  packets:                   0
+    Output packets:                   0
+  Input errors:
+    Errors: 0, Drops: 0, Framing errors: 0, Runts: 0, Giants: 0,
+    Policed discards: 0, Resource errors: 0
+  Output errors:
+    Carrier transitions: 0, Errors: 0, Drops: 0, MTU errors: 0,
+    Resource errors: 0
+
+  Logical interface lo0.0 (Index 70) (SNMP ifIndex 16) (Generation 135)
+    Flags: SNMP-Traps Encapsulation: Unspecified
+    Protocol inet, MTU: Unlimited, Generation: 150, Route table: 0
+      Flags: Sendbcast-pkt-to-re
+      Addresses, Flags: Is-Default Is-Primary
+        Local: 198.51.100.5

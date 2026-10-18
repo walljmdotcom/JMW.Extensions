@@ -1,0 +1,81 @@
+table aligned lines 19-28: Column1 | Column2
+  row 19: Native VLAN: 1 | 
+  row 20: Allowed VLAN List: 1,10,20 | 
+  row 21: Rx | 
+  row 22: 8812301 input packets | 1203311221 bytes
+  row 23: 0 input error | 0 dropped
+  row 24: 0 CRC/FCS | 
+  row 25: Tx | 
+  row 26: 7712091 output packets | 990122330 bytes
+  row 27: 0 input error | 3 dropped
+  row 28: 0 collision | 
+table aligned lines 52-54: Column1 | Column2 | Column3 | Column4
+  row 52: 0 | output packets | 0 | bytes
+  row 53: 7 | input error | 7 | dropped
+  row 54: 0 | collision |  | 
+record lines 3-18
+  Name = Interface 1/1/1
+  Status = up
+  Admin state = up
+  Link state = up for 3 days (since Mon Mar 07 10:12:01 UTC 2022)
+  Link transitions = 2
+  Description = uplink-a
+  Hardware = Ethernet
+  MAC Address = 02:00:5e:70:00:01
+  MTU = 1500
+  Speed = 1000 [Mb/s]
+  Auto-negotiation = on
+  Flow-control = off
+  Error-control = off
+  MDI mode = MDIX
+  VLAN Mode = native-untagged
+record lines 30-51
+  Name = Interface 1/1/2
+  Status = down
+  Admin state = up
+  State information = Waiting for link
+  Link transitions = 0
+  Description = 
+  Hardware = Ethernet
+  MAC Address = 02:00:5e:70:00:02
+  MTU = 1500
+  Speed = 0 [Mb/s]
+  Auto-negotiation = on
+  Flow-control = off
+  Error-control = off
+  MDI mode = none
+  VLAN Mode = access
+  Access VLAN = 1
+  Rx / input packets = 0
+  Rx / input packets bytes = 0
+  Rx / input error = 0
+  Rx / input error dropped = 0
+  Rx / CRC/FCS = 0
+record lines 56-80
+  Name = Interface 1/1/3
+  Status = down
+  Admin state = down
+  State information = Administratively down
+  Link transitions = 0
+  Description = spare
+  Hardware = Ethernet
+  MAC Address = 02:00:5e:70:00:03
+  MTU = 1500
+  Speed = 0 [Mb/s]
+  Auto-negotiation = on
+  Flow-control = off
+  Error-control = off
+  MDI mode = none
+  VLAN Mode = access
+  Access VLAN = 20
+  Rx / input packets = 0
+  Rx / input packets bytes = 0
+  Rx / input error = 0
+  Rx / input error dropped = 0
+  Rx / CRC/FCS = 0
+  Tx / output packets = 0
+  Tx / output packets bytes = 0
+  Tx / input error = 0
+  Tx / input error dropped = 0
+  Tx / collision = 0
+unclaimed 1: show interface

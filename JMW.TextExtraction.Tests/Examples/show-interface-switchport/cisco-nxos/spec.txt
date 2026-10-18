@@ -1,0 +1,11 @@
+records split by blank
+  line "Name:" => Name: {Name}
+  line "Switchport:" => Switchport: {Switchport}
+  line "Switchport Monitor:" => Switchport Monitor: {Switchport Monitor}
+  line "Operational Mode:" => Operational Mode: {Operational Mode}
+  line "Access Mode VLAN:" => Access Mode VLAN: {Access Mode VLAN}
+  line "Trunking Native Mode VLAN:" => Trunking Native Mode VLAN: {Trunking Native Mode VLAN}
+  line "Trunking VLANs Enabled:" => Trunking VLANs Enabled: {Trunking VLANs Enabled}
+  line "Administrative private-vlan primary host-association:" => Administrative private-vlan primary host-association: {Administrative private-vlan primary host-association}
+  line "Administrative private-vlan trunk encapsulation:" => Administrative private-vlan trunk encapsulation: {Administrative private-vlan trunk encapsulation}
+  line "Operational private-vlan:" => Operational private-vlan: {Operational private-vlan}

@@ -1,0 +1,24 @@
+single
+  line "Architecture:" => Architecture: {Architecture}
+  line "Architecture: / CPU op-mode :" => CPU op-mode {?Architecture / CPU op-mode qualifier} : {Architecture / CPU op-mode}
+  line "Architecture: / Address sizes:" => Address sizes: {Architecture / Address sizes} , {Architecture / bits virtual} bits virtual
+  line "Architecture: / Byte Order:" => Byte Order: {Architecture / Byte Order}
+  line "CPU(s) :" => CPU(s) : {CPU(s)}
+  line "CPU(s) : / On-line CPU(s) list:" => On-line CPU(s) list: {CPU(s) / On-line CPU(s) list}
+  line "Vendor ID:" => Vendor ID: {Vendor ID}
+  line "Vendor ID: / Model name:" => Model name: {Vendor ID / Model name}
+  line "Vendor ID: / Model name: / CPU family:" => CPU family: {Vendor ID / Model name / CPU family}
+  line "Vendor ID: / Model name: / Model:" => Model: {Vendor ID / Model name / Model}
+  line "Vendor ID: / Model name: / Thread(s) per core:" => Thread(s) per core: {Vendor ID / Model name / Thread(s) per core}
+  line "Vendor ID: / Model name: / Core(s) per socket:" => Core(s) per socket: {Vendor ID / Model name / Core(s) per socket}
+  line "Vendor ID: / Model name: / Socket(s) :" => Socket(s) : {Vendor ID / Model name / Socket(s)}
+  line "Vendor ID: / Model name: / Stepping:" => Stepping: {Vendor ID / Model name / Stepping}
+  line "Vendor ID: / Model name: / BogoMIPS:" => BogoMIPS: {Vendor ID / Model name / BogoMIPS}
+  line "Virtualization features: / Hypervisor vendor:" => Hypervisor vendor: {Virtualization features / Hypervisor vendor}
+  line "Virtualization features: / Virtualization type:" => Virtualization type: {Virtualization features / Virtualization type}
+  line "Caches : / L1d:" => L1d: {Caches / L1d}
+  line "Caches : / L1i:" => L1i: {Caches / L1i}
+  line "Caches : / L2:" => L2: {Caches / L2}
+  line "Caches : / L3:" => L3: {Caches / L3}
+  line "NUMA: / NUMA node(s) :" => NUMA node(s) : {NUMA / NUMA node(s)}
+  line "NUMA: / NUMA node0 CPU(s) :" => NUMA node0 CPU(s) : {NUMA / NUMA node0 CPU(s)}

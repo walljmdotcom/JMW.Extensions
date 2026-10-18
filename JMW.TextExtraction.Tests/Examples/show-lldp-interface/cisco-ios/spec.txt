@@ -1,0 +1,6 @@
+records start at key "Rx:", head
+  line "@head" => {Name}
+  line "@head" => Rx: {Rx}
+  line "Tx:" => Tx: {Tx}
+  line "Tx state:" => Tx state: {Tx state}
+  line "Rx state:" => Rx state: {Rx state}

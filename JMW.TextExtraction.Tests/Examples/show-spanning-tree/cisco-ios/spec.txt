@@ -1,0 +1,14 @@
+table ruled header: Interface | Role | Sts | Cost | Prio.Nbr | Type
+
+records split by blank, head
+  line "@head" => {Name}
+  line "@head" => Bridge ID Priority {Bridge ID Priority} ( priority {priority} sys-id-ext {sys-id-ext} )
+  line "Spanning" => Spanning tree enabled protocol rstp
+  line "Root" => Root ID Priority {Root ID Priority}
+  line "Root / Address" => Address 0200.5e10.4000
+  line "Root / Cost" => Cost {Root / Cost}
+  line "Root / Port" => Port {Root / Port} ( TenGigabitEthernet1/1/1 )
+  line "Root / Hello" => Hello Time {Root / Hello Time} sec Max Age {Root / sec Max Age} sec Forward Delay {Root / sec Forward Delay} sec
+  line "Address" => Address 0200.5e10.7700
+  line "Hello" => Hello Time {Hello Time} sec Max Age {sec Max Age} sec Forward Delay {sec Forward Delay} sec
+  line "Aging" => Aging Time {Aging Time} sec

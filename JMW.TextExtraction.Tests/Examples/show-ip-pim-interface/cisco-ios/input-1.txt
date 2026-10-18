@@ -1,0 +1,7 @@
+show ip pim interface
+
+Address          Interface                Ver/   Nbr    Query  DR     DR
+                                          Mode   Count  Intvl  Prior
+192.0.2.1        Vlan20                   v2/S   0      30     1      192.0.2.1
+198.51.100.2     Vlan99                   v2/S   1      30     1      198.51.100.3
+203.0.113.6      GigabitEthernet1/0/1     v2/S   1      30     1      203.0.113.6

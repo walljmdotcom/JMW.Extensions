@@ -1,0 +1,31 @@
+record lines 3-23
+  Device ID = nx-2(FDO0000N2AA)
+  System Name = nx-2
+  Interface address(es) / IPv4 Address = 192.0.2.22
+  Platform = N9K-C93180YC-EX
+  Capabilities = Router Switch IGMP Filtering Supports-STP-Dispute
+  Interface = Ethernet1/49
+  Port ID (outgoing port) = Ethernet1/49
+  Holdtime = 165 sec
+  Version = Cisco Nexus Operating System (NX-OS) Software, Version 9.3(8)
+  Advertisement Version = 2
+  Native VLAN = 1
+  Duplex = full
+  MTU = 9216
+  Physical Location = row 4 rack 12
+  Mgmt address(es) / IPv4 Address = 198.51.100.22
+record lines 25-46
+  Device ID = access-sw3.example.net
+  System Name = access-sw3
+  Interface address(es) / IPv4 Address = 192.0.2.32
+  Platform = cisco WS-C3750X-48P
+  Capabilities = Router Switch IGMP
+  Interface = mgmt0
+  Port ID (outgoing port) = GigabitEthernet1/0/2
+  Holdtime = 140 sec
+  Version = Cisco IOS Software, C3750E Software (C3750E-UNIVERSALK9-M), Version 15.2(4)E6, RELEASE SOFTWARE (fc4) \n Technical Support: http://www.cisco.com/techsupport \n Copyright (c) 1986-2018 by Cisco Systems, Inc. \n Compiled Thu 05-Apr-18 02:22 by prod_rel_team
+  Advertisement Version = 2
+  Native VLAN = 99
+  Duplex = full
+  Mgmt address(es) / IPv4 Address = 192.0.2.32
+unclaimed 1: show cdp neighbors detail

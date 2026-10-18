@@ -1,0 +1,1 @@
+table aligned header: Interface | Admin | Link | Proto | Local | Remote

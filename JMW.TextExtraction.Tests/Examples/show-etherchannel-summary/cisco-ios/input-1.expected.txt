@@ -1,0 +1,14 @@
+table ruled lines 19-23: Group | Port-channel | Protocol | Ports
+  row 21: 1 | Po1(SU) | LACP | Te1/1/1(P)  Te1/1/2(P)
+  row 22: 2 | Po2(SU) | LACP | Gi1/0/45(P) Gi1/0/46(P)
+  row 23: 10 | Po10(SD) | - | 
+single lines 1-17
+  Flags = D - down        P - bundled in port-channel I - stand-alone s - suspended H - Hot-standby (LACP only) R - Layer3      S - Layer2 U - in use      f - failed to allocate aggregator
+  Number of channel-groups in use = 3
+  Number of aggregators = 3
+unclaimed 1: show etherchannel summary
+unclaimed 8: M - not in use, minimum links not met
+unclaimed 9: u - unsuitable for bundling
+unclaimed 10: w - waiting to be aggregated
+unclaimed 11: d - default port
+unclaimed 13: A - formed by Auto LAG

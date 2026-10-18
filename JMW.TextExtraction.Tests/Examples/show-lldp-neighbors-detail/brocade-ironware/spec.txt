@@ -1,0 +1,15 @@
+records split by blank
+  line "Local port:" => Local port: {Local port}
+  line "Neighbor:" => Neighbor: {Neighbor} , TTL {TTL} seconds
+  line "Neighbor: / + Chassis ID :" => + Chassis ID {?Neighbor / Chassis ID qualifier} : {Neighbor / Chassis ID}
+  line "Neighbor: / + Port ID :" => + Port ID {?Neighbor / Port ID qualifier} : {Neighbor / Port ID}
+  line "Neighbor: / + Time to live:" => + Time to live: {Neighbor / Time to live}
+  line "Neighbor: / + System name :" => + System name : {Neighbor / System name}
+  line "Neighbor: / + Port description :" => + Port description : {Neighbor / Port description}
+  line "Neighbor: / + System capabilities :" => + System capabilities : {Neighbor / System capabilities}
+  line "Neighbor: / + System capabilities : / Enabled capabilities:" => Enabled capabilities: {Neighbor / System capabilities / Enabled capabilities}
+  line "Neighbor: / + Link aggregation:" => + Link aggregation: {Neighbor / Link aggregation}
+  line "Neighbor: / + Link aggregation:" => + Link aggregation: {Neighbor / Link aggregation} , port channel {Neighbor / port channel}
+  line "Neighbor: / + Maximum frame size:" => + Maximum frame size: {Neighbor / Maximum frame size}
+  line "Neighbor: / + Port VLAN ID:" => + Port VLAN ID: {Neighbor / Port VLAN ID}
+  line "Neighbor: / + Management address :" => + Management address {?Neighbor / Management address qualifier} : {Neighbor / Management address}

@@ -1,0 +1,3 @@
+records split by blank
+  line "NAME: DESCR:" => NAME: {NAME} , DESCR: {DESCR}
+  line "PID: VID: SN:" => PID: {PID} , VID: {VID} , SN: {SN}

@@ -1,0 +1,6 @@
+table ruled lines 2-7: Name | PCI Device | Driver | Admin Status | Link Status | Speed | Duplex | MAC Address | MTU | Description
+  row 4: vmnic0 | 0000:01:00.0 | ntg3 | Up | Up | 1000 | Full | 02:00:5e:00:03:01 | 1500 | Broadcom Corporation NetXtreme BCM5720 Gigabit Ethernet
+  row 5: vmnic1 | 0000:01:00.1 | ntg3 | Up | Down | 0 | Half | 02:00:5e:00:03:02 | 1500 | Broadcom Corporation NetXtreme BCM5720 Gigabit Ethernet
+  row 6: vmnic2 | 0000:3b:00.0 | i40en | Up | Up | 10000 | Full | 02:00:5e:00:03:03 | 9000 | Intel(R) Ethernet Controller X710 for 10GbE SFP+
+  row 7: vmnic3 | 0000:3b:00.1 | i40en | Up | Up | 10000 | Full | 02:00:5e:00:03:04 | 9000 | Intel(R) Ethernet Controller X710 for 10GbE SFP+
+unclaimed 1: esxcli network nic list

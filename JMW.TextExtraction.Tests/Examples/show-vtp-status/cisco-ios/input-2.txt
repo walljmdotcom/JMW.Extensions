@@ -1,0 +1,17 @@
+show vtp status
+VTP Version capable             : 1 to 3
+VTP version running             : 2
+VTP Domain Name                 : branch-07
+VTP Pruning Mode                : Enabled
+VTP Traps Generation            : Disabled
+Device ID                       : 0200.5e10.7700
+Configuration last modified by 0.0.0.0 at 0-0-00 00:00:00
+
+Feature VLAN:
+--------------
+VTP Operating Mode                : Transparent
+Maximum VLANs supported locally   : 1005
+Number of existing VLANs          : 7
+Configuration Revision            : 0
+MD5 digest                        : 0x9A 0x41 0x0C 0x77 0x1B 0xE2 0x5D 0x80
+                                    0x13 0x6F 0xC4 0x22 0x08 0xAB 0x37 0x91

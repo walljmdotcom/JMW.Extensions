@@ -1,0 +1,2 @@
+single
+  line "Current configuration :" => Current configuration : {Current configuration}

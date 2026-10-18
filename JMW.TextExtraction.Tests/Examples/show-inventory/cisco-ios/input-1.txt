@@ -1,0 +1,12 @@
+show inventory
+NAME: "1", DESCR: "WS-C3850-48P"
+PID: WS-C3850-48P      , VID: V07  , SN: FOC0000Z1AA
+
+NAME: "Switch 1 - Power Supply A", DESCR: "Switch 1 - Power Supply A"
+PID: PWR-C1-715WAC     , VID: V02  , SN: LIT0000Q1AB
+
+NAME: "Switch 1 - FRU Uplink Module 1", DESCR: "4x10G Uplink Module"
+PID: C3850-NM-4-10G    , VID: V01  , SN: FOC0000Z1AC
+
+NAME: "Te1/1/1", DESCR: "SFP-10GBase-LR"
+PID: SFP-10G-LR          , VID: V02  , SN: FNS0000A1AD

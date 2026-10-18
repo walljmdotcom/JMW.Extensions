@@ -1,0 +1,10 @@
+table ruled lines 3-13: VLAN | Name | Status | Ports
+  row 5-6: 1 | default | active | Gi1/0/2, Gi1/0/3, Gi1/0/4, Gi1/0/5 Gi1/0/6, Gi1/0/7, Gi1/0/8
+  row 7: 20 | users-floor2 | active | Gi1/0/10, Gi1/0/11, Gi1/0/12
+  row 8: 30 | voice | active | 
+  row 9: 99 | management | active | Gi1/0/48
+  row 10: 1002 | fddi-default | act/unsup | 
+  row 11: 1003 | token-ring-default | act/unsup | 
+  row 12: 1004 | fddinet-default | act/unsup | 
+  row 13: 1005 | trnet-default | act/unsup | 
+unclaimed 1: show vlan brief

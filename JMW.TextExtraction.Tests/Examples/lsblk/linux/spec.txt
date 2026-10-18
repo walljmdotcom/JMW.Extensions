@@ -1,0 +1,1 @@
+table aligned header: NAME | MAJ:MIN | RM | SIZE | RO | TYPE | MOUNTPOINTS

@@ -1,0 +1,6 @@
+table aligned lines 3-6: Flag | address | ref clock | st | when | poll | reach | delay | offset | disp
+  row 4: *~ | 192.0.2.123 | .GPS. | 1 | 112 | 1024 | 377 | 1.412 | -0.201 | 0.912
+  row 5: +~ | 198.51.100.123 | 192.0.2.123 | 2 | 519 | 1024 | 377 | 2.103 | 0.388 | 1.044
+  row 6: ~ | 203.0.113.123 | .INIT. | 16 | - | 1024 | 0 | 0.000 | 0.000 | 15937.
+unclaimed 1: show ntp associations
+unclaimed 7: * sys.peer, # selected, + candidate, - outlyer, x falseticker, ~ configured

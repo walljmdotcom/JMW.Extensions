@@ -1,0 +1,4 @@
+show cdp neighbors detail
+                         ^
+% Invalid input detected at '^' marker.
+

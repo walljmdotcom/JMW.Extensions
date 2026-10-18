@@ -1,0 +1,26 @@
+records split by indent, head
+  line "@head" => Interface {Interface}
+  line "Neighbor" => Neighbor {Neighbor} , age {age} seconds
+  line "Discovered" => Discovered {Discovered} days , {ago} ago ; Last changed {Last changed} days , {ago ago} ago
+  line "- Chassis ID type:" => - Chassis ID type: {Chassis ID type}
+  line "- Chassis ID type: / Chassis ID :" => Chassis ID : {Chassis ID type / Chassis ID}
+  line "- Port ID type:" => - Port ID type: {Port ID type}
+  line "- Port ID type: / Port ID :" => Port ID : {Port ID type / Port ID}
+  line "- Time To Live:" => - Time To Live: {Time To Live}
+  line "- Port Description:" => - Port Description: {Port Description}
+  line "- System Name:" => - System Name: {System Name}
+  line "- System Description:" => - System Description: {System Description}
+  line "- System Description:" => - System Description: {System Description} , C3750E Software ( C3750E-UNIVERSALK9-M ) , Version 15.2(4)E10 , RELEASE SOFTWARE ( fc2)"
+  line "- System Description:" => - System Description: {System Description} , Inc. ex2300-48t Ethernet Switch , kernel JUNOS 20.4R3"
+  line "- System Capabilities :" => - System Capabilities : {System Capabilities}
+  line "- System Capabilities : / Enabled Capabilities:" => Enabled Capabilities: {System Capabilities / Enabled Capabilities}
+  line "- Management Address Subtype:" => - Management Address Subtype: {Management Address Subtype}
+  line "- Management Address Subtype: / Management Address :" => Management Address : {Management Address Subtype / Management Address}
+  line "- Management Address Subtype: / Interface Number Subtype :" => Interface Number Subtype : {Management Address Subtype / Interface Number Subtype}
+  line "- Management Address Subtype: / Interface Number :" => Interface Number : {Management Address Subtype / Interface Number}
+  line "- Management Address Subtype: / OID String :" => OID String : {Management Address Subtype / OID String}
+  line "- IEEE802.1 Port VLAN ID:" => - IEEE802.1 Port VLAN ID: {IEEE802.1 Port VLAN ID}
+  line "- IEEE802.3 Maximum Frame Size:" => - IEEE802.3 Maximum Frame Size: {IEEE802.3 Maximum Frame Size}
+
+single
+  line "Interface Ethernet2 detected ~ LLDP neighbors:" => Interface Ethernet2 detected {Interface Ethernet2 detected} LLDP neighbors: {LLDP neighbors}

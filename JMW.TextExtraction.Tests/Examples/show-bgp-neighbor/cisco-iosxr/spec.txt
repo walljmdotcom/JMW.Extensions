@@ -1,0 +1,31 @@
+records start at key "For Address Family:", head
+  line "@head" => {Name} is {Status}
+  line "@head" => {Name} Family: {Family}
+  line "Remote" => Remote AS {Remote AS} , local AS {local AS} , internal link
+  line "Remote" => Remote router ID {Remote router ID}
+  line "Description:" => Description: {Description}
+  line "Cluster" => Cluster ID {Cluster ID}
+  line "Cluster / BGP state =" => BGP state = {Cluster / BGP state} , up for 3w2d
+  line "Cluster / BGP state =" => BGP state = {Cluster / BGP state}
+  line "Cluster / Last" => Last read {Cluster / Last read} , Last read before reset {Cluster / Last read before reset}
+  line "Cluster / Last" => Last write {Cluster / Last write} , attempted {Cluster / attempted} , written {Cluster / written}
+  line "Cluster / Hold time" => Hold time is {Cluster / Hold time} , keepalive interval is {Cluster / keepalive interval}
+  line "Cluster / Configured hold time: keepalive: min acceptable hold time:" => Configured hold time: {Cluster / Configured hold time} , keepalive: {Cluster / keepalive} , min acceptable hold time: {Cluster / min acceptable hold time}
+  line "Cluster / Precedence:" => Precedence: {Cluster / Precedence}
+  line "Cluster / Graceful restart" => Graceful restart is {Cluster / Graceful restart}
+  line "Cluster / Restart time" => Restart time is {Cluster / Restart time}
+  line "Cluster / Stale path timeout time" => Stale path timeout time is {Cluster / Stale path timeout time}
+  line "Cluster / Received" => Received {Cluster / Received} messages , {Cluster / notifications} notifications , {Cluster / in queue} in queue
+  line "Cluster / Sent" => Sent {Cluster / Sent} messages , {Cluster / notifications 2} notifications , {Cluster / in queue 2} in queue
+  line "Cluster / Minimum time between advertisement runs" => Minimum time between advertisement runs is {Cluster / Minimum time between advertisement runs}
+  line "BGP" => BGP neighbor version {BGP neighbor version}
+  line "Update group: ~ Filter-group:" => Update group: {Update group} Filter-group: {Filter-group} No Refresh request being processed
+  line "Route-Reflector" => Route-Reflector Client
+  line "Route refresh request:" => Route refresh request: {Route refresh request} , sent {sent}
+  line "~9 accepted prefixes" => {accepted prefixes} accepted prefixes , {Field2} are {Field3}
+  line "Prefix" => Prefix advertised {Prefix advertised} , suppressed {suppressed} , withdrawn {withdrawn}
+  line "Connections" => Connections established {Connections established} ; dropped {dropped}
+  line "Local host: Local port: IF Handle:" => Local host: {Local host} , Local port: {Local port} , IF Handle: {IF Handle}
+  line "Foreign host: Foreign port:" => Foreign host: {Foreign host} , Foreign port: {Foreign port}
+  line "Last" => Last reset 3w2d , due to Peer closing down the session
+  line "Last" => Last reset {Last reset} , due to BGP neighbor initialized

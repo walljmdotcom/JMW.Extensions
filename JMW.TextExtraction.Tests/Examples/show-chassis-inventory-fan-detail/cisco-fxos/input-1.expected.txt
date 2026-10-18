@@ -1,0 +1,59 @@
+record lines 4-28
+  Tray 1 Module = 1
+  Presence = Equipped
+  Product Name = Cisco Firepower 9000 Series Fan
+  PID = FPR9K-FAN
+  VID = 01
+  Vendor = Cisco Systems Inc
+  Serial (SN) = AAA0000A001
+  HW Revision = 0
+  Fans / ID = 1
+  Fans / ID / Product Name = Cisco Firepower 9000 Series Fan
+  Fans / ID / PID = FPR9K-FAN
+  Fans / ID / VID = V01
+  Fans / ID / Vendor = Cisco Systems Inc
+  Fans / ID / Serial (SN) = AAA0000A001
+  Fans / ID / HW Revision = 0
+  Fans / ID = 2
+  Fans / ID / Product Name = Cisco Firepower 9000 Series Fan
+  Fans / ID / PID = FPR9K-FAN
+  Fans / ID / VID = V01
+  Fans / ID / Vendor = Cisco Systems Inc
+  Fans / ID / Serial (SN) = AAA0000A001
+  Fans / ID / HW Revision = 0
+record lines 30-54
+  Tray 1 Module = 2
+  Presence = Equipped
+  Product Name = Cisco Firepower 9000 Series Fan
+  PID = FPR9K-FAN
+  VID = 01
+  Vendor = Cisco Systems Inc
+  Serial (SN) = AAA0000A002
+  HW Revision = 0
+  Fans / ID = 1
+  Fans / ID / Product Name = Cisco Firepower 9000 Series Fan
+  Fans / ID / PID = FPR9K-FAN
+  Fans / ID / VID = V01
+  Fans / ID / Vendor = Cisco Systems Inc
+  Fans / ID / Serial (SN) = AAA0000A002
+  Fans / ID / HW Revision = 0
+  Fans / ID = 2
+  Fans / ID / Product Name = Cisco Firepower 9000 Series Fan
+  Fans / ID / PID = FPR9K-FAN
+  Fans / ID / VID = V01
+  Fans / ID / Vendor = Cisco Systems Inc
+  Fans / ID / Serial (SN) = AAA0000A002
+  Fans / ID / HW Revision = 0
+record lines 56-63
+  Tray 1 Module = 3
+  Presence = Missing
+  Product Name = 
+  PID = 
+  VID = 
+  Vendor = 
+  Serial (SN) = 
+  HW Revision = 0
+single lines 1-3
+  Chassis / Fan Modules = 
+unclaimed 1: fpr-1# show chassis inventory fan detail
+unclaimed 2: Chassis 1:

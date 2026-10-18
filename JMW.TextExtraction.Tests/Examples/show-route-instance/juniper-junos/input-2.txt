@@ -1,0 +1,8 @@
+show route instance
+Instance             Type
+         Primary RIB                                     Active/holddown/hidden
+master               forwarding
+         inet.0                                          60/0/3
+         inet6.0                                         15/0/0
+__master.anon__      forwarding
+mgmt_junos           forwarding

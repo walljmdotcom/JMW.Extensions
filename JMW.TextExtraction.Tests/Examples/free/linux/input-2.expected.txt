@@ -1,0 +1,4 @@
+table aligned lines 2-4: Column1 | total | used | free | shared | buff/cache | available
+  row 3: Mem: | 967143424 | 205656064 | 162381824 | 5132288 | 599105536 | 694870016
+  row 4: Swap: | 104853504 | 0 | 104853504 |  |  | 
+single lines 1

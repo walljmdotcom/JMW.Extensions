@@ -1,0 +1,10 @@
+records split by indent, head
+  line "@head" => {Name} mtu {mtu} qdisc {qdisc} state {state} group default qlen {group default qlen}
+  line "inet" => inet {inet} brd {brd} scope global {scope global}
+  line "inet" => inet {inet} scope host lo
+  line "inet / valid_lft" => valid_lft forever preferred_lft forever
+  line "inet6" => inet6 {inet6} scope host
+  line "inet6" => inet6 2001:db8:0:20::20/64 scope global
+  line "inet6" => inet6 fe80::200:5eff:fe77:20/64 scope link
+  line "inet6 / valid_lft" => valid_lft forever preferred_lft forever
+  line "link/ether" => link/ether {link/ether} brd ff:ff:ff:ff:ff:ff {brd ff:ff:ff:ff:ff:ff}

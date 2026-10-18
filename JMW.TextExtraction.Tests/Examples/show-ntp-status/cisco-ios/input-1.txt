@@ -1,0 +1,9 @@
+show ntp status
+Clock is synchronized, stratum 3, reference is 192.0.2.123
+nominal freq is 250.0000 Hz, actual freq is 250.0011 Hz, precision is 2**10
+ntp uptime is 1755286108 (1/100 of seconds), resolution is 4000
+reference time is E5D0F90F.FC28F878 (16:35:11.985 UTC Mon Mar 7 2022)
+clock offset is 1.1898 msec, root delay is 11.07 msec
+root dispersion is 87.56 msec, peer dispersion is 1.04 msec
+loopfilter state is 'CTRL' (Normal Controlled Loop), drift is -0.000014869 s/s
+system poll interval is 1024, last update was 2878 sec ago.

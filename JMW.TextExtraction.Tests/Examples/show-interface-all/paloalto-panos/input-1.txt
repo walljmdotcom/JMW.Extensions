@@ -1,0 +1,26 @@
+show admin@fw1(active)> show interface
+total configured hardware interfaces: 7
+
+name                    id    speed/duplex/state        mac address
+--------------------------------------------------------------------------------
+ethernet1/1             64    ukn/ukn/down(disabled)    02:00:5e:40:01:40
+ethernet1/12            75    ukn/ukn/down(power-down)  02:00:5e:40:01:4b
+ethernet1/17            80    10000/full/up             02:00:5e:40:01:50
+ethernet1/18            81    10000/full/up             02:00:5e:40:01:51
+ha1-a                   5     1000/full/up              02:00:5e:40:00:ed
+vlan                    1     [n/a]/[n/a]/up            02:00:5e:40:01:01
+loopback                3     [n/a]/[n/a]/up            02:00:5e:40:01:03
+
+aggregation groups: 0
+
+
+total configured logical interfaces: 6
+
+name                id    vsys zone             forwarding               tag    address
+------------------- ----- ---- ---------------- ------------------------ ------ ------------------
+ethernet1/1         64    0                     N/A                      0      N/A
+ethernet1/17        80    2    untrust-ext      vr:untrust               0      203.0.113.34/28
+ethernet1/18        81    2    transit          vr:untrust               0      198.51.100.5/28
+ethernet1/18.10     153   5                     N/A                      10     N/A
+ethernet1/18.2001   158   4    mgmt-dmz         vr:transit               2001   198.51.100.17/28
+ethernet1/18.2002   155   4    server-dmz       vr:transit               2002   198.51.100.33/28

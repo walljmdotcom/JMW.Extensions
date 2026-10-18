@@ -1,0 +1,62 @@
+ show sys hardware
+
+Sys::Hardware
+Chassis Fan Status
+  Index  Status  Low Limit(rpm)  Fan Speed(rpm)
+  1      up      1000            6594
+  2      up      1000            5228
+  3      down    1000            0
+
+Chassis Information
+  Maximum MAC Count  2
+  Registration Key   -
+
+Chassis Power Supply Status
+  Index  Status  Current
+  1      up      AC
+  2      up      AC
+
+Chassis Temperature Status
+  Index  Lo Limit(C)  Temp(degC)  Hi Limit(C)  Location
+  1      0            42          74           Main board HSBE transistor temperature
+  2      0            34          57           Main board HSBE IC temperature
+  3      0            24          41           Main board inlet transistor temperature
+  4      0            29          67           Power supply #1 meas. inlet temperature
+
+CPU Status
+  Index  Temp(degC)  Fan Speed(rpm)
+  1      43          7802
+
+Hardware Version Information
+  Name        HD1
+  Type        physical-disk
+  Model       EXAMPLE-DISK-1000
+  Parameters  --                --
+              SerialNumber      AA0000000001
+              Size              931.51G
+              Firmware Version  04.06A00
+              Media Type        HDD
+
+  Name        HD2
+  Type        physical-disk
+  Model       EXAMPLE-DISK-1000
+  Parameters  --                --
+              SerialNumber      AA0000000002
+              Size              931.51G
+              Firmware Version  04.06A00
+              Media Type        HDD
+
+
+Platform
+  Name                 BIG-IP 10200F
+  BIOS Revision        F5 Platform: D113 OBJ-0000-00 BIOS (build: 010) Date: 02/14/2018
+  Base MAC             02:00:5e:73:00:20
+
+System Information
+  Type                 D113
+  Chassis Serial       f5-aaaa-bbbb
+  Level 200/400 Part   200-0000-00 REV A
+  Switch Board Serial
+  Switch Board Part Revision
+  Host Board Serial
+  Host Board Part Revision

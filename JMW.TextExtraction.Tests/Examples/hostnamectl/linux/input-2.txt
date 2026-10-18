@@ -1,0 +1,8 @@
+hostnamectl
+   Static hostname: pi-4.example.net
+         Icon name: computer
+        Machine ID: 1122334455667788990011aabbccddee
+           Boot ID: aabbccddeeff00112233445566778899
+  Operating System: Raspbian GNU/Linux 11 (bullseye)
+            Kernel: Linux 6.1.21-v7+
+      Architecture: arm

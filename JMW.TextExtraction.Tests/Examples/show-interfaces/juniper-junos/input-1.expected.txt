@@ -1,0 +1,39 @@
+record lines 2-5
+  Physical interface = lsi
+  Physical link is = UP
+  Physical link = UNKNOWN
+  Link-level type = ether
+  MTU = 65535
+  Interface index = 9
+  Current address = 02:00:5e:00:01:10
+record lines 6-12
+  Physical interface = eth4
+  Physical link is = UP
+  Physical link = UP
+  Link-level type = ether
+  MTU = 9500
+  Interface index = 766
+  Current address = 02:00:5e:00:01:06
+  Logical interface = eth4.0
+  Index = 766
+  Logical / Protocol / Local = 192.0.2.44/31
+record lines 13-15
+  Physical interface = ip6tnl0
+  Physical link is = UP
+  Physical link = UP
+  Link-level type = tunnel6
+  MTU = 1452
+  Interface index = 6
+record lines 16-24
+  Physical interface = eth2
+  Physical link is = DOWN
+  Physical link = DOWN
+  Link-level type = ether
+  MTU = 9500
+  Interface index = 769
+  Current address = 02:00:5e:00:01:18
+  Logical interface = eth2.0
+  Index = 769
+  Logical / Protocol / Local = 192.0.2.36/31
+  Logical / Protocol / Local = 2001:db8:0:36::1/64
+unclaimed 1: show interfaces

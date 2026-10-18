@@ -1,0 +1,4 @@
+table aligned header: Port | Native Vlan | Status | Port Channel
+table aligned header: Port | STP Forwarding
+table aligned header: Port | Vlans Allowed on Trunk
+table aligned header: Port | Vlans Err-disabled on Trunk

@@ -1,0 +1,57 @@
+record lines 2-17
+  Name = TenGigabitEthernet 0/1
+  Status = up
+  line protocol = up
+  Hardware = DellEth
+  address = 02:00:5e:60:6a:01
+  Hardware / Current address = 02:00:5e:60:6a:01
+  Server Port AdminState = N/A
+  Interface index = 1048580
+  Internet address = not set
+  Mode of IPv4 Address Assignment = NONE
+  DHCP Client-ID = 02005e606a01
+  MTU = 12000 [bytes]
+  IP MTU = 11982 [bytes]
+  LineSpeed = 10000 [Mbit]
+  ARP type = ARPA
+  ARP Timeout = 04:00:00
+  Queueing strategy = fifo
+  Time since last interface status change = 57w5d0h
+record lines 18-33
+  Name = TenGigabitEthernet 0/2
+  Status = down
+  line protocol = down
+  Hardware = DellEth
+  address = 02:00:5e:60:6a:02
+  Hardware / Current address = 02:00:5e:60:6a:02
+  Server Port AdminState = N/A
+  Interface index = 1048708
+  Internet address = not set
+  Mode of IPv4 Address Assignment = NONE
+  DHCP Client-ID = 02005e606a02
+  MTU = 2500 [bytes]
+  IP MTU = 2482 [bytes]
+  ARP type = ARPA
+  ARP Timeout = 04:00:00
+  Queueing strategy = fifo
+  Time since last interface status change = 3w2d1h
+record lines 34-47
+  Name = Port-channel 1
+  Status = up
+  line protocol = up
+  Hardware address = 02:00:5e:60:6a:10
+  Current address = 02:00:5e:60:6a:10
+  Interface index = 1258356224
+  Internet address = 192.0.2.61/24
+  Mode of IPv4 Address Assignment = MANUAL
+  DHCP Client-ID = 02005e606a10
+  MTU = 9216 [bytes]
+  IP MTU = 9198 [bytes]
+  LineSpeed = 20000 [Mbit]
+  Members in this channel = Te 0/1(U) Te 0/3(U)
+  ARP type = ARPA
+  ARP Timeout = 04:00:00
+  Queueing strategy = fifo
+  Time since last interface status change = 57w5d0h
+unclaimed 1: show interfaces
+unclaimed 37: Minimum number of links to bring Port-channel up is 1

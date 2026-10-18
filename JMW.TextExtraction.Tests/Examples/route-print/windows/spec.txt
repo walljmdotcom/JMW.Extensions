@@ -1,0 +1,8 @@
+table words headerless: 5
+table aligned header: Network Address | Netmask | Gateway Address | Metric
+table aligned header: Network Destination | Netmask | Gateway | Interface | Metric
+
+single
+  line "Interface / ~9.Aa Loopback Interface" => 1...........................Software Loopback Interface {Interface / 1...........................Software Loopback Interface}
+  line "Active Routes:" => Active Routes: {Active Routes}
+  line "Persistent Routes:" => Persistent Routes: {Persistent Routes}

@@ -1,0 +1,6 @@
+single
+  line "show" => show system uptime
+  line "Current time:" => Current time: {Current time}
+  line "System booted:" => System booted: {System booted}
+  line "Protocols started:" => Protocols started: {Protocols started}
+  line "Last configured:" => Last configured: {Last configured}

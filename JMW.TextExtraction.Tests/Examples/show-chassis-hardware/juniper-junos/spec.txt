@@ -1,0 +1,4 @@
+table aligned header: Item | Version | Part number | Serial number | Description
+
+single
+  line "Hardware inventory:" => Hardware inventory: {Hardware inventory}

@@ -1,0 +1,3 @@
+show snmp engineID
+Local SNMP engineID: 800000090302005E207700
+Remote Engine ID          IP-addr    Port

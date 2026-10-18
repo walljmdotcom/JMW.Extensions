@@ -1,0 +1,24 @@
+records split by blank, head
+  line "@head" => {Name} state: {state}
+  line "IP Packet Frame Type: Hardware Address:" => IP Packet Frame Type: {IP Packet Frame Type} , Hardware Address: {Hardware Address}
+  line "Description:" => Description: {Description}
+  line "~9Aa-a mode" => {mode} mode , full-duplex mode
+  line "Link speed type" => Link speed type is {Link speed type} , link duplex type is {link duplex type}
+  line "PVID:" => PVID: {PVID}
+  line "Port link-type:" => Port link-type: {Port link-type}
+  line "Port link-type: / VLAN passing :" => VLAN passing : {Port link-type / VLAN passing}
+  line "Port link-type: / VLAN permitted:" => VLAN permitted: {Port link-type / VLAN permitted}
+  line "Port link-type: / Trunk port encapsulation:" => Trunk port encapsulation: {Port link-type / Trunk port encapsulation}
+  line "Last clearing of counters:" => Last clearing of counters: {Last clearing of counters}
+  line "Last ~ seconds input:" => Last {Last} seconds input: {seconds input}
+  line "Last ~ seconds output:" => Last {Last 2} seconds output: {seconds output}
+  line "Input :" => Input {?Input qualifier} : {Input} , {bytes} bytes
+  line "Input:" => Input: {Input 2} , {runts} runts , {giants} giants , {throttles} throttles
+  line "Output :" => Output {?Output qualifier} : {Output} , {bytes 2} bytes
+  line "Output:" => Output: {Output 2} , - underruns , - buffer failures
+  line "Port link-type: / Tagged VLAN ID :" => Tagged VLAN ID : {Port link-type / Tagged VLAN ID}
+  line "Port link-type: / Untagged VLAN ID :" => Untagged VLAN ID : {Port link-type / Untagged VLAN ID}
+  line "Loopback" => Loopback is {Loopback}
+  line "Media type" => Media type is {Media type} , Port hardware type is {Port hardware type}
+  line "Flow-control" => Flow-control is {Flow-control}
+  line "The Maximum Frame Length" => The Maximum Frame Length is {The Maximum Frame Length}

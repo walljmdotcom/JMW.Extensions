@@ -1,0 +1,18 @@
+table aligned lines 6-11: Id | State | State 2 | MTU | MTU 2 | Bndl | Mode | Encp | Type | MDIMDX
+  row 8: 1/1/1 | Up    Yes | Up | 9212 | 9212 | 1 | netw | null | xgige | 10GBASE-LR *
+  row 9: 1/1/2 | Up    Yes | Up | 9212 | 9212 | 1 | netw | null | xgige | 10GBASE-LR *
+  row 10: 1/1/3 | Up    Yes | Up | 1514 | 1514 | - | accs | dotq | xgige | 10GBASE-SR *
+  row 11: 1/1/4 | Down  No | Down | 1514 | 1514 | - | netw | null | xgige | 
+table aligned lines 17-20: Id | State | State 2 | MTU | MTU 2 | Bndl | Mode | Encp | Type | MDIMDX
+  row 19: 2/1/1 | Up    Yes | Up | 9212 | 9212 | 2 | netw | null | xgige | 10GBASE-LR *
+  row 20: 2/1/2 | Down  No | Down | 1514 | 1514 | - | netw | null | xgige | 
+table aligned lines 26-29: Id | State | State 2 | MTU | MTU 2 | Bndl | Mode | Encp | Type | MDIMDX
+  row 28: A/1 | Up | Yes  Up | 1514 | 1514 | - | netw | null | faste | MDI
+  row 29: A/4 | Up | No   Down | 1514 | 1514 | - | netw | null | faste | 
+unclaimed 1: show port
+unclaimed 3: Ports on Slot 1
+unclaimed 5: Port          Admin Link Port    Cfg  Oper LAG/ Port Port Port   C/QS/S/XFP/
+unclaimed 14: Ports on Slot 2
+unclaimed 16: Port          Admin Link Port    Cfg  Oper LAG/ Port Port Port   C/QS/S/XFP/
+unclaimed 23: Ports on Slot A
+unclaimed 25: Port          Admin Link Port    Cfg  Oper LAG/ Port Port Port   C/QS/S/XFP/

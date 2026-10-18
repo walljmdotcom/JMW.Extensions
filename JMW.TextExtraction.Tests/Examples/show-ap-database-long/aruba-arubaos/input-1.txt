@@ -1,0 +1,22 @@
+show ap database long
+
+AP Database
+-----------
+Name               Group    AP Type  IP Address    Status          Flags  Switch IP     Standby IP  Wired MAC Address  Serial #     Port  FQLN  Outer IP  User
+----               -----    -------  ----------    ------          -----  ---------     ----------  -----------------  --------     ----  ----  --------  ----
+ap-lobby-1         default  225      192.0.2.21    Up 12d:4h:3m:1s  i      192.0.2.115   0.0.0.0     02:00:5e:50:00:21  CN0000AA01         N/A   N/A
+ap-lobby-2         default  225      192.0.2.22    Up 12d:4h:2m:9s  i      192.0.2.115   0.0.0.0     02:00:5e:50:00:22  CN0000AA02         N/A   N/A
+02:00:5e:50:00:23  default  225      192.0.2.23    Down            I      192.0.2.115   0.0.0.0     02:00:5e:50:00:23  CN0000AA03         N/A   N/A
+
+Flags: 1 = 802.1x authenticated AP use EAP-PEAP; 1+ = 802.1x use EST; 1- = 802.1x use factory cert; 2 = Using IKE version 2
+       B = Built-in AP; C = Cellular RAP; D = Dirty or no config
+       E = Regulatory Domain Mismatch; F = AP failed 802.1x authentication
+       G = No such group; I = Inactive; J = USB cert at AP; L = Unlicensed
+       M = Mesh node
+       N = Duplicate name; P = PPPoe AP; R = Remote AP; R- = Remote AP requires Auth;
+       S = Standby-mode AP; U = Unprovisioned; X = Maintenance Mode
+       Y = Mesh Recovery
+       c = CERT-based RAP; e = Custom EST cert; f = No Spectrum FFT support
+       i = Indoor; o = Outdoor; s = LACP striping; u = Custom-Cert RAP; z = Datazone AP
+
+Total APs:3

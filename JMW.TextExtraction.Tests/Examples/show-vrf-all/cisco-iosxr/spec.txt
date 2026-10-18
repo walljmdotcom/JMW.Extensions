@@ -1,0 +1,2 @@
+table words headerless: 4
+table aligned header: VRF | RD | RT | AFI | SAFI

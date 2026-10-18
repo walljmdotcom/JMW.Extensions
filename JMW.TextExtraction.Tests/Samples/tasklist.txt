@@ -1,0 +1,6 @@
+
+Image Name                     PID Session Name        Session#    Mem Usage
+========================= ======== ================ =========== ============
+System Idle Process              0 Services                   0          8 K
+System                           4 Services                   0     12,532 K
+svchost.exe                    912 Services                   0     25,104 K

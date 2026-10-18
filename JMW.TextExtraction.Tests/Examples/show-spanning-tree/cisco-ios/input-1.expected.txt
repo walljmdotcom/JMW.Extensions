@@ -1,0 +1,36 @@
+table ruled lines 16-20: Interface | Role | Sts | Cost | Prio.Nbr | Type
+  row 18: Gi1/0/3 | Desg | FWD | 4 | 128.3 | P2p Edge
+  row 19: Gi1/0/22 | Desg | FWD | 4 | 128.22 | P2p Edge
+  row 20: Te1/1/1 | Root | FWD | 2 | 128.49 | P2p
+table ruled lines 36-39: Interface | Role | Sts | Cost | Prio.Nbr | Type
+  row 38: Gi1/0/48 | Desg | FWD | 4 | 128.48 | P2p
+  row 39: Te1/1/1 | Root | FWD | 2 | 128.49 | P2p
+record lines 3-9
+  Name = VLAN0020
+  Root ID Priority = 24596
+  Root / Cost = 2
+  Root / Port = 49
+  Root / Hello Time = 2
+  Root / sec Max Age = 20
+  Root / sec Forward Delay = 15
+record lines 11-14
+  Name = Bridge ID  Priority    32788  (priority 32768 sys-id-ext 20)
+  Hello Time = 2
+  sec Max Age = 20
+  sec Forward Delay = 15
+  Aging Time = 300 [sec]
+record lines 23-29
+  Name = VLAN0099
+  Root ID Priority = 24675
+  Root / Cost = 2
+  Root / Port = 49
+  Root / Hello Time = 2
+  Root / sec Max Age = 20
+  Root / sec Forward Delay = 15
+record lines 31-34
+  Name = Bridge ID  Priority    32867  (priority 32768 sys-id-ext 99)
+  Hello Time = 2
+  sec Max Age = 20
+  sec Forward Delay = 15
+  Aging Time = 300 [sec]
+unclaimed 1: show spanning-tree

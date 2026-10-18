@@ -1,0 +1,2 @@
+table aligned headerless: 9
+table aligned header: Name | Mtu | Network | Address | Ipkts | Ierrs | Opkts | Oerrs | Coll

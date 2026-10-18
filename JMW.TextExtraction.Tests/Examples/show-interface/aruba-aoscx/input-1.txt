@@ -1,0 +1,80 @@
+show interface
+
+Interface 1/1/1 is up
+ Admin state is up
+ Link state: up for 3 days (since Mon Mar 07 10:12:01 UTC 2022)
+ Link transitions: 2
+ Description: uplink-a
+ Hardware: Ethernet, MAC Address: 02:00:5e:70:00:01
+ MTU 1500
+ Type 1GbT
+ Full-duplex
+ qos trust none
+ Speed 1000 Mb/s
+ Auto-negotiation is on
+ Flow-control: off
+ Error-control: off
+ MDI mode: MDIX
+ VLAN Mode: native-untagged
+ Native VLAN: 1
+ Allowed VLAN List: 1,10,20
+ Rx
+          8812301 input packets       1203311221 bytes
+             0 input error                 0 dropped
+             0 CRC/FCS
+ Tx
+          7712091 output packets       990122330 bytes
+             0 input error                 3 dropped
+             0 collision
+
+Interface 1/1/2 is down
+ Admin state is up
+ State information: Waiting for link
+ Link transitions: 0
+ Description:
+ Hardware: Ethernet, MAC Address: 02:00:5e:70:00:02
+ MTU 1500
+ Type 1GbT
+ Full-duplex
+ qos trust none
+ Speed 0 Mb/s
+ Auto-negotiation is on
+ Flow-control: off
+ Error-control: off
+ MDI mode: none
+ VLAN Mode: access
+ Access VLAN: 1
+ Rx
+             0 input packets               0 bytes
+             0 input error                 0 dropped
+             0 CRC/FCS
+ Tx
+             0 output packets              0 bytes
+             7 input error                 7 dropped
+             0 collision
+
+Interface 1/1/3 is down
+ Admin state is down
+ State information: Administratively down
+ Link transitions: 0
+ Description: spare
+ Hardware: Ethernet, MAC Address: 02:00:5e:70:00:03
+ MTU 1500
+ Type 1GbT
+ Full-duplex
+ qos trust none
+ Speed 0 Mb/s
+ Auto-negotiation is on
+ Flow-control: off
+ Error-control: off
+ MDI mode: none
+ VLAN Mode: access
+ Access VLAN: 20
+ Rx
+             0 input packets               0 bytes
+             0 input error                 0 dropped
+             0 CRC/FCS
+ Tx
+             0 output packets              0 bytes
+             0 input error                 0 dropped
+             0 collision

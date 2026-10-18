@@ -1,0 +1,70 @@
+show interface
+Ethernet1/1 is up
+ Dedicated Interface
+
+  Belongs to Po100
+  Hardware: 1000/10000 Ethernet, address: 0200.5e30.1158 (bia 0200.5e30.1158)
+  Description: peer-link member a
+  MTU 9216 bytes, BW 10000000 Kbit, DLY 10 usec
+  reliability 255/255, txload 1/255, rxload 1/255
+  Encapsulation ARPA, medium is broadcast
+  Port mode is trunk
+  full-duplex, 10 Gb/s, media type is 10G
+  Last link flapped 12week(s) 2day(s)
+  Last clearing of "show interface" counters never
+  11 interface resets
+  30 seconds input rate 3784288 bits/sec, 1720 packets/sec
+  30 seconds output rate 2643296 bits/sec, 1475 packets/sec
+  RX
+    520345044785 unicast packets  19485844958 multicast packets  11163680028 broadcast packets
+    550995982198 input packets  617475555066962 bytes
+    0 runts  0 giants  378241 CRC  0 no buffer
+  TX
+    498200112244 unicast packets  1022339811 multicast packets  20022019 broadcast packets
+    499242471874 output packets  581213900112934 bytes
+    0 output error  0 collision  0 deferred  0 late collision
+
+Ethernet1/2 is down (Link not connected)
+ Dedicated Interface
+
+  Hardware: 1000/10000 Ethernet, address: 0200.5e30.1159 (bia 0200.5e30.1159)
+  Description: spare
+  MTU 1500 bytes, BW 10000000 Kbit, DLY 10 usec
+  reliability 255/255, txload 1/255, rxload 1/255
+  Encapsulation ARPA, medium is broadcast
+  Port mode is access
+  auto-duplex, auto-speed, media type is 10G
+  Last link flapped never
+  Last clearing of "show interface" counters never
+  0 interface resets
+  30 seconds input rate 0 bits/sec, 0 packets/sec
+  30 seconds output rate 0 bits/sec, 0 packets/sec
+  RX
+    0 unicast packets  0 multicast packets  0 broadcast packets
+    0 input packets  0 bytes
+    0 runts  0 giants  0 CRC  0 no buffer
+  TX
+    0 unicast packets  0 multicast packets  0 broadcast packets
+    0 output packets  0 bytes
+    0 output error  0 collision  0 deferred  0 late collision
+
+mgmt0 is up
+admin state is up,
+  Hardware: GigabitEthernet, address: 0200.5e30.0001 (bia 0200.5e30.0001)
+  Internet Address is 198.51.100.21/24
+  MTU 1500 bytes, BW 1000000 Kbit, DLY 10 usec
+  reliability 255/255, txload 1/255, rxload 1/255
+  Encapsulation ARPA, medium is broadcast
+  full-duplex, 1000 Mb/s
+  Last clearing of "show interface" counters never
+  1 interface resets
+  30 seconds input rate 4120 bits/sec, 5 packets/sec
+  30 seconds output rate 2210 bits/sec, 2 packets/sec
+  RX
+    1022399 unicast packets  22011 multicast packets  12 broadcast packets
+    1044422 input packets  98201933 bytes
+    0 runts  0 giants  0 CRC  0 no buffer
+  TX
+    733921 unicast packets  0 multicast packets  1 broadcast packets
+    733922 output packets  82013392 bytes
+    0 output error  0 collision  0 deferred  0 late collision

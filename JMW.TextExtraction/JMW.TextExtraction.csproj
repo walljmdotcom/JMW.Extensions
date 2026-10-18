@@ -1,0 +1,17 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net10.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <RootNamespace>JMW.TextExtraction</RootNamespace>
+    <AssemblyName>JMW.TextExtraction</AssemblyName>
+    <PackageId>JMW.TextExtraction</PackageId>
+    <IsPackable>false</IsPackable>
+    <Description>Infers the layout of semi-structured text, such as tables and records, from samples.</Description>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Using Include="JMW.TextExtraction.Text" />
+  </ItemGroup>
+
+</Project>

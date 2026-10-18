@@ -1,0 +1,39 @@
+show interface
+Interface GigabitEthernet0/0 "", is up, line protocol is up
+  Hardware is i82574L rev00, BW 1000 Mbps, DLY 10 usec
+	Auto-Duplex(Full-duplex), Auto-Speed(1000 Mbps)
+	Input flow control is unsupported, output flow control is off
+	Description: trunk to core-1
+	Available but not configured via nameif
+	MAC address 0200.5e60.0001, MTU not set
+	IP address unassigned
+	914846830 packets input, 493141583957 bytes, 0 no buffer
+	Received 112180001 broadcasts, 0 runts, 0 giants
+	348 input errors, 0 CRC, 0 frame, 348 overrun, 0 ignored, 0 abort
+	0 pause input, 0 resume input
+	112124910 L2 decode drops
+	808709128 packets output, 491323804147 bytes, 0 underruns
+	0 pause output, 0 resume output
+	0 output errors, 0 collisions, 0 interface resets
+	0 late collisions, 0 deferred
+	0 input reset drops, 0 output reset drops
+	input queue (blocks free curr/low): hardware (510/362)
+	output queue (blocks free curr/low): hardware (488/222)
+Interface GigabitEthernet0/0.24 "dmz-a", is up, line protocol is up
+  Hardware is i82574L rev00, BW 1000 Mbps, DLY 10 usec
+	VLAN identifier 24
+	MAC address 0200.5e60.0001, MTU 1500
+	IP address 198.51.100.101, subnet mask 255.255.255.248
+  Traffic Statistics for "dmz-a":
+	2553830285 packets input, 1724366493454 bytes
+	2594409838 packets output, 1961940857734 bytes
+	6617544 packets dropped
+Interface GigabitEthernet0/0.25 "dmz-b", is up, line protocol is up
+  Hardware is i82574L rev00, BW 1000 Mbps, DLY 10 usec
+	VLAN identifier 25
+	MAC address 0200.5e60.0001, MTU 1500
+	IP address 198.51.100.109, subnet mask 255.255.255.248
+  Traffic Statistics for "dmz-b":
+	2480119616 packets input, 1800617412198 bytes
+	2527923329 packets output, 1550612964027 bytes
+	10510422 packets dropped

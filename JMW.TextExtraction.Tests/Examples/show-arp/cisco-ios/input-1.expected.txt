@@ -1,0 +1,8 @@
+table aligned lines 2-8: Protocol | Address | Age (min) | Hardware Addr | Type | Interface
+  row 3: Internet | 192.0.2.1 | - | 0200.5e10.0014 | ARPA | Vlan20
+  row 4: Internet | 192.0.2.10 | 12 | 0200.5e01.000a | ARPA | Vlan20
+  row 5: Internet | 192.0.2.11 | 0 | 0200.5e01.000b | ARPA | Vlan20
+  row 6: Internet | 198.51.100.2 | - | 0200.5e10.0063 | ARPA | Vlan99
+  row 7: Internet | 198.51.100.9 | 241 | 0200.5e02.0009 | ARPA | Vlan99
+  row 8: Internet | 203.0.113.5 | 3 | Incomplete | ARPA | 
+unclaimed 1: show arp

@@ -1,0 +1,9 @@
+esxcli hardware platform get
+Platform Information
+   UUID: 0x4c 0x4c 0x45 0x44 0x00 0x42 0x30 0x10 0x80 0x31 0xc2 0xc0 0x4f 0x00 0x00 0x01
+   Product Name: XS-2200
+   Vendor Name: Example Systems
+   Serial Number: AA0000000002
+   Enclosure Serial Number: AA0000000003
+   BIOS Asset Tag:
+   IPMI Supported: true

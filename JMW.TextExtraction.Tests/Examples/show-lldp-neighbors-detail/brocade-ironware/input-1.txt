@@ -1,0 +1,43 @@
+show lldp neighbors detail
+Total number of LLDP neighbors on all ports: 3
+Local port: 1/1
+  Neighbor: 0200.5e50.c230, TTL 114 seconds
+    + Chassis ID (MAC address): 0200.5e50.c200
+    + Port ID (MAC address): 0200.5e50.c230
+    + Time to live: 120 seconds
+    + System name         : "core-1.example.net"
+    + Port description    : "10GigabitEthernet2/1"
+    + System capabilities : bridge, router
+      Enabled capabilities: router
+    + Link aggregation: not capable
+    + Maximum frame size: 9216 octets
+    + Port VLAN ID: 40
+    + Management address (IPv4): 192.0.2.51
+
+Local port: 1/2
+  Neighbor: 0200.5e50.e831, TTL 108 seconds
+    + Chassis ID (MAC address): 0200.5e50.e800
+    + Port ID (locally assigned): 27
+    + Time to live: 120 seconds
+    + System name         : "access-9.example.net"
+    + Port description    : "uplink a"
+    + System capabilities : bridge
+      Enabled capabilities: bridge
+    + Link aggregation: not capable
+    + Maximum frame size: 1518 octets
+    + Port VLAN ID: 1
+    + Management address (IPv4): 192.0.2.52
+
+Local port: 2/4
+  Neighbor: 0200.5e50.1101, TTL 97 seconds
+    + Chassis ID (network address): 192.0.2.53
+    + Port ID (interface name): ethernet1/1/1
+    + Time to live: 120 seconds
+    + System name         : "fw-edge.example.net"
+    + Port description    : "outside"
+    + System capabilities : router
+      Enabled capabilities: router
+    + Link aggregation: aggregated, port channel 3
+    + Maximum frame size: 9216 octets
+    + Port VLAN ID: 200
+    + Management address (IPv4): 192.0.2.53

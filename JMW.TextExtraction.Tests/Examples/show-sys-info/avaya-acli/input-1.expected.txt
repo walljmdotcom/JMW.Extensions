@@ -1,0 +1,36 @@
+single lines 1-55
+  Operation Mode = Switch
+  Enhanced Secure Mode = Disabled
+  MAC Address = 02-00-5E-75-00-01
+  PoE Module FW = 4.1.0.4
+  Reset Count = 4
+  Last Reset Type = Power Cycle
+  Power Status = Primary Power
+  Autotopology = Enabled
+  Base Unit Selection = Base unit using rear-panel switch
+  sysDescr = Ethernet Routing Switch 4850GTS-PWR+
+  HW = 10
+  FW = 5.8.0.3
+  SW = v5.11.2.013
+  Mfg Date = 20150913
+  HW Dev = none
+  Operational Software = 
+  FW 2 = 5.8.0.3
+  SW 2 = v5.11.2.013
+  Installed software = 
+  FW 3 = 5.8.0.3
+  SW 3 = v5.11.2.013
+  Operational license = Base software
+  Installed license = Base software
+  sysObjectID = 1.3.6.1.4.1.45.3.78.2
+  sysUpTime = 12 days, 01:08:28
+  sysNtpTime = NTP not synchronized.
+  sysName = ers-1.example.net
+  sysLocation = lab rack 1
+  sysContact = noc@example.net
+unclaimed 1: show sys-info
+unclaimed 19: Pluggable Port 47:     None
+unclaimed 21: Pluggable Port 48:     None
+unclaimed 23: Pluggable Port 49:     10GbSR
+unclaimed 25: Pluggable Port 50:     None
+unclaimed 35: Serial #:              AA0000000001

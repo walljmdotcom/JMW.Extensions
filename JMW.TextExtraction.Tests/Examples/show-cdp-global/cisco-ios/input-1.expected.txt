@@ -1,0 +1,4 @@
+single lines 1-6
+  Global CDP information / Sending CDP packets every = 60 [seconds]
+  Global CDP information / Sending a holdtime value of = 180 [seconds]
+  Global CDP information / Sending CDPv2 advertisements = enabled

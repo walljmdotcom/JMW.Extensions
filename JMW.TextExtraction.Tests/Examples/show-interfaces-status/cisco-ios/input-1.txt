@@ -1,0 +1,12 @@
+show interfaces status
+
+Port      Name               Status       Vlan       Duplex  Speed Type
+Gi1/0/1   uplink to core-rtr connected    trunk        full   1000 10/100/1000BaseTX
+Gi1/0/2                      notconnect   20           auto   auto 10/100/1000BaseTX
+Gi1/0/3   printer room 2     connected    20         a-full  a-100 10/100/1000BaseTX
+Gi1/0/4                      disabled     1            auto   auto 10/100/1000BaseTX
+Gi1/0/22  phone 1001         connected    20         a-full a-1000 10/100/1000BaseTX
+Gi1/0/48  mgmt               connected    99         a-full a-1000 10/100/1000BaseTX
+Te1/1/1   to dist-sw1        connected    trunk        full    10G SFP-10GBase-LR
+Te1/1/2                      notconnect   1            full    10G Not Present
+Po1       dist uplink        connected    trunk      a-full a-1000

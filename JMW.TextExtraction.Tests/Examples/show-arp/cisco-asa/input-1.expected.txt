@@ -1,0 +1,8 @@
+table words lines 2-7: Column1 | Column2 | Column3 | Column4
+  row 2: outside | 203.0.113.1 | 0200.5e00.0001 | 12
+  row 3: outside | 203.0.113.7 | 0200.5e00.0107 | 241
+  row 4: inside | 192.0.2.10 | 0200.5e01.000a | 0
+  row 5: inside | 192.0.2.11 | 0200.5e01.000b | 3
+  row 6: inside | 192.0.2.40 | 0200.5e01.0028 | 88
+  row 7: mgmt | 198.51.100.2 | 0200.5e02.0002 | 1450
+unclaimed 1: show arp

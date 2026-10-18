@@ -1,0 +1,30 @@
+single lines 1-37
+  ROM = System Bootstrap
+  Version = 3.04
+  Field3 = 20160919:102146
+  xr-1.example.net uptime = 28 weeks
+  days = 2
+  hours = 4
+  minutes = 7
+  System image file = bootflash:disk0/asr9k-os-mbi-6.4.2/0x100000/mbiasr9k-rp.vm
+  Revision = 2.0
+  Management Ethernet = 2
+  TenGigE = 8
+  DWDM controller(s) = 8
+  WANPHY controller(s) = 8
+  3915760k bytes of disk0 = (Sector size 512 bytes).
+  Configuration register on node 0/RSP0/CPU0 = 0x102
+  Boot device on node 0/RSP0/CPU0 = disk0
+  Package active on node 0/RSP0/CPU0 = iosxr-security, V 6.4.2[Default], Cisco Systems, at disk0:iosxr-security-6.4.2 \n Built on Fri Jul 27 15:48:51 UTC 2018 \n By builder-01 in /build/prod/6.4.2/asr9k-px/ws for pie
+unclaimed 1: show version
+unclaimed 2: Wed Dec  7 12:34:14.793 UTC
+unclaimed 4: Cisco IOS XR Software, Version 6.4.2[Default]
+unclaimed 5: Copyright (c) 2018 by Cisco Systems, Inc.
+unclaimed 12: cisco ASR9K Series (P4040) processor with 8388608K bytes of memory.
+unclaimed 14: ASR-9001 Chassis
+unclaimed 31: asr9k-k9sec-supp, V 6.4.2[Default], Cisco Systems, at disk0:asr9k-k9sec-supp-6.4.2
+unclaimed 32: Built on Fri Jul 27 15:48:51 UTC 2018
+unclaimed 33: By builder-01 in /build/prod/6.4.2/asr9k-px/ws for pie
+unclaimed 35: iosxr-mpls, V 6.4.2[Default], Cisco Systems, at disk0:iosxr-mpls-6.4.2
+unclaimed 36: Built on Fri Jul 27 15:27:50 UTC 2018
+unclaimed 37: By builder-01 in /build/prod/6.4.2/asr9k-px/ws for pie

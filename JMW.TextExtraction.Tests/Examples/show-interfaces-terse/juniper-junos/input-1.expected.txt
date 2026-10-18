@@ -1,0 +1,11 @@
+table aligned lines 2-13: Interface | Admin | Link | Proto | Local | Remote
+  row 3: ge-0/0/0 | up | up |  |  | 
+  row 4-6: ge-0/0/0.0 | up | up | inet inet6 | 192.0.2.1/24 2001:db8::1/64 fe80::200:5eff:fe90:1/64 | 
+  row 7: ge-0/0/1 | up | down |  |  | 
+  row 8: ge-0/0/1.0 | up | down | eth-switch |  | 
+  row 9: ge-0/0/2 | down | down |  |  | 
+  row 10: lo0 | up | up |  |  | 
+  row 11: lo0.0 | up | up | inet | 192.0.2.255         --> | 0/0
+  row 12: me0 | up | up |  |  | 
+  row 13: me0.0 | up | up | inet | 198.51.100.5/24 | 
+unclaimed 1: show interfaces terse

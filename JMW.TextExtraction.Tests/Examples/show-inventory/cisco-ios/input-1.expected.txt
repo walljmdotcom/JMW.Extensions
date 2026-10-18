@@ -1,0 +1,25 @@
+record lines 2-3
+  NAME = 1
+  DESCR = WS-C3850-48P
+  PID = WS-C3850-48P
+  VID = V07
+  SN = FOC0000Z1AA
+record lines 5-6
+  NAME = Switch 1 - Power Supply A
+  DESCR = Switch 1 - Power Supply A
+  PID = PWR-C1-715WAC
+  VID = V02
+  SN = LIT0000Q1AB
+record lines 8-9
+  NAME = Switch 1 - FRU Uplink Module 1
+  DESCR = 4x10G Uplink Module
+  PID = C3850-NM-4-10G
+  VID = V01
+  SN = FOC0000Z1AC
+record lines 11-12
+  NAME = Te1/1/1
+  DESCR = SFP-10GBase-LR
+  PID = SFP-10G-LR
+  VID = V02
+  SN = FNS0000A1AD
+unclaimed 1: show inventory

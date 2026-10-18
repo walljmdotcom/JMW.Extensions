@@ -1,0 +1,11 @@
+table aligned lines 3-12: Port | Name | Status | Vlan | Duplex | Speed | Type
+  row 4: Gi1/0/1 | uplink to core-rtr | connected | trunk | full | 1000 | 10/100/1000BaseTX
+  row 5: Gi1/0/2 |  | notconnect | 20 | auto | auto | 10/100/1000BaseTX
+  row 6: Gi1/0/3 | printer room 2 | connected | 20 | a-full | a-100 | 10/100/1000BaseTX
+  row 7: Gi1/0/4 |  | disabled | 1 | auto | auto | 10/100/1000BaseTX
+  row 8: Gi1/0/22 | phone 1001 | connected | 20 | a-full | a-1000 | 10/100/1000BaseTX
+  row 9: Gi1/0/48 | mgmt | connected | 99 | a-full | a-1000 | 10/100/1000BaseTX
+  row 10: Te1/1/1 | to dist-sw1 | connected | trunk | full | 10G | SFP-10GBase-LR
+  row 11: Te1/1/2 |  | notconnect | 1 | full | 10G | Not Present
+  row 12: Po1 | dist uplink | connected | trunk | a-full | a-1000 | 
+unclaimed 1: show interfaces status

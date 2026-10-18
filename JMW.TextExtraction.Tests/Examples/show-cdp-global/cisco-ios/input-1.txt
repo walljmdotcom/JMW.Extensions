@@ -1,0 +1,6 @@
+show cdp global
+Global CDP information:
+    CDP enabled globally
+    Sending CDP packets every 60 seconds
+    Sending a holdtime value of 180 seconds
+    Sending CDPv2 advertisements is enabled

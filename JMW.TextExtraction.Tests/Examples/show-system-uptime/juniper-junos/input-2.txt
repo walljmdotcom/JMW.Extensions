@@ -1,0 +1,6 @@
+show system uptime
+Current time: 2024-03-11 14:05:40 UTC
+System booted: 2024-01-19 22:10:02 UTC (7w2d 15:55 ago)
+Protocols started: 2024-01-19 22:12:30 UTC (7w2d 15:53 ago)
+Last configured: 2024-03-08 09:44:12 UTC (3d 04:21 ago) by netops
+ 2:05PM  up 51 days, 15:55, 2 users, load averages: 0.31, 0.22, 0.18

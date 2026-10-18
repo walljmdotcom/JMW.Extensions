@@ -1,0 +1,26 @@
+records split by indent, head
+  line "@head" => net interface {net interface} \{
+  line "@head" => }
+  line "aggregation" => aggregation attached
+  line "aggregation" => aggregation none
+  line "counters.bits-in" => counters.bits-in 14.6K
+  line "counters.bits-in" => counters.bits-in 16.1K
+  line "counters.bits-in" => counters.bits-in 811.2M
+  line "counters.bits-out" => counters.bits-out {counters.bits-out}
+  line "counters.bits-out" => counters.bits-out 2.1G
+  line "counters.collisions" => counters.collisions {counters.collisions}
+  line "counters.drops-in" => counters.drops-in {counters.drops-in}
+  line "counters.errors-in" => counters.errors-in {counters.errors-in}
+  line "counters.pkts-in" => counters.pkts-in {counters.pkts-in}
+  line "counters.pkts-out" => counters.pkts-out {counters.pkts-out}
+  line "mac-address" => mac-address 02:00:5e:73:00:01
+  line "mac-address" => mac-address 02:00:5e:73:00:02
+  line "mac-address" => mac-address 02:00:5e:73:00:10
+  line "media-active" => media-active 10000T-FD
+  line "media-active" => media-active 1000T-FD
+  line "mtu" => mtu {mtu}
+  line "name" => name {name}
+  line "pause-active" => pause-active none
+  line "status" => status up
+  line "trunk-name" => trunk-name external-trunk
+  line "trunk-name" => trunk-name none

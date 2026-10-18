@@ -1,0 +1,21 @@
+table aligned lines 11-20: Interface | PHY | Protocol | InUti | OutUti | inErrors | outErrors
+  row 12: Eth-Trunk1 | up | up | 0.01% | 0.02% | 0 | 0
+  row 13: GigabitEthernet0/0/1 | up | up | 0.01% | 0.03% | 0 | 0
+  row 14: GigabitEthernet0/0/2 | up | up | 0.01% | 0.01% | 0 | 0
+  row 15: GigabitEthernet0/0/3 | *down | down | 0% | 0% | 0 | 0
+  row 16: GigabitEthernet0/0/4 | up | up | 1.20% | 0.80% | 12 | 0
+  row 17: LoopBack0 | up | up(s) | 0% | 0% | 0 | 0
+  row 18: MEth0/0/1 | up | up | 0.01% | 0.01% | 0 | 0
+  row 19: NULL0 | up | up(s) | 0% | 0% | 0 | 0
+  row 20: Vlanif20 | up | up | -- | -- | 0 | 0
+single lines 1-10
+  PHY = Physical
+  *down = administratively down
+  Field2 (l) = loopback
+  Field2 (s) = spoofing
+  Field2 (b) = BFD down
+  ^down = standby
+  Field2 (e) = ETHOAM down
+  Field2 (d) = Dampening Suppressed
+  InUti/OutUti = input utility/output utility
+unclaimed 1: display interface brief

@@ -1,0 +1,16 @@
+table aligned lines 3-15: Item | Version | Part number | Serial number | Description
+  row 4: Chassis |  |  | AA0000000001 | EX4300-48P
+  row 5: Routing Engine 0 | REV 08 | 750-000001 | PE0000000002 | EX4300-48P
+  row 6: FPC 0 | REV 08 | 650-000003 | PE0000000003 | EX4300-48P
+  row 7: CPU |  | BUILTIN | BUILTIN | FPC CPU
+  row 8: PIC 0 |  | BUILTIN | BUILTIN | 48x10/100/1000 Base-T
+  row 9: PIC 1 | REV 05 | 611-000004 | MY0000000004 | 4x QSFP+
+  row 10: PIC 2 | REV 05 | 611-000005 | MY0000000005 | 4x 10GE SFP+
+  row 11: Xcvr 0 | REV 01 | 740-000006 | AB0000000006 | SFP+-10G-LR
+  row 12: Xcvr 1 | REV 01 | 740-000007 | AB0000000007 | SFP+-10G-LR
+  row 13: Power Supply 0 | REV 03 | 740-000008 | 1EDE00000008 | JPSU-920-AC-AFO
+  row 14: Fan Tray 0 |  |  |  | Fan Module, Airflow Out (AFO)
+  row 15: Fan Tray 1 |  |  |  | Fan Module, Airflow Out (AFO)
+single lines 1-2
+  Hardware inventory = 
+unclaimed 1: show chassis hardware

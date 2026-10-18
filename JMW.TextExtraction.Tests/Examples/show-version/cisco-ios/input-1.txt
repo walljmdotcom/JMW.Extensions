@@ -1,0 +1,33 @@
+show version
+Cisco IOS Software, C3750E Software (C3750E-UNIVERSALK9-M), Version 15.2(4)E10, RELEASE SOFTWARE (fc2)
+Technical Support: http://www.cisco.com/techsupport
+Copyright (c) 1986-2020 by Cisco Systems, Inc.
+Compiled Tue 31-Mar-20 05:01 by prod_rel_team
+
+ROM: Bootstrap program is C3750E boot loader
+BOOTLDR: C3750E Boot Loader (C3750X-HBOOT-M) Version 15.2(3r)E, RELEASE SOFTWARE (fc1)
+
+dist-sw1 uptime is 2 years, 13 weeks, 4 days, 1 hour, 2 minutes
+System returned to ROM by power-on
+System restarted at 09:14:21 UTC Wed Dec 1 2021
+System image file is "flash:/c3750e-universalk9-mz.152-4.E10.bin"
+Last reload reason: power-on
+
+cisco WS-C3750X-48P (PowerPC405) processor (revision W0) with 262144K bytes of memory.
+Processor board ID FDO0000X0AA
+Last reset from power-on
+3 Virtual Ethernet interfaces
+52 Gigabit Ethernet interfaces
+4 Ten Gigabit Ethernet interfaces
+The password-recovery mechanism is enabled.
+
+512K bytes of flash-simulated non-volatile configuration memory.
+Base ethernet MAC Address       : 02:00:5E:10:40:00
+Motherboard assembly number     : 73-0000-00
+Model revision number           : W0
+Model number                    : WS-C3750X-48P-S
+System serial number            : FDO0000X0AA
+Top Assembly Part Number        : 800-00000-00
+Top Assembly Revision Number    : A0
+
+Configuration register is 0xF

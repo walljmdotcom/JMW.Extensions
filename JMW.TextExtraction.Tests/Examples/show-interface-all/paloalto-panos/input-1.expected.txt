@@ -1,0 +1,20 @@
+table aligned lines 4-12: name | id | speed/duplex/state | mac address
+  row 6: ethernet1/1 | 64 | ukn/ukn/down(disabled) | 02:00:5e:40:01:40
+  row 7: ethernet1/12 | 75 | ukn/ukn/down(power-down) | 02:00:5e:40:01:4b
+  row 8: ethernet1/17 | 80 | 10000/full/up | 02:00:5e:40:01:50
+  row 9: ethernet1/18 | 81 | 10000/full/up | 02:00:5e:40:01:51
+  row 10: ha1-a | 5 | 1000/full/up | 02:00:5e:40:00:ed
+  row 11: vlan | 1 | [n/a]/[n/a]/up | 02:00:5e:40:01:01
+  row 12: loopback | 3 | [n/a]/[n/a]/up | 02:00:5e:40:01:03
+table ruled lines 19-26: name | id | vsys | zone | forwarding | tag | address
+  row 21: ethernet1/1 | 64 | 0 |  | N/A | 0 | N/A
+  row 22: ethernet1/17 | 80 | 2 | untrust-ext | vr:untrust | 0 | 203.0.113.34/28
+  row 23: ethernet1/18 | 81 | 2 | transit | vr:untrust | 0 | 198.51.100.5/28
+  row 24: ethernet1/18.10 | 153 | 5 |  | N/A | 10 | N/A
+  row 25: ethernet1/18.2001 | 158 | 4 | mgmt-dmz | vr:transit | 2001 | 198.51.100.17/28
+  row 26: ethernet1/18.2002 | 155 | 4 | server-dmz | vr:transit | 2002 | 198.51.100.33/28
+single lines 1-17
+  total configured hardware interfaces = 7
+  aggregation groups = 0
+  total configured logical interfaces = 6
+unclaimed 1: show admin@fw1(active)> show interface

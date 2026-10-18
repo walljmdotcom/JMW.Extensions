@@ -1,0 +1,9 @@
+show ip interface brief
+Interface              IP-Address      OK? Method Status                Protocol
+Vlan1                  unassigned      YES NVRAM  administratively down down
+Vlan20                 192.0.2.1       YES NVRAM  up                    up
+Vlan99                 198.51.100.2    YES manual up                    up
+GigabitEthernet0/0     unassigned      YES unset  down                  down
+GigabitEthernet1/0/1   203.0.113.6     YES DHCP   up                    up
+GigabitEthernet1/0/2   unassigned      YES unset  down                  down
+Loopback0              192.0.2.255     YES NVRAM  up                    up

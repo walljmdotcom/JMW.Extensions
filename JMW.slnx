@@ -14,5 +14,7 @@
   <Project Path="JMW.Parsing/JMW.Parsing.csproj" />
   <Project Path="JMW.Templates/JMW.Templates.csproj" />
   <Project Path="JMW.Tests/JMW.Tests.csproj" />
+  <Project Path="JMW.TextExtraction/JMW.TextExtraction.csproj" />
+  <Project Path="JMW.TextExtraction.Tests/JMW.TextExtraction.Tests.csproj" />
   <Project Path="JMW/JMW.csproj" />
 </Solution>

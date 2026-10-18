@@ -1,0 +1,6 @@
+single lines 1-6
+  Hostname = rtr1.example.net
+  Model = cRPD
+  Family = junos
+  Junos = 23.4R1.9
+  cRPD package version = 23.4R1.9 built by builder on 2023-12-20 10:21:33 UTC

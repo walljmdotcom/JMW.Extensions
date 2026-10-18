@@ -1,0 +1,13 @@
+show access-lists
+Standard IP access list MGMT-HOSTS
+    10 permit 198.51.100.0, wildcard bits 0.0.0.255 (1022 matches)
+    20 permit 192.0.2.10 (12 matches)
+    30 deny   any log (3 matches)
+Extended IP access list WEB-IN
+    10 permit tcp any host 203.0.113.10 eq www (88211 matches)
+    20 permit tcp any host 203.0.113.10 eq 443 (412093 matches)
+    30 deny ip any any log (2290 matches)
+Extended IP access list VOICE-QOS
+    10 permit udp any any range 16384 32767
+    20 permit tcp any any eq 5060
+    30 permit udp any any eq 5060 (19 matches)

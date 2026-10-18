@@ -1,0 +1,14 @@
+records split by rule
+  line "Device ID:" => Device ID: {Device ID}
+  line "System Name:" => System Name: {System Name}
+  line "Interface address(es) : / IPv4 Address:" => IPv4 Address: {Interface address(es) / IPv4 Address}
+  line "Platform: Capabilities:" => Platform: {Platform} , Capabilities: {Capabilities}
+  line "Interface: Port ID :" => Interface: {Interface} , Port ID {?Port ID qualifier} : {Port ID}
+  line "Holdtime:" => Holdtime: {Holdtime}
+  text "Version:" => Version: {Version}
+  line "Advertisement Version:" => Advertisement Version: {Advertisement Version}
+  line "Native VLAN:" => Native VLAN: {Native VLAN}
+  line "Duplex:" => Duplex: {Duplex}
+  line "MTU:" => MTU: {MTU}
+  line "Physical Location:" => Physical Location: {Physical Location}
+  line "Mgmt address(es) : / IPv4 Address:" => IPv4 Address: {Mgmt address(es) / IPv4 Address}

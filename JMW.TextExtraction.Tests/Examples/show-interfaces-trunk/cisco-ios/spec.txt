@@ -1,0 +1,4 @@
+table aligned header: Port | Mode | Encapsulation | Status | Native vlan
+table aligned header: Port | Vlans allowed and active in management domain
+table aligned header: Port | Vlans allowed on trunk
+table aligned header: Port | Vlans in spanning tree forwarding state and not pruned

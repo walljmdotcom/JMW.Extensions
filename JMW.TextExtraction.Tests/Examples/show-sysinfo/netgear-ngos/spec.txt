@@ -1,0 +1,11 @@
+table aligned header: HCNUM-TC | A MIB module containing | textual conventions
+
+single
+  line "System Description :" => System Description : {System Description}
+  line "System Name :" => System Name : {System Name}
+  line "System Location :" => System Location : {System Location}
+  line "System Contact :" => System Contact : {System Contact}
+  line "System Object ID :" => System Object ID : {System Object ID}
+  line "System Up Time :" => System Up Time : {System Up Time}
+  line "Current SNTP Synchronized Time :" => Current SNTP Synchronized Time : {Current SNTP Synchronized Time}
+  line "MIBs Supported:" => MIBs Supported: {MIBs Supported}

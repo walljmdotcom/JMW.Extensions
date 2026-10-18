@@ -1,0 +1,19 @@
+records split by blank
+  line "Chassis id:" => Chassis id: {Chassis id}
+  line "Port id:" => Port id: {Port id}
+  line "Local Port id:" => Local Port id: {Local Port id}
+  line "Port Description:" => Port Description: {Port Description}
+  line "System Name:" => System Name: {System Name}
+  line "System Description:" => System Description: {System Description} , C3750E Software ( C3750E-UNIVERSALK9-M ) , Version 15.2(4)E6 , RELEASE SOFTWARE ( fc4 )
+  line "System Description:" => System Description: {System Description}
+  line "Technical Support:" => Technical Support: {Technical Support}
+  line "Copyright" => Copyright ( c ) {Cisco Systems} Cisco Systems , Inc. {Inc.}
+  line "Time remaining:" => Time remaining: {Time remaining}
+  line "System Capabilities:" => System Capabilities: {System Capabilities}
+  line "Enabled Capabilities:" => Enabled Capabilities: {Enabled Capabilities}
+  line "Management Address:" => Management Address: {Management Address}
+  line "Vlan ID:" => Vlan ID: {Vlan ID}
+  line "TAC support:" => TAC support: {TAC support}
+
+single
+  line "Total entries displayed:" => Total entries displayed: {Total entries displayed}

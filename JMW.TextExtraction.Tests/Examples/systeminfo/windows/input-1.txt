@@ -1,0 +1,49 @@
+C:\Users\alice>systeminfo
+
+Host Name:                 WS-0042
+OS Name:                   Microsoft Windows 11 Enterprise
+OS Version:                10.0.22631 N/A Build 22631
+OS Manufacturer:           Microsoft Corporation
+OS Configuration:          Member Workstation
+OS Build Type:             Multiprocessor Free
+Registered Owner:          alice
+Registered Organization:   Example Corp
+Product ID:                00330-80000-00000-AA001
+Original Install Date:     3/14/2024, 9:12:05 AM
+System Boot Time:          10/1/2024, 7:45:31 AM
+System Manufacturer:       Example Systems
+System Model:              XL-7400
+System Type:               x64-based PC
+Processor(s):              1 Processor(s) Installed.
+                           [01]: Intel64 Family 6 Model 154 Stepping 3 GenuineIntel ~2400 Mhz
+BIOS Version:              Example Systems 1.21.0, 6/12/2024
+Windows Directory:         C:\WINDOWS
+System Directory:          C:\WINDOWS\system32
+Boot Device:               \Device\HarddiskVolume1
+System Locale:             en-us;English (United States)
+Input Locale:              en-us;English (United States)
+Time Zone:                 (UTC-05:00) Eastern Time (US & Canada)
+Total Physical Memory:     32,437 MB
+Available Physical Memory: 18,902 MB
+Virtual Memory: Max Size:  37,301 MB
+Virtual Memory: Available: 20,118 MB
+Virtual Memory: In Use:    17,183 MB
+Page File Location(s):     C:\pagefile.sys
+Domain:                    corp.example.net
+Logon Server:              \\DC-01
+Hotfix(s):                 3 Hotfix(s) Installed.
+                           [01]: KB5039895
+                           [02]: KB5040442
+                           [03]: KB5041585
+Network Card(s):           2 NIC(s) Installed.
+                           [01]: Intel(R) Ethernet Connection (16) I219-LM
+                                 Connection Name: Ethernet
+                                 DHCP Enabled:    Yes
+                                 DHCP Server:     192.0.2.1
+                                 IP address(es)
+                                 [01]: 192.0.2.42
+                                 [02]: fe80::200:5eff:fe00:42
+                           [02]: Intel(R) Wi-Fi 6E AX211 160MHz
+                                 Connection Name: Wi-Fi
+                                 Status:          Media disconnected
+Hyper-V Requirements:      A hypervisor has been detected. Features required for Hyper-V will not be displayed.

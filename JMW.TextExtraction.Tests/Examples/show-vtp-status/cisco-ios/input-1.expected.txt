@@ -1,0 +1,16 @@
+single lines 1-18
+  VTP Version capable = 1 to 3
+  VTP version running = 1
+  VTP Domain Name = campus
+  VTP Pruning Mode = Disabled
+  VTP Traps Generation = Enabled
+  Device ID = 0200.5e10.4000
+  Configuration last modified by = 192.0.2.5
+  at = 3-7-22 16:20:11
+  Local updater ID = 192.0.2.5 on interface Vl99 (lowest numbered VLAN interface found)
+  Feature VLAN = 
+  VTP Operating Mode = Server
+  Maximum VLANs supported locally = 1005
+  Number of existing VLANs = 16
+  Configuration Revision = 42
+  MD5 digest = 0x32 0x1E 0xA2 0x4C 0xAC 0xA7 0x25 0xF3 0xDD 0xEB 0x99 0xCC 0x8C 0x5E 0xCC 0xDB

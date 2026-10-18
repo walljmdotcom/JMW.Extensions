@@ -1,0 +1,7 @@
+table aligned lines 2-7: Address | Age (sec) | Hardware Addr | Interface
+  row 3: 192.0.2.1 | 0:00:12 | 0200.5e80.0001 | Vlan20, Ethernet1
+  row 4: 192.0.2.10 | 0:03:41 | 0200.5e80.000a | Vlan20, Ethernet7
+  row 5: 192.0.2.11 | not learned | 0200.5e80.000b | Vlan20, not learned
+  row 6: 198.51.100.2 | 1:12:00 | 0200.5e80.0102 | Management1
+  row 7: 203.0.113.6 | 0:00:02 | 0200.5e80.0206 | Ethernet49/1
+unclaimed 1: show arp

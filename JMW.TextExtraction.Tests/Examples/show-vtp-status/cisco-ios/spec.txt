@@ -1,0 +1,16 @@
+single
+  line "show" => show vtp status
+  line "VTP Version capable :" => VTP Version capable : {VTP Version capable}
+  line "VTP version running :" => VTP version running : {VTP version running}
+  line "VTP Domain Name :" => VTP Domain Name : {VTP Domain Name}
+  line "VTP Pruning Mode :" => VTP Pruning Mode : {VTP Pruning Mode}
+  line "VTP Traps Generation :" => VTP Traps Generation : {VTP Traps Generation}
+  line "Device ID :" => Device ID : {Device ID}
+  line "Configuration" => Configuration last modified by {Configuration last modified by} at {at}
+  line "Local updater ID" => Local updater ID is {Local updater ID}
+  line "Feature VLAN:" => Feature VLAN: {Feature VLAN}
+  line "VTP Operating Mode :" => VTP Operating Mode : {VTP Operating Mode}
+  line "Maximum VLANs supported locally :" => Maximum VLANs supported locally : {Maximum VLANs supported locally}
+  line "Number of existing VLANs :" => Number of existing VLANs : {Number of existing VLANs}
+  line "Configuration Revision :" => Configuration Revision : {Configuration Revision}
+  line "MD5 digest :" => MD5 digest : {MD5 digest}

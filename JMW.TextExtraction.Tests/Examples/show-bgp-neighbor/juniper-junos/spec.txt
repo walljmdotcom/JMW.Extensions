@@ -1,0 +1,44 @@
+table aligned headerless: 7
+
+records split by blank
+  line "Peer: ~ AS ~ Local:" => Peer: {Peer} Local: {Local}
+  line "Type: Internal State: Established Flags:" => Type: {Type} State: {State} Flags: {Flags}
+  line "Last State: OpenConfirm Last Event:" => Last State: {Last State} Last Event: {Last Event}
+  line "Last Error:" => Last Error: {Last Error}
+  line "Options:" => Options: {Options}
+  line "Address families configured:" => Address families configured: {Address families configured}
+  line "Holdtime: ~ Preference:" => Holdtime: {Holdtime} Preference: {Preference}
+  line "Number of flaps:" => Number of flaps: {Number of flaps}
+  line "Peer ID: ~ Local ID: ~ Active Holdtime:" => Peer ID: {Peer ID} Local ID: {Local ID} Active Holdtime: {Active Holdtime}
+  line "Keepalive Interval: ~ Group index: ~ Peer index:" => Keepalive Interval: {Keepalive Interval} Group index: {Group index} Peer index: {Peer index}
+  line "BFD:" => BFD: {BFD}
+  line "NLRI advertised by peer:" => NLRI advertised by peer: {NLRI advertised by peer}
+  line "NLRI for this session:" => NLRI for this session: {NLRI for this session}
+  line "Peer" => Peer does not support {Peer does not support}
+  line "Peer" => Peer supports Refresh capability ( {Field1} )
+  line "Peer" => Peer supports {Peer supports} byte AS extension ( peer-as {peer-as} )
+  line "Stale routes from peer" => Stale routes from peer are {Stale routes from peer}
+  line "Table inet.0 Bit:" => Table inet.0 Bit: {Table inet.0 Bit}
+  line "Table inet.0 Bit: / RIB State:" => RIB State: {Table inet.0 Bit / RIB State} restart is {Table inet.0 Bit / restart}
+  line "Table inet.0 Bit: / Send state:" => Send state: {Table inet.0 Bit / Send state}
+  line "Table inet.0 Bit: / Active prefixes:" => Active prefixes: {Table inet.0 Bit / Active prefixes}
+  line "Table inet.0 Bit: / Received prefixes:" => Received prefixes: {Table inet.0 Bit / Received prefixes}
+  line "Table inet.0 Bit: / Accepted prefixes:" => Accepted prefixes: {Table inet.0 Bit / Accepted prefixes}
+  line "Table inet.0 Bit: / Suppressed due to damping:" => Suppressed due to damping: {Table inet.0 Bit / Suppressed due to damping}
+  line "Table inet.0 Bit: / Advertised prefixes:" => Advertised prefixes: {Table inet.0 Bit / Advertised prefixes}
+  line "Table / RIB State:" => RIB State: {Table / RIB State} restart is {Table / restart}
+  line "Table / Send state:" => Send state: {Table / Send state}
+  line "Table / Active prefixes:" => Active prefixes: {Table / Active prefixes}
+  line "Table / Received prefixes:" => Received prefixes: {Table / Received prefixes}
+  line "Table / Accepted prefixes:" => Accepted prefixes: {Table / Accepted prefixes}
+  line "Table / Suppressed due to damping:" => Suppressed due to damping: {Table / Suppressed due to damping}
+  line "Last traffic :" => Last traffic {?Last traffic qualifier} : {Last traffic} Sent {Sent} Checked {Checked}
+  line "Input messages:" => Input messages: {Input messages}
+  line "Output messages:" => Output messages: {Output messages}
+  line "Output Queue[1]:" => Output Queue[1]: {Output Queue[1]} , inet-unicast )
+  line "Output Queue[2]:" => Output Queue[2]: {Output Queue[2]} , inet-vpn-unicast )
+  line "Type: External State: Established Flags:" => Type: {Type 2} State: {State 2} Flags: {Flags 2}
+  line "Last flap event:" => Last flap event: {Last flap event}
+  line "Error: 'Hold Timer Expired Error' Sent: ~ Recv:" => Error: {Error} Sent: {Sent 2} Recv: {Recv}
+  line "Type: External State: Active Flags:" => Type: {Type 3} State: {State 3} Flags: {Flags 3}
+  line "Last State: Idle Last Event:" => Last State: {Last State 2} Last Event: {Last Event 2}

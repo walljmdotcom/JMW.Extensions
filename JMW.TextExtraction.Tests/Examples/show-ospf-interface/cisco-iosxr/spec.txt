@@ -1,0 +1,19 @@
+records split by indent, head
+  line "@head" => {Name} is {Status} , line protocol is {line protocol}
+  line "Internet" => Internet Address {Internet Address} , Area {Area}
+  line "Label" => Label stack Primary label {Label stack Primary label} Backup label {Backup label} SRTE label {SRTE label}
+  line "Process" => Process ID {Process ID} , Router ID {Router ID} , Network Type {Network Type} , Cost: {Cost}
+  line "Loopback interface" => Loopback interface is {Loopback interface}
+  line "Transmit Delay" => Transmit Delay is {Transmit Delay} , State POINT_TO_POINT , MTU {MTU} , MaxPktSz {MaxPktSz}
+  line "Forward" => Forward reference No , Unnumbered no , Bandwidth {Bandwidth}
+  line "Timer" => Timer intervals configured , Hello {Hello} , Dead {Dead} , Wait {Wait} , Retransmit {Retransmit}
+  line "Timer / Hello" => Hello due in {Timer / Hello due in}
+  line "Index" => Index {Index} , flood queue length {flood queue length}
+  line "Next" => Next 0(0)/0(0)
+  line "Last flood scan length" => Last flood scan length is {Last flood scan length} , maximum is {maximum}
+  line "Last flood scan time" => Last flood scan time is {Last flood scan time} , maximum is {maximum 2}
+  line "LS Ack List:" => LS Ack List: {LS Ack List} , high water mark {high water mark}
+  line "Neighbor Count" => Neighbor Count is {Neighbor Count} , Adjacent neighbor count is {Adjacent neighbor count}
+  line "Neighbor Count / Adjacent" => Adjacent with neighbor {Neighbor Count / Adjacent with neighbor}
+  line "Suppress" => Suppress hello for {Suppress hello for} neighbor(s)
+  line "Multi-area" => Multi-area interface Count is {Multi-area interface Count}

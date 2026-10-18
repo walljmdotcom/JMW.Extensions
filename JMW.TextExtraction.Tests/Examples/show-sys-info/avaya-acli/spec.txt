@@ -1,0 +1,23 @@
+single
+  line "Operation Mode:" => Operation Mode: {Operation Mode}
+  line "Enhanced Secure Mode:" => Enhanced Secure Mode: {Enhanced Secure Mode}
+  line "MAC Address:" => MAC Address: {MAC Address}
+  line "PoE Module FW:" => PoE Module FW: {PoE Module FW}
+  line "Reset Count:" => Reset Count: {Reset Count}
+  line "Last Reset Type:" => Last Reset Type: {Last Reset Type}
+  line "Power Status:" => Power Status: {Power Status}
+  line "Autotopology:" => Autotopology: {Autotopology}
+  line "Base Unit Selection:" => Base Unit Selection: {Base Unit Selection}
+  line "sysDescr:" => sysDescr: {sysDescr}
+  line "HW: ~ FW: ~ SW:" => HW: {HW} FW: {FW} SW: {SW}
+  line "Mfg Date: ~ HW Dev:" => Mfg Date: {Mfg Date} HW Dev: {HW Dev}
+  line "Operational Software: FW: ~ SW:" => Operational Software: {Operational Software} FW: {FW 2} SW: {SW 2}
+  line "Installed software: FW: ~ SW:" => Installed software: {Installed software} FW: {FW 3} SW: {SW 3}
+  line "Operational license:" => Operational license: {Operational license}
+  line "Installed license:" => Installed license: {Installed license}
+  line "sysObjectID:" => sysObjectID: {sysObjectID}
+  line "sysUpTime:" => sysUpTime: {sysUpTime}
+  line "sysNtpTime:" => sysNtpTime: {sysNtpTime}
+  line "sysName:" => sysName: {sysName}
+  line "sysLocation:" => sysLocation: {sysLocation}
+  line "sysContact:" => sysContact: {sysContact}

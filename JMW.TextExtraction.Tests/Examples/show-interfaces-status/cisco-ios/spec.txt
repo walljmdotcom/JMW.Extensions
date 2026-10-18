@@ -1,0 +1,1 @@
+table aligned header: Port | Name | Status | Vlan | Duplex | Speed | Type

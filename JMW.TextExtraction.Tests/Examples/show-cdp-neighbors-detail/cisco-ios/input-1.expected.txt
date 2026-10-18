@@ -1,0 +1,49 @@
+record lines 3-21
+  Device ID = dist-sw1.example.net
+  Entry address(es) / IP address = 192.0.2.11
+  Platform = cisco WS-C3850-48P
+  Capabilities = Router Switch IGMP
+  Interface = TenGigabitEthernet1/1/1
+  Port ID (outgoing port) = TenGigabitEthernet1/0/49
+  Holdtime = 162 sec
+  Version = Cisco IOS Software [Fuji], Catalyst L3 Switch Software (CAT3K_CAA-UNIVERSALK9-M), Version 16.9.5, RELEASE SOFTWARE (fc2) \n Technical Support: http://www.cisco.com/techsupport \n Copyright (c) 1986-2020 by Cisco Systems, Inc. \n Compiled Thu 30-Jan-20 18:48 by mcpre
+  advertisement version = 2
+  VTP Management Domain = 
+  Native VLAN = 1
+  Duplex = full
+  Management address(es) / IP address = 192.0.2.11
+record lines 24-42
+  Device ID = ap-floor2.example.net
+  Entry address(es) / IP address = 198.51.100.40
+  Platform = cisco AIR-AP2802I-B-K9
+  Capabilities = Trans-Bridge Source-Route-Bridge IGMP
+  Interface = GigabitEthernet1/0/14
+  Port ID (outgoing port) = GigabitEthernet0
+  Holdtime = 131 sec
+  Version = Cisco AP Software, ap3g3-k9w8 Version: 8.10.130.0 \n Technical Support: http://www.cisco.com/techsupport \n Copyright (c) 2014-2015 by Cisco Systems, Inc.
+  advertisement version = 2
+  Duplex = full
+  Power drawn = 15.400 Watts
+  Power request id = 25031
+  Power management id = 2
+  Power request levels = 15400 0 0 0 0
+  Management address(es) / IP address = 198.51.100.40
+record lines 45-64
+  Device ID = SEP0200AA00B101
+  Entry address(es) / IP address = 198.51.100.77
+  Platform = Cisco IP Phone 8841
+  Capabilities = Host Phone Two-port Mac Relay
+  Interface = GigabitEthernet1/0/22
+  Port ID (outgoing port) = Port 1
+  Holdtime = 144 sec
+  Second Port Status = Down
+  Version = sip88xx.12-8-1-0001-455
+  advertisement version = 2
+  Duplex = full
+  Power drawn = 6.300 Watts
+  Power request id = 52288
+  Power management id = 3
+  Power request levels = 6300 0 0 0 0
+  Management address(es) = 
+  Total cdp entries displayed = 3
+single lines 1

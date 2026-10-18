@@ -1,0 +1,4 @@
+table aligned header: Instance | Type | Primary RIB | Active/holddown/hidden
+
+single
+  line "show" => show route instance {show route instance}

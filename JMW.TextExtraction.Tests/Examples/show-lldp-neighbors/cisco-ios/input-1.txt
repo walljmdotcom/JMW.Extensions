@@ -1,0 +1,12 @@
+show lldp neighbors
+Capability codes:
+    (R) Router, (B) Bridge, (T) Telephone, (C) DOCSIS Cable Device
+    (W) WLAN Access Point, (P) Repeater, (S) Station, (O) Other
+
+Device ID           Local Intf     Hold-time  Capability      Port ID
+SEP0200AA00B101.corpGi1/0/22       180        B,T             0200AA00B101:P1
+SEP0200AA00B102.corpGi1/0/23       180        B,T             0200AA00B102:P1
+dist-sw1            Te1/1/1        120        B,R             Te1/0/49
+ap-floor2           Gi1/0/14       120        B               Gi0
+
+Total entries displayed: 4

@@ -1,0 +1,11 @@
+table aligned lines 2-11: NAME | MAJ:MIN | RM | SIZE | RO | TYPE | MOUNTPOINTS
+  row 3: sda | 8:0 | 0 | 100G | 0 | disk | 
+  row 4: ├─sda1 | 8:1 | 0 | 1G | 0 | part | /boot
+  row 5: └─sda2 | 8:2 | 0 | 99G | 0 | part | 
+  row 6: ├─vg0-root | 253:0 | 0 | 60G | 0 | lvm | /
+  row 7: ├─vg0-swap | 253:1 | 0 | 4G | 0 | lvm | SWAP
+  row 8: └─vg0-var | 253:2 | 0 | 35G | 0 | lvm | /var
+  row 9: sdb | 8:16 | 0 | 1.8T | 0 | disk | 
+  row 10: └─sdb1 | 8:17 | 0 | 1.8T | 0 | part | /var/lib/backup
+  row 11: sr0 | 11:0 | 1 | 1024M | 0 | rom | 
+unclaimed 1: lsblk

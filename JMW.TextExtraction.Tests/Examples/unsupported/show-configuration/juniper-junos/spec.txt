@@ -1,0 +1,2 @@
+single
+  line "## Last commit:" => ## Last commit: {Last commit}

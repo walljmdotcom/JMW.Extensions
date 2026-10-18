@@ -1,0 +1,5 @@
+single
+  line "name: mgmt mode: static ip: ~ ~ status: up type: physical mtu-override:" => name: {name} mode: {mode} ip: {ip} status: {status} type: {type} mtu-override: {mtu-override}
+  line "name: internal mode: static ip: ~ ~ status: up type: physical mtu-override:" => name: {name 2} mode: {mode 2} ip: {ip 2} status: {status 2} type: {type 2} mtu-override: {mtu-override 2}
+  line "name: loopback_0 ip: ~ ~ status: up type:" => name: {name 3} ip: {ip 3} status: {status 3} type: {type 3}
+  line "name: vlan10 mode: dhcp ip: ~ ~ status: down type: vlan interface: internal vlanid:" => name: {name 4} mode: {mode 3} ip: {ip 4} status: {status 4} type: {type 4} interface: {interface} vlanid: {vlanid}

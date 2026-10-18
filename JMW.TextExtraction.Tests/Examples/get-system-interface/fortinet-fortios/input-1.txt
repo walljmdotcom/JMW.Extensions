@@ -1,0 +1,10 @@
+get system interface
+
+== [ mgmt ]
+name: mgmt    mode: static    ip: 192.0.2.70 255.255.254.0   status: up    type: physical   mtu-override: disable
+== [ internal ]
+name: internal    mode: static    ip: 0.0.0.0 0.0.0.0   status: up    type: physical   mtu-override: disable
+== [ loopback_0 ]
+name: loopback_0    ip: 198.51.100.1 255.255.255.255   status: up    type: loopback
+== [ vlan10 ]
+name: vlan10    mode: dhcp    ip: 203.0.113.20 255.255.255.0   status: down    type: vlan   interface: internal    vlanid: 10

@@ -1,0 +1,52 @@
+admin@(lb-1)(cfg-sync Standalone)(Active)(/Common)(tmos)# show net interface field-fmt all-properties
+net interface 1.1 {
+    aggregation attached
+    counters.bits-in 14.6K
+    counters.bits-out 3.4K
+    counters.collisions 0
+    counters.drops-in 0
+    counters.errors-in 0
+    counters.pkts-in 31
+    counters.pkts-out 5
+    mac-address 02:00:5e:73:00:01
+    media-active 10000T-FD
+    mtu 9198
+    name 1.1
+    pause-active none
+    status up
+    trunk-name external-trunk
+}
+net interface 1.2 {
+    aggregation attached
+    counters.bits-in 16.1K
+    counters.bits-out 0
+    counters.collisions 0
+    counters.drops-in 0
+    counters.errors-in 0
+    counters.pkts-in 32
+    counters.pkts-out 0
+    mac-address 02:00:5e:73:00:02
+    media-active 10000T-FD
+    mtu 9198
+    name 1.2
+    pause-active none
+    status up
+    trunk-name external-trunk
+}
+net interface mgmt {
+    aggregation none
+    counters.bits-in 811.2M
+    counters.bits-out 2.1G
+    counters.collisions 0
+    counters.drops-in 1204
+    counters.errors-in 0
+    counters.pkts-in 1.4M
+    counters.pkts-out 900.2K
+    mac-address 02:00:5e:73:00:10
+    media-active 1000T-FD
+    mtu 1500
+    name mgmt
+    pause-active none
+    status up
+    trunk-name none
+}

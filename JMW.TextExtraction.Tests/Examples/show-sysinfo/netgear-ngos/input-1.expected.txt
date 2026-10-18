@@ -1,0 +1,18 @@
+table aligned lines 18-20: HCNUM-TC | A MIB module containing | textual conventions
+  row 19:  | for high capacity data | types.
+  row 20: Broadcom-REF-MIB | Broadcom Reference | 
+single lines 1-17
+  System Description = M4100-D12G ProSafe 12-port Gigabit L2+ Intelligent Edge Desktop Managed Switch, 10.0.2.20, B1.0.1.1
+  System Name = sw-12.example.net
+  System Location = lab rack 4
+  System Contact = noc@example.net
+  System Object ID = 1.3.6.1.4.1.4526.100.11.22
+  System Up Time = 18 days 10 hrs 38 mins 23 secs
+  Current SNTP Synchronized Time = SNTP Last Attempt Status Is Not Successful
+  MIBs Supported = 
+unclaimed 1: show sysinfo
+unclaimed 13: RFC 1907 - SNMPv2-MIB              The MIB module for SNMPv2 entities
+unclaimed 14: RFC 2819 - RMON-MIB                Remote Network Monitoring Management
+unclaimed 15: Information Base
+unclaimed 16: HC-RMON-MIB                        The original version of this MIB, published
+unclaimed 17: as RFC3273.

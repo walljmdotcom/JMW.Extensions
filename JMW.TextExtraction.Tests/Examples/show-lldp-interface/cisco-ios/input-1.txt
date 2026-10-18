@@ -1,0 +1,25 @@
+show lldp interface
+
+Vlan20:
+    Tx: disabled
+    Rx: disabled
+    Tx state: INIT
+    Rx state: INIT
+
+GigabitEthernet1/0/1:
+    Tx: enabled
+    Rx: enabled
+    Tx state: IDLE
+    Rx state: WAIT FOR FRAME
+
+GigabitEthernet1/0/2:
+    Tx: enabled
+    Rx: enabled
+    Tx state: INIT
+    Rx state: WAIT PORT OPER
+
+TenGigabitEthernet1/1/1:
+    Tx: enabled
+    Rx: enabled
+    Tx state: IDLE
+    Rx state: WAIT FOR FRAME

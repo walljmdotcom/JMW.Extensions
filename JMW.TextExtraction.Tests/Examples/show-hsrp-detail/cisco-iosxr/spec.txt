@@ -1,0 +1,21 @@
+table words headerless: 10
+
+records split by indent, head
+  line "@head" => {Name} - IPv4 Group {IPv4 Group} ( version {version} )
+  line "Local state" => Local state is {Local state} , priority {priority} , may preempt
+  line "Preemption" => Preemption delay for at least {Preemption delay for at least} secs
+  line "Hellotime" => Hellotime {Hellotime} msec holdtime {msec holdtime} msec
+  line "Configured" => Configured hellotime {Configured hellotime} msec holdtime {msec holdtime 2} msec
+  line "Minimum" => Minimum delay {Minimum delay} sec , reload delay {reload delay} sec
+  line "Hot standby IP address" => Hot standby IP address is {Hot standby IP address}
+  line "Active router" => Active router is {Active router} , priority {priority 2} expires in {expires in}
+  line "Active router" => Active router is {Active router}
+  line "Standby router" => Standby router is {Standby router}
+  line "Standby router" => Standby router is {Standby router} , priority {priority 3} expires in {expires in 2}
+  line "Standby virtual mac address" => Standby virtual mac address is {Standby virtual mac address} , state is {state}
+  line "~9 state changes" => {state changes} state changes , last state change {last state change}
+  line "State change history:" => State change history: {State change history}
+  line "Last coup sent:" => Last coup sent: {Last coup sent}
+  line "Last coup received:" => Last coup received: {Last coup received}
+  line "Last resign sent:" => Last resign sent: {Last resign sent}
+  line "Last resign received:" => Last resign received: {Last resign received}

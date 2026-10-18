@@ -1,0 +1,9 @@
+table aligned lines 2-8: Netid | State | Recv-Q | Send-Q | Local Address:Port | Peer Address:Port Process
+  row 3: udp | UNCONN | 0 | 0 | 127.0.0.1:323 | 0.0.0.0:*
+  row 4: udp | UNCONN | 0 | 0 | [::1]:323 | [::]:*
+  row 5: tcp | LISTEN | 0 | 4096 | 127.0.0.53%lo:53 | 0.0.0.0:*
+  row 6: tcp | LISTEN | 0 | 128 | 0.0.0.0:22 | 0.0.0.0:*
+  row 7: tcp | LISTEN | 0 | 511 | 192.0.2.10:443 | 0.0.0.0:*
+  row 8: tcp | LISTEN | 0 | 128 | [::]:22 | [::]:*
+unclaimed 1: ss -tuln
+unclaimed 9: tcp   LISTEN 0      4096       [2001:db8::10]:8443            [::]:*

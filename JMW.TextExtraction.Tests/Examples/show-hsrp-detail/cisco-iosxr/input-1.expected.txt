@@ -1,0 +1,54 @@
+table words lines 15-17: Column1 | Column2 | Column3 | Column4 | Column5 | Column6 | Column7 | Column8 | Column9 | Column10
+  row 15: Jun | 27 | 12:35:58.003 | UTC | Standby | -> | Init | Interface | Down | update
+  row 16: Jun | 27 | 12:54:10.801 | UTC | Init | -> | Listen | Delay | timer | expired
+  row 17: Jun | 27 | 12:54:13.803 | UTC | Speak | -> | Standby | Standby | timer | expired
+record lines 3-21
+  Name = TenGigE0/0/2/1.100
+  IPv4 Group = 26
+  version = 1
+  Local state = Standby
+  priority = 100
+  Preemption delay for at least = 300 [secs]
+  Hellotime = 500
+  msec holdtime = 1500
+  Configured hellotime = 500
+  msec holdtime 2 = 1500
+  Minimum delay = 1 [sec]
+  reload delay = 5 [sec]
+  Hot standby IP address = 192.0.2.1 configured
+  Active router = 192.0.2.3
+  priority 2 = 110
+  expires in = 00:00:01
+  Standby router = local
+  Standby virtual mac address = 0000.0c07.ac1a
+  state = reserved
+  state changes = 23
+  last state change = 7w5d
+  State change history = 
+  Last coup sent = Never
+  Last coup received = Oct 14 04:28:59.718 UTC
+  Last resign sent = Oct 14 04:28:59.708 UTC
+  Last resign received = Never
+record lines 22-39
+  Name = TenGigE0/0/2/1.110
+  IPv4 Group = 27
+  version = 1
+  Local state = Active
+  priority = 110
+  Preemption delay for at least = 300 [secs]
+  Hellotime = 500
+  msec holdtime = 1500
+  Configured hellotime = 500
+  msec holdtime 2 = 1500
+  Minimum delay = 1 [sec]
+  reload delay = 5 [sec]
+  Hot standby IP address = 198.51.100.1 configured
+  Active router = local
+  Standby router = 198.51.100.2, priority 100 expires in 00:00:01
+  Standby virtual mac address = 0000.0c07.ac1b
+  state = active
+  state changes = 20
+  last state change = 23w0d
+  State change history = 
+unclaimed 1: show hsrp detail
+unclaimed 2: Wed Dec  7 12:33:06.139 UTC

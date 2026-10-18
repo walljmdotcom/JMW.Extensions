@@ -1,0 +1,30 @@
+show ntp associations detail
+192.0.2.123 configured, ipv4, our_master, sane, valid, stratum 1
+ref ID .GPS.           , time E5D0F931.377B5B95 (16:35:45.216 UTC Mon Mar 7 2022)
+our mode client, peer mode server, our poll intvl 1024, peer poll intvl 1024
+root delay 0.00 msec, root disp 1.07, reach 377, sync dist 3.40
+delay 1.41 msec, offset -0.2010 msec, dispersion 0.91, jitter 0.33 msec
+precision 2**22, version 4
+assoc id 33957, assoc name 192.0.2.123
+assoc in packets 2336, assoc out packets 2336, assoc error packets 0
+minpoll = 6, maxpoll = 10
+
+198.51.100.123 configured, ipv4, sane, valid, stratum 2
+ref ID 192.0.2.123     , time E5D0FC76.BD8BC517 (16:49:42.740 UTC Mon Mar 7 2022)
+our mode client, peer mode server, our poll intvl 1024, peer poll intvl 1024
+root delay 1.41 msec, root disp 2.17, reach 377, sync dist 6.97
+delay 2.10 msec, offset 0.3880 msec, dispersion 1.04, jitter 0.97 msec
+precision 2**23, version 4
+assoc id 33958, assoc name 198.51.100.123
+assoc in packets 2301, assoc out packets 2301, assoc error packets 1
+minpoll = 6, maxpoll = 10
+
+203.0.113.123 configured, ipv4, insane, invalid, unsynced, stratum 16
+ref ID .INIT.          , time 00000000.00000000 (00:00:00.000 UTC Mon Jan 1 1900)
+our mode client, peer mode unspec, our poll intvl 1024, peer poll intvl 1024
+root delay 0.00 msec, root disp 0.00, reach 0, sync dist 15937.50
+delay 0.00 msec, offset 0.0000 msec, dispersion 15937.50, jitter 15937.50 msec
+precision 2**32, version 4
+assoc id 33959, assoc name 203.0.113.123
+assoc in packets 0, assoc out packets 12, assoc error packets 0
+minpoll = 6, maxpoll = 10

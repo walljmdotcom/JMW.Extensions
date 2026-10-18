@@ -1,0 +1,19 @@
+table words headerless: 3
+table words headerless: 4
+table ruled header: Community | Group / Access | context | acl_filter
+table ruled header: User | Auth | Priv
+table ruled header: User | Auth | Priv(enforce) | Groups
+
+single
+  line "sys contact:" => sys contact: {sys contact}
+  line "sys location:" => sys location: {sys location}
+  line "~9 Illegal operation for community" => {Illegal operation for community name supplied} Illegal operation for community name supplied
+  line "~9 Encoding errors" => {Encoding errors} Encoding errors
+  line "~9 Number of requested variables" => {Number of requested variables} Number of requested variables
+  line "~9 Number of altered variables" => {Number of altered variables} Number of altered variables
+  line "~9 SNMP packets output" => {SNMP packets output} SNMP packets output
+  line "~9 Too big errors" => {Too big errors} Too big errors
+  line "~9 No such name errors" => {No such name errors} No such name errors
+  line "~9 Bad values errors" => {Bad values errors} Bad values errors
+  line "~9 General errors" => {General errors} General errors
+  line "~9 Silent Drops" => {Silent Drops} Silent Drops

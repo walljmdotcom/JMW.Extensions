@@ -1,0 +1,75 @@
+display interface
+ Bridge-Aggregation1 current state: UP
+ IP Packet Frame Type: PKTFMT_ETHNT_2, Hardware Address: 0200-5e20-0001
+ Description: Bridge-Aggregation1 Interface
+ 1Gbps-speed mode, full-duplex mode
+ Link speed type is autonegotiation, link duplex type is autonegotiation
+ PVID: 1
+ Port link-type: trunk
+  VLAN passing  : 1(default vlan), 100
+  VLAN permitted: 1(default vlan), 100
+  Trunk port encapsulation: IEEE 802.1q
+ Last clearing of counters:  Never
+ Last 300 seconds input:  0 packets/sec 58 bytes/sec    0%
+ Last 300 seconds output:  0 packets/sec 114 bytes/sec    0%
+ Input (total):  167010 packets, 34103102 bytes
+	 58023 unicasts, 0 broadcasts, 108986 multicasts
+ Input:  0 input errors, 0 runts, 0 giants, 0 throttles
+	 0 CRC, 0 frame, - overruns, 0 aborts
+	 - ignored, - parity errors
+ Output (total): 505775 packets, 65742066 bytes
+	 0 unicasts, 0 broadcasts, 505775 multicasts, 0 pauses
+ Output: 0 output errors, - underruns, - buffer failures
+	 0 aborts, 0 deferred, 0 collisions, 0 late collisions
+	 0 lost carrier, - no carrier
+
+ Bridge-Aggregation2 current state: DOWN
+ IP Packet Frame Type: PKTFMT_ETHNT_2, Hardware Address: 0200-5e20-0002
+ Description: Bridge-Aggregation2 Interface
+ Unknown-speed mode, unknown-duplex mode
+ Link speed type is autonegotiation, link duplex type is autonegotiation
+ PVID: 20
+ Port link-type: access
+  Tagged   VLAN ID : none
+  Untagged VLAN ID : 20
+ Last clearing of counters:  Never
+ Last 300 seconds input:  0 packets/sec 0 bytes/sec    -%
+ Last 300 seconds output:  0 packets/sec 0 bytes/sec    -%
+ Input (total):  0 packets, 0 bytes
+	 0 unicasts, 0 broadcasts, 0 multicasts
+ Input:  0 input errors, 0 runts, 0 giants, 0 throttles
+	 0 CRC, 0 frame, - overruns, 0 aborts
+	 - ignored, - parity errors
+ Output (total): 0 packets, 0 bytes
+	 0 unicasts, 0 broadcasts, 0 multicasts, 0 pauses
+ Output: 0 output errors, - underruns, - buffer failures
+	 0 aborts, 0 deferred, 0 collisions, 0 late collisions
+	 0 lost carrier, - no carrier
+
+ GigabitEthernet1/0/1 current state: UP
+ IP Packet Frame Type: PKTFMT_ETHNT_2, Hardware Address: 0200-5e20-0101
+ Description: GigabitEthernet1/0/1 Interface
+ Loopback is not set
+ Media type is optical fiber, Port hardware type is 1000_BASE_SX_SFP
+ 1000Mbps-speed mode, full-duplex mode
+ Link speed type is autonegotiation, link duplex type is autonegotiation
+ Flow-control is not enabled
+ The Maximum Frame Length is 9216
+ PVID: 1
+ Port link-type: trunk
+  VLAN passing  : 1(default vlan), 100
+  VLAN permitted: 1(default vlan), 100
+  Trunk port encapsulation: IEEE 802.1q
+ Last clearing of counters:  Never
+ Last 300 seconds input:  2 packets/sec 310 bytes/sec    0%
+ Last 300 seconds output:  1 packets/sec 122 bytes/sec    0%
+ Input (total):  902211 packets, 120330112 bytes
+	 400120 unicasts, 120 broadcasts, 501971 multicasts
+ Input:  3 input errors, 0 runts, 0 giants, 0 throttles
+	 3 CRC, 0 frame, - overruns, 0 aborts
+	 - ignored, - parity errors
+ Output (total): 811200 packets, 98010231 bytes
+	 300100 unicasts, 2 broadcasts, 511098 multicasts, 0 pauses
+ Output: 0 output errors, - underruns, - buffer failures
+	 0 aborts, 0 deferred, 0 collisions, 0 late collisions
+	 0 lost carrier, - no carrier

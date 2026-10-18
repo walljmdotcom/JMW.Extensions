@@ -1,0 +1,47 @@
+record lines 3-15
+  Local port = 1/1
+  Neighbor = 0200.5e50.c230
+  TTL = 114 [seconds]
+  Neighbor / Chassis ID (MAC address) = 0200.5e50.c200
+  Neighbor / Port ID (MAC address) = 0200.5e50.c230
+  Neighbor / Time to live = 120 seconds
+  Neighbor / System name = core-1.example.net
+  Neighbor / Port description = 10GigabitEthernet2/1
+  Neighbor / System capabilities = bridge, router
+  Neighbor / System capabilities / Enabled capabilities = router
+  Neighbor / Link aggregation = not capable
+  Neighbor / Maximum frame size = 9216 octets
+  Neighbor / Port VLAN ID = 40
+  Neighbor / Management address (IPv4) = 192.0.2.51
+record lines 17-29
+  Local port = 1/2
+  Neighbor = 0200.5e50.e831
+  TTL = 108 [seconds]
+  Neighbor / Chassis ID (MAC address) = 0200.5e50.e800
+  Neighbor / Port ID (locally assigned) = 27
+  Neighbor / Time to live = 120 seconds
+  Neighbor / System name = access-9.example.net
+  Neighbor / Port description = uplink a
+  Neighbor / System capabilities = bridge
+  Neighbor / System capabilities / Enabled capabilities = bridge
+  Neighbor / Link aggregation = not capable
+  Neighbor / Maximum frame size = 1518 octets
+  Neighbor / Port VLAN ID = 1
+  Neighbor / Management address (IPv4) = 192.0.2.52
+record lines 31-43
+  Local port = 2/4
+  Neighbor = 0200.5e50.1101
+  TTL = 97 [seconds]
+  Neighbor / Chassis ID (network address) = 192.0.2.53
+  Neighbor / Port ID (interface name) = ethernet1/1/1
+  Neighbor / Time to live = 120 seconds
+  Neighbor / System name = fw-edge.example.net
+  Neighbor / Port description = outside
+  Neighbor / System capabilities = router
+  Neighbor / System capabilities / Enabled capabilities = router
+  Neighbor / Link aggregation = aggregated, port channel 3
+  Neighbor / Maximum frame size = 9216 octets
+  Neighbor / Port VLAN ID = 200
+  Neighbor / Management address (IPv4) = 192.0.2.53
+unclaimed 1: show lldp neighbors detail
+unclaimed 2: Total number of LLDP neighbors on all ports: 3

@@ -1,0 +1,12 @@
+single
+  line "DTP information for ~: / TOS/TAS/TNS:" => TOS/TAS/TNS: {DTP information for / TOS/TAS/TNS}
+  line "DTP information for ~: / TOT/TAT/TNT:" => TOT/TAT/TNT: {DTP information for / TOT/TAT/TNT}
+  line "DTP information for ~: / Hello timer expiration :" => Hello timer expiration {?DTP information for / Hello timer expiration qualifier} : {DTP information for / Hello timer expiration}
+  line "DTP information for ~: / Access timer expiration :" => Access timer expiration {?DTP information for / Access timer expiration qualifier} : {DTP information for / Access timer expiration}
+  line "DTP information for ~: / FSM state:" => FSM state: {DTP information for / FSM state}
+  line "DTP information for ~: / Enabled:" => Enabled: {DTP information for / Enabled}
+  line "DTP information for ~: / In STP:" => In STP: {DTP information for / In STP}
+  line "DTP information for ~: / ~9 packets received" => {DTP information for / packets received} packets received ( {DTP information for / good} good )
+  line "DTP information for ~: / ~9 packets dropped" => {DTP information for / packets dropped} packets dropped
+  line "DTP information for ~: / ~9 packets output" => {DTP information for / packets output} packets output ( {DTP information for / good 2} good )
+  line "DTP information for ~: / ~9 output errors" => {DTP information for / output errors} output errors

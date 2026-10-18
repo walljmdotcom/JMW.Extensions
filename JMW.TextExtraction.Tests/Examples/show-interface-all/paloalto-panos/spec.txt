@@ -1,0 +1,7 @@
+table aligned header: name | id | speed/duplex/state | mac address
+table ruled header: name | id | vsys | zone | forwarding | tag | address
+
+single
+  line "total configured hardware interfaces:" => total configured hardware interfaces: {total configured hardware interfaces}
+  line "aggregation groups:" => aggregation groups: {aggregation groups}
+  line "total configured logical interfaces:" => total configured logical interfaces: {total configured logical interfaces}

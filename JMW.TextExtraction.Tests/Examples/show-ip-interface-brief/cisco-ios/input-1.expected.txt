@@ -1,0 +1,9 @@
+table aligned lines 2-9: Interface | IP-Address | OK? | Method | Status | Protocol
+  row 3: Vlan1 | unassigned | YES | NVRAM | administratively down | down
+  row 4: Vlan20 | 192.0.2.1 | YES | NVRAM | up | up
+  row 5: Vlan99 | 198.51.100.2 | YES | manual | up | up
+  row 6: GigabitEthernet0/0 | unassigned | YES | unset | down | down
+  row 7: GigabitEthernet1/0/1 | 203.0.113.6 | YES | DHCP | up | up
+  row 8: GigabitEthernet1/0/2 | unassigned | YES | unset | down | down
+  row 9: Loopback0 | 192.0.2.255 | YES | NVRAM | up | up
+unclaimed 1: show ip interface brief

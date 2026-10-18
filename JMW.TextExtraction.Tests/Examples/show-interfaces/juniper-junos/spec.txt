@@ -1,0 +1,9 @@
+records start at key "Physical interface:"
+  line "Physical interface:" => Physical interface: {Physical interface} , {Physical link is} Physical link is {Physical link}
+  line "Link-level type: MTU:" => Link-level type: {Link-level type} , MTU: {MTU}
+  line "Interface index:" => Interface index: {Interface index}
+  line "Current address:" => Current address: {Current address}
+  line "Logical" => Logical interface {Logical interface} ( Index {Index} )
+  line "Logical / Protocol" => Protocol inet
+  line "Logical / Protocol" => Protocol inet6
+  line "Logical / Protocol / Local:" => Local: {Logical / Protocol / Local}

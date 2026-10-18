@@ -1,0 +1,26 @@
+single
+  line "get" => get system status
+  line "Version:" => Version: {Version}
+  line "Serial-Number:" => Serial-Number: {Serial-Number}
+  line "BIOS version:" => BIOS version: {BIOS version}
+  line "System Part-Number:" => System Part-Number: {System Part-Number}
+  line "Burn in MAC:" => Burn in MAC: {Burn in MAC}
+  line "Hostname:" => Hostname: {Hostname}
+  line "Distribution:" => Distribution: {Distribution}
+  line "Branch point:" => Branch point: {Branch point}
+  line "System time:" => System time: {System time}
+  line "Security Level:" => Security Level: {Security Level}
+  line "Firmware Signature:" => Firmware Signature: {Firmware Signature}
+  line "Virus-DB:" => Virus-DB: {Virus-DB}
+  line "IPS-DB:" => IPS-DB: {IPS-DB}
+  line "Log hard disk:" => Log hard disk: {Log hard disk}
+  line "Private Encryption:" => Private Encryption: {Private Encryption}
+  line "Operation Mode:" => Operation Mode: {Operation Mode}
+  line "Current virtual domain:" => Current virtual domain: {Current virtual domain}
+  line "Max number of virtual domains:" => Max number of virtual domains: {Max number of virtual domains}
+  line "Virtual domains status:" => Virtual domains status: {Virtual domains status} , {in TP mode} in TP mode
+  line "Virtual domain configuration:" => Virtual domain configuration: {Virtual domain configuration}
+  line "FIPS-CC mode:" => FIPS-CC mode: {FIPS-CC mode}
+  line "Current HA mode:" => Current HA mode: {Current HA mode}
+  line "Cluster uptime:" => Cluster uptime: {Cluster uptime} , {hours} hours , {minutes} minutes , {seconds} seconds
+  line "Release Version Information:" => Release Version Information: {Release Version Information}

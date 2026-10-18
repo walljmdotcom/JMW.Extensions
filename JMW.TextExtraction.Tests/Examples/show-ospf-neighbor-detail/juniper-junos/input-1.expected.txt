@@ -1,0 +1,41 @@
+table aligned lines 3-4: Address | Interface | State | ID | Pri | Dead
+  row 4: 192.0.2.7 | ge-0/0/1.0 | Full | 198.51.100.8 | 128 | 28
+table aligned lines 10-13: Column1 | Column2 | Column3 | Column4
+  row 10: 192.0.2.18       ge-0/0/3.0             Full | 198.51.100.10 | 1 | 31
+  row 11: Area 0.0.0.1, opt 0x42, DR 192.0.2.18, BDR | 192.0.2.17 |  | 
+  row 12: Up 2d 04:44:53, adjacent 2d 04:44:13 |  |  | 
+  row 13: 192.0.2.33       gr-0/0/0.10            Init | 198.51.100.7 | 128 | 25
+table aligned lines 19-20: Address | Interface | State | ID | Pri | Dead
+  row 20: 203.0.113.1 | ge-0/0/4.100 | Full | 203.0.113.250 | 128 | 35
+record lines 2-6
+  Instance = master
+  Area = 0.0.0.0
+  opt = 0x52
+  DR = 0.0.0.0
+  BDR = 0.0.0.0
+  Up = 12w5d 11:53:10
+  adjacent = 12w5d 11:53:10
+record lines 7-14
+  ge-0/0/2.0 Full = 192.0.2.2
+  ge-0/0/2.0 Full 2 = 198.51.100.5     128    29
+  Area = 0.0.0.0
+  opt = 0x52
+  DR = 0.0.0.0
+  BDR = 0.0.0.0
+  Up = 14w4d 10:58:47
+  adjacent = 14w4d 10:58:47
+  Area = 0.0.0.0
+  opt = 0x12
+  DR = 0.0.0.0
+  BDR = 0.0.0.0
+record lines 16
+  Instance = blue
+record lines 18-22
+  Instance = red
+  Area = 0.0.0.0
+  opt = 0x52
+  DR = 203.0.113.1
+  BDR = 203.0.113.2
+  Up = 6d 01:02:03
+  adjacent = 6d 01:01:23
+unclaimed 1: show ospf neighbor instance all detail | no-more

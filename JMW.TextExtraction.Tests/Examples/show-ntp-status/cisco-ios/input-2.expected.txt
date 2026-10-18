@@ -1,0 +1,18 @@
+single lines 1-9
+  Clock = unsynchronized
+  stratum = 16
+  reference = no
+  reference 2 = clock
+  nominal freq = 250.0000 Hz
+  actual freq = 250.0000 Hz
+  precision = 2**24
+  ntp uptime = 4200 (1/100 of seconds)
+  resolution = 4000
+  reference time = 00000000.00000000 (00:00:00.000 UTC Mon Jan 1 1900)
+  clock offset = 0.0000 msec
+  root delay = 0.00 msec
+  root dispersion = 0.17 msec
+  peer dispersion = 0.00 msec
+  loopfilter state = 'NSET' (Never set)
+  drift = 0.000000000 s/s
+  system poll interval = 8

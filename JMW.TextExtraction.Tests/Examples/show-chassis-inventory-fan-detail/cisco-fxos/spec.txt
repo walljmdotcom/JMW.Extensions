@@ -1,0 +1,19 @@
+records split by indent 8, head
+  line "@head" => Tray 1 Module {Tray 1 Module}
+  line "Presence:" => Presence: {Presence}
+  line "Product Name:" => Product Name: {Product Name}
+  line "PID:" => PID: {PID}
+  line "VID:" => VID: {VID}
+  line "Vendor:" => Vendor: {Vendor}
+  line "Serial :" => Serial {?Serial qualifier} : {Serial}
+  line "HW Revision:" => HW Revision: {HW Revision}
+  line "Fans: / ID" => ID {Fans / ID}
+  line "Fans: / ID / Product Name:" => Product Name: {Fans / ID / Product Name}
+  line "Fans: / ID / PID:" => PID: {Fans / ID / PID}
+  line "Fans: / ID / VID:" => VID: {Fans / ID / VID}
+  line "Fans: / ID / Vendor:" => Vendor: {Fans / ID / Vendor}
+  line "Fans: / ID / Serial :" => Serial {?Fans / ID / Serial qualifier} : {Fans / ID / Serial}
+  line "Fans: / ID / HW Revision:" => HW Revision: {Fans / ID / HW Revision}
+
+single
+  line "Chassis / Fan Modules:" => Fan Modules: {Chassis / Fan Modules}

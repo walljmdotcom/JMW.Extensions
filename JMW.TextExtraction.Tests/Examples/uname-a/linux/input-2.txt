@@ -1,0 +1,2 @@
+uname -a
+Linux pi-4.example.net 6.1.21-v7+ #1642 SMP Mon Apr  3 17:20:52 BST 2023 armv7l GNU/Linux

@@ -1,0 +1,8 @@
++----+-------------+---------+
+| id | name        | state   |
++----+-------------+---------+
+|  1 | alpha one   | active  |
+|  2 | beta        | stopped |
+| 13 | gamma ray   | active  |
++----+-------------+---------+
+3 rows in set (0.00 sec)

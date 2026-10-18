@@ -1,0 +1,32 @@
+single lines 1-31
+  hostname = fw1
+  ip-address = 192.0.2.62
+  public-ip-address = unknown
+  netmask = 255.255.254.0
+  default-gateway = 192.0.2.1
+  ip-assignment = static
+  ipv6-address = unknown
+  ipv6-link-local-address = unknown
+  ipv6-default-gateway = 
+  mac-address = 02:00:5e:40:00:01
+  time = Tue Sep 13 16:37:56 2022
+  uptime = 14 days, 0:08:54
+  family = 5200
+  model = PA-5280
+  serial = 000000000001
+  cloud-mode = non-cloud
+  sw-version = 8.1.0
+  app-version = 8617-7553
+  app-release-date = 2022/09/07 21:24:48 EDT
+  av-version = 3372-3883
+  av-release-date = 2020/06/07 08:31:24 EDT
+  threat-version = 0
+  wildfire-version = 460814-463748
+  url-filtering-version = 20200608.20121
+  global-protect-datafile-version = unknown
+  logdb-version = 8.1.8
+  platform-family = 5200
+  vpn-disable-mode = off
+  multi-vsys = on
+  operational-mode = normal
+unclaimed 1: show admin@fw1(active)> show system

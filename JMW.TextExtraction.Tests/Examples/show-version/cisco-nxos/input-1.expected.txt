@@ -1,0 +1,38 @@
+single lines 1-50
+  TAC support = http://www.cisco.com/tac
+  Documents = http://www.cisco.com/en/US/products/ps9372/tsd_products_support_series_home.html
+  Field1 = 2002-2016
+  The copyrights to certain works contained = herein
+  Field2 = owned by
+  other third parties and = used and distributed under license.
+  Some parts of this software = covered under the GNU Public
+  License. A copy of the license = available at
+  Software / BIOS = version 2.1.2
+  Software / Fabric Power Sequencer Firmware = Module 1: version v4.0
+  Software / Microcontroller Firmware = version v0.0.0.15
+  Software / kickstart = version 7.1(4)N1(1)
+  Software / system = version 7.1(4)N1(1)
+  Software / BIOS compile time = 07/16/2014
+  Software / kickstart image file = bootflash:///n6000-uk9-kickstart.7.1.4.N1.1.bin
+  Software / kickstart compile time = 9/2/2016 10:00:00 [09/02/2016 16:17:17]
+  Software / system image file = bootflash:///n6000-uk9.7.1.4.N1.1.bin
+  Software / system compile time = 9/2/2016 10:00:00 [09/02/2016 16:18:08]
+  Hardware / CPU = 
+  Hardware / with = 1.80
+  Hardware / with kB of memory. = 8243332
+  Hardware / Processor Board ID = FOC0000A1BC
+  Hardware / Device name = nx-1.example.net
+  Hardware / bootflash = 7692288 kB
+  Kernel uptime = 402 day(s)
+  hour(s) = 21
+  minute(s) = 53
+  second(s) = 31
+  Last / Reason = Unknown
+  Last / System version = 7.1(4)N1(1)
+  Last / Service = 
+unclaimed 10: http://www.gnu.org/licenses/gpl.html.
+unclaimed 15: Module 1: v4.0
+unclaimed 16: Module 1: v4.0
+unclaimed 20: Module 1: v2.0.0.0
+unclaimed 22: Module 1: v1.3.0.0
+unclaimed 24: Module not detected

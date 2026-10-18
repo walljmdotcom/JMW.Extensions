@@ -1,0 +1,10 @@
+single lines 1-10
+  Version = FortiSwitch-224E-POE v6.2.4,build0213,200501 (GA)
+  Serial-Number = S224EP0000000001
+  BIOS version = 04000006
+  System Part-Number = P21936-03
+  Burn in MAC = 02:00:5e:74:00:01
+  Hostname = fsw-1
+  Distribution = International
+  Branch point = 213
+  System time = Fri Jan  7 16:23:37 2022

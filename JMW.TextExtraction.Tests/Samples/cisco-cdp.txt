@@ -1,0 +1,12 @@
+Capability Codes: R - Router, T - Trans Bridge, B - Source Route Bridge
+                  S - Switch, H - Host, I - IGMP, r - Repeater, P - Phone
+
+Device ID        Local Intrfce     Holdtme    Capability  Platform  Port ID
+core-sw01.example.com
+                 Gig 1/0/1         150             S I    WS-C3850  Gig 1/0/24
+core-sw02.example.com
+                 Gig 1/0/2         142             S I    WS-C3850  Gig 1/0/24
+ap-lobby         Gig 1/0/10        171              T     AIR-AP380 Gig 0
+phone-1001       Fas 0/5           128            H P M   IP Phone  Port 1
+
+Total cdp entries displayed : 4

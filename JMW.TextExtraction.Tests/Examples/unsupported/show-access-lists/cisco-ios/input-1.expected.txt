@@ -1,0 +1,29 @@
+single lines 1-13
+  Standard / permit = 10
+  Standard / permit 2 = 198.51.100.0, wildcard bits 0.0.0.255
+  Standard / matches = 1022
+  Standard / permit = 20
+  Standard / permit 2 = 192.0.2.10
+  Standard / matches = 12
+  Standard / deny any log = 30
+  Standard / matches 2 = 3
+  Extended / permit tcp any host = 10
+  Extended / permit tcp any host eq = 203.0.113.10
+  Extended / eq = www
+  Extended / matches = 88211
+  Extended / permit tcp any host = 20
+  Extended / permit tcp any host eq = 203.0.113.10
+  Extended / eq = 443
+  Extended / matches = 412093
+  Extended / deny ip any any log = 30
+  Extended / matches 2 = 2290
+  Extended / permit udp any any = 10
+  Extended / permit udp any any 2 = range 16384 32767
+  Extended / permit tcp any any eq = 20
+  Extended / permit tcp any any eq 2 = 5060
+  Extended / permit udp any any = 30
+  Extended / permit udp any any 2 = eq 5060 (19 matches)
+unclaimed 1: show access-lists
+unclaimed 2: Standard IP access list MGMT-HOSTS
+unclaimed 6: Extended IP access list WEB-IN
+unclaimed 10: Extended IP access list VOICE-QOS

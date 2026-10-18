@@ -1,0 +1,10 @@
+records split by blank, head
+  line "@head" => {Name} configured , ipv4 , {Field2} , {Field3} , {stratum} stratum {stratum 2}
+  line "ref" => ref ID {ref ID} , time {time} ( {UTC Mon} UTC Mon {UTC Mon 2} )
+  line "our" => our mode client , peer mode {peer mode} , our poll intvl {our poll intvl} , peer poll intvl {peer poll intvl}
+  line "root" => root delay {root delay} msec , root disp {root disp} , reach {reach} , sync dist {sync dist}
+  line "delay" => delay {delay} msec , offset {offset} msec , dispersion {dispersion} , jitter {jitter} msec
+  line "precision" => precision {precision} , version {version}
+  line "assoc" => assoc id {assoc id} , assoc name {assoc name}
+  line "assoc" => assoc in packets {assoc in packets} , assoc out packets {assoc out packets} , assoc error packets {assoc error packets}
+  line "minpoll = maxpoll =" => minpoll = {minpoll} , maxpoll = {maxpoll}

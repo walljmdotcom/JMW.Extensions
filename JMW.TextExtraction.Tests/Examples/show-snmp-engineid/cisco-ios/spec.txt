@@ -1,0 +1,4 @@
+single
+  line "show" => show snmp engineID
+  line "Local SNMP engineID:" => Local SNMP engineID: {Local SNMP engineID}
+  line "Remote" => Remote Engine ID IP-addr Port

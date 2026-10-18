@@ -1,0 +1,29 @@
+records split by indent, head
+  line "@head" => {Name} is {Status}
+  line "Dedicated" => Dedicated Interface
+  line "Hardware: address:" => Hardware: {Hardware} , address: {address}
+  line "Description:" => Description: {Description}
+  line "MTU" => MTU {MTU} bytes , BW {BW} Kbit , DLY {DLY} usec
+  line "reliability" => reliability {reliability} , txload {txload} , rxload {rxload}
+  line "Encapsulation" => Encapsulation ARPA , medium is {medium}
+  line "Port mode" => Port mode is {Port mode}
+  line "full-duplex" => full-duplex , {Gb/s} Gb/s , media type is {media type}
+  line "full-duplex" => full-duplex , {Mb/s} Mb/s
+  line "Last" => Last clearing of "show interface" counters never
+  line "Last" => Last link flapped 12week ( s ) 2day ( s )
+  line "Last" => Last link flapped never
+  line "~9 interface resets" => {interface resets} interface resets
+  line "~9 seconds input rate" => {seconds input rate} seconds input rate {seconds input rate bits/sec} bits/sec , {packets/sec} packets/sec
+  line "~9 seconds output rate" => {seconds output rate} seconds output rate {seconds output rate bits/sec} bits/sec , {packets/sec 2} packets/sec
+  line "RX" => RX
+  line "RX / ~9 unicast packets" => {RX / unicast packets} unicast packets {RX / unicast packets multicast packets} multicast packets {RX / multicast packets} broadcast packets
+  line "RX / ~9 input packets" => {RX / input packets} input packets {RX / input packets bytes} bytes
+  line "RX / ~9 runts" => {RX / runts} runts {RX / runts giants} giants {RX / giants} CRC {RX / CRC} no buffer
+  line "TX" => TX
+  line "TX / ~9 unicast packets" => {TX / unicast packets} unicast packets {TX / unicast packets multicast packets} multicast packets {TX / multicast packets} broadcast packets
+  line "TX / ~9 output packets" => {TX / output packets} output packets {TX / output packets bytes} bytes
+  line "TX / ~9 output error" => {TX / output error} output error {TX / output error collision} collision {TX / collision} deferred {TX / deferred} late collision
+  line "Internet Address" => Internet Address is {Internet Address}
+
+single
+  line "mgmt0" => mgmt0 is {mgmt0}

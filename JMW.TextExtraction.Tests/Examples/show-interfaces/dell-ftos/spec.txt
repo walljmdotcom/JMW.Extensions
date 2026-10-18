@@ -1,0 +1,20 @@
+records start at phrase "line protocol is", head
+  line "@head" => {Name} is {Status} , line protocol is {line protocol}
+  line "Hardware" => Hardware is {Hardware} , address is {address}
+  line "Hardware / Current address" => Current address is {Hardware / Current address}
+  line "Server Port AdminState" => Server Port AdminState is {Server Port AdminState}
+  line "Pluggable" => Pluggable media not present
+  line "Interface index" => Interface index is {Interface index}
+  line "Internet address" => Internet address is {Internet address}
+  line "Mode of IPv4 Address Assignment :" => Mode of IPv4 Address Assignment : {Mode of IPv4 Address Assignment}
+  line "DHCP Client-ID :" => DHCP Client-ID : {DHCP Client-ID}
+  line "MTU" => MTU {MTU} bytes , IP MTU {IP MTU} bytes
+  line "LineSpeed" => LineSpeed {LineSpeed} Mbit
+  line "LineSpeed" => LineSpeed auto
+  line "Flowcontrol" => Flowcontrol rx off tx off
+  line "ARP type:" => ARP type: {ARP type} , ARP Timeout {ARP Timeout}
+  line "Last" => Last clearing of "show interface" counters 57w5d0h
+  line "Queueing strategy:" => Queueing strategy: {Queueing strategy}
+  line "Time since last interface status change:" => Time since last interface status change: {Time since last interface status change}
+  line "Hardware address" => Hardware address is {Hardware address} , Current address is {Current address}
+  line "Members in this channel:" => Members in this channel: {Members in this channel}

@@ -1,0 +1,35 @@
+records split by indent, head
+  line "@head" => {Name} is {Status} , line protocol is {line protocol}
+  line "Hardware" => Hardware is {Hardware} , address is {address}
+  line "MTU" => MTU {MTU} bytes , BW {BW} Kbit/sec , DLY {DLY} usec ,
+  line "MTU / reliability" => reliability {MTU / reliability} , txload {MTU / txload} , rxload {MTU / rxload}
+  line "Encapsulation" => Encapsulation ARPA , loopback not set
+  line "Keepalive" => Keepalive not supported
+  line "Keepalive" => Keepalive set ( {sec} sec )
+  line "ARP type:" => ARP type: {ARP type} , ARP Timeout {ARP Timeout}
+  line "Last" => Last input {Last input} , output {output} , output hang never
+  line "Last" => Last clearing of "show interface" counters never
+  line "Input queue: Total output drops:" => Input queue: {Input queue} ; Total output drops: {Total output drops}
+  line "Queueing strategy:" => Queueing strategy: {Queueing strategy}
+  line "Output queue:" => Output queue: {Output queue}
+  line "~9 minute input rate" => {minute input rate} minute input rate {minute input rate bits/sec} bits/sec , {packets/sec} packets/sec
+  line "~9 minute output rate" => {minute output rate} minute output rate {minute output rate bits/sec} bits/sec , {packets/sec 2} packets/sec
+  line "~9 packets input" => {packets input} packets input , {bytes} bytes , {no buffer} no buffer
+  line "Received" => Received {Received} broadcasts ( {multicasts} multicasts )
+  line "~9 runts" => {runts} runts , {giants} giants , {throttles} throttles
+  line "~9 input errors" => {input errors} input errors , {CRC} CRC , {frame} frame , {overrun} overrun , {ignored} ignored
+  line "~9 packets output" => {packets output} packets output , {bytes 2} bytes , {underruns} underruns
+  line "~9 output errors" => {output errors} output errors , {interface resets} interface resets
+  line "~9 output buffer failures" => {output buffer failures} output buffer failures , {output buffers swapped out} output buffers swapped out
+  line "Description:" => Description: {Description}
+  line "Internet address" => Internet address is {Internet address}
+  line "Full-duplex" => Full-duplex , {Field1} , media type is {media type}
+  line "input" => input flow-control is {input flow-control} , output flow-control is {output flow-control}
+  line "~9 watchdog" => {watchdog} watchdog , {multicast} multicast , {pause input} pause input
+  line "~9 input packets with dribble" => {input packets with dribble condition detected} input packets with dribble condition detected
+  line "~9 unknown protocol drops" => {unknown protocol drops} unknown protocol drops
+  line "~9 babbles" => {babbles} babbles , {late collision} late collision , {deferred} deferred
+  line "~9 lost carrier" => {lost carrier} lost carrier , {no carrier} no carrier , {pause output} pause output
+
+single
+  line "show" => show interfaces

@@ -1,0 +1,7 @@
+show arp
+Address         Age (sec)  Hardware Addr   Interface
+192.0.2.1         0:00:12  0200.5e80.0001  Vlan20, Ethernet1
+192.0.2.10        0:03:41  0200.5e80.000a  Vlan20, Ethernet7
+192.0.2.11      not learned 0200.5e80.000b Vlan20, not learned
+198.51.100.2      1:12:00  0200.5e80.0102  Management1
+203.0.113.6       0:00:02  0200.5e80.0206  Ethernet49/1

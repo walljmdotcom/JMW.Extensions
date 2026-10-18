@@ -1,0 +1,10 @@
+table aligned lines 6-10: Device ID | Local Intf | Hold-time | Capability | Port ID
+  row 7: SEP0200AA00B101.corp | Gi1/0/22 | 180 | B,T | 0200AA00B101:P1
+  row 8: SEP0200AA00B102.corp | Gi1/0/23 | 180 | B,T | 0200AA00B102:P1
+  row 9: dist-sw1 | Te1/1/1 | 120 | B,R | Te1/0/49
+  row 10: ap-floor2 | Gi1/0/14 | 120 | B | Gi0
+single lines 1-12
+  Total entries displayed = 4
+unclaimed 1: show lldp neighbors
+unclaimed 3: (R) Router, (B) Bridge, (T) Telephone, (C) DOCSIS Cable Device
+unclaimed 4: (W) WLAN Access Point, (P) Repeater, (S) Station, (O) Other

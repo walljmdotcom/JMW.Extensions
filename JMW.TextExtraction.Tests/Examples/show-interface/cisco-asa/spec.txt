@@ -1,0 +1,23 @@
+records start at key "Interface", head
+  line "@head" => {Name} is {Status} , line protocol is {line protocol}
+  line "Hardware" => Hardware is {Hardware} , BW {BW} Mbps , DLY {DLY} usec
+  line "Hardware / Input flow control" => Input flow control is {Hardware / Input flow control} , output flow control is {Hardware / output flow control}
+  line "Hardware / Description:" => Description: {Hardware / Description}
+  line "Hardware / MAC" => MAC address 0200.5e60.0001 , MTU {Hardware / MTU}
+  line "Hardware / IP" => IP address {Hardware / IP address} , subnet mask {Hardware / subnet mask}
+  line "Hardware / IP" => IP address unassigned
+  line "Hardware / ~9 packets input" => {Hardware / packets input} packets input , {Hardware / bytes} bytes , {Hardware / no buffer} no buffer
+  line "Hardware / ~9 input errors" => {Hardware / input errors} input errors , {Hardware / CRC} CRC , {Hardware / frame} frame , {Hardware / overrun} overrun , {Hardware / ignored} ignored , {Hardware / abort} abort
+  line "Hardware / ~9 pause input" => {Hardware / pause input} pause input , {Hardware / resume input} resume input
+  line "Hardware / ~9" => {Hardware / L2 decode drops} L2 decode drops
+  line "Hardware / ~9 packets output" => {Hardware / packets output} packets output , {Hardware / bytes 2} bytes , {Hardware / underruns} underruns
+  line "Hardware / ~9 pause output" => {Hardware / pause output} pause output , {Hardware / resume output} resume output
+  line "Hardware / ~9 output errors" => {Hardware / output errors} output errors , {Hardware / collisions} collisions , {Hardware / interface resets} interface resets
+  line "Hardware / ~9 late collisions" => {Hardware / late collisions} late collisions , {Hardware / deferred} deferred
+  line "Hardware / ~9 input reset drops" => {Hardware / input reset drops} input reset drops , {Hardware / output reset drops} output reset drops
+  line "Hardware / input queue :" => input queue {?Hardware / input queue qualifier} : {Hardware / input queue}
+  line "Hardware / output queue :" => output queue {?Hardware / output queue qualifier} : {Hardware / output queue}
+  line "Hardware / VLAN" => VLAN identifier {Hardware / VLAN identifier}
+  line "Traffic Statistics for ~: / ~9 packets input" => {Traffic Statistics for / packets input} packets input , {Traffic Statistics for / bytes} bytes
+  line "Traffic Statistics for ~: / ~9 packets output" => {Traffic Statistics for / packets output} packets output , {Traffic Statistics for / bytes 2} bytes
+  line "Traffic Statistics for ~: / ~9 packets dropped" => {Traffic Statistics for / packets dropped} packets dropped

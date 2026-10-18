@@ -1,0 +1,29 @@
+single lines 1-10
+  name = mgmt
+  mode = static
+  ip = 192.0.2.70 255.255.254.0
+  status = up
+  type = physical
+  mtu-override = disable
+  name 2 = internal
+  mode 2 = static
+  ip 2 = 0.0.0.0 0.0.0.0
+  status 2 = up
+  type 2 = physical
+  mtu-override 2 = disable
+  name 3 = loopback_0
+  ip 3 = 198.51.100.1 255.255.255.255
+  status 3 = up
+  type 3 = loopback
+  name 4 = vlan10
+  mode 3 = dhcp
+  ip 4 = 203.0.113.20 255.255.255.0
+  status 4 = down
+  type 4 = vlan
+  interface = internal
+  vlanid = 10
+unclaimed 1: get system interface
+unclaimed 3: == [ mgmt ]
+unclaimed 5: == [ internal ]
+unclaimed 7: == [ loopback_0 ]
+unclaimed 9: == [ vlan10 ]

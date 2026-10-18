@@ -5,6 +5,7 @@
     <RootNamespace>JMW.Templates</RootNamespace>
     <AssemblyName>JMW.Templates</AssemblyName>
     <PackageId>JMW.Templates</PackageId>
+    <IsPackable>false</IsPackable>
     <Description>A tag-based text templating engine with tables, joins, lookups, and a JavaScript-subset expression language.</Description>
     <UsePolyfillsFromJmw>true</UsePolyfillsFromJmw>
   </PropertyGroup>

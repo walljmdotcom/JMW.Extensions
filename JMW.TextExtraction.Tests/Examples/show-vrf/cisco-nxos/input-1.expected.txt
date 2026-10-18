@@ -1,0 +1,6 @@
+table aligned lines 2-6: VRF-Name | VRF-ID | State | Reason
+  row 3: blue | 3 | Up | --
+  row 4: default | 1 | Up | --
+  row 5: management | 2 | Up | --
+  row 6: red | 4 | Down | Admin Down
+unclaimed 1: show vrf

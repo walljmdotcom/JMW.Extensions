@@ -1,0 +1,9 @@
+gv-1 # show cards
+
+Box ID: 1
+Slot  Config  Oper Status       HW Type       Product Code  Serial Num  HW Rev
+------------------------------------------------------------------------------
+cc1   yes     up           HC2-Main-Board-v2  132-00C2      AA00-0001   A4-a0
+1     yes     up           SMT-HC0-X16        132-00BK      AA00-0002   A4-3
+2     no      -                               -             -           -
+3     yes     up           SMT-HC0-Q02X08     132-00F7      AA00-0003   A0-c

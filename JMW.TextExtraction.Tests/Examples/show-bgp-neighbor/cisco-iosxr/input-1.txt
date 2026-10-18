@@ -1,0 +1,63 @@
+show bgp neighbor
+
+BGP neighbor is 192.0.2.10
+ Remote AS 64500, local AS 64500, internal link
+ Description: rr-client-a
+ Remote router ID 192.0.2.10
+ Cluster ID 192.0.2.1
+  BGP state = Established, up for 3w2d
+  Last read 00:00:12, Last read before reset 00:00:00
+  Hold time is 180, keepalive interval is 60 seconds
+  Configured hold time: 180, keepalive: 60, min acceptable hold time: 3
+  Last write 00:00:21, attempted 19, written 19
+  Precedence: internet
+  Graceful restart is enabled
+  Restart time is 120 seconds
+  Stale path timeout time is 360 seconds
+  Received 30512 messages, 0 notifications, 0 in queue
+  Sent 30498 messages, 1 notifications, 0 in queue
+  Minimum time between advertisement runs is 0 secs
+
+ For Address Family: VPNv4 Unicast
+  BGP neighbor version 4410
+  Update group: 0.1 Filter-group: 0.1  No Refresh request being processed
+  Route-Reflector Client
+  Route refresh request: received 0, sent 0
+  12 accepted prefixes, 12 are bestpaths
+  Prefix advertised 40, suppressed 0, withdrawn 2
+
+  Connections established 2; dropped 1
+  Local host: 192.0.2.1, Local port: 179, IF Handle: 0x00000000
+  Foreign host: 192.0.2.10, Foreign port: 61022
+  Last reset 3w2d, due to Peer closing down the session
+
+BGP neighbor is 192.0.2.11
+ Remote AS 64500, local AS 64500, internal link
+ Description: rr-client-b
+ Remote router ID 0.0.0.0
+ Cluster ID 192.0.2.1
+  BGP state = Idle (No route to multi-hop neighbor)
+  Last read 00:00:00, Last read before reset 00:00:00
+  Hold time is 180, keepalive interval is 60 seconds
+  Configured hold time: 30, keepalive: 10, min acceptable hold time: 3
+  Last write 00:00:00, attempted 0, written 0
+  Precedence: internet
+  Graceful restart is enabled
+  Restart time is 120 seconds
+  Stale path timeout time is 360 seconds
+  Received 0 messages, 0 notifications, 0 in queue
+  Sent 0 messages, 0 notifications, 0 in queue
+  Minimum time between advertisement runs is 0 secs
+
+ For Address Family: VPNv4 Unicast
+  BGP neighbor version 0
+  Update group: 0.1 Filter-group: 0.0  No Refresh request being processed
+  Route-Reflector Client
+  Route refresh request: received 0, sent 0
+  0 accepted prefixes, 0 are bestpaths
+  Prefix advertised 0, suppressed 0, withdrawn 0
+
+  Connections established 0; dropped 0
+  Local host: 0.0.0.0, Local port: 0, IF Handle: 0x00000000
+  Foreign host: 192.0.2.11, Foreign port: 179
+  Last reset 00:00:00, due to BGP neighbor initialized

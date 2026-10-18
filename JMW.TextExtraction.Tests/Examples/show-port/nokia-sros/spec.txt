@@ -1,0 +1,1 @@
+table aligned header: Id | State | State 2 | MTU | MTU 2 | Bndl | Mode | Encp | Type | MDIMDX

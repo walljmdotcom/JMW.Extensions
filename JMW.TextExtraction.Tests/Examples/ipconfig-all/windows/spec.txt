@@ -1,0 +1,20 @@
+records split by indent, head
+  line "@head" => {Name}
+  line "Connection-specific DNS Suffix :" => Connection-specific DNS Suffix : {Connection-specific DNS Suffix}
+  line "Description :" => Description : {Description}
+  line "Physical Address :" => Physical Address : {Physical Address}
+  line "DHCP Enabled :" => DHCP Enabled : {DHCP Enabled}
+  line "Autoconfiguration Enabled :" => Autoconfiguration Enabled : {Autoconfiguration Enabled}
+  line "IPv4 Address :" => IPv4 Address : {IPv4 Address}
+  line "Subnet Mask :" => Subnet Mask : {Subnet Mask}
+  line "Default Gateway :" => Default Gateway : {Default Gateway}
+  line "DNS Servers :" => DNS Servers : {DNS Servers}
+  line "Media State :" => Media State : {Media State}
+
+single
+  line "Host Name :" => Host Name : {Host Name}
+  line "Primary Dns Suffix :" => Primary Dns Suffix : {Primary Dns Suffix}
+  line "Node Type :" => Node Type : {Node Type}
+  line "IP Routing Enabled :" => IP Routing Enabled : {IP Routing Enabled}
+  line "WINS Proxy Enabled :" => WINS Proxy Enabled : {WINS Proxy Enabled}
+  line "DNS Suffix Search List :" => DNS Suffix Search List : {DNS Suffix Search List}

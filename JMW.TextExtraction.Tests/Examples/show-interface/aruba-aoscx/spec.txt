@@ -1,0 +1,30 @@
+table aligned headerless: 2
+table aligned headerless: 4
+
+records split by blank, head
+  line "@head" => {Name} is {Status}
+  line "Admin state" => Admin state is {Admin state}
+  line "Link state:" => Link state: {Link state}
+  line "Link transitions:" => Link transitions: {Link transitions}
+  line "Description:" => Description: {Description}
+  line "Hardware: MAC Address:" => Hardware: {Hardware} , MAC Address: {MAC Address}
+  line "MTU" => MTU {MTU}
+  line "Type" => Type 1GbT
+  line "Full-duplex" => Full-duplex
+  line "qos" => qos trust none
+  line "Speed" => Speed {Speed} Mb/s
+  line "Auto-negotiation" => Auto-negotiation is {Auto-negotiation}
+  line "Flow-control:" => Flow-control: {Flow-control}
+  line "Error-control:" => Error-control: {Error-control}
+  line "MDI mode:" => MDI mode: {MDI mode}
+  line "VLAN Mode:" => VLAN Mode: {VLAN Mode}
+  line "State information:" => State information: {State information}
+  line "Access VLAN:" => Access VLAN: {Access VLAN}
+  line "Rx" => Rx
+  line "Rx / ~9 input packets" => {Rx / input packets} input packets {Rx / input packets bytes} bytes
+  line "Rx / ~9 input error" => {Rx / input error} input error {Rx / input error dropped} dropped
+  line "Rx / ~9" => {Rx / CRC/FCS} CRC/FCS
+  line "Tx" => Tx
+  line "Tx / ~9 output packets" => {Tx / output packets} output packets {Tx / output packets bytes} bytes
+  line "Tx / ~9 input error" => {Tx / input error} input error {Tx / input error dropped} dropped
+  line "Tx / ~9 collision" => {Tx / collision} collision

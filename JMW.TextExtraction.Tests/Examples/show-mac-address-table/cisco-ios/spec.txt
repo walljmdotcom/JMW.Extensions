@@ -1,0 +1,4 @@
+table ruled header: Vlan | Mac Address | Type | Ports
+
+single
+  line "Total Mac Addresses for this criterion:" => Total Mac Addresses for this criterion: {Total Mac Addresses for this criterion}

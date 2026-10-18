@@ -1,0 +1,6 @@
+show system uptime
+Current time: 2024-03-11 14:02:19 UTC
+System booted: 2023-09-02 06:41:48 UTC (27w2d 07:20 ago)
+Protocols started: 2023-09-02 06:43:11 UTC (27w2d 07:19 ago)
+Last configured: 2024-02-27 17:01:33 UTC (1w6d 20:59 ago) by admin
+ 2:02PM  up 191 days,  7:20, 1 user, load averages: 0.12, 0.08, 0.05

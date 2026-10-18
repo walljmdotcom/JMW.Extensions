@@ -1,0 +1,28 @@
+table aligned lines 13-17: Neighbor | V | AS | MsgRcvd | MsgSent | TblVer | InQ | OutQ | Up/Down | State/PfxRcd
+  row 14: 192.0.2.11 | 4 | 64500 | 120392 | 120401 | 1042 | 0 | 0 | 12w0d | 402
+  row 15: 198.51.100.1 | 4 | 64501 | 88213 | 91022 | 1042 | 0 | 0 | 9w3d | 388
+  row 16: 203.0.113.9 | 4 | 64999 | 0 | 0 | 1 | 0 | 0 | never | Idle
+  row 17: 2001:DB8::9 | 4 | 64999 | 10022 | 9981 | 1042 | 0 | 0 | 1d02h | 22
+single lines 1-11
+  BGP router identifier = 192.0.2.255
+  local AS number = 64500
+  BGP table version = 1042
+  main routing table version = 1042
+  network entries using = 812
+  network entries using bytes of memory = 201376
+  path entries using = 1203
+  path entries using bytes of memory = 163608
+  BGP path/bestpath attribute entries using = 184/112
+  BGP path/bestpath attribute entries using bytes of memory = 51520
+  BGP = 21
+  BGP entries using = AS-PATH
+  entries using = 712
+  BGP = 0
+  BGP entries using = route-map cache
+  entries using = 0
+  BGP = 0
+  BGP entries using = filter-list cache
+  entries using = 0
+unclaimed 1: show ip bgp summary
+unclaimed 10: BGP using 417216 total bytes of memory
+unclaimed 11: BGP activity 2211/1399 prefixes, 5120/3917 paths, scan interval 60 secs

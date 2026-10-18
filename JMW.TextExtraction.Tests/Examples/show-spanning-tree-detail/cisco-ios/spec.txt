@@ -1,0 +1,18 @@
+records split by blank, head
+  line "@head" => {Name} is {Status}
+  line "Bridge" => Bridge Identifier has priority {Bridge Identifier has priority} , sysid {sysid} , address 0200.5e10.0100
+  line "Configured" => Configured hello time {Configured hello time} , max age {max age} , forward delay {forward delay} , transmit hold-count {transmit hold-count}
+  line "Current" => Current root has priority {Current root has priority} , address 0200.5e10.0001
+  line "Root port" => Root port is {Root port} , cost of root path is {cost of root path}
+  line "Times:" => Times: {Times} , topology change {topology change} , notification {notification}
+  line "Timers:" => Timers: {Timers} , forward delay {forward delay 2} , hold {hold}
+  line "Timers:" => Timers: {Timers} , topology change {topology change 2} , notification {notification 2}
+  line "Port" => Port path cost {Port path cost} , Port priority {Port priority} , Port Identifier {Port Identifier}
+  line "Designated" => Designated {Designated} has priority {has priority} , address {address}
+  line "Designated port id" => Designated port id is {Designated port id} , designated path cost {designated path cost}
+  line "Number of transitions to forwarding state:" => Number of transitions to forwarding state: {Number of transitions to forwarding state}
+  line "The port" => The port is {The port}
+  line "Link type" => Link type is {Link type} , {Field2}
+  line "Bpdu guard" => Bpdu guard is {Bpdu guard}
+  line "Loop guard" => Loop guard is {Loop guard}
+  line "BPDU:" => BPDU: {BPDU} , received {received}
