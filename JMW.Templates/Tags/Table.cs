@@ -1,8 +1,6 @@
-﻿using JMW.Extensions;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 
 namespace JMW.Templates.Tags
 {
@@ -121,20 +119,11 @@ namespace JMW.Templates.Tags
                 for (var i = 0; i < cols.Length; i++)
                     indexes[i] = table_data.ColumnIndexes[cols[i].Trim().ToLowerInvariant()];
 
-                var seen = new HashSet<string>(StringComparer.Ordinal);
+                var seen = new HashSet<List<string>>(new CellsComparer(indexes));
                 var rows = new List<List<string>>();
-                var key = new StringBuilder();
                 foreach (var row in table_data.Data)
                 {
-                    key.Clear();
-                    for (var i = 0; i < indexes.Length; i++)
-                    {
-                        if (i > 0)
-                            key.Append('|');
-                        key.Append(row[indexes[i]]);
-                    }
-
-                    if (seen.Add(key.ToString()))
+                    if (seen.Add(row))
                         rows.Add(row);
                 }
 
@@ -163,6 +152,42 @@ namespace JMW.Templates.Tags
         public static bool IsTable(Tag tag)
         {
             return tag.TagType == TagTypes.Tag && (tag.Name == TAG || tag.Name == TAB_TAG);
+        }
+
+        // Rows are equal when the cells at the given columns are equal.
+        private sealed class CellsComparer : IEqualityComparer<List<string>>
+        {
+            private readonly int[] _indexes;
+
+            public CellsComparer(int[] indexes)
+            {
+                _indexes = indexes;
+            }
+
+            public bool Equals(List<string>? x, List<string>? y)
+            {
+                if (ReferenceEquals(x, y))
+                    return true;
+                if (x is null || y is null)
+                    return false;
+
+                foreach (var i in _indexes)
+                {
+                    if (!string.Equals(x[i], y[i], StringComparison.Ordinal))
+                        return false;
+                }
+
+                return true;
+            }
+
+            public int GetHashCode(List<string> row)
+            {
+                var hash = 17;
+                foreach (var i in _indexes)
+                    hash = unchecked(hash * 31 + StringComparer.Ordinal.GetHashCode(row[i]));
+
+                return hash;
+            }
         }
     }
 }

@@ -643,6 +643,23 @@ namespace JMW.Templates.Tests
             Assert.That(sb.ToString(), Is.EqualTo(expected));
         }
 
+        // Cells are compared one by one, so no text in a cell can make two different rows look the same.
+        [TestCase("1,a|b,c", "2,a,b|c", "12")]
+        [TestCase("1,a|,b", "2,a,|b", "12")]
+        [TestCase("1,,", "2,,", "1")]
+        [TestCase("1,a,b", "2,a,b", "1")]
+        public void TestDistinctComparesEachCell(string first, string second, string expected)
+        {
+            var sb = new StringBuilder();
+            using var wr = new StringWriter(sb);
+            var i = new Interpreter(wr);
+            i.AddHandler(new Table(new TableData("t", ["n,x,y", first, second]), i));
+
+            i.Eval("<tab name=\"t\" distinct=\"x,y\"><n/></tab>");
+
+            Assert.That(sb.ToString(), Is.EqualTo(expected));
+        }
+
         // Column names in orderby and distinct match whatever their case, as column tags do.
         [TestCase("<tab name=\"t\" orderby=\"Name\" order=\"desc\"><name/></tab>", "cba")]
         [TestCase("<tab name=\"t\" orderby=\"name\"><Name/></tab>", "abc")]
