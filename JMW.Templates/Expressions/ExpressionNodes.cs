@@ -16,9 +16,11 @@ internal sealed class LiteralNode(ScriptValue value) : ExpressionNode
 
 internal sealed class IdentifierNode(string name) : ExpressionNode
 {
+    private readonly int argumentIndex = ExpressionScope.TryGetArgumentIndex(name, out int index) ? index : -1;
+
     public string Name { get; } = name;
 
-    public override ScriptValue Evaluate(ExpressionScope scope) => scope.Get(Name);
+    public override ScriptValue Evaluate(ExpressionScope scope) => scope.Get(Name, argumentIndex);
 }
 
 internal sealed class SequenceNode(IReadOnlyList<ExpressionNode> statements) : ExpressionNode

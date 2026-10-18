@@ -8,17 +8,22 @@ namespace JMW.Templates.Expressions;
 /// </summary>
 internal sealed class ExpressionScope(IReadOnlyList<string> arguments)
 {
-    private readonly Dictionary<string, ScriptValue> variables = new(System.StringComparer.Ordinal);
+    // Most expressions only read their arguments, so the variables are created by the first assignment.
+    private Dictionary<string, ScriptValue>? variables;
 
     public ScriptValue Get(string name)
     {
-        if (variables.TryGetValue(name, out ScriptValue value)) return value;
+        return Get(name, TryGetArgumentIndex(name, out int index) ? index : -1);
+    }
 
-        if (TryGetArgumentIndex(name, out int index) && index < arguments.Count)
+    /// <param name="argument_index">The argument <paramref name="name"/> stands for, or -1 when it is not one.</param>
+    public ScriptValue Get(string name, int argument_index)
+    {
+        if (variables is not null && variables.TryGetValue(name, out ScriptValue value)) return value;
+
+        if (argument_index >= 0 && argument_index < arguments.Count)
         {
-            value = ScriptValue.FromArgument(arguments[index]);
-            variables[name] = value;
-            return value;
+            return ScriptValue.FromArgument(arguments[argument_index]);
         }
 
         return name switch
@@ -29,7 +34,11 @@ internal sealed class ExpressionScope(IReadOnlyList<string> arguments)
         };
     }
 
-    public void Set(string name, ScriptValue value) => variables[name] = value;
+    public void Set(string name, ScriptValue value)
+    {
+        variables ??= new(System.StringComparer.Ordinal);
+        variables[name] = value;
+    }
 
     /// <summary>
     /// Maps <c>x1</c>/<c>X1</c> to argument index 0, <c>x2</c> to 1, and so on.
