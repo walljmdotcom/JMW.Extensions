@@ -643,6 +643,35 @@ namespace JMW.Templates.Tests
             Assert.That(sb.ToString(), Is.EqualTo(expected));
         }
 
+        // Column tags, plain or prefixed for a join side, accept only the column attributes.
+        [TestCase("<tab name=\"t\"><name bogus=\"1\"/></tab>")]
+        [TestCase("<join " + JoinTables + "><left_name bogus=\"1\"/></join>")]
+        [TestCase("<join " + JoinTables + "><right_label bogus=\"1\"/></join>")]
+        public void TestColumnTagRejectsUnknownAttribute(string template)
+        {
+            var i = new Interpreter(new StringWriter());
+            i.AddHandler(new Table(new TableData("t", ["num,name", "10,a"]), i));
+            i.AddHandler(new Table(new TableData("u", ["num,label", "10,p"]), i));
+
+            Assert.That(() => i.Eval(template), Throws.TypeOf<ParseException>());
+        }
+
+        [TestCase("<tab name=\"t\"><name exp=\"x1 + '!'\"/></tab>", "a!")]
+        [TestCase("<join " + JoinTables + "><left_name exp=\"x1 + '!'\"/></join>", "a!")]
+        [TestCase("<join " + JoinTables + "><right_label exp=\"x1 + '!'\"/></join>", "p!")]
+        public void TestColumnTagAcceptsColumnAttributes(string template, string expected)
+        {
+            var sb = new StringBuilder();
+            using var wr = new StringWriter(sb);
+            var i = new Interpreter(wr);
+            i.AddHandler(new Table(new TableData("t", ["num,name", "10,a"]), i));
+            i.AddHandler(new Table(new TableData("u", ["num,label", "10,p"]), i));
+
+            i.Eval(template);
+
+            Assert.That(sb.ToString(), Is.EqualTo(expected));
+        }
+
         // Cells are compared one by one, so no text in a cell can make two different rows look the same.
         [TestCase("1,a|b,c", "2,a,b|c", "12")]
         [TestCase("1,a|,b", "2,a,|b", "12")]

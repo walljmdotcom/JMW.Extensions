@@ -20,6 +20,14 @@ namespace JMW.Templates
             _columnTags.Add(column.ToLowerInvariant());
         }
 
+        // A join names a column of either table with a left_ or right_ prefix.
+        private bool IsColumnTag(string name)
+        {
+            return _columnTags.Contains(name)
+                || (name.StartsWith(JoinColumn.LEFT_PREFIX, System.StringComparison.Ordinal) && _columnTags.Contains(name.Substring(JoinColumn.LEFT_PREFIX.Length)))
+                || (name.StartsWith(JoinColumn.RIGHT_PREFIX, System.StringComparison.Ordinal) && _columnTags.Contains(name.Substring(JoinColumn.RIGHT_PREFIX.Length)));
+        }
+
         public void AddTag(string tag_name, ITagHandler tag)
         {
             _tags.Add(tag_name.ToLowerInvariant(), tag);
@@ -120,9 +128,7 @@ namespace JMW.Templates
                             TagHelpers.CheckAllowedAttributes(curr, Include.ALLOWEDPROPS, token);
                         }
                         // handle the special case for columns, and join columns
-                        else if (_columnTags.Contains(curr.Name) ||
-                                 _columnTags.Contains(JoinColumn.LEFT_PREFIX + curr.Name) ||
-                                 _columnTags.Contains(JoinColumn.RIGHT_PREFIX + curr.Name))
+                        else if (IsColumnTag(curr.Name))
                         {
                             TagHelpers.CheckAllowedAttributes(curr, ColumnBase.ALLOWED, token);
                         }
