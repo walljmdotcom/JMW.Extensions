@@ -9,8 +9,6 @@ namespace JMW.Parsing.Extractors;
 
 public class Column : Base
 {
-    private static readonly char[] separator = [' '];
-
     public const string NAME = "col";
 
     public List<ColumnPosition>? Positions { get; set; }
@@ -27,8 +25,33 @@ public class Column : Base
             return this.Positions[this.Index].GetColumnValue(s);
         }
 
-        // treat it like a split.
-        return s.Split(separator, StringSplitOptions.RemoveEmptyEntries)[this.Index];
+        return FieldAt(s, this.Index);
+    }
+
+    // The field s.Split(' ', RemoveEmptyEntries) would return at the index, without splitting the rest of the line.
+    private static string FieldAt(string s, int index)
+    {
+        var found = 0;
+        var i = 0;
+        while (i < s.Length)
+        {
+            while (i < s.Length && s[i] == ' ')
+                i++;
+
+            if (i == s.Length)
+                break;
+
+            var start = i;
+            while (i < s.Length && s[i] != ' ')
+                i++;
+
+            if (found == index)
+                return s.Substring(start, i - start);
+
+            found++;
+        }
+
+        throw new IndexOutOfRangeException();
     }
 
     public Column(Tag t) : base(t)
