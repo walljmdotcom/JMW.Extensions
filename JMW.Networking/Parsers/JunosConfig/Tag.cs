@@ -9,11 +9,12 @@ public class Tag
     private string _Name = string.Empty;
     public string Name { get { return _Name; } set { _Name = value.Trim(); } }
 
-    public Dictionary<string, Tag> Properties { get; set; } = [];
+    // Most tags are words and properties with neither, so both are created on first use.
+    public Dictionary<string, Tag> Properties { get => field ??= []; set; }
 
     public string Value { get; set; } = string.Empty;
 
-    public Stack<Tag> Children { get; set; } = new Stack<Tag>();
+    public Stack<Tag> Children { get => field ??= new Stack<Tag>(); set; }
 
     public override string ToString()
     {

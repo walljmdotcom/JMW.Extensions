@@ -139,4 +139,36 @@ public class JunosParsingTest : TestBase
         Assert.That(task.Result, Has.Count.EqualTo(1));
         Assert.That(task.Result[0].Name, Is.EqualTo("interfaces"));
     }
+
+    // A tag's children and properties are made on first use, and read as empty until then.
+    [Test]
+    public void TagCollectionsStartEmptyAndKeepAssignments()
+    {
+        var tag = new Tag();
+        var children = tag.Children;
+        Assert.That(children, Is.Empty);
+        Assert.That(tag.Properties, Is.Empty);
+        Assert.That(tag.Children, Is.SameAs(children));
+
+        var child = new Tag { Name = "child" };
+        tag.Children.Push(child);
+        tag.Properties["key"] = child;
+        Assert.That(tag.Children, Is.EquivalentTo(new[] { child }));
+        Assert.That(tag.Properties["key"], Is.SameAs(child));
+
+        var replaced = new Stack<Tag>();
+        tag.Children = replaced;
+        Assert.That(tag.Children, Is.SameAs(replaced));
+    }
+
+    [Test]
+    public void ParsesWordsPropertiesAndObjects()
+    {
+        var tags = new Parser().Parse("interfaces { ge-0/0/0 { description \"uplink\"; mtu 9192; } }");
+
+        Assert.That(tags, Has.Count.EqualTo(1));
+        var iface = tags[0].Children.Pop();
+        Assert.That(iface.Name, Is.EqualTo("ge-0/0/0"));
+        Assert.That(iface.Children, Has.Count.EqualTo(2));
+    }
 }

@@ -31,11 +31,13 @@ public class Parser
         Tag? last = null;
         while (tokenizer.Next() != TokenType.Error)
         {
-            var tag = new Tag();
+            // Closing tokens and empty statements make no tag, so each case that keeps one creates it.
+            Tag tag;
             var token = tokenizer.Token;
             switch (token.Type)
             {
                 case TokenType.ObjectStart:
+                    tag = new Tag();
                     var o_names = CollapseWords(stack);
                     if (o_names.Count > 0)
                     {
@@ -53,6 +55,7 @@ public class Parser
                 case TokenType.ArrayStart:
                     if (stack.Count > 0)
                         stack.Pop(); // you don't need the current word.
+                    tag = new Tag();
                     tag.TagType = TagTypes.Array;
                     tag.Name = token.Value.ToLowerInvariant().Trim();
                     tag.Children = new Stack<Tag>();
@@ -105,6 +108,7 @@ public class Parser
                     {
                         if (stack.Count > 0 && stack.Peek().TagType == TagTypes.Array)
                         {
+                            tag = new Tag();
                             tag.TagType = TagTypes.Word;
                             tag.Name = string.Empty;
                             tag.Value = token.Value;
@@ -115,6 +119,7 @@ public class Parser
                             if (token.Value.Length == 0)
                                 break;
 
+                            tag = new Tag();
                             tag.TagType = TagTypes.Word;
                             tag.Name = string.Empty;
                             tag.Value = token.Value;
@@ -123,6 +128,7 @@ public class Parser
                         else if (stack.Count > 0)
                         {
                             var words = CollapseWords(stack);
+                            tag = new Tag();
                             tag.TagType = TagTypes.Property;
 
                             if (words.Count > 2)
@@ -152,6 +158,7 @@ public class Parser
                     }
                 case TokenType.Word:
                     {
+                        tag = new Tag();
                         tag.TagType = TagTypes.Word;
                         tag.Value = token.Value;
                         if (stack.Count > 0 && stack.Peek().TagType == TagTypes.Array)
