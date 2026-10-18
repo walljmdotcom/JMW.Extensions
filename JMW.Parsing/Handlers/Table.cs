@@ -136,14 +136,13 @@ public class Table : Base, IParser, IProperty
         // parse the rows
         foreach (var line in this.GetNextRow(reader, this.rowExp))
         {
-            var record = new List<object>();
-
-            foreach (var p in this.Props)
+            var record = new object[this.Props.Count];
+            for (var i = 0; i < record.Length; i++)
             {
                 using var sr = new StringReader(line);
-                record.Add(p.Parse(sr));
+                record[i] = this.Props[i].Parse(sr);
             }
-            yield return record.ToArray();
+            yield return record;
         }
     }
 

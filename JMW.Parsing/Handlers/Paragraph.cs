@@ -67,19 +67,18 @@ public class Paragraph : Base, IParser, IProperty
         // parse the paragraphs
         foreach (var lines in paras)
         {
-            var record = new List<object>();
-
             if (lines.Count == 0 || this.start is null || !this.start.Test(lines.First()))
                 continue;
 
             // process the properties
             var line = lines.ToDelimitedString("\n");
-            foreach (var p in this.Props)
+            var record = new object[this.Props.Count];
+            for (var i = 0; i < record.Length; i++)
             {
                 using var sr = new StringReader(line);
-                record.Add(p.Parse(sr));
+                record[i] = this.Props[i].Parse(sr);
             }
-            yield return record.ToArray();
+            yield return record;
         }
     }
 
