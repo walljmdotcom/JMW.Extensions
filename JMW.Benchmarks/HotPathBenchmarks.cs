@@ -77,6 +77,22 @@ public class HotPathBenchmarks
     private readonly Split split = new([" "], string.Empty, 1);
     private RegularExpression[] regexes = [];
 
+    private static readonly string[] ExpressionTexts =
+    [
+        """contains {s:["connected"]}""",
+        """contains {s:["FULL", "half"]i}""",
+        """startswith {s:["gi1/0/1"]i}""",
+        """endswith {s:["copper"]}""",
+        """and { contains {s:["full"]} contains {s:["1000"]} }""",
+        """or { contains {s:["half"]} contains {s:["copper"]} }""",
+        """look { a:["gi"]i s:["connected"] b:["copper"] }""",
+        """count { s:[" "] rng:"1-5" }""",
+    ];
+
+    private readonly IExpression[] expressions = ExpressionTexts
+        .Select(static text => JMW.Parsing.Expressions.Base.ToExpression(new CompileParser().Parse(text).First()))
+        .ToArray();
+
     [GlobalSetup]
     public void GlobalSetup()
     {
@@ -114,6 +130,10 @@ public class HotPathBenchmarks
         var allowed = RulesAllowed();
         var extracted = ExtractorsParse();
         var matched = RegexTest();
+        var expressionMatches = expressions.Select(e => lines.Count(e.Test)).ToArray();
+        Console.WriteLine($"// setup: expression matches {string.Join(", ", expressionMatches)}");
+        if (expressionMatches.Any(static m => m == 0))
+            throw new InvalidOperationException("An expression matched no line.");
         Console.WriteLine($"// setup: property '{property}', distinct {distinct}, allowed {allowed}, extracted {extracted}, matched {matched}");
         if (property != "target found" || distinct != Rows / 2 * ("up".Length + "down".Length) || allowed != packetSources.Length || extracted == 0 || matched == 0)
             throw new InvalidOperationException("A benchmark did not do its work.");
@@ -172,6 +192,22 @@ public class HotPathBenchmarks
             length += to.Parse(line).Length + after.Parse(line).Length + split.Parse(line).Length;
 
         return length;
+    }
+
+    [Benchmark]
+    public int ExpressionsTest()
+    {
+        var matches = 0;
+        foreach (var line in lines)
+        {
+            foreach (var expression in expressions)
+            {
+                if (expression.Test(line))
+                    matches++;
+            }
+        }
+
+        return matches;
     }
 
     [Benchmark]
