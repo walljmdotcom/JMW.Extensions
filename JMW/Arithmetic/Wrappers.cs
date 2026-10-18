@@ -16,7 +16,8 @@ namespace Lambda.Generic.Arithmetic
 {
     #region Signed Wrapper
 
-    public readonly struct Signed<T, O> : IComparable<T>, IComparable, IFormattable, IConvertible, IEquatable<T>
+    public readonly struct Signed<T, O>
+        : IComparable<Signed<T, O>>, IComparable<T>, IComparable, IFormattable, IConvertible, IEquatable<Signed<T, O>>, IEquatable<T>
         where O : ISignedMath<T>, new()
         where T : IComparable<T>, IComparable, IFormattable, IConvertible, IEquatable<T>
     {
@@ -118,9 +119,20 @@ namespace Lambda.Generic.Arithmetic
             return o.Compare(a, b) > 0;
         }
 
+        // The Signed overloads let the default comparers, as in SortedList and Dictionary keys, compare without boxing.
+        public readonly int CompareTo(Signed<T, O> other)
+        {
+            return value.CompareTo(other.value);
+        }
+
         public readonly int CompareTo(T other)
         {
             return value.CompareTo(other);
+        }
+
+        public readonly bool Equals(Signed<T, O> other)
+        {
+            return value.Equals(other.value);
         }
 
         public readonly bool Equals(T other)
