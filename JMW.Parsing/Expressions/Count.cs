@@ -57,17 +57,38 @@ public class Count : IExpression
 
     public bool Test(string inputValue)
     {
-        var caseInsensitive = this.Search.Mods.Contains(Constants.CASE_INSENSITIVE);
-        var compareOptions = caseInsensitive ? StringComparison.OrdinalIgnoreCase : StringComparison.Ordinal;
-        var queryArray = this.Search.Query.ToArray();
+        var comparison = this.Search.Mods.Contains(Constants.CASE_INSENSITIVE)
+            ? StringComparison.OrdinalIgnoreCase
+            : StringComparison.Ordinal;
 
-        var working = inputValue;
-        var c = 0;
-        while (this.Search.Query.Any(sr => working.Contains(sr, compareOptions)))
+        // Counts matches left to right, each starting after the last. Where two values match at the same place, the
+        // first in the list wins. An empty value would match forever without moving, so it is not counted.
+        var count = 0;
+        var position = 0;
+        while (true)
         {
-            c++;
-            working = working.ParseAfterIndexOf_PlusLength(caseInsensitive, queryArray);
+            var best = -1;
+            var bestLength = 0;
+            foreach (var value in this.Search.Query)
+            {
+                if (value.Length == 0)
+                    continue;
+
+                var index = inputValue.IndexOf(value, position, comparison);
+                if (index >= 0 && (best < 0 || index < best))
+                {
+                    best = index;
+                    bestLength = value.Length;
+                }
+            }
+
+            if (best < 0)
+                break;
+
+            count++;
+            position = best + bestLength;
         }
-        return this.Rng.Contains(c);
+
+        return this.Rng.Contains(count);
     }
 }

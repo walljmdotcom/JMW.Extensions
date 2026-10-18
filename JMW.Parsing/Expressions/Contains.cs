@@ -18,10 +18,8 @@ public class Contains : Base
 
     public override bool Test(string s)
     {
-        var compareOptions = this.Search.Mods.Contains(Constants.CASE_INSENSITIVE)
-            ? StringComparison.OrdinalIgnoreCase
-            : StringComparison.Ordinal;
-
-        return base.Test(s, (str, sch) => str.Contains(sch, compareOptions));
+        return this.Search.Mods.Contains(Constants.CASE_INSENSITIVE)
+            ? base.Test(s, static (str, sch) => str.Contains(sch, StringComparison.OrdinalIgnoreCase))
+            : base.Test(s, static (str, sch) => str.Contains(sch, StringComparison.Ordinal));
     }
 }

@@ -19,6 +19,6 @@ public class EndsWith : Base
 
     public override bool Test(string s)
     {
-        return base.Test(s, (str, sch) => str.EndsWith(sch, StringComparison.Ordinal));
+        return base.Test(s, static (str, sch) => str.EndsWith(sch, StringComparison.Ordinal));
     }
 }

@@ -117,12 +117,12 @@ public class Look : IExpression
 
         if (this.Behind.Query.Count > 0)
         {
-            text = text.ParseToLastIndexOf(behindIgnoresCase, [.. this.Behind.Query]);
+            text = text.ParseToLastIndexOf(behindIgnoresCase, this.Behind.QueryArray());
         }
 
         if (this.Ahead.Query.Count > 0)
         {
-            text = text.ParseAfterLastIndexOf_PlusLength(aheadIgnoresCase, [.. this.Ahead.Query]);
+            text = text.ParseAfterLastIndexOf_PlusLength(aheadIgnoresCase, this.Ahead.QueryArray());
         }
 
         return ContainsAny(text, this.Search.Query, searchIgnoresCase);
@@ -133,6 +133,14 @@ public class Look : IExpression
     private static bool ContainsAny(string text, List<string> queries, bool ignoreCase)
     {
         var comparison = ignoreCase ? StringComparison.OrdinalIgnoreCase : StringComparison.Ordinal;
-        return queries.Any(q => text.Contains(q, comparison));
+        foreach (var q in queries)
+        {
+            if (text.Contains(q, comparison))
+            {
+                return true;
+            }
+        }
+
+        return false;
     }
 }

@@ -31,6 +31,14 @@ public class Or : IExpression
 
     public bool Test(string s)
     {
-        return this.Expressions.Any(o => o.Test(s));
+        foreach (var expression in this.Expressions)
+        {
+            if (expression.Test(s))
+            {
+                return true;
+            }
+        }
+
+        return false;
     }
 }

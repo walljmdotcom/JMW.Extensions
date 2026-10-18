@@ -44,9 +44,19 @@ public abstract class Base : IExpression
     /// <param name="func">Function that takes the String to test against and a value to test for and returns a boolean.</param>
     public bool Test(string s, Func<string, string, bool> func)
     {
-        bool v = this.Search.Mods.Contains(Constants.CASE_INSENSITIVE) // run case insensitive
-            ? this.Search.Query.Any(sr => func(s.ToLowerInvariant(), sr.ToLowerInvariant()))
-            : this.Search.Query.Any(sr => func(s, sr));
+        var ignoreCase = this.Search.Mods.Contains(Constants.CASE_INSENSITIVE);
+        var text = ignoreCase ? s.ToLowerInvariant() : s;
+        var query = ignoreCase ? this.Search.LoweredQueryArray() : this.Search.QueryArray();
+
+        var v = false;
+        foreach (var sr in query)
+        {
+            if (func(text, sr))
+            {
+                v = true;
+                break;
+            }
+        }
 
         return this.Search.Mods.Contains(Constants.NEGATE) ? !v : v;
     }
