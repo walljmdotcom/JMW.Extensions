@@ -27,6 +27,9 @@ public class Tokenizer
 
     private bool inWord = false;
 
+    // Each token's text is built here and copied out, so the buffer is reused for the next token.
+    private readonly StringBuilder buffer = new();
+
     public Tokenizer(TextReader reader)
     {
         this.lineReader = new(reader, INVALID_UNICODE_ERROR);
@@ -130,7 +133,7 @@ public class Tokenizer
         }
 
         // A comment runs to the end of the line, or to the end of the input on the last line.
-        var value = new StringBuilder();
+        var value = this.buffer.Clear();
         this.lineReader.ReadUntil('\n', value);
         this.Token.Type = TokenType.Comment;
         this.Token.Value = value.ToString().TrimEnd('\r');
@@ -141,7 +144,7 @@ public class Tokenizer
     private TokenType ConsumePropertyValue()
     {
         this.lineReader.TryRead(out char quote);
-        var value = new StringBuilder();
+        var value = this.buffer.Clear();
         if (!this.lineReader.ReadUntil(quote, value))
         {
             return this.SetupErrorToken("Unexpected end of input. Did you forget a closing " + quote + "?");
@@ -186,7 +189,7 @@ public class Tokenizer
 
     private TokenType ConsumeWord()
     {
-        var identifier = new StringBuilder();
+        var identifier = this.buffer.Clear();
         this.lineReader.ReadWhile(IsWordChar, identifier);
         this.inWord = true;
         this.Token.Type = TokenType.Word;

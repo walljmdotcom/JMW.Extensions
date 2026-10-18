@@ -32,6 +32,9 @@ namespace JMW.Templates
         internal bool _inTag = false;
         internal bool _inParam = false;
 
+        // Each token's text is built here and copied out, so the buffer is reused for the next token.
+        private readonly StringBuilder buffer = new();
+
         internal int Line
         {
             get { return _reader.Line; }
@@ -141,7 +144,7 @@ namespace JMW.Templates
         {
             Token.Type = TokenType.TEXT;
             var consumed = false;
-            var tb = new StringBuilder();
+            var tb = buffer.Clear();
             var more = _reader.TryRead(out char c);
             var l = -1;
             while (more && c != BEGIN && !isComment(tb, c))
@@ -194,7 +197,7 @@ namespace JMW.Templates
         internal TokenType consumeUntil(char qry, TokenType type)
         {
             Token.Type = type;
-            var value = new StringBuilder();
+            var value = buffer.Clear();
             if (!_reader.ReadUntil(qry, value))
             {
                 return setupErrorToken("Unexpected end of template.  Did you forget to add a " + qry + "?", Line, Column);
@@ -222,7 +225,7 @@ namespace JMW.Templates
 
         internal TokenType consumeIdentifier(TokenType type)
         {
-            var identifier = new StringBuilder();
+            var identifier = buffer.Clear();
             _reader.ReadWhile(
                 static c => c != FORWARD_SLASH && c != CLOSE && c != BEGIN && c != PARAM_ASSIGN && !char.IsWhiteSpace(c),
                 identifier
@@ -253,7 +256,7 @@ namespace JMW.Templates
                 return setupErrorToken(EOF);
             }
             // A comment runs to the end of the line, or to the end of the template on the last line.
-            var value = new StringBuilder();
+            var value = buffer.Clear();
             _reader.ReadUntil('\n', value);
 
             Token.Type = TokenType.COMMENT;
